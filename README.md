@@ -6,6 +6,9 @@ Feudalia es un juego de estrategia en el que el jugador intentará conseguir el 
 - Sprint 1: Definición del alcance, mecánicas y organización inicial.
 - Sprint 2: Prototipo ejecutable básico.
 
+## Kanban actual
+[Kanban](https://trello.com/invite/b/68da4f0b7cd58b01e819c607/ATTI086ec6cdfc5afd3c08384b078f2164edAB060372/feudalia)
+
 ## Herramientas:
 - Motor de desarrollo:
 - Lenguaje:
