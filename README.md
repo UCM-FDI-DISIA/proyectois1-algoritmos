@@ -1,6 +1,6 @@
 # Feudalia
 ## Descripción: 
-se trata de un juego de estrategia en el que el jugador intentará conseguir el mayor número de recursos para ganar a su rival en combate.
+Feudalia es un juego de estrategia en el que el jugador intentará conseguir el mayor número de recursos para ganar a su rival en combate.
 
 ## Estado del proyecto:
 - Sprint 1: Definición del alcance, mecánicas y organización inicial.
