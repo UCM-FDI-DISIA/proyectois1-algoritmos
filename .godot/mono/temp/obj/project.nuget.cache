@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "PfNgaag+ej13pKFY1064R7g5sQPMOwrQ8f5thzIshaopxxorT6McOBQZj39Nq9193PdTHbLN9P9MhGBvJPRJMw==",
+  "success": true,
+  "projectFilePath": "/home/andres/proyectois1-algoritmos/feudalia/Feudalia.csproj",
+  "expectedPackageFiles": [
+    "/home/andres/.nuget/packages/godot.sourcegenerators/4.5.0/godot.sourcegenerators.4.5.0.nupkg.sha512",
+    "/home/andres/.nuget/packages/godotsharp/4.5.0/godotsharp.4.5.0.nupkg.sha512",
+    "/home/andres/.nuget/packages/godotsharpeditor/4.5.0/godotsharpeditor.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
