@@ -1,2 +1,0 @@
-﻿37031
-/home/andres/Godot/Godot_v4.5-stable_mono_linux.x86_64
