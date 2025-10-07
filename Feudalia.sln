@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Feudalia", "Feudalia.csproj", "{ACB2F47C-97B1-4CDA-90E1-690B8A9EE639}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ACB2F47C-97B1-4CDA-90E1-690B8A9EE639}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACB2F47C-97B1-4CDA-90E1-690B8A9EE639}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACB2F47C-97B1-4CDA-90E1-690B8A9EE639}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{ACB2F47C-97B1-4CDA-90E1-690B8A9EE639}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{ACB2F47C-97B1-4CDA-90E1-690B8A9EE639}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{ACB2F47C-97B1-4CDA-90E1-690B8A9EE639}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal
