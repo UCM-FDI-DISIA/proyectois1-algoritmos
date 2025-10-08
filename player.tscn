@@ -395,8 +395,7 @@ position = Vector2(580, 295)
 script = ExtResource("1_i3pqv")
 
 [node name="Animacion" type="AnimatedSprite2D" parent="Player"]
-position = Vector2(-5, 12)
 sprite_frames = SubResource("SpriteFrames_b26j0")
-animation = &"Ataque2_W"
+animation = &"Idle"
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
