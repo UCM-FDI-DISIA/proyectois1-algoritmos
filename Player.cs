@@ -3,10 +3,13 @@ using System;
 
 public partial class Player : Node2D
 {
-	[Export] public float Speed = 200f;
+	[Export] public float Speed = 300f;
 
 	private AnimatedSprite2D animatedSprite;
 	private bool isAttacking = false;
+
+	// Última dirección para determinar animación de ataque
+	private Vector2 lastDirection = Vector2.Right;
 
 	public override void _Ready()
 	{
@@ -15,7 +18,6 @@ public partial class Player : Node2D
 
 	public override void _Process(double delta)
 	{
-		// Si estamos atacando, ignoramos movimiento y otras animaciones
 		if (isAttacking)
 			return;
 
@@ -35,12 +37,17 @@ public partial class Player : Node2D
 		// Movimiento
 		Position += inputDirection * Speed * (float)delta;
 
+		// Guardar dirección si hay movimiento
+		if (inputDirection != Vector2.Zero)
+			lastDirection = inputDirection;
+
 		// Animación de movimiento
 		if (inputDirection != Vector2.Zero)
 		{
 			if (!animatedSprite.IsPlaying() || animatedSprite.Animation != "Andar")
 				animatedSprite.Play("Andar");
 
+			// Flip para mirar a la izquierda o derecha
 			if (inputDirection.X < 0)
 				animatedSprite.FlipH = true;
 			else if (inputDirection.X > 0)
@@ -52,26 +59,54 @@ public partial class Player : Node2D
 				animatedSprite.Play("Idle");
 		}
 
-		// Animación de ataque (clic izquierdo)
+		// Ataque 1: click izquierdo
 		if (Input.IsActionJustPressed("ataque"))
 		{
-			animatedSprite.Play("Ataque1_H");
-			isAttacking = true;
+			StartAttack(1);
+		}
 
-			// Conectar señal para saber cuándo termina la animación
-			animatedSprite.AnimationFinished += OnAnimationFinished;
+		// Ataque 2: click derecho
+		if (Input.IsActionJustPressed("ataque2"))
+		{
+			StartAttack(2);
+		}
+	}
+
+	private void StartAttack(int attackNumber)
+	{
+		if (isAttacking)
+			return;
+
+		isAttacking = true;
+
+		string directionSuffix = GetDirectionSuffix(lastDirection);
+		string animationName = $"Ataque{attackNumber}_{directionSuffix}";
+
+		animatedSprite.Play(animationName);
+		animatedSprite.AnimationFinished += OnAnimationFinished;
+	}
+
+	private string GetDirectionSuffix(Vector2 dir)
+	{
+		if (Mathf.Abs(dir.Y) > Mathf.Abs(dir.X))
+		{
+			if (dir.Y < 0)
+				return "W"; // Arriba
+			else
+				return "S"; // Abajo
+		}
+		else
+		{
+			return "H"; // Horizontal
 		}
 	}
 
 	private void OnAnimationFinished()
 	{
-		if (animatedSprite.Animation == "Ataque1_H")
+		if (animatedSprite.Animation.ToString().StartsWith("Ataque"))
 		{
 			isAttacking = false;
-			// Vuelve a Idle después del ataque
 			animatedSprite.Play("Idle");
-
-			// Desconectar la señal (importante para no duplicarla)
 			animatedSprite.AnimationFinished -= OnAnimationFinished;
 		}
 	}
