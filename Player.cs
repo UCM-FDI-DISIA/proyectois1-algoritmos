@@ -14,6 +14,9 @@ public partial class Player : Node2D
 	public override void _Ready()
 	{
 		animatedSprite = GetNode<AnimatedSprite2D>("Animacion");
+
+		// Centrar personaje en la pantalla al iniciar
+		Position = GetViewport().GetVisibleRect().Size / 2;
 	}
 
 	public override void _Process(double delta)
