@@ -1,8 +1,9 @@
-[gd_scene load_steps=53 format=3 uid="uid://b8rmi03nk487q"]
+[gd_scene load_steps=55 format=3 uid="uid://b8rmi03nk487q"]
 
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://Player.cs" id="1_i3pqv"]
-[ext_resource type="Texture2D" uid="uid://ij87wpgkey1d" path="res://Fondos/Captura desde 2025-09-26 12-29-29.png" id="3_hqtel"]
+[ext_resource type="Texture2D" path="res://Fondos/Captura desde 2025-09-26 12-29-29.png" id="3_hqtel"]
+[ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://arbolAnimado.tscn" id="4_hqtel"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i3pqv"]
 atlas = ExtResource("1_4flbx")
@@ -383,6 +384,9 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sweqy"]
+size = Vector2(50, 93)
+
 [node name="Main" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -398,4 +402,15 @@ script = ExtResource("1_i3pqv")
 sprite_frames = SubResource("SpriteFrames_b26j0")
 animation = &"Idle"
 
+[node name="Animacion" type="AnimatedSprite2D" parent="Player/Animacion"]
+sprite_frames = SubResource("SpriteFrames_b26j0")
+animation = &"Idle"
+
 [node name="Camera2D" type="Camera2D" parent="Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(-2, -10.5)
+shape = SubResource("RectangleShape2D_sweqy")
+
+[node name="ArbolAnimado" parent="." instance=ExtResource("4_hqtel")]
+position = Vector2(-22, -60)

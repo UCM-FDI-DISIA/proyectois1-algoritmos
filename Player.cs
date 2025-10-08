@@ -1,28 +1,30 @@
 using Godot;
 using System;
 
-public partial class Player : Node2D
+public partial class Player : CharacterBody2D
 {
 	[Export] public float Speed = 300f;
 
 	private AnimatedSprite2D animatedSprite;
 	private bool isAttacking = false;
-
-	// Última dirección para determinar animación de ataque
 	private Vector2 lastDirection = Vector2.Right;
 
 	public override void _Ready()
 	{
 		animatedSprite = GetNode<AnimatedSprite2D>("Animacion");
 
-		// Centrar personaje en la pantalla al iniciar
+		// Centrar personaje en pantalla al iniciar (opcional)
 		Position = GetViewport().GetVisibleRect().Size / 2;
 	}
 
-	public override void _Process(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
 		if (isAttacking)
+		{
+			Velocity = Vector2.Zero;
+			MoveAndSlide();
 			return;
+		}
 
 		Vector2 inputDirection = Vector2.Zero;
 
@@ -36,25 +38,19 @@ public partial class Player : Node2D
 			inputDirection.Y -= 1;
 
 		inputDirection = inputDirection.Normalized();
+		Velocity = inputDirection * Speed;
+		MoveAndSlide();
 
-		// Movimiento
-		Position += inputDirection * Speed * (float)delta;
-
-		// Guardar dirección si hay movimiento
 		if (inputDirection != Vector2.Zero)
 			lastDirection = inputDirection;
 
-		// Animación de movimiento
+		// Animaciones de movimiento
 		if (inputDirection != Vector2.Zero)
 		{
 			if (!animatedSprite.IsPlaying() || animatedSprite.Animation != "Andar")
 				animatedSprite.Play("Andar");
 
-			// Flip para mirar a la izquierda o derecha
-			if (inputDirection.X < 0)
-				animatedSprite.FlipH = true;
-			else if (inputDirection.X > 0)
-				animatedSprite.FlipH = false;
+			animatedSprite.FlipH = inputDirection.X < 0;
 		}
 		else
 		{
@@ -62,17 +58,11 @@ public partial class Player : Node2D
 				animatedSprite.Play("Idle");
 		}
 
-		// Ataque 1: click izquierdo
+		// Ataques
 		if (Input.IsActionJustPressed("ataque"))
-		{
 			StartAttack(1);
-		}
-
-		// Ataque 2: click derecho
 		if (Input.IsActionJustPressed("ataque2"))
-		{
 			StartAttack(2);
-		}
 	}
 
 	private void StartAttack(int attackNumber)
@@ -92,21 +82,14 @@ public partial class Player : Node2D
 	private string GetDirectionSuffix(Vector2 dir)
 	{
 		if (Mathf.Abs(dir.Y) > Mathf.Abs(dir.X))
-		{
-			if (dir.Y < 0)
-				return "W"; // Arriba
-			else
-				return "S"; // Abajo
-		}
+			return dir.Y < 0 ? "W" : "S"; // W = arriba, S = abajo
 		else
-		{
 			return "H"; // Horizontal
-		}
 	}
 
 	private void OnAnimationFinished()
 	{
-		if (animatedSprite.Animation.ToString().StartsWith("Ataque"))
+		if (((string)animatedSprite.Animation).StartsWith("Ataque"))
 		{
 			isAttacking = false;
 			animatedSprite.Play("Idle");
