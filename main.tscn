@@ -2,9 +2,9 @@
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://Main.cs" id="1_lquwl"]
-[ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://Player.cs" id="2_lquwl"]
+[ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://PersonajePrincipal/Player.cs" id="2_lquwl"]
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
-[ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://arbolAnimado.tscn" id="4_272bh"]
+[ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("3_lquwl")
@@ -416,22 +416,34 @@ tile_set = ExtResource("1_1bvp3")
 tile_map_data = PackedByteArray("AAAHAP7/AgABAAEAAAAIAAAAAgABAAEAAAAIAP//AgABAAEAAAAHAP3/AgABAAEAAAAJAAAAAgACAAEAAAAJAP//AgACAAEAAAAIAP7/AgACAAEAAAAIAP3/AgACAAEAAAAIAAEAAgABAAEAAAAJAAEAAgACAAEAAAADAAIAAgABAAIAAAAEAAIAAgABAAIAAAAFAAIAAgABAAIAAAAGAAIAAgABAAIAAAAHAAIAAgABAAIAAAAIAAIAAgABAAIAAAA=")
 tile_set = ExtResource("1_1bvp3")
 
-[node name="Player" type="CharacterBody2D" parent="."]
+[node name="Objetos" type="Node2D" parent="."]
 z_as_relative = false
+y_sort_enabled = true
+
+[node name="Player" type="CharacterBody2D" parent="Objetos"]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(1126, 619)
 script = ExtResource("2_lquwl")
 
-[node name="Animacion" type="AnimatedSprite2D" parent="Player"]
+[node name="Animacion" type="AnimatedSprite2D" parent="Objetos/Player"]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(-579, -325)
 sprite_frames = SubResource("SpriteFrames_b26j0")
 animation = &"Idle"
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
+[node name="Camera2D" type="Camera2D" parent="Objetos/Player"]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(-579, -325)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Objetos/Player"]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(-579, -296.75)
 shape = SubResource("CircleShape2D_lquwl")
 
-[node name="Arbol" parent="." instance=ExtResource("4_272bh")]
+[node name="Arbol" parent="Objetos" instance=ExtResource("4_272bh")]
+z_as_relative = false
 position = Vector2(730, 306)
