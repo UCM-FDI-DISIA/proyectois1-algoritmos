@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://chbs7mxhn2mf6" path="res://AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png" id="1_xfbxd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rcsqm"]
-size = Vector2(97, 73)
+size = Vector2(64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ci4l3"]
 atlas = ExtResource("1_xfbxd")
@@ -46,12 +46,11 @@ animations = [{
 script = ExtResource("1_j4bp6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-2.500061, -15.5000305)
 shape = SubResource("RectangleShape2D_rcsqm")
 
 [node name="Animacion" type="AnimatedSprite2D" parent="."]
 z_as_relative = false
-position = Vector2(-2.3841858e-07, -106.5)
+position = Vector2(0, -100)
 scale = Vector2(1.4166666, 1.390625)
 sprite_frames = SubResource("SpriteFrames_uvlja")
 animation = &"Idle"
