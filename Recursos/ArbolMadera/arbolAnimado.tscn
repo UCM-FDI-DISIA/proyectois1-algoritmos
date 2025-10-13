@@ -6,19 +6,19 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rcsqm"]
 size = Vector2(64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ci4l3"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_c0rit"]
 atlas = ExtResource("1_xfbxd")
 region = Rect2(0, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_utamm"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_5k63u"]
 atlas = ExtResource("1_xfbxd")
 region = Rect2(192, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_a6x1h"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_gweg6"]
 atlas = ExtResource("1_xfbxd")
 region = Rect2(384, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kg568"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_jgsib"]
 atlas = ExtResource("1_xfbxd")
 region = Rect2(576, 0, 192, 192)
 
@@ -26,16 +26,16 @@ region = Rect2(576, 0, 192, 192)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ci4l3")
+"texture": SubResource("AtlasTexture_c0rit")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_utamm")
+"texture": SubResource("AtlasTexture_5k63u")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_a6x1h")
+"texture": SubResource("AtlasTexture_gweg6")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_kg568")
+"texture": SubResource("AtlasTexture_jgsib")
 }],
 "loop": true,
 "name": &"Idle",
@@ -58,5 +58,5 @@ position = Vector2(-0.99999994, 0)
 scale = Vector2(1.4166666, 1.390625)
 sprite_frames = SubResource("SpriteFrames_uvlja")
 animation = &"Idle"
-frame_progress = 0.38105235
+frame_progress = 0.447654
 offset = Vector2(0.7058823, -71.91011)
