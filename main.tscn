@@ -395,12 +395,13 @@ scale = Vector2(2, 1)
 texture = ExtResource("1_1bvp3")
 
 [node name="Player" type="CharacterBody2D" parent="."]
+z_as_relative = false
 position = Vector2(580, 295)
 script = ExtResource("2_lquwl")
 
 [node name="Animacion" type="AnimatedSprite2D" parent="Player"]
 sprite_frames = SubResource("SpriteFrames_b26j0")
-animation = &"Ataque2_W"
+animation = &"Idle"
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 
@@ -408,5 +409,5 @@ animation = &"Ataque2_W"
 position = Vector2(0, 28.25)
 shape = SubResource("RectangleShape2D_sweqy")
 
-[node name="ArbolAnimado" parent="." instance=ExtResource("4_272bh")]
-position = Vector2(129, -87)
+[node name="Arbol" parent="." instance=ExtResource("4_272bh")]
+position = Vector2(155, -104)

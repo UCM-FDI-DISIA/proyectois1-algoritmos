@@ -5,26 +5,26 @@
 * [Home](Home)
 * Documentación
    * [Documento de Especificación de Requisitos](especificacionIEEE830.md)
-       * [Sección 1: Introducción](IEEE830.md)
-       * [Sección 2: Descripción](IEEE830descrip.md)
-       * [Sección 3: Requisitos específicos](IEEE830requis.md)
+	   * [Sección 1: Introducción](IEEE830.md)
+	   * [Sección 2: Descripción](IEEE830descrip.md)
+	   * [Sección 3: Requisitos específicos](IEEE830requis.md)
    * Documento técnico
 * Diseño gráfico
    * [Estética y Diseño](estetica_papel.md)
-       * [Interfaz](diseno_interfaz.md)
-       * [Diseño de personajes](diseno_personajes.md)
-       * [Diseño de recursos](diseno_recursos.md)
+	   * [Interfaz](diseno_interfaz.md)
+	   * [Diseño de personajes](diseno_personajes.md)
+	   * [Diseño de recursos](diseno_recursos.md)
    * [Enlazado de recursos](Enlazado-de-recursos)
 * Objetivos y planificación
    * [Usuarios de _Feudalia_](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Historias-de-usuario).
-       * [Historias de usuario](historiasusuario.md).
-       * [DoD (Definition of Done)](definitionOfDone.md) 
+	   * [Historias de usuario](historiasusuario.md).
+	   * [DoD (Definition of Done)](definitionOfDone.md) 
    * [Planificación de los Sprints](sprints.md)
-       * [Backlog de los Sprints](backlogSprint.md)
-       * [Revisión de los Sprints](revisionSprints.md)
-       * [Retrospectiva de los Sprints](retrospectivaSprints.md)
+	   * [Backlog de los Sprints](backlogSprint.md)
+	   * [Revisión de los Sprints](revisionSprints.md)
+	   * [Retrospectiva de los Sprints](retrospectivaSprints.md)
    * [Reuniones del equipo](reuniones.md)
-       * [MVP y terminado](MVP.md)
+	   * [MVP y terminado](MVP.md)
 * Gestión de riesgos
    * [Introducción](introduccionRiesgos.md) 
    * [Priorización de riesgos del proyecto](priorizacionRiesgos.md)

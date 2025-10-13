@@ -1,8 +1,6 @@
 using Godot;
 using System;
 
-//Comentario dos
-
 public partial class Player : CharacterBody2D
 {
 	[Export] public float Speed = 300f;
@@ -65,6 +63,9 @@ public partial class Player : CharacterBody2D
 			StartAttack(1);
 		if (Input.IsActionJustPressed("ataque2"))
 			StartAttack(2);
+
+		// 🟢 ORDEN DE DIBUJO SEGÚN ALTURA
+		ZIndex = (int)Position.Y;
 	}
 
 	private void StartAttack(int attackNumber)
