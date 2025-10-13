@@ -1,6 +1,8 @@
 using Godot;
 using System;
 
+//NO CAMBIAR
+
 public partial class MainMenu : Control
 {
 	public override void _Ready()
