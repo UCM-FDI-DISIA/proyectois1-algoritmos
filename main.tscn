@@ -396,18 +396,20 @@ texture = ExtResource("1_1bvp3")
 
 [node name="Player" type="CharacterBody2D" parent="."]
 z_as_relative = false
-position = Vector2(580, 295)
+position = Vector2(1126, 619)
 script = ExtResource("2_lquwl")
 
 [node name="Animacion" type="AnimatedSprite2D" parent="Player"]
+position = Vector2(-579, -325)
 sprite_frames = SubResource("SpriteFrames_b26j0")
 animation = &"Idle"
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(-579, -325)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-position = Vector2(0, 28.25)
+position = Vector2(-579, -296.75)
 shape = SubResource("RectangleShape2D_sweqy")
 
 [node name="Arbol" parent="." instance=ExtResource("4_272bh")]
-position = Vector2(155, -104)
+position = Vector2(820, 344)

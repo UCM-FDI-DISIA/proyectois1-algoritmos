@@ -15,6 +15,9 @@ public partial class Player : CharacterBody2D
 
 		// Centrar personaje en pantalla al iniciar (opcional)
 		Position = GetViewport().GetVisibleRect().Size / 2;
+
+		// Inicial ZIndex
+		ZIndex = (int)Position.Y;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -23,6 +26,7 @@ public partial class Player : CharacterBody2D
 		{
 			Velocity = Vector2.Zero;
 			MoveAndSlide();
+			ZIndex = (int)Position.Y;
 			return;
 		}
 
@@ -64,7 +68,7 @@ public partial class Player : CharacterBody2D
 		if (Input.IsActionJustPressed("ataque2"))
 			StartAttack(2);
 
-		// 🟢 ORDEN DE DIBUJO SEGÚN ALTURA
+		// Actualizar ZIndex según Y
 		ZIndex = (int)Position.Y;
 	}
 

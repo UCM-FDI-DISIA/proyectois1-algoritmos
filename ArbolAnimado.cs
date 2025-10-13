@@ -9,16 +9,16 @@ public partial class Arbol : StaticBody2D
 	{
 		anim = GetNode<AnimatedSprite2D>("Animacion");
 
-		ZAsRelative = false;
-		ZIndex = (int)Position.Y;
-
-		// Iniciar animación Idle y dejarla siempre en loop
+		// Iniciar animación Idle
 		anim.Play("Idle");
+
+		// Ajustar ZIndex según Y
+		ZIndex = (int)Position.Y;
 	}
 
 	public override void _Process(double delta)
 	{
-		// Mantener el orden de dibujo según la altura
+		// Solo si el árbol se mueve, sino se puede quitar
 		ZIndex = (int)Position.Y;
 	}
 }

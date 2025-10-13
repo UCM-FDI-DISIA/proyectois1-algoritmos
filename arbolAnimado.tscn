@@ -46,12 +46,12 @@ animations = [{
 script = ExtResource("1_j4bp6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(611.5, 403)
+position = Vector2(0.49993896, 1.9999695)
 shape = SubResource("RectangleShape2D_rcsqm")
 
 [node name="Animacion" type="AnimatedSprite2D" parent="."]
 z_as_relative = false
-position = Vector2(609, 310.5)
+position = Vector2(2.9999995, -89)
 scale = Vector2(1.4166666, 1.390625)
 sprite_frames = SubResource("SpriteFrames_uvlja")
 animation = &"Idle"
