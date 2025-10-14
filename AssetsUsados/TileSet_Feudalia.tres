@@ -1,8 +1,8 @@
 [gd_resource type="TileSet" load_steps=7 format=3 uid="uid://df4yue3wsjnbd"]
 
-[ext_resource type="Texture2D" uid="uid://dnpxr1p1yr5s2" path="res://AssetsUsados/Terrain/Ground/Tilemap_Flat.png" id="1_75fgc"]
-[ext_resource type="Texture2D" uid="uid://dwhdje0vawy2x" path="res://AssetsUsados/Terrain/Ground/Tilemap_Elevation.png" id="2_7pobe"]
-[ext_resource type="Texture2D" uid="uid://kkincbjo4fu8" path="res://AssetsUsados/Terrain/Ground/Shadows.png" id="3_4hb0b"]
+[ext_resource type="Texture2D" uid="uid://dnpxr1p1yr5s2" path="res://AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Flat.png" id="1_75fgc"]
+[ext_resource type="Texture2D" uid="uid://dwhdje0vawy2x" path="res://AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Elevation.png" id="2_7pobe"]
+[ext_resource type="Texture2D" uid="uid://kkincbjo4fu8" path="res://AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Shadows.png" id="3_4hb0b"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8mvm6"]
 texture = ExtResource("1_75fgc")
