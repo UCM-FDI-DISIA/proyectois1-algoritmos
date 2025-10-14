@@ -12,3 +12,5 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 PRUEBAS REALIZADAS:
 	10/2025
 		Sin ninguna incidencia.
+	14/10/2025
+		Funciona correctamente, cumpliendo todos los requisitos. Pasa la prueba con éxito.
