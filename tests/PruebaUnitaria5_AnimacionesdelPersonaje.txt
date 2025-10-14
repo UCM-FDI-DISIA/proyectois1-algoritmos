@@ -1,0 +1,17 @@
+MECANICA A PROBAR: ANIMACIONES DEL PERSONAJE
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	
+	1) Ejecutar el archivo.
+	2) Comprobar que el personaje principal realiza las animaciones de movimiento pertinentes.
+		* Si camina en horizontal, realiza la animacion de "caminar" en el sentido correspondiente.
+		* Si se mueve en verticar, continua la animacion de "caminar" que estuviese realizando.
+		* Si se mueve en diagonal, realiza la animacion de "caminar" en el sentido de la componente horizontal de su movimiento.
+	3) Comprobar animaciones de ataque.
+		* Al hacer click derecho o izquierdo:
+			* Comprobar que el personaje realiza la animacion de atacar en el sentido de su movimiento. 
+			* Comprobar que la animacion es distinta con el click derecho que con el izquierdo.
+
+PRUEBAS REALIZADAS:
+	10/2025
+		Sin ninguna incidencia.
