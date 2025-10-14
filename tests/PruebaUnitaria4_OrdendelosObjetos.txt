@@ -1,0 +1,21 @@
+MECANICA A PROBAR: ORDEN DE LOS OBJETOS
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	
+	1) Ejecutar el archivo.
+	2) Comprobar que la visualizacion de los objetos es natural.
+		* No aparecen objetos superpuestos.
+		* Si aparecen varios objetos en una misma zona solapados, se distingue cual esta delante y cual detras y se corresponde con lo esperado.
+	3) Al mover el personaje delante o detras del objeto se actualiza que imagen se ve encima de la otra.
+		* Si el personaje pasa delante de un objeto, se ve encima.
+		* Si el personaje pasa detras del obejto, se ve detras.
+
+PRUEBAS REALIZADAS:
+	10/2025
+		DIA 13: Solo existe el objeto Arbol.
+			La mecanica no se implementa correctamente y el personaje aparece debajo del mapa.
+			Renunciamos a la implementacion con ZIndex y usamos Y-Sort.
+			Se obtiene una version funcional de esta mecanica y las anteiores pero se desconfigura al hacer push con el plugin de Godot.
+			Se recupera el codigo perdido, se hace push con Desktop y se verifica desde otro dispositivo que funciona correctamente.
+		DIA 14: Se annade la mecanica a los objetos "Mina de Piedra" y "Mina de Oro".
+		OTROS PUSH: Sin ninguna incidencia.

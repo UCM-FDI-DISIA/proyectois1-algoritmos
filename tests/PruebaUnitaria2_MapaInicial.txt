@@ -1,0 +1,23 @@
+MECANICA A PROBAR: MAPA DEL USUARIO
+
+En esta prueba se verifica que todo lo referente a la visualizacion de los nodos TileMap es correcto.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	
+	1) Ejecutar el archivo.
+	2) Comprobar que el terreno del mapa aparece y es el esperado.
+		* El mapa combina unicamente imagenes de la carpeta "AssetsUsados".
+		* Se han importado correctamente las imagenes de los Assets.
+		* El mapa se ve con la resolución, color y tamanno esperado.
+		* El mapa aparece debajo del personaje.
+		* El mapa tiene los desniveles y texturas esperados.
+	3) Comprobar que los elementos del mapa aparecen.
+		* Los objetos estan colocados correctamente en un nivel u otro del mapa.
+		* Los objetos iniciales que aparecen son Arbol, Mina de Oro, Mina de Piedra (al menos uno de cada).
+		* Cada objeto aparece en una cantidad razonable (ver especificacion en GitHub).
+	
+
+
+PRUEBAS REALIZADAS:
+	10/2025
+		Sin ninguna incidencia.

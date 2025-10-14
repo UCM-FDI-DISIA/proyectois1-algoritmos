@@ -1,0 +1,14 @@
+MECANICA A PROBAR: MOVIMIENTO DEL PERSONAJE Y SEGUIMIENTO DE LA CAMARA
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	
+	1) Ejecutar el archivo.
+	2) Comprobar que el personaje principal aparece centrado en la pantalla al iniciar el programa.
+	3) Comprobar que el personaje se mueve con las flechas del teclado en las cuatro direcciones cardinales y en las cuatro diagonales.
+	4) Comprobar que al hacer cualquiera de estos ocho movimientos, la camara sigue al personaje y este se mantiene centrado en la pantalla.
+	5) Comprobar que lo anterior usando las flechas WASD.
+
+
+PRUEBAS REALIZADAS:
+	10/2025
+		Sin ninguna incidencia.
