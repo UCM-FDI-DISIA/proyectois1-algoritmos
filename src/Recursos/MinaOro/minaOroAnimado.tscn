@@ -1,21 +1,19 @@
 [gd_scene load_steps=3 format=3 uid="uid://b16fkyrsi8o7y"]
 
-[ext_resource type="Texture2D" uid="uid://xkvuah8qtglq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/MinadeOro.png" id="1_w6psx"]
+[ext_resource type="Texture2D" uid="uid://bt11g46ev4u3d" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/GoldMine_Active.png" id="1_w6psx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w6psx"]
-size = Vector2(171.38391, 105.44586)
+size = Vector2(224.9414, 195.38498)
 
 [node name="MinaOroAnimado" type="StaticBody2D"]
 
-[node name="MinadeOro" type="Sprite2D" parent="."]
-position = Vector2(-2.9999971, -9.536743e-07)
-scale = Vector2(0.21848892, 0.23995058)
+[node name="GoldMineActive" type="Sprite2D" parent="."]
+position = Vector2(3, -6)
 texture = ExtResource("1_w6psx")
-offset = Vector2(35.05618, -184.88889)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(3.0000038, 11)
+position = Vector2(2.5000014, 14.5)
 scale = Vector2(0.84021884, 0.32244036)
 shape = SubResource("RectangleShape2D_w6psx")

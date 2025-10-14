@@ -3,7 +3,7 @@
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
 [ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://src/PersonajePrincipal/Player.cs" id="2_lquwl"]
-[ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="3_lquwl"]
+[ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
 [ext_resource type="PackedScene" uid="uid://c677m228bca8p" path="res://src/Recursos/MinaPiedra/minaPiedraAnimado.tscn" id="7_rlaii"]
@@ -460,19 +460,19 @@ position = Vector2(-185, 148)
 position = Vector2(1254, -162)
 
 [node name="MinaOroAnimado" parent="Objetos" instance=ExtResource("6_kmhfv")]
-position = Vector2(126, 99)
+position = Vector2(91, 82)
 
 [node name="MinaOroAnimado2" parent="Objetos" instance=ExtResource("6_kmhfv")]
 position = Vector2(1071, 478)
 
 [node name="MinaOroAnimado3" parent="Objetos" instance=ExtResource("6_kmhfv")]
-position = Vector2(703, 60)
+position = Vector2(724, 65)
 
 [node name="MinaOroAnimado4" parent="Objetos" instance=ExtResource("6_kmhfv")]
 position = Vector2(-216, -353)
 
 [node name="MinaOroAnimado5" parent="Objetos" instance=ExtResource("6_kmhfv")]
-position = Vector2(-134, -383)
+position = Vector2(-117, -392)
 
 [node name="MinaPiedraAnimado" parent="Objetos" instance=ExtResource("7_rlaii")]
 position = Vector2(-27, 253)
