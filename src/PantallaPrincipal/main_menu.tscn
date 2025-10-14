@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://dud42l0lmmsh2"]
+
+[ext_resource type="Script" uid="uid://bkdgb7tbawmyu" path="res://src/PantallaPrincipal/MainMenu.cs" id="1_7vrkn"]
+[ext_resource type="Texture2D" uid="uid://cnn3dt4wm7vaa" path="res://src/UI/FondoMenu.jpg" id="2_fu7sn"]
+[ext_resource type="Texture2D" uid="uid://3fakca8bfqjt" path="res://src/UI/BotonPlay.png" id="3_fu7sn"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7vrkn")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -19.0
+offset_top = -15.0
+offset_right = 1171.0
+offset_bottom = 666.0
+texture = ExtResource("2_fu7sn")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PlayButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 436.0
+offset_top = 415.0
+offset_right = 760.0
+offset_bottom = 527.0
+icon = ExtResource("3_fu7sn")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]

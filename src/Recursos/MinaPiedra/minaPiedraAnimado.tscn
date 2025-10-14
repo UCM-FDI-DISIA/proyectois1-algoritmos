@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://c677m228bca8p"]
+
+[ext_resource type="Texture2D" uid="uid://dti2fl7yrpm64" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/GoldMine_Destroyed.png" id="1_ikrbq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e0jvj"]
+size = Vector2(190, 51)
+
+[node name="MinaPiedraAnimado" type="StaticBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(4, 12.5)
+shape = SubResource("RectangleShape2D_e0jvj")
+
+[node name="GoldMineDestroyed" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(-1, 10)
+texture = ExtResource("1_ikrbq")
+offset = Vector2(4, -17)
