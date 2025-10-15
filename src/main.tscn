@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=60 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
 [ext_resource type="PackedScene" uid="uid://c677m228bca8p" path="res://src/Recursos/MinaPiedra/minaPiedraAnimado.tscn" id="7_rlaii"]
+[ext_resource type="Script" uid="uid://dobkasqxexa7m" path="res://src/resource_manager.gd" id="9_kf8lf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("3_lquwl")
@@ -491,3 +492,6 @@ position = Vector2(502, 500)
 
 [node name="MinaPiedraAnimado5" parent="Objetos" instance=ExtResource("7_rlaii")]
 position = Vector2(599, 535)
+
+[node name="ResourceManager" type="Node" parent="."]
+script = ExtResource("9_kf8lf")
