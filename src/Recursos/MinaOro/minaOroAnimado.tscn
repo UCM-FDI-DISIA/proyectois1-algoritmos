@@ -8,12 +8,11 @@ size = Vector2(224.9414, 195.38498)
 [node name="MinaOroAnimado" type="StaticBody2D"]
 
 [node name="GoldMineActive" type="Sprite2D" parent="."]
-position = Vector2(3, -6)
+position = Vector2(2, -12)
 texture = ExtResource("1_w6psx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(2.5000014, 14.5)
 scale = Vector2(0.84021884, 0.32244036)
 shape = SubResource("RectangleShape2D_w6psx")
