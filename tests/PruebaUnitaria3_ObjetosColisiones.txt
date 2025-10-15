@@ -18,3 +18,5 @@ Nota: definimos colision como
 PRUEBAS REALIZADAS:
 	10/2025
 		Sin ninguna incidencia.
+	14/10/2025
+		Funciona correctamente, cumpliendo los requisitos, se pasa la prueba con éxito.

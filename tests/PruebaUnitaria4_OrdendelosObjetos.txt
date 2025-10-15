@@ -19,3 +19,6 @@ PRUEBAS REALIZADAS:
 			Se recupera el codigo perdido, se hace push con Desktop y se verifica desde otro dispositivo que funciona correctamente.
 		DIA 14: Se annade la mecanica a los objetos "Mina de Piedra" y "Mina de Oro".
 		OTROS PUSH: Sin ninguna incidencia.
+	14/2025
+		Se comprueba que los objetos cumplen lo requerido, se respeta el orden de aparición y la animación cuando dos objetos colisionan 
+		es la correcta. Se pasa la prueba con éxito.
