@@ -1,22 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://dtox61xw2rp3e"]
+[gd_scene load_steps=7 format=3 uid="uid://dtox61xw2rp3e"]
 
 [ext_resource type="Texture2D" uid="uid://c2y3e4plqmh21" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/W_Idle.png" id="1_mkcvl"]
-[ext_resource type="Texture2D" uid="uid://dopipnxlkfjfk" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/04.png" id="2_wdeym"]
+[ext_resource type="Texture2D" uid="uid://7coqstm4olxf" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Banners/Carved_3Slides.png" id="1_wdeym"]
+[ext_resource type="Texture2D" uid="uid://bso5x606mwmd2" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/05.png" id="3_8aly1"]
 [ext_resource type="Texture2D" uid="uid://blfnw3ge2tpxp" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/G_Idle.png" id="3_ix1yk"]
 [ext_resource type="Texture2D" uid="uid://diptjqat7a84h" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/18.png" id="4_8aly1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aaxvf"]
-bg_color = Color(0.11372549, 0.11372549, 0.11372549, 0.8392157)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.27644327, 0.51549155, 0.29140568, 1)
-border_blend = true
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="ResourcesHUD" type="CanvasLayer"]
 
@@ -26,64 +17,70 @@ offset_right = 273.0
 offset_bottom = 101.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_aaxvf")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+[node name="TextureRect" type="TextureRect" parent="Panel"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -7.0
+offset_top = -1.0
+offset_right = 275.0
+offset_bottom = 104.0
+texture = ExtResource("1_wdeym")
 
-[node name="WoodContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_right = 268.0
+offset_bottom = 98.0
+
+[node name="WoodContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBoxContainer/WoodContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/WoodContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = ExtResource("1_mkcvl")
-expand_mode = 3
-stretch_mode = 4
+expand_mode = 1
 
-[node name="WoodLabel" type="Label" parent="Panel/HBoxContainer/WoodContainer"]
+[node name="WoodLabel" type="Label" parent="HBoxContainer/WoodContainer"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 
-[node name="StoneContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
+[node name="StoneContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBoxContainer/StoneContainer"]
-custom_minimum_size = Vector2(64, 64)
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/StoneContainer"]
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-texture = ExtResource("2_wdeym")
-expand_mode = 5
+texture = ExtResource("3_8aly1")
+stretch_mode = 3
 
-[node name="StoneLabel" type="Label" parent="Panel/HBoxContainer/StoneContainer"]
+[node name="StoneLabel" type="Label" parent="HBoxContainer/StoneContainer"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 
-[node name="GoldContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
+[node name="GoldContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBoxContainer/GoldContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/GoldContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = ExtResource("3_ix1yk")
 expand_mode = 3
 
-[node name="GoldLabel" type="Label" parent="Panel/HBoxContainer/GoldContainer"]
+[node name="GoldLabel" type="Label" parent="HBoxContainer/GoldContainer"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 
-[node name="VillagerContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
+[node name="VillagerContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="Panel/HBoxContainer/VillagerContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VillagerContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 texture = ExtResource("4_8aly1")
 expand_mode = 3
 
-[node name="VillagerLabel" type="Label" parent="Panel/HBoxContainer/VillagerContainer"]
+[node name="VillagerLabel" type="Label" parent="HBoxContainer/VillagerContainer"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
