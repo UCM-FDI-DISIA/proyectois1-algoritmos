@@ -12,10 +12,10 @@
 [ext_resource type="Texture2D" uid="uid://cwa702r0ec70w" path="res://src/AssetsUsados/Terrain/Shadows/Shadow.png" id="8_o15w4"]
 [ext_resource type="Texture2D" uid="uid://t4y8u5d5fj0k" path="res://src/AssetsUsados/Terrain/Agua_NiveldelAgua/Water Foam.png" id="9_marls"]
 [ext_resource type="Texture2D" uid="uid://bluai1kjrgp11" path="res://src/AssetsUsados/Terrain/Bridge/Bridge_All.png" id="10_dosor"]
-[ext_resource type="Texture2D" uid="uid://cqxlmcv2kklad" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_01.png" id="12_dosor"]
-[ext_resource type="Texture2D" uid="uid://dd5407xwdg7lb" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_02.png" id="13_o15w4"]
-[ext_resource type="Texture2D" uid="uid://xejlcy6lu2t" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_03.png" id="14_marls"]
-[ext_resource type="Texture2D" uid="uid://dhic1qgeuucc5" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Rocks/Rocks_04.png" id="15_ah6ps"]
+[ext_resource type="Texture2D" uid="uid://cqxlmcv2kklad" path="res://src/AssetsUsados/Terrain/Agua_NiveldelAgua/PackOg/Rocks/Rocks_01.png" id="12_dosor"]
+[ext_resource type="Texture2D" uid="uid://dd5407xwdg7lb" path="res://src/AssetsUsados/Terrain/Agua_NiveldelAgua/PackOg/Rocks/Rocks_02.png" id="13_o15w4"]
+[ext_resource type="Texture2D" uid="uid://xejlcy6lu2t" path="res://src/AssetsUsados/Terrain/Agua_NiveldelAgua/PackOg/Rocks/Rocks_03.png" id="14_marls"]
+[ext_resource type="Texture2D" uid="uid://dhic1qgeuucc5" path="res://src/AssetsUsados/Terrain/Agua_NiveldelAgua/PackOg/Rocks/Rocks_04.png" id="15_ah6ps"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8mvm6"]
 texture = ExtResource("1_75fgc")

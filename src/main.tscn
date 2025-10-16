@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=62 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
@@ -392,6 +392,15 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_lquwl"]
 radius = 12.002604
 
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_kf8lf"]
+scenes/1/scene = ExtResource("4_272bh")
+scenes/2/scene = ExtResource("6_kmhfv")
+scenes/3/scene = ExtResource("7_rlaii")
+
+[sub_resource type="TileSet" id="TileSet_mgm53"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetScenesCollectionSource_kf8lf")
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_lquwl")
 
@@ -455,251 +464,11 @@ y_sort_enabled = true
 position = Vector2(-579, -296.75)
 shape = SubResource("CircleShape2D_lquwl")
 
-[node name="Arboles" type="Node2D" parent="Objetos"]
-
-[node name="Arbol6" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-3680, 1028)
-
-[node name="Arbol7" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-3878, 412)
-
-[node name="Arbol8" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-3565, 1998)
-
-[node name="Arbol9" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-3362, 2121)
-
-[node name="Arbol10" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2088, 2253)
-
-[node name="Arbol11" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2433, 2313)
-
-[node name="Arbol12" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-1860, 2331)
-
-[node name="Arbol13" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-449, 1145)
-
-[node name="Arbol" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-1769, 1446)
-
-[node name="Arbol2" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2058, 1655)
-
-[node name="Arbol3" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-1916, 1209)
-
-[node name="Arbol4" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2596, 2070)
-
-[node name="Arbol5" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2474, 1657)
-
-[node name="Arbol14" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(1527, 2287)
-
-[node name="Arbol15" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(2412, 1782)
-
-[node name="Arbol16" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(2235, 1185)
-
-[node name="Arbol17" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(2617, 780)
-
-[node name="Arbol18" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(2645, 1050)
-
-[node name="Arbol19" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(1123, 1022)
-
-[node name="Arbol20" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(1374, 921)
-
-[node name="Arbol21" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(1325, 1107)
-
-[node name="Arbol22" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(1177, 1185)
-
-[node name="Arbol23" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-773, 1426)
-
-[node name="Arbol24" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-908, 1214)
-
-[node name="Arbol25" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2830, -636)
-
-[node name="Arbol26" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2551, -815)
-
-[node name="Arbol27" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2808, -903)
-
-[node name="Arbol28" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-3037, -2328)
-
-[node name="Arbol29" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-3724, -2329)
-
-[node name="Arbol30" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2676, 838)
-
-[node name="Arbol31" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-4585, -384)
-
-[node name="Arbol32" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2170, 1328)
-
-[node name="Arbol33" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2411, 1123)
-
-[node name="Arbol34" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-3226, 1901)
-
-[node name="Arbol35" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2664, 1409)
-
-[node name="Arbol36" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2222, 2036)
-
-[node name="Arbol37" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-2520, 918)
-
-[node name="Arbol38" parent="Objetos/Arboles" instance=ExtResource("4_272bh")]
-position = Vector2(-1796, 791)
-
-[node name="Oro" type="Node2D" parent="Objetos"]
-
-[node name="MinaOroAnimado" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(270, 1133)
-
-[node name="MinaOroAnimado2" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(1910, -1507)
-
-[node name="MinaOroAnimado3" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(1879, -1303)
-
-[node name="MinaOroAnimado4" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(2400, -616)
-
-[node name="MinaOroAnimado5" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(1261, -1369)
-
-[node name="MinaOroAnimado6" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(-4376, -222)
-
-[node name="MinaOroAnimado7" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(-4014, -2214)
-
-[node name="MinaOroAnimado8" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(-4278, -1083)
-
-[node name="MinaOroAnimado9" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(-2306, -2103)
-
-[node name="MinaOroAnimado10" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(2871, 459)
-
-[node name="MinaOroAnimado11" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(-576, -2163)
-
-[node name="MinaOroAnimado12" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(-296, -1946)
-
-[node name="MinaOroAnimado13" parent="Objetos/Oro" instance=ExtResource("6_kmhfv")]
-position = Vector2(806, -669)
-
-[node name="Piedra" type="Node2D" parent="Objetos"]
-
-[node name="MinaPiedraAnimado" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-368, 204)
-
-[node name="MinaPiedraAnimado2" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(2267, -1504)
-
-[node name="MinaPiedraAnimado3" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(2079, -1089)
-
-[node name="MinaPiedraAnimado4" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-111, 916)
-
-[node name="MinaPiedraAnimado5" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(899, 329)
-
-[node name="MinaPiedraAnimado6" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(961, 1338)
-
-[node name="MinaPiedraAnimado7" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(659, 808)
-
-[node name="MinaPiedraAnimado8" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-206, 1548)
-
-[node name="MinaPiedraAnimado9" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-3636, 655)
-
-[node name="MinaPiedraAnimado10" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-4291, 1912)
-
-[node name="MinaPiedraAnimado11" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-4201, 2033)
-
-[node name="MinaPiedraAnimado12" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-4513, 2341)
-
-[node name="MinaPiedraAnimado13" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-4437, 2232)
-
-[node name="MinaPiedraAnimado14" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-3929, 2278)
-
-[node name="MinaPiedraAnimado15" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-4156, -91)
-
-[node name="MinaPiedraAnimado16" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-4324, 78)
-
-[node name="MinaPiedraAnimado17" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-3222, -2196)
-
-[node name="MinaPiedraAnimado18" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-3012, -2076)
-
-[node name="MinaPiedraAnimado19" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-3787, -928)
-
-[node name="MinaPiedraAnimado20" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-3586, -2161)
-
-[node name="MinaPiedraAnimado21" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-1788, -1703)
-
-[node name="MinaPiedraAnimado22" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-4444, -1713)
-
-[node name="MinaPiedraAnimado23" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-3137, -458)
-
-[node name="MinaPiedraAnimado24" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(1931, 2081)
-
-[node name="MinaPiedraAnimado25" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(3009, 881)
-
-[node name="MinaPiedraAnimado26" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-211, 2267)
-
-[node name="MinaPiedraAnimado27" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(1847, 406)
-
-[node name="MinaPiedraAnimado28" parent="Objetos/Piedra" instance=ExtResource("7_rlaii")]
-position = Vector2(-1015, -1453)
+[node name="ObjetosMapa" type="TileMapLayer" parent="Objetos"]
+z_as_relative = false
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAAX/27/AAAAAAAAAQDF/9v/AAAAAAAAAQDQ/9v/AAAAAAAAAQDT//X/AAAAAAAAAQDU//H/AAAAAAAAAQDY//P/AAAAAAAAAQC4//n/AAAAAAAAAQDD/wYAAAAAAAAAAQDG/xAAAAAAAAAAAQDI/x8AAAAAAAAAAQDL/yEAAAAAAAAAAQDN/x0AAAAAAAAAAQDW/w0AAAAAAAAAAQDY/w4AAAAAAAAAAQDa/xEAAAAAAAAAAQDW/xYAAAAAAAAAAQDe/xQAAAAAAAAAAQDi/xIAAAAAAAAAAQDk/wwAAAAAAAAAAQDk/xYAAAAAAAAAAQDf/xkAAAAAAAAAAQDZ/xoAAAAAAAAAAQDX/yAAAAAAAAAAAQDa/yQAAAAAAAAAAQDd/x8AAAAAAAAAAQDf/yMAAAAAAAAAAQDj/yQAAAAAAAAAAQDx/xMAAAAAAAAAAQDz/xYAAAAAAAAAAQD5/xEAAAAAAAAAAQARABAAAAAAAAAAAQASABIAAAAAAAAAAQAUABEAAAAAAAAAAQAVAA4AAAAAAAAAAQAXACMAAAAAAAAAAQAlABsAAAAAAAAAAQAiABIAAAAAAAAAAQApABAAAAAAAAAAAQAoAAwAAAAAAAAAAQAEABEAAAAAAAAAAgAsAAcAAAAAAAAAAgATAOr/AAAAAAAAAgAdAOv/AAAAAAAAAgAdAOj/AAAAAAAAAgAlAPb/AAAAAAAAAgD3/97/AAAAAAAAAgD7/+H/AAAAAAAAAgDb/9//AAAAAAAAAgDB/93/AAAAAAAAAgC9/+//AAAAAAAAAgC7//z/AAAAAAAAAgAMAPX/AAAAAAAAAgAjAOj/AAAAAAAAAwAgAO//AAAAAAAAAwAuAA0AAAAAAAAAAwAeACAAAAAAAAAAAwAOABQAAAAAAAAAAwAKAAwAAAAAAAAAAwD+/w4AAAAAAAAAAwD7/wwAAAAAAAAAAwD8/xgAAAAAAAAAAwD8/yMAAAAAAAAAAwANAAUAAAAAAAAAAwD5/wIAAAAAAAAAAwC8/x0AAAAAAAAAAwC+/x8AAAAAAAAAAwC6/yIAAAAAAAAAAwC5/yQAAAAAAAAAAwDC/yMAAAAAAAAAAwDG/woAAAAAAAAAAwC8/wEAAAAAAAAAAwC///7/AAAAAAAAAwDO//j/AAAAAAAAAwDE//H/AAAAAAAAAwC6/+X/AAAAAAAAAwDH/97/AAAAAAAAAwDN/93/AAAAAAAAAwDQ/9//AAAAAAAAAwDj/+X/AAAAAAAAAwDv/+n/AAAAAAAAAwAcAAYAAAAAAAAAAwA=")
+tile_set = SubResource("TileSet_mgm53")
 
 [node name="ResourceManager" type="Node" parent="."]
 script = ExtResource("9_kf8lf")
-
-[node name="MinaPiedraAnimado" parent="." instance=ExtResource("7_rlaii")]
-position = Vector2(-239, 796)

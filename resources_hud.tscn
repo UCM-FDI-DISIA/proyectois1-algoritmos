@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://c6umwjf6dridd" path="res://resources_hud.gd" id="1_ix1yk"]
 [ext_resource type="Texture2D" uid="uid://c2y3e4plqmh21" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/W_Idle.png" id="1_mkcvl"]
 [ext_resource type="Texture2D" uid="uid://7coqstm4olxf" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Banners/Carved_3Slides.png" id="1_wdeym"]
-[ext_resource type="Texture2D" uid="uid://bso5x606mwmd2" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/05.png" id="3_8aly1"]
 [ext_resource type="Texture2D" uid="uid://blfnw3ge2tpxp" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/G_Idle.png" id="3_ix1yk"]
 [ext_resource type="Texture2D" uid="uid://diptjqat7a84h" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/18.png" id="4_8aly1"]
+[ext_resource type="Texture2D" uid="uid://cbmjxcg71s832" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Decorations/Rocks/Rock2.1.png" id="4_ix1yk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aaxvf"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -49,9 +49,9 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/StoneContainer"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-texture = ExtResource("3_8aly1")
+texture = ExtResource("4_ix1yk")
 stretch_mode = 1
 
 [node name="StoneLabel" type="Label" parent="HBoxContainer/StoneContainer"]
