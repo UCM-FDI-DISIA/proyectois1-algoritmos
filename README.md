@@ -1,6 +1,11 @@
 # Feudalia
 ## AlgoRitmos
 
+### Wiki
+Visita nuestra [Wiki](wiki) para mayor detalle.
+
+---
+
 ### Índice
 * [Home](Home)
 * Documentación
@@ -39,9 +44,6 @@
 
 ---
 
-### Wiki
-Visita nuestra [Wiki](wiki) para mayor detalle.
-
 ### Versiones
 
 ### Estado del proyecto:
@@ -54,10 +56,9 @@ Visita nuestra [Wiki](wiki) para mayor detalle.
 Feudalia se plantea como un videojuego de desarrollo independiente con todo su código de acceso libre publicado en GitHub. Se pretende que, siendo de código abierto, llegue a un público amplio interesado en probar, modificar, compartir y mejorar el proyecto.
 
 **Visualización**
+
 Capturas:
-
-### Presentaciones
-
+<img width="1149" height="646" alt="Captura de pantalla 2025-10-11 121954" src="https://github.com/user-attachments/assets/e7ae3ea2-d047-4f52-a60c-65d4131aca61" />
 
 ### Arquitectura
 **Herramientas**
@@ -83,15 +84,26 @@ Capturas:
 - Combate: declaración de una batalla para la que se accede al círculo de combate donde se determina el resultado y quién expande su territorio.
 - Expansión: se desarrolla la actividad normal en el nuevo territorio adquirido.
 
-**Funcionamiento de una partida genérica**
+**Interacciones entre los ciclos:**
+- Recolección → Combate: Una vez que se ha recolectado suficiente recursos, el jugador puede lanzar un ataque. Si el jugador ha fortalecido bien su ejército, está listo para enfrentarse a los enemigos.
+- Combate → Expansión: Tras una victoria en el combate, el jugador pasa al ciclo de expansión, donde gestionará el nuevo territorio y lo hará más fuerte para futuras conquistas.
+- Expansión → Recolección: La expansión de un nuevo territorio crea más oportunidades para recolectar recursos adicionales, lo que a su vez fortalece la capacidad de luchar y defenderse en el futuro.
 
 ### Estética
 
 **Visual**
 - Paleta de colores
+  
+    - Menú de inicio: 
+		
+  <img width="200" height="400" alt="Captura de pantalla 2025-10-11 121954-colorpalette" src="https://github.com/user-attachments/assets/1ce4bd8f-fc18-4968-92fe-4252d2bb348c" />
+
+   - Pantalla principal:
+  
+  <img width="200" height="400" alt="Captura de pantalla 2025-10-11 122014-colorpalette" src="https://github.com/user-attachments/assets/bdef18e7-ea73-4bd3-8549-1e24ec256408" />
+
 - Referencias
 
-**Musical**
 
 ### Controles
 - Movimiento: WASD
@@ -113,7 +125,7 @@ Capturas:
 - Carla Tomás Aguilar.
 - Claudia Villodre Pérez.
 
-### FAQ
+## FAQ
 
 
 ## Trabajos previos a la creación del repositorio:
