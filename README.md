@@ -108,7 +108,7 @@ Las siguientes son [librerías de uso libre](https://opengameart.org/) de varias
 **Visual**
 - Paleta de colores
   
-    - Menú de inicio: 
+	- Menú de inicio: 
 		
   <img width="200" height="400" alt="Captura de pantalla 2025-10-11 121954-colorpalette" src="https://github.com/user-attachments/assets/1ce4bd8f-fc18-4968-92fe-4252d2bb348c" />
 

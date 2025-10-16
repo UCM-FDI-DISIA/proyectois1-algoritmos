@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Arbol : StaticBody2D
+public partial class ArbolAnimado : StaticBody2D
 {
 	private AnimatedSprite2D anim;
 	private CollisionShape2D collisionShape;
@@ -10,7 +10,7 @@ public partial class Arbol : StaticBody2D
 
 	public override void _Ready()
 	{
-		anim = GetNode<AnimatedSprite2D>("Animacion");
+		anim = GetNode<AnimatedSprite2D>("AnimacionArbol");
 		collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
 
 		anim.Play("Idle");
