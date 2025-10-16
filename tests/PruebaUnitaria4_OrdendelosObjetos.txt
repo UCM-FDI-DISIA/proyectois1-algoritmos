@@ -22,3 +22,5 @@ PRUEBAS REALIZADAS:
 	14/2025
 		Se comprueba que los objetos cumplen lo requerido, se respeta el orden de aparición y la animación cuando dos objetos colisionan 
 		es la correcta. Se pasa la prueba con éxito.
+	17/2025 
+		Se identifica un problema con la mina de piedra. La imágen esmuy confusa y no queda claro cuándo el personaje debe estar delante y cuando detrás.
