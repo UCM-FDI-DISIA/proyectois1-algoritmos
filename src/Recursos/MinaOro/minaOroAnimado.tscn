@@ -6,8 +6,12 @@
 size = Vector2(224.9414, 195.38498)
 
 [node name="MinaOroAnimado" type="StaticBody2D"]
+z_as_relative = false
+y_sort_enabled = true
 
 [node name="GoldMineActive" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(2, -12)
 texture = ExtResource("1_w6psx")
 
