@@ -9,6 +9,7 @@
 size = Vector2(161, 76)
 
 [node name="MinaPiedraAnimado" type="StaticBody2D"]
+position = Vector2(0, 43)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
@@ -17,35 +18,52 @@ position = Vector2(-10.5, 0)
 shape = SubResource("RectangleShape2D_e0jvj")
 
 [node name="06" type="Sprite2D" parent="."]
-position = Vector2(-22, 5.000001)
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(-3.3881318e-21, -38)
 scale = Vector2(0.96875, 0.96875)
 texture = ExtResource("1_wl0cj")
+offset = Vector2(-22.709677, 44.3871)
 
 [node name="08" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(-37, 20)
 scale = Vector2(1.0000001, 1.0000001)
 texture = ExtResource("2_dh0kw")
 
 [node name="05" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(-2, 23)
 texture = ExtResource("3_xrkcp")
 
 [node name="07" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(12, -14)
 texture = ExtResource("1_wl0cj")
 
 [node name="09" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(32, 5)
 texture = ExtResource("4_0i0py")
 
 [node name="10" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(-36, -26)
 texture = ExtResource("1_wl0cj")
 
 [node name="11" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(-60, -8)
 texture = ExtResource("1_wl0cj")
 
 [node name="12" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(-35, -36)
 texture = ExtResource("3_xrkcp")

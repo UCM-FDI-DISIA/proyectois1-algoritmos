@@ -21,14 +21,14 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_aaxvf")
 
 [node name="TextureRect" type="TextureRect" parent="Panel"]
 layout_mode = 0
-offset_left = -7.0
 offset_top = -1.0
-offset_right = 275.0
+offset_right = 282.0
 offset_bottom = 104.0
 texture = ExtResource("1_wdeym")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-offset_right = 268.0
+offset_left = 7.0
+offset_right = 275.0
 offset_bottom = 98.0
 
 [node name="WoodContainer" type="VBoxContainer" parent="HBoxContainer"]
