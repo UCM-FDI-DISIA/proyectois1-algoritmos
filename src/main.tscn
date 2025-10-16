@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=62 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
@@ -392,6 +392,15 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_lquwl"]
 radius = 12.002604
 
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_kf8lf"]
+scenes/1/scene = ExtResource("4_272bh")
+scenes/2/scene = ExtResource("6_kmhfv")
+scenes/3/scene = ExtResource("7_rlaii")
+
+[sub_resource type="TileSet" id="TileSet_mgm53"]
+tile_size = Vector2i(64, 64)
+sources/0 = SubResource("TileSetScenesCollectionSource_kf8lf")
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_lquwl")
 
@@ -450,50 +459,11 @@ y_sort_enabled = true
 position = Vector2(-579, -296.75)
 shape = SubResource("CircleShape2D_lquwl")
 
-[node name="Arbol" parent="Objetos" instance=ExtResource("4_272bh")]
-position = Vector2(-1468, 957)
-
-[node name="Arbol2" parent="Objetos" instance=ExtResource("4_272bh")]
-position = Vector2(-1941, 1145)
-
-[node name="Arbol3" parent="Objetos" instance=ExtResource("4_272bh")]
-position = Vector2(-1611, 1280)
-
-[node name="Arbol4" parent="Objetos" instance=ExtResource("4_272bh")]
-position = Vector2(-2003, 2132)
-
-[node name="Arbol5" parent="Objetos" instance=ExtResource("4_272bh")]
-position = Vector2(-1752, 826)
-
-[node name="MinaOroAnimado" parent="Objetos" instance=ExtResource("6_kmhfv")]
-position = Vector2(91, 82)
-
-[node name="MinaOroAnimado2" parent="Objetos" instance=ExtResource("6_kmhfv")]
-position = Vector2(2529, -460)
-
-[node name="MinaOroAnimado3" parent="Objetos" instance=ExtResource("6_kmhfv")]
-position = Vector2(1892, -846)
-
-[node name="MinaOroAnimado4" parent="Objetos" instance=ExtResource("6_kmhfv")]
-position = Vector2(2173, -680)
-
-[node name="MinaOroAnimado5" parent="Objetos" instance=ExtResource("6_kmhfv")]
-position = Vector2(1340, -1390)
-
-[node name="MinaPiedraAnimado" parent="Objetos" instance=ExtResource("7_rlaii")]
-position = Vector2(-27, 253)
-
-[node name="MinaPiedraAnimado2" parent="Objetos" instance=ExtResource("7_rlaii")]
-position = Vector2(1556, -1204)
-
-[node name="MinaPiedraAnimado3" parent="Objetos" instance=ExtResource("7_rlaii")]
-position = Vector2(2464, -751)
-
-[node name="MinaPiedraAnimado4" parent="Objetos" instance=ExtResource("7_rlaii")]
-position = Vector2(502, 500)
-
-[node name="MinaPiedraAnimado5" parent="Objetos" instance=ExtResource("7_rlaii")]
-position = Vector2(599, 535)
+[node name="ObjetosTile" type="TileMapLayer" parent="Objetos"]
+z_as_relative = false
+y_sort_enabled = true
+tile_map_data = PackedByteArray("AAAGAAEAAAAAAAAAAQAFAAIAAAAAAAAAAQANAAMAAAAAAAAAAQASAAcAAAAAAAAAAQAXAAUAAAAAAAAAAQAXAAcAAAAAAAAAAQAlABQAAAAAAAAAAQAcABgAAAAAAAAAAQAgABMAAAAAAAAAAQAaAAMAAAAAAAAAAQAeAAMAAAAAAAAAAgAiAAIAAAAAAAAAAgAiAAQAAAAAAAAAAgAuAAQAAAAAAAAAAgApABQAAAAAAAAAAgAkABUAAAAAAAAAAgAjAA4AAAAAAAAAAgAiAA8AAAAAAAAAAgAgAAwAAAAAAAAAAwAUAAIAAAAAAAAAAwAvABMAAAAAAAAAAwAwABAAAAAAAAAAAwA=")
+tile_set = SubResource("TileSet_mgm53")
 
 [node name="ResourceManager" type="Node" parent="."]
 script = ExtResource("9_kf8lf")
