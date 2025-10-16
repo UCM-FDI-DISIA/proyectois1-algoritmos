@@ -68,6 +68,20 @@ Capturas:
 
 **Assets**
 
+Recursos prediseñados para la inspiración del Diseño Gráfico de Feudalia. Las siguientes son todas [librerías de assets de uso libre](https://itch.io/game-assets/free/tag-pixel-art) seleccionadas dentro del enlace:
+- [Tiny Swords](https://pixelfrog-assets.itch.io/tiny-swords) - Pack general de edificios y personajes + UI + terreno
+- [Pixel Crawler](https://anokolisa.itch.io/free-pixel-art-asset-pack-topdown-tileset-rpg-16x16-sprites) - Extras de estaciones y edificios customizables + props
+- [Hana Caraka Bundle](https://itch.io/s/101184/hana-caraka-bundle) - Un poco de todo con otro estilo.
+- [Cute Fantasy Free](https://kenmi-art.itch.io/cute-fantasy-rpg) - Animales y terreno.
+- UI asset pack - Tiny Swords v0.
+- [Forest nature pack](https://toffeecraft.itch.io/forest-nature-pack) - Vegetación.
+- [16x16-mini-world-sprites](https://merchant-shade.itch.io/16x16-mini-world-sprites) - Mapa.
+
+Las siguientes son [librerías de uso libre](https://opengameart.org/) de varias funcionalidades, especialmente música y efectos de sonido:
+- Asset packs generales
+- [Librerías de sonidos](https://opengameart.org/art-search-advanced?keys=&title=&field_art_tags_tid_op=or&field_art_tags_tid=&name=&field_art_type_tid%5B%5D=13&sort_by=count&sort_order=DESC&items_per_page=24&Collection=)
+- [Librerías de música](https://opengameart.org/art-search-advanced?keys=&field_art_type_tid%5B%5D=12&sort_by=count&sort_order=DESC)
+
 ### Ficha técnica
 - Título: Feudalia
 - Rating: +12
@@ -104,7 +118,11 @@ Capturas:
 
 - Referencias
 
+**Musical**
 
+- [Librerías de sonidos](https://opengameart.org/art-search-advanced?keys=&title=&field_art_tags_tid_op=or&field_art_tags_tid=&name=&field_art_type_tid%5B%5D=13&sort_by=count&sort_order=DESC&items_per_page=24&Collection=)
+- [Librerías de música](https://opengameart.org/art-search-advanced?keys=&field_art_type_tid%5B%5D=12&sort_by=count&sort_order=DESC)
+  
 ### Controles
 - Movimiento: WASD
 - Ataque: clicks izquierdo y derecho
