@@ -117,6 +117,8 @@ Las siguientes son [librerías de uso libre](https://opengameart.org/) de varias
   <img width="200" height="400" alt="Captura de pantalla 2025-10-11 122014-colorpalette" src="https://github.com/user-attachments/assets/bdef18e7-ea73-4bd3-8549-1e24ec256408" />
 
 - Referencias
+<img width="643" height="673" alt="refes" src="https://github.com/user-attachments/assets/8ad00280-b59f-4aec-a862-502e4459fb39" />
+
 
 **Musical**
 
