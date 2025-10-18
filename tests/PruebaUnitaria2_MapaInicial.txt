@@ -15,9 +15,12 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 		* Los objetos estan colocados correctamente en un nivel u otro del mapa.
 		* Los objetos iniciales que aparecen son Arbol, Mina de Oro, Mina de Piedra (al menos uno de cada).
 		* Cada objeto aparece en una cantidad razonable (ver especificacion en GitHub).
+		* Los objetos están situados en 1 o 3 casillas del mapa.
 	
 
 
 PRUEBAS REALIZADAS:
 	10/2025
 		Sin ninguna incidencia.
+	15/10/2025
+		Seha desajustado la colocación de los objetos en el mapa.

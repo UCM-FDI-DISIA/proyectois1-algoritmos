@@ -6,64 +6,77 @@
 [ext_resource type="Texture2D" uid="uid://dg6osshhfjoa2" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/08.png" id="4_0i0py"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0jvj"]
-size = Vector2(161, 76)
+size = Vector2(192, 64)
 
 [node name="MinaPiedraAnimado" type="StaticBody2D"]
-position = Vector2(0, 43)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(-10.5, 0)
 shape = SubResource("RectangleShape2D_e0jvj")
 
 [node name="06" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(-3.3881318e-21, -38)
+position = Vector2(0, -6.9999924)
 scale = Vector2(0.96875, 0.96875)
 texture = ExtResource("1_wl0cj")
-offset = Vector2(-22.709677, 44.3871)
+offset = Vector2(-9.29032, 5.161289)
+metadata/_edit_group_ = true
 
 [node name="08" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(-37, 20)
+position = Vector2(0, -7)
 scale = Vector2(1.0000001, 1.0000001)
 texture = ExtResource("2_dh0kw")
+offset = Vector2(-23.999996, 19.999998)
+metadata/_edit_group_ = true
 
 [node name="05" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(-2, 23)
+position = Vector2(0, -7)
 texture = ExtResource("3_xrkcp")
+offset = Vector2(11, 23)
+metadata/_edit_group_ = true
 
 [node name="07" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(12, -14)
+position = Vector2(0, -7)
 texture = ExtResource("1_wl0cj")
+offset = Vector2(25, -14)
+metadata/_edit_group_ = true
 
 [node name="09" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(32, 5)
+position = Vector2(0, -7)
 texture = ExtResource("4_0i0py")
+offset = Vector2(45, 5)
+metadata/_edit_group_ = true
 
 [node name="10" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(-36, -26)
+position = Vector2(0, -7)
 texture = ExtResource("1_wl0cj")
+offset = Vector2(-23, -26)
+metadata/_edit_group_ = true
 
 [node name="11" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(-60, -8)
+position = Vector2(0, -7)
 texture = ExtResource("1_wl0cj")
+offset = Vector2(-47, -8)
+metadata/_edit_group_ = true
 
 [node name="12" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(-35, -36)
+position = Vector2(0, -7)
 texture = ExtResource("3_xrkcp")
+offset = Vector2(-22, -36)
+metadata/_edit_group_ = true

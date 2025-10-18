@@ -3,22 +3,20 @@
 [ext_resource type="Texture2D" uid="uid://bt11g46ev4u3d" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/GoldMine_Active.png" id="1_w6psx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w6psx"]
-size = Vector2(224.9414, 195.38498)
+size = Vector2(192, 64)
 
 [node name="MinaOroAnimado" type="StaticBody2D"]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(0, 21)
 
 [node name="GoldMineActive" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(0, -21)
+position = Vector2(0, 1)
 texture = ExtResource("1_w6psx")
-offset = Vector2(2, 9)
+offset = Vector2(0, -14)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-scale = Vector2(0.84021884, 0.32244036)
 shape = SubResource("RectangleShape2D_w6psx")
