@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r1qpu"]
 size = Vector2(192, 64)
 
-[node name="CasaAnimada" type="Node2D"]
+[node name="CasaAnimada" type="StaticBody2D"]
 z_as_relative = false
 y_sort_enabled = true
 script = ExtResource("1_h8oa0")
@@ -14,18 +14,12 @@ script = ExtResource("1_h8oa0")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(0, -7.6293945e-06)
+position = Vector2(0, -2.3841858e-07)
 scale = Vector2(1.6, 1.6)
 texture = ExtResource("2_aspst")
-offset = Vector2(0, -48.749996)
+offset = Vector2(0, -50)
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(2, 32)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(-2, -31)
 shape = SubResource("RectangleShape2D_r1qpu")

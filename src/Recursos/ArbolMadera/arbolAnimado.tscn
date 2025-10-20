@@ -83,22 +83,20 @@ size = Vector2(64, 64)
 [node name="ArbolAnimado" type="StaticBody2D"]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(0, 18)
 script = ExtResource("1_j4bp6")
 
 [node name="AnimacionArbol" type="AnimatedSprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(0.99999994, -17)
+position = Vector2(0, 4.7683716e-07)
 scale = Vector2(1.4166666, 1.390625)
 sprite_frames = SubResource("SpriteFrames_uvlja")
 animation = &"chop"
 frame = 1
 frame_progress = 1.0
-offset = Vector2(-1.4117646, -68.3145)
+offset = Vector2(-1.4117646, -63.999897)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_rcsqm")
