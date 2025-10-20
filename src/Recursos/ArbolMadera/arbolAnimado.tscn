@@ -1,7 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://4oaphcoyv6qq"]
+[gd_scene load_steps=10 format=3 uid="uid://4oaphcoyv6qq"]
 
 [ext_resource type="Script" uid="uid://bd8vmr6kq3l7j" path="res://src/Recursos/ArbolMadera/ArbolAnimado.cs" id="1_j4bp6"]
 [ext_resource type="Texture2D" uid="uid://chbs7mxhn2mf6" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png" id="1_xfbxd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xvs66"]
+atlas = ExtResource("1_xfbxd")
+region = Rect2(0, 384, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c0rit"]
 atlas = ExtResource("1_xfbxd")
@@ -21,6 +25,14 @@ region = Rect2(576, 0, 192, 192)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_uvlja"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xvs66")
+}],
+"loop": true,
+"name": &"Die",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_c0rit")
