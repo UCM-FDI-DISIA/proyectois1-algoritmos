@@ -23,17 +23,17 @@ region = Rect2(384, 0, 192, 192)
 atlas = ExtResource("1_xfbxd")
 region = Rect2(576, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qciif"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_8hxk4"]
 atlas = ExtResource("1_xfbxd")
-region = Rect2(0, 192, 192, 192)
+region = Rect2(192, 192, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g60yq"]
 atlas = ExtResource("1_xfbxd")
 region = Rect2(576, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8hxk4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_qciif"]
 atlas = ExtResource("1_xfbxd")
-region = Rect2(192, 192, 192, 192)
+region = Rect2(0, 192, 192, 192)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_uvlja"]
 animations = [{
@@ -64,13 +64,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qciif")
+"texture": SubResource("AtlasTexture_8hxk4")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_g60yq")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8hxk4")
+"texture": SubResource("AtlasTexture_qciif")
 }],
 "loop": false,
 "name": &"chop",
@@ -93,7 +93,7 @@ position = Vector2(0.99999994, -17)
 scale = Vector2(1.4166666, 1.390625)
 sprite_frames = SubResource("SpriteFrames_uvlja")
 animation = &"chop"
-frame = 2
+frame = 1
 frame_progress = 1.0
 offset = Vector2(-1.4117646, -68.3145)
 
