@@ -5,6 +5,11 @@ public partial class ArbolAnimado : StaticBody2D
 {
 	private AnimatedSprite2D anim;
 	private CollisionShape2D collisionShape;
+	
+	
+	// Atributos auxiliares para la 
+	// RECOLECCION DE RECURSOS
+	
 	private bool isDead = false;
 	private int maderaQueda = 10000;
 	private const int MADERA = 5;
@@ -24,24 +29,37 @@ public partial class ArbolAnimado : StaticBody2D
 		// Nota: aqui antes se comprobaba si la animacion termina. Esto lo hago solo si hace falta.
 	}
 	
-	//Detecta que ha sido golpeado
+	
+	
+	/* --------------------
+	RECOLECCION DE RECURSOS
+	----------------------*/
+	
+	// Detecta que ha sido golpeado
 	public void Hit()
 	{
+		// Actualizo madera disponible 
+		// He dejado el recurso como "finito" por si en versiones posteriores quisieramos tocarlo.
 		if (isDead) return;
 		isDead = (maderaQueda <= 0);
 		maderaQueda--;
 		
 		if (isDead) {
 			anim.Play("Die");
+			// Si el arbol muere, puedes atravesar el tronco (se puede omitir si preferis)
 			if (collisionShape != null) collisionShape.Disabled = true;
 		}
 		else {
 			anim.Play("chop");
+			// Hago que la animacion termine y se resetee a Idle correctamente
+			// OnAnimFinished tambien suma la madera (para que se actualice el contador despues de la animacion)
 			anim.AnimationFinished += OnAnimFinished;
 		}
 	}
 	
-	//Esto nunca ocurre porque he hecho la animacion un bucle infinto, pero que se puede a futuro vamos
+	// Realmente, esto solo se ejecuta si "chop"
+	//    - Cuando termina la animacion de "chop" cambio el contador.
+	// Con "Die" entra en bucle y no llega a llamarlo
 	private void OnAnimFinished()
 	{
 		if (anim.Animation == "Die")
