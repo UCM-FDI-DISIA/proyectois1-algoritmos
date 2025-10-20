@@ -1,0 +1,19 @@
+MECANICA A PROBAR: RECOLECCION MANUAL DE RECURSOS
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	
+	1) Ejecutar el archivo.
+	2) Buscar un Arbol y entrar en su zona de colision (chocar con el arbol).
+	3) Hacer click derecho o izquierdo.
+		* El arbol debe hacer una animacion de "sacudida".
+		* Despues de la animacion de sacudida, se incrementa el contador arriba a la izquierda.
+	4) Comprobar que la animacion termina correctamente y vuelve a su animacion estatica.
+	5) Comprobar que, rebasada la capacidad maxima del arbol, muere y ya no afecta el contador.
+	6) Comprobar que la interaccion se limita a un arbol.
+	7) Comprobar que los pasos 1 - 7 para minas de oro y minas de piedra.
+
+PRUEBAS REALIZADAS:
+	20/10/2025
+		No funcionan las interacciones con el Arbol. No se detectan bien las senales.
+	20/10/2025
+		Finalmente funcionan los arboles, la mecamica se traslada al resto de recursos.
