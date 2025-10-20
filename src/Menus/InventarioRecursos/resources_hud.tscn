@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://dtox61xw2rp3e"]
 
-[ext_resource type="Script" uid="uid://b3jhr68w8w154" path="res://ResourcesHud.cs" id="1_ix1yk"]
+[ext_resource type="Script" uid="uid://b3jhr68w8w154" path="res://src/Menus/InventarioRecursos/ResourcesHud.cs" id="1_ix1yk"]
 [ext_resource type="Texture2D" uid="uid://c2y3e4plqmh21" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/W_Idle.png" id="1_mkcvl"]
 [ext_resource type="Texture2D" uid="uid://7coqstm4olxf" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Banners/Carved_3Slides.png" id="1_wdeym"]
 [ext_resource type="Texture2D" uid="uid://blfnw3ge2tpxp" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/G_Idle.png" id="3_ix1yk"]
