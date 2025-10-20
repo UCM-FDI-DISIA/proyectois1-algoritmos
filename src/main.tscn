@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
 [ext_resource type="PackedScene" uid="uid://dtox61xw2rp3e" path="res://resources_hud.tscn" id="2_5mrjc"]
 [ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://src/PersonajePrincipal/Player.cs" id="2_lquwl"]
-[ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
+[ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
 [ext_resource type="PackedScene" uid="uid://c677m228bca8p" path="res://src/Recursos/MinaPiedra/minaPiedraAnimado.tscn" id="7_rlaii"]
-[ext_resource type="Script" uid="uid://dobkasqxexa7m" path="res://src/resource_manager.gd" id="9_kf8lf"]
+[ext_resource type="Script" uid="uid://cb2shqdb8q060" path="res://src/ResourceManager.cs" id="9_kf8lf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("3_lquwl")
