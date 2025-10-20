@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://4oaphcoyv6qq"]
+[gd_scene load_steps=13 format=3 uid="uid://4oaphcoyv6qq"]
 
 [ext_resource type="Script" uid="uid://bd8vmr6kq3l7j" path="res://src/Recursos/ArbolMadera/ArbolAnimado.cs" id="1_j4bp6"]
 [ext_resource type="Texture2D" uid="uid://chbs7mxhn2mf6" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png" id="1_xfbxd"]
@@ -22,14 +22,6 @@ region = Rect2(384, 0, 192, 192)
 [sub_resource type="AtlasTexture" id="AtlasTexture_jgsib"]
 atlas = ExtResource("1_xfbxd")
 region = Rect2(576, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_777f3"]
-atlas = ExtResource("1_xfbxd")
-region = Rect2(0, 0, 192, 192)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nclhg"]
-atlas = ExtResource("1_xfbxd")
-region = Rect2(192, 0, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qciif"]
 atlas = ExtResource("1_xfbxd")
@@ -72,12 +64,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_777f3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nclhg")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_qciif")
 }, {
 "duration": 1.0,
@@ -107,7 +93,7 @@ position = Vector2(0.99999994, -17)
 scale = Vector2(1.4166666, 1.390625)
 sprite_frames = SubResource("SpriteFrames_uvlja")
 animation = &"chop"
-frame = 4
+frame = 2
 frame_progress = 1.0
 offset = Vector2(-1.4117646, -68.3145)
 

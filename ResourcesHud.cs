@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class UIManager : CanvasLayer
+public partial class ResourcesHud : CanvasLayer
 {
 	private Label woodLabel;
 	private Label stoneLabel;

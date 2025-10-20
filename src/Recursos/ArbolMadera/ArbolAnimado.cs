@@ -7,6 +7,7 @@ public partial class ArbolAnimado : StaticBody2D
 	private CollisionShape2D collisionShape;
 	private bool isDead = false;
 	private int maderaQueda = 10000;
+	private const int MADERA = 5;
 
 	[Export] public Vector2I CellSize = new Vector2I(64, 64);
 
@@ -20,14 +21,14 @@ public partial class ArbolAnimado : StaticBody2D
 
 		anim.Play("Idle");
 		ZIndex = (int)Position.Y;
-		anim.AnimationFinished += OnAnimFinished;
+		// Nota: aqui antes se comprobaba si la animacion termina. Esto lo hago solo si hace falta.
 	}
 	
 	//Detecta que ha sido golpeado
 	public void Hit()
 	{
 		if (isDead) return;
-		isDead = !(maderaQueda > 0);
+		isDead = (maderaQueda <= 0);
 		maderaQueda--;
 		
 		if (isDead) {
@@ -49,6 +50,11 @@ public partial class ArbolAnimado : StaticBody2D
 		if (anim.Animation == "chop")
 		{
 			anim.Play("Idle");
+			
+			// === SUMAR 5 A MADERA ===
+			var manager = GetNode<ResourceManager>("/root/Main/ResourceManager");
+			manager.AddResource("wood", MADERA); 
+			
 			anim.AnimationFinished -= OnAnimFinished;
 		}
 	}
