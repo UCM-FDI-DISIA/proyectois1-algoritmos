@@ -6,17 +6,17 @@ public partial class MinaOroAnimado : StaticBody2D
 	private AnimatedSprite2D anim;
 	private AnimatedSprite2D animOro;
 	private CollisionShape2D collisionShape;
-	private Timer regenTimer;          // para regenerar la mina
-	private Timer depletionDelayTimer; // para retrasar la animación "Apagada"
+	private Timer regenTimer;
+	private Timer depletionDelayTimer;
 
 	private bool isDepleted = false;
 	private int oroQueda = 3;
 	private const int ORO = 3;
 	private const int ORO_INICIAL = 3;
-	private const float TIEMPO_REGENERACION = 30f; // segundos
-	private const float TIEMPO_AGOTARSE = 0.3f;    // retraso antes de "Apagada"
+	private const float TIEMPO_REGENERACION = 30f;
+	private const float TIEMPO_AGOTARSE = 0.3f;
 
-	[Export] public Vector2I CellSize = new Vector2I(64, 64);
+	[Export] public Vector2I CellSize = new Vector2I(168, 58);
 
 	public override void _Ready()
 	{
@@ -27,10 +27,10 @@ public partial class MinaOroAnimado : StaticBody2D
 		if (collisionShape.Shape is RectangleShape2D rect)
 			rect.Size = CellSize;
 
+		collisionShape.Disabled = false; 
 		anim.Play("Idle");
 		ZIndex = (int)Position.Y;
 
-		// Crear e inicializar el Timer para regenerar
 		regenTimer = new Timer
 		{
 			WaitTime = TIEMPO_REGENERACION,
@@ -39,7 +39,6 @@ public partial class MinaOroAnimado : StaticBody2D
 		AddChild(regenTimer);
 		regenTimer.Timeout += OnRegenTimerTimeout;
 
-		// Crear e inicializar el Timer para retrasar "Apagada"
 		depletionDelayTimer = new Timer
 		{
 			WaitTime = TIEMPO_AGOTARSE,
@@ -49,9 +48,6 @@ public partial class MinaOroAnimado : StaticBody2D
 		depletionDelayTimer.Timeout += OnDepletionDelayTimeout;
 	}
 
-	/* --------------------
-	   RECOLECCIÓN DE RECURSOS
-	----------------------*/
 	public void Hit()
 	{
 		if (isDepleted)
@@ -69,7 +65,6 @@ public partial class MinaOroAnimado : StaticBody2D
 	{
 		if (anim.Animation == "Collect")
 		{
-			// === SUMAR ORO ===
 			var manager = GetNode<ResourceManager>("/root/Main/ResourceManager");
 			manager.AddResource("gold", ORO);
 			GD.Print("Oro añadido: +3");
@@ -79,7 +74,7 @@ public partial class MinaOroAnimado : StaticBody2D
 			if (oroQueda <= 0)
 			{
 				isDepleted = true;
-				depletionDelayTimer.Start(); // Espera 0.3 segundos antes de apagarse
+				depletionDelayTimer.Start();
 			}
 			else
 			{
@@ -88,23 +83,22 @@ public partial class MinaOroAnimado : StaticBody2D
 		}
 	}
 
-	// Espera un poco y luego apaga la mina
 	private void OnDepletionDelayTimeout()
 	{
 		anim.Play("Depleted");
 
+		
+
 		GD.Print("Mina agotada. Regenerando en 30 segundos...");
-		regenTimer.Start(); // inicia regeneración tras agotarse
+		regenTimer.Start();
 	}
 
-	// Regenerar la mina tras 30 segundos
 	private void OnRegenTimerTimeout()
 	{
 		GD.Print("Mina regenerada.");
 		isDepleted = false;
 		oroQueda = ORO_INICIAL;
+
 		anim.Play("Idle");
-		if (collisionShape != null)
-			collisionShape.Disabled = false;
 	}
 }
