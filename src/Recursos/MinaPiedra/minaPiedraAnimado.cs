@@ -15,7 +15,7 @@ public partial class MinaPiedraAnimado : StaticBody2D
 	private const int ROCA = 3;
 	private const int ROCA_INICIAL = 3;
 	private const float TIEMPO_REGENERACION = 30f;
-	private const float TIEMPO_AGOTARSE = 0.0001f;
+	private const float TIEMPO_AGOTARSE = 0.4f;
 
 	[Export] public Vector2I CellSize = new Vector2I(168, 58);
 
@@ -32,12 +32,11 @@ public partial class MinaPiedraAnimado : StaticBody2D
 		collisionShape.Disabled = false;
 		ZIndex = (int)Position.Y;
 
-		// Al inicio, mostrar las grandes y ocultar las pequeñas
 		SetRocasVisibles(rocasGrandes, true);
 		SetRocasVisibles(rocasPequenas, false);
 		animExplosion.Visible = false;
 
-		// === Timers ===
+		// Timer regeneración
 		regenTimer = new Timer
 		{
 			WaitTime = TIEMPO_REGENERACION,
@@ -46,6 +45,7 @@ public partial class MinaPiedraAnimado : StaticBody2D
 		AddChild(regenTimer);
 		regenTimer.Timeout += OnRegenTimerTimeout;
 
+		// Timer retraso tras agotarse
 		depletionDelayTimer = new Timer
 		{
 			WaitTime = TIEMPO_AGOTARSE,
@@ -63,21 +63,45 @@ public partial class MinaPiedraAnimado : StaticBody2D
 		rocaQueda--;
 		GD.Print($"Roca golpeada. Rocas restantes: {rocaQueda}");
 
-		// efecto visual: pequeña vibración
+		// Efectos visuales
 		ShakeRocas();
 		animExplosion.Visible = true;
 		animExplosion.Play("Collect");
+		animExplosion.AnimationFinished += OnExplosionFinished;
 
-		// sumar recurso
+		// Añadir recurso
 		var manager = GetNode<ResourceManager>("/root/Main/ResourceManager");
 		manager.AddResource("stone", ROCA);
 		GD.Print("Piedra añadida: +3");
 
+		// Si se agotó la roca
 		if (rocaQueda <= 0)
 		{
 			isDepleted = true;
-			depletionDelayTimer.Start();
+			animExplosion.Play("Collect");
+			animExplosion.AnimationFinished += OnExplosionFinished;
+			depletionDelayTimer.Start(); // Esperar antes de mostrar las rocas pequeñas
 		}
+	}
+
+	private void OnExplosionFinished()
+	{
+		animExplosion.Visible = false;
+		animExplosion.AnimationFinished -= OnExplosionFinished;
+	}
+
+	private void OnDepletionDelayTimeout()
+	{
+		GD.Print("Mina de roca agotada.");
+
+		SetRocasVisibles(rocasGrandes, false);
+		SetRocasVisibles(rocasPequenas, true);
+
+		if (collisionShape != null)
+			collisionShape.Disabled = true;
+
+		GD.Print("Regenerando en 30 segundos...");
+		regenTimer.Start();
 	}
 
 	private void ShakeRocas()
@@ -92,35 +116,6 @@ public partial class MinaPiedraAnimado : StaticBody2D
 				tween.TweenProperty(rock, "position:x", original.X, 0.05f);
 			}
 		}
-	}
-
-	private void OnDepletionDelayTimeout()
-	{
-		GD.Print("Mina de roca agotada. Mostrando explosión...");
-
-		// Ocultar las rocas grandes
-		SetRocasVisibles(rocasGrandes, false);
-
-		// Reproducir animación de explosión
-		animExplosion.Visible = true;
-		animExplosion.Play("explode");
-		animExplosion.AnimationFinished += OnExplosionFinished;
-	}
-
-	private void OnExplosionFinished()
-	{
-		animExplosion.Visible = false;
-		animExplosion.AnimationFinished -= OnExplosionFinished;
-
-		// Mostrar las rocas pequeñas
-		SetRocasVisibles(rocasPequenas, true);
-
-		// Desactivar colisión
-		if (collisionShape != null)
-			collisionShape.Disabled = true;
-
-		GD.Print("Mina agotada. Regenerando en 30 segundos...");
-		regenTimer.Start();
 	}
 
 	private void OnRegenTimerTimeout()
