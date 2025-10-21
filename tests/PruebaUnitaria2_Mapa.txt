@@ -13,9 +13,11 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 		* El mapa tiene los desniveles y texturas esperados.
 	3) Comprobar que los elementos del mapa aparecen.
 		* Los objetos estan colocados correctamente en un nivel u otro del mapa.
-		* Los objetos iniciales que aparecen son Arbol, Mina de Oro, Mina de Piedra (al menos uno de cada).
+		* Los objetos que aparecen son Arbol, Mina de Oro, Mina de Piedra (al menos uno de cada), agua, puentes, montañas con varios niveles de altura, 
+		rampas o edificios como casas.
 		* Cada objeto aparece en una cantidad razonable (ver especificacion en GitHub).
 		* Los objetos están situados en 1 o 3 casillas del mapa.
+	4) Se debe comprobar que se aprecia la diferencia visual entre los diferentes elementos que aparecen, es decir, que cada elemento es reconocible y distinguible.
 	
 
 
