@@ -419,5 +419,4 @@ position = Vector2(-2, -10.5)
 shape = SubResource("RectangleShape2D_sweqy")
 
 [node name="ArbolAnimado" parent="." instance=ExtResource("4_hqtel")]
-z_as_relative = false
 position = Vector2(-22, -60)
