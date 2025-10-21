@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://die6kbpl1cpp2"]
+
+[ext_resource type="Script" uid="uid://dhyd00gt2dacc" path="res://src/Edificios/Cuartel/CuartelAnimado.cs" id="1_x2djh"]
+[ext_resource type="Texture2D" uid="uid://citpi61s3dpat" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Buildings/Blue Buildings/Castle.png" id="2_8bsr4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8bsr4"]
+size = Vector2(320, 64)
+
+[node name="CuartelAnimado" type="StaticBody2D"]
+z_as_relative = false
+y_sort_enabled = true
+script = ExtResource("1_x2djh")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(0, -1)
+texture = ExtResource("2_8bsr4")
+offset = Vector2(0, -63)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+shape = SubResource("RectangleShape2D_8bsr4")
