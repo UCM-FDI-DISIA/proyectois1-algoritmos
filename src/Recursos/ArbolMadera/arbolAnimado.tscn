@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://4oaphcoyv6qq"]
+[gd_scene load_steps=21 format=3 uid="uid://4oaphcoyv6qq"]
 
 [ext_resource type="Script" uid="uid://bd8vmr6kq3l7j" path="res://src/Recursos/ArbolMadera/ArbolAnimado.cs" id="1_j4bp6"]
 [ext_resource type="Texture2D" uid="uid://chbs7mxhn2mf6" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png" id="1_xfbxd"]
+[ext_resource type="Texture2D" uid="uid://cfmb6qvyik4lk" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/W_Spawn.png" id="3_777f3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xvs66"]
 atlas = ExtResource("1_xfbxd")
@@ -80,6 +81,62 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rcsqm"]
 size = Vector2(64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_nclhg"]
+atlas = ExtResource("3_777f3")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r5jlw"]
+atlas = ExtResource("3_777f3")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bgh6v"]
+atlas = ExtResource("3_777f3")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5vvxk"]
+atlas = ExtResource("3_777f3")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_of4mw"]
+atlas = ExtResource("3_777f3")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_paawy"]
+atlas = ExtResource("3_777f3")
+region = Rect2(768, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mxyo6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nclhg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r5jlw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bgh6v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5vvxk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_of4mw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_paawy")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"tronquito",
+"speed": 6.0
+}]
+
 [node name="ArbolAnimado" type="StaticBody2D"]
 z_as_relative = false
 y_sort_enabled = true
@@ -103,3 +160,10 @@ shape = SubResource("RectangleShape2D_rcsqm")
 
 [node name="deathDelayTimer" type="Timer" parent="."]
 wait_time = 0.1
+
+[node name="AnimacionTronco" type="AnimatedSprite2D" parent="."]
+position = Vector2(39, 21)
+sprite_frames = SubResource("SpriteFrames_mxyo6")
+animation = &"tronquito"
+frame = 7
+frame_progress = 1.0

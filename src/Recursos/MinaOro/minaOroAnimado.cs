@@ -4,8 +4,9 @@ using System;
 public partial class MinaOroAnimado : StaticBody2D
 {
 	private AnimatedSprite2D anim;
+	private AnimatedSprite2D animOro;
 	private CollisionShape2D collisionShape;
-	private Timer regenTimer;       // para regenerar la mina
+	private Timer regenTimer;          // para regenerar la mina
 	private Timer depletionDelayTimer; // para retrasar la animación "Apagada"
 
 	private bool isDepleted = false;
@@ -13,13 +14,14 @@ public partial class MinaOroAnimado : StaticBody2D
 	private const int ORO = 3;
 	private const int ORO_INICIAL = 3;
 	private const float TIEMPO_REGENERACION = 30f; // segundos
-	private const float TIEMPO_AGOTARSE = 0.3f; // retraso antes de "Apagada"
+	private const float TIEMPO_AGOTARSE = 0.3f;    // retraso antes de "Apagada"
 
 	[Export] public Vector2I CellSize = new Vector2I(64, 64);
 
 	public override void _Ready()
 	{
 		anim = GetNode<AnimatedSprite2D>("AnimacionMina");
+		animOro = GetNode<AnimatedSprite2D>("AnimacionOro");
 		collisionShape = GetNode<CollisionShape2D>("CollisionShape2D");
 
 		if (collisionShape.Shape is RectangleShape2D rect)
@@ -48,7 +50,7 @@ public partial class MinaOroAnimado : StaticBody2D
 	}
 
 	/* --------------------
-	RECOLECCIÓN DE RECURSOS
+	   RECOLECCIÓN DE RECURSOS
 	----------------------*/
 	public void Hit()
 	{
@@ -58,31 +60,31 @@ public partial class MinaOroAnimado : StaticBody2D
 		oroQueda--;
 		GD.Print($"Mina golpeada. Oro restante: {oroQueda}");
 
-		if (oroQueda <= 0)
-		{
-			isDepleted = true;
-			anim.Play("Collect");
-			anim.AnimationFinished += OnAnimFinished;
-			depletionDelayTimer.Start(); // Espera 0.3 segundos antes de apagarse
-		}
-		else
-		{
-			anim.Play("Collect");
-			anim.AnimationFinished += OnAnimFinished;
-		}
+		anim.Play("Collect");
+		animOro.Play("bolsita");
+		anim.AnimationFinished += OnAnimFinished;
 	}
 
 	private void OnAnimFinished()
 	{
 		if (anim.Animation == "Collect")
 		{
-			anim.Play("Idle");
-
 			// === SUMAR ORO ===
 			var manager = GetNode<ResourceManager>("/root/Main/ResourceManager");
 			manager.AddResource("gold", ORO);
+			GD.Print("Oro añadido: +3");
 
 			anim.AnimationFinished -= OnAnimFinished;
+
+			if (oroQueda <= 0)
+			{
+				isDepleted = true;
+				depletionDelayTimer.Start(); // Espera 0.3 segundos antes de apagarse
+			}
+			else
+			{
+				anim.Play("Idle");
+			}
 		}
 	}
 
