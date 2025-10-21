@@ -1,21 +1,78 @@
-[gd_scene load_steps=6 format=3 uid="uid://c677m228bca8p"]
+[gd_scene load_steps=17 format=3 uid="uid://c677m228bca8p"]
 
+[ext_resource type="Script" uid="uid://dtvsulgat5vng" path="res://src/Recursos/MinaPiedra/MinaPiedraAnimado.cs" id="1_sm5a2"]
 [ext_resource type="Texture2D" uid="uid://clo1xbg3upk24" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/06.png" id="1_wl0cj"]
 [ext_resource type="Texture2D" uid="uid://phsgl16ntrib" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/07.png" id="2_dh0kw"]
 [ext_resource type="Texture2D" uid="uid://bso5x606mwmd2" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/05.png" id="3_xrkcp"]
 [ext_resource type="Texture2D" uid="uid://dg6osshhfjoa2" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/08.png" id="4_0i0py"]
+[ext_resource type="Texture2D" uid="uid://inkvkba7l15g" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Effects/Explosion/Explosions.png" id="5_dh0kw"]
+[ext_resource type="Texture2D" uid="uid://xx1gjwd1rgkh" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/10.png" id="7_paksk"]
+[ext_resource type="Texture2D" uid="uid://dopipnxlkfjfk" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/04.png" id="8_8c583"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0jvj"]
-size = Vector2(192, 64)
+size = Vector2(192, 70)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xrkcp"]
+atlas = ExtResource("5_dh0kw")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0i0py"]
+atlas = ExtResource("5_dh0kw")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sm5a2"]
+atlas = ExtResource("5_dh0kw")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_paksk"]
+atlas = ExtResource("5_dh0kw")
+region = Rect2(1152, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8c583"]
+atlas = ExtResource("5_dh0kw")
+region = Rect2(1344, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cj4s2"]
+atlas = ExtResource("5_dh0kw")
+region = Rect2(1536, 0, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ov4qk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xrkcp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0i0py")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sm5a2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_paksk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8c583")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cj4s2")
+}],
+"loop": false,
+"name": &"Collect",
+"speed": 6.0
+}]
 
 [node name="MinaPiedraAnimado" type="StaticBody2D"]
+script = ExtResource("1_sm5a2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
+position = Vector2(-2, 5)
 shape = SubResource("RectangleShape2D_e0jvj")
 
 [node name="06" type="Sprite2D" parent="."]
+visible = false
 z_as_relative = false
 y_sort_enabled = true
 position = Vector2(0, -6.9999924)
@@ -25,6 +82,7 @@ offset = Vector2(-9.29032, 5.161289)
 metadata/_edit_group_ = true
 
 [node name="08" type="Sprite2D" parent="."]
+visible = false
 z_as_relative = false
 y_sort_enabled = true
 position = Vector2(0, -7)
@@ -34,6 +92,7 @@ offset = Vector2(-23.999996, 19.999998)
 metadata/_edit_group_ = true
 
 [node name="05" type="Sprite2D" parent="."]
+visible = false
 z_as_relative = false
 y_sort_enabled = true
 position = Vector2(0, -7)
@@ -42,6 +101,7 @@ offset = Vector2(11, 23)
 metadata/_edit_group_ = true
 
 [node name="07" type="Sprite2D" parent="."]
+visible = false
 z_as_relative = false
 y_sort_enabled = true
 position = Vector2(0, -7)
@@ -50,6 +110,7 @@ offset = Vector2(25, -14)
 metadata/_edit_group_ = true
 
 [node name="09" type="Sprite2D" parent="."]
+visible = false
 z_as_relative = false
 y_sort_enabled = true
 position = Vector2(0, -7)
@@ -58,6 +119,7 @@ offset = Vector2(45, 5)
 metadata/_edit_group_ = true
 
 [node name="10" type="Sprite2D" parent="."]
+visible = false
 z_as_relative = false
 y_sort_enabled = true
 position = Vector2(0, -7)
@@ -66,6 +128,7 @@ offset = Vector2(-23, -26)
 metadata/_edit_group_ = true
 
 [node name="11" type="Sprite2D" parent="."]
+visible = false
 z_as_relative = false
 y_sort_enabled = true
 position = Vector2(0, -7)
@@ -74,9 +137,133 @@ offset = Vector2(-47, -8)
 metadata/_edit_group_ = true
 
 [node name="12" type="Sprite2D" parent="."]
+visible = false
 z_as_relative = false
 y_sort_enabled = true
 position = Vector2(0, -7)
 texture = ExtResource("3_xrkcp")
 offset = Vector2(-22, -36)
 metadata/_edit_group_ = true
+
+[node name="AnimacionExplosion" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(7, -8)
+scale = Vector2(1.0625001, 1.065104)
+sprite_frames = SubResource("SpriteFrames_ov4qk")
+animation = &"Collect"
+frame = 5
+frame_progress = 1.0
+
+[node name="BigRocksContainer" type="Node2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+
+[node name="RockBig1" type="Sprite2D" parent="BigRocksContainer"]
+position = Vector2(-15.000001, -17)
+scale = Vector2(2.0585938, 1.9921874)
+texture = ExtResource("1_wl0cj")
+
+[node name="RockBig2" type="Sprite2D" parent="BigRocksContainer"]
+position = Vector2(20, 16.75)
+scale = Vector2(1.59375, 1.6484375)
+texture = ExtResource("1_wl0cj")
+
+[node name="RockBig3" type="Sprite2D" parent="BigRocksContainer"]
+position = Vector2(-45.000004, 15)
+scale = Vector2(1.4218751, 1.46875)
+texture = ExtResource("3_xrkcp")
+
+[node name="BushBig1" type="Sprite2D" parent="BigRocksContainer"]
+position = Vector2(48, 30.750002)
+scale = Vector2(0.99023443, 1.2695313)
+texture = ExtResource("7_paksk")
+
+[node name="BushBig2" type="Sprite2D" parent="BigRocksContainer"]
+show_behind_parent = true
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(-60, -7)
+scale = Vector2(1.4453124, 1.515625)
+texture = ExtResource("2_dh0kw")
+
+[node name="SmallRocksContainer" type="Node2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+
+[node name="RockSmall1" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(15, -6)
+scale = Vector2(0.9375, 0.90625)
+texture = ExtResource("8_8c583")
+
+[node name="RockSmall2" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(24, 8.500001)
+scale = Vector2(0.6875, 0.703125)
+texture = ExtResource("8_8c583")
+
+[node name="RockSmall3" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(39, 17)
+scale = Vector2(0.828125, 0.8515625)
+texture = ExtResource("8_8c583")
+
+[node name="RockSmall4" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(18, 21)
+scale = Vector2(0.5859375, 0.64453125)
+texture = ExtResource("8_8c583")
+
+[node name="RockSmall5" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(-48, 10)
+scale = Vector2(0.87499994, 0.7910156)
+texture = ExtResource("8_8c583")
+
+[node name="RockSmall6" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(-38.25, 22.171877)
+scale = Vector2(0.6328125, 0.6821289)
+texture = ExtResource("8_8c583")
+
+[node name="RockSmall7" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(-15.625, 9.585937)
+scale = Vector2(0.45703125, 0.5754394)
+texture = ExtResource("8_8c583")
+
+[node name="RockSmall8" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(-6, -6)
+scale = Vector2(0.45703125, 0.5754394)
+texture = ExtResource("8_8c583")
+
+[node name="RockSmall9" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(4, 15)
+scale = Vector2(0.45703125, 0.5754394)
+texture = ExtResource("8_8c583")
+
+[node name="RockSmall10" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(-6, 19)
+scale = Vector2(0.41601565, 0.5064697)
+texture = ExtResource("8_8c583")
+
+[node name="RockSmall11" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(-24.578127, -2.801755)
+scale = Vector2(0.79931635, 0.80630493)
+texture = ExtResource("3_xrkcp")
+
+[node name="RockSmall12" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(-21, 22.000002)
+scale = Vector2(0.5336914, 0.59375006)
+texture = ExtResource("3_xrkcp")
+
+[node name="RockSmall13" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(3.9999998, 33)
+scale = Vector2(0.4230957, 0.51562506)
+texture = ExtResource("3_xrkcp")
+
+[node name="BushSmall1" type="Sprite2D" parent="SmallRocksContainer"]
+position = Vector2(48, 30.750002)
+scale = Vector2(0.99023443, 1.2695313)
+texture = ExtResource("7_paksk")
+
+[node name="BushSmall2" type="Sprite2D" parent="SmallRocksContainer"]
+show_behind_parent = true
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(-60, -7)
+scale = Vector2(1.4453124, 1.515625)
+texture = ExtResource("2_dh0kw")

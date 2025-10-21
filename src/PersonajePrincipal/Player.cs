@@ -90,6 +90,8 @@ public partial class Player : CharacterBody2D
 			{
 				mina.Hit();
 			}
+			else if (obj is MinaPiedraAnimado roca)
+				roca.Hit();
 			//Se puede añadir para cualquier objeto de esa forma
 			//En el hit actualizas el objeto
 			//Y aqui o dodne mejor venga contadores y todo lo necesario
