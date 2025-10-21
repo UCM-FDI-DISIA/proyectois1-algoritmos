@@ -85,6 +85,11 @@ public partial class Player : CharacterBody2D
 		{
 			if (obj is ArbolAnimado arbol)
 				arbol.Hit(); // notificar golpe
+			// Si golpea una mina de oro
+			else if (obj is MinaOroAnimado mina)
+			{
+				mina.Hit();
+			}
 			//Se puede añadir para cualquier objeto de esa forma
 			//En el hit actualizas el objeto
 			//Y aqui o dodne mejor venga contadores y todo lo necesario
