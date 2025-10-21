@@ -9,6 +9,10 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 			* Probar colision con Arbol.
 			* Probar colision con Piedras.
 			* Probar colision con Mina de Oro.
+		* Probar colision con elementos del mapa.
+			* Probar colision con rampas. (Se puede cambiar de altura con éxito únicamente pasando por estas rampas)
+			* Probar colision con agua. (Se comprueba que no se puede acceder a lagos, ríos...)
+			* Probar colision con puentes. (La única manera de atravesar bloques de agua)
 
 Nota: definimos colision como
 	1) el movimiento del personaje se vea interrumpido al intentar atravesar el objeto.
