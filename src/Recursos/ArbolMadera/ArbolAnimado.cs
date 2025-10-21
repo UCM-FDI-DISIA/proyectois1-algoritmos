@@ -5,14 +5,15 @@ public partial class ArbolAnimado : StaticBody2D
 {
 	private AnimatedSprite2D anim;
 	private CollisionShape2D collisionShape;
-	
-	
-	// Atributos auxiliares para la 
-	// RECOLECCION DE RECURSOS
-	
+	private Timer regenTimer;    // para regenerar el árbol
+	private Timer deathDelayTimer; // para retrasar la animación "Die"
+
 	private bool isDead = false;
-	private int maderaQueda = 10000;
+	private int maderaQueda = 3;
 	private const int MADERA = 5;
+	private const int MADERA_INICIAL = 3;
+	private const float TIEMPO_REGENERACION = 30f; // segundos
+	private const float TIEMPO_MORIR = 0.3f; // retraso antes de "Die"
 
 	[Export] public Vector2I CellSize = new Vector2I(64, 64);
 
@@ -26,54 +27,84 @@ public partial class ArbolAnimado : StaticBody2D
 
 		anim.Play("Idle");
 		ZIndex = (int)Position.Y;
-		// Nota: aqui antes se comprobaba si la animacion termina. Esto lo hago solo si hace falta.
+
+		// Crear e inicializar el Timer para regenerar
+		regenTimer = new Timer
+		{
+			WaitTime = TIEMPO_REGENERACION,
+			OneShot = true
+		};
+		AddChild(regenTimer);
+		regenTimer.Timeout += OnRegenTimerTimeout;
+
+		// Crear e inicializar el Timer para retrasar "Die"
+		deathDelayTimer = new Timer
+		{
+			WaitTime = TIEMPO_MORIR,
+			OneShot = true
+		};
+		AddChild(deathDelayTimer);
+		deathDelayTimer.Timeout += OnDeathDelayTimeout;
 	}
-	
-	
-	
+
 	/* --------------------
-	RECOLECCION DE RECURSOS
+	RECOLECCIÓN DE RECURSOS
 	----------------------*/
-	
-	// Detecta que ha sido golpeado
 	public void Hit()
 	{
-		// Actualizo madera disponible 
-		// He dejado el recurso como "finito" por si en versiones posteriores quisieramos tocarlo.
-		if (isDead) return;
-		isDead = (maderaQueda <= 0);
+		if (isDead)
+			return;
+
 		maderaQueda--;
-		
-		if (isDead) {
-			anim.Play("Die");
-			// Si el arbol muere, puedes atravesar el tronco (se puede omitir si preferis)
-			if (collisionShape != null) collisionShape.Disabled = true;
-		}
-		else {
+		GD.Print($"Árbol golpeado. Madera restante: {maderaQueda}");
+
+		if (maderaQueda <= 0)
+		{
+			isDead = true;
 			anim.Play("chop");
-			// Hago que la animacion termine y se resetee a Idle correctamente
-			// OnAnimFinished tambien suma la madera (para que se actualice el contador despues de la animacion)
+			anim.AnimationFinished += OnAnimFinished;
+			deathDelayTimer.Start(); // Espera 0. segundo antes de morir
+		}
+		else
+		{
+			anim.Play("chop");
 			anim.AnimationFinished += OnAnimFinished;
 		}
 	}
-	
-	// Realmente, esto solo se ejecuta si "chop"
-	//    - Cuando termina la animacion de "chop" cambio el contador.
-	// Con "Die" entra en bucle y no llega a llamarlo
+
 	private void OnAnimFinished()
 	{
-		if (anim.Animation == "Die")
-			QueueFree(); // eliminar árbol tras morir
-		
 		if (anim.Animation == "chop")
 		{
 			anim.Play("Idle");
-			
-			// === SUMAR 5 A MADERA ===
+
+			// === SUMAR MADERA ===
 			var manager = GetNode<ResourceManager>("/root/Main/ResourceManager");
-			manager.AddResource("wood", MADERA); 
-			
+			manager.AddResource("wood", MADERA);
+
 			anim.AnimationFinished -= OnAnimFinished;
 		}
+	}
+
+	// Espera 1 segundo y luego hace "Die"
+	private void OnDeathDelayTimeout()
+	{
+		anim.Play("Die");
+		if (collisionShape != null)
+			collisionShape.Disabled = true;
+
+		GD.Print("Árbol caído. Regenerando en 30 segundos...");
+		regenTimer.Start(); // inicia regeneración tras morir
+	}
+
+	// Regenerar el árbol tras 5 segundos
+	private void OnRegenTimerTimeout()
+	{
+		GD.Print("Árbol regenerado.");
+		isDead = false;
+		maderaQueda = MADERA_INICIAL;
+		anim.Play("Idle");
+		if (collisionShape != null)
+			collisionShape.Disabled = false;
 	}
 }

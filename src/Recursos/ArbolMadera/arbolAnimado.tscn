@@ -92,11 +92,14 @@ position = Vector2(0, 4.7683716e-07)
 scale = Vector2(1.4166666, 1.390625)
 sprite_frames = SubResource("SpriteFrames_uvlja")
 animation = &"chop"
-frame = 1
-frame_progress = 1.0
 offset = Vector2(-1.4117646, -63.999897)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
 shape = SubResource("RectangleShape2D_rcsqm")
+
+[node name="regenTimer" type="Timer" parent="."]
+
+[node name="deathDelayTimer" type="Timer" parent="."]
+wait_time = 0.1
