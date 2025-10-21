@@ -78,7 +78,7 @@ public partial class MinaOroAnimado : StaticBody2D
 			}
 			else
 			{
-				anim.Play("Idle");
+				anim.Play("Idle"); 
 			}
 		}
 	}
