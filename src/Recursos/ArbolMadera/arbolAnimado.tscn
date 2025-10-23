@@ -148,7 +148,7 @@ y_sort_enabled = true
 position = Vector2(0, 4.7683716e-07)
 scale = Vector2(1.4166666, 1.390625)
 sprite_frames = SubResource("SpriteFrames_uvlja")
-animation = &"chop"
+animation = &"Idle"
 offset = Vector2(-1.4117646, -63.999897)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

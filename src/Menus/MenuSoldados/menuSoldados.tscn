@@ -1,0 +1,87 @@
+[gd_scene load_steps=7 format=3 uid="uid://fsq1fp7g6o7n"]
+
+[ext_resource type="Texture2D" uid="uid://7coqstm4olxf" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Banners/Carved_3Slides.png" id="1_svn2r"]
+[ext_resource type="Texture2D" uid="uid://bc0t4hvtx1bkf" path="res://src/AssetsUsados/UI_Soldados/Warrior.png" id="2_s6o2e"]
+[ext_resource type="Texture2D" uid="uid://dvrc6nqo6d6qm" path="res://src/AssetsUsados/UI_Soldados/Archer.png" id="3_6qod5"]
+[ext_resource type="Texture2D" uid="uid://jh58qq1irqwa" path="res://src/AssetsUsados/UI_Soldados/Lancer.png" id="4_pmiql"]
+[ext_resource type="Texture2D" uid="uid://b5ivibj8nyguh" path="res://src/AssetsUsados/UI_Soldados/Monk.png" id="5_k48v8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qasqj"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="MenuSoldados" type="CanvasLayer"]
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(264, 64)
+offset_right = 273.0
+offset_bottom = 101.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qasqj")
+
+[node name="TextureRect" type="TextureRect" parent="Panel"]
+layout_mode = 0
+offset_top = -1.0
+offset_right = 282.0
+offset_bottom = 104.0
+texture = ExtResource("1_svn2r")
+
+[node name="Soldados" type="HBoxContainer" parent="."]
+offset_left = 7.0
+offset_right = 275.0
+offset_bottom = 98.0
+
+[node name="Warrior" type="VBoxContainer" parent="Soldados"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Soldados/Warrior"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_s6o2e")
+expand_mode = 1
+
+[node name="WoodLabel" type="Label" parent="Soldados/Warrior"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="Archer" type="VBoxContainer" parent="Soldados"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Soldados/Archer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("3_6qod5")
+expand_mode = 1
+
+[node name="StoneLabel" type="Label" parent="Soldados/Archer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="Lancer" type="VBoxContainer" parent="Soldados"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Soldados/Lancer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("4_pmiql")
+expand_mode = 1
+
+[node name="GoldLabel" type="Label" parent="Soldados/Lancer"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+
+[node name="Monk" type="VBoxContainer" parent="Soldados"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Soldados/Monk"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("5_k48v8")
+expand_mode = 3
+
+[node name="VillagerLabel" type="Label" parent="Soldados/Monk"]
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
