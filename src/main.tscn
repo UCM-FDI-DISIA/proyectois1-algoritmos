@@ -425,7 +425,6 @@ script = ExtResource("1_lquwl")
 [node name="MenuSoldados" type="Node2D" parent="."]
 
 [node name="MenuSoldados" parent="MenuSoldados" instance=ExtResource("3_d3u4l")]
-visible = false
 offset = Vector2(0, 120)
 transform = Transform2D(1, 0, 0, 1, 0, 120)
 
