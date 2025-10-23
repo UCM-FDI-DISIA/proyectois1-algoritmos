@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://iah8x7at2l31"]
+
+[ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="1_3hdph"]
+[ext_resource type="Texture2D" uid="uid://bh6mm7bjgnrxk" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Pressed_07.png" id="2_05vxd"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_nguxq"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3hdph"]
+texture = ExtResource("1_3hdph")
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_05vxd"]
+
+[node name="menuConstruccion" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 90.0
+offset_bottom = 91.0
+
+[node name="Button" type="Button" parent="."]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 101.0
+offset_bottom = 102.0
+theme_override_icons/icon = SubResource("ViewportTexture_nguxq")
+theme_override_styles/normal = SubResource("StyleBoxTexture_3hdph")
+button_group = SubResource("ButtonGroup_05vxd")
+icon = ExtResource("2_05vxd")
+icon_alignment = 1
+expand_icon = true
