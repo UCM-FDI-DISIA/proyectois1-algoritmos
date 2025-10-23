@@ -36,7 +36,7 @@ public partial class MinaPiedraAnimado : StaticBody2D
 		SetRocasVisibles(rocasPequenas, false);
 		animExplosion.Visible = false;
 
-		// Timer regeneración
+		// Conexión única del temporizador de regeneración
 		regenTimer = new Timer
 		{
 			WaitTime = TIEMPO_REGENERACION,
@@ -45,7 +45,7 @@ public partial class MinaPiedraAnimado : StaticBody2D
 		AddChild(regenTimer);
 		regenTimer.Timeout += OnRegenTimerTimeout;
 
-		// Timer retraso tras agotarse
+		// Conexión única del temporizador de retraso tras agotarse
 		depletionDelayTimer = new Timer
 		{
 			WaitTime = TIEMPO_AGOTARSE,
@@ -53,6 +53,10 @@ public partial class MinaPiedraAnimado : StaticBody2D
 		};
 		AddChild(depletionDelayTimer);
 		depletionDelayTimer.Timeout += OnDepletionDelayTimeout;
+
+		// **CAMBIO:** Conexión única de la señal de animación en _Ready().
+		// No es necesario conectarla y desconectarla cada vez que se golpea.
+		animExplosion.AnimationFinished += OnExplosionFinished;
 	}
 
 	public void Hit()
@@ -67,7 +71,6 @@ public partial class MinaPiedraAnimado : StaticBody2D
 		ShakeRocas();
 		animExplosion.Visible = true;
 		animExplosion.Play("Collect");
-		animExplosion.AnimationFinished += OnExplosionFinished;
 
 		// Añadir recurso
 		var manager = GetNode<ResourceManager>("/root/Main/ResourceManager");
@@ -78,8 +81,7 @@ public partial class MinaPiedraAnimado : StaticBody2D
 		if (rocaQueda <= 0)
 		{
 			isDepleted = true;
-			animExplosion.Play("Collect");
-			animExplosion.AnimationFinished += OnExplosionFinished;
+			// Ya no necesitas volver a conectar la señal aquí
 			depletionDelayTimer.Start(); // Esperar antes de mostrar las rocas pequeñas
 		}
 	}
@@ -87,7 +89,7 @@ public partial class MinaPiedraAnimado : StaticBody2D
 	private void OnExplosionFinished()
 	{
 		animExplosion.Visible = false;
-		animExplosion.AnimationFinished -= OnExplosionFinished;
+		// Ya no necesitas desconectar, ya que la conexión es permanente
 	}
 
 	private void OnDepletionDelayTimeout()

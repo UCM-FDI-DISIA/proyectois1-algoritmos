@@ -87,8 +87,6 @@ public partial class MinaOroAnimado : StaticBody2D
 	{
 		anim.Play("Depleted");
 
-		
-
 		GD.Print("Mina agotada. Regenerando en 30 segundos...");
 		regenTimer.Start();
 	}

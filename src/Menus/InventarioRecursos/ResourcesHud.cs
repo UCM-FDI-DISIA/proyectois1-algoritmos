@@ -26,14 +26,14 @@ public partial class ResourcesHud : CanvasLayer
 			case "wood":
 				woodLabel.Text = newValue.ToString();
 				break;
+			case "villager":
+				villagerLabel.Text = newValue.ToString();
+				break;
 			case "stone":
 				stoneLabel.Text = newValue.ToString();
 				break;
 			case "gold":
 				goldLabel.Text = newValue.ToString();
-				break;
-			case "villager":
-				villagerLabel.Text = newValue.ToString();
 				break;
 		}
 	}
