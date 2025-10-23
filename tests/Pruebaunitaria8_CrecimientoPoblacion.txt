@@ -1,0 +1,17 @@
+MECANICA A PROBAR: RECOLECCION MANUAL DE RECURSOS
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	
+	1) Ejecutar el archivo.
+	2) Comprobar que el numero de personas crece bajo la siguiente ecuacion.
+		* NumeroVillagers(t) = NumeroVillagers(t - 1) + NUMERO_CASAS * CRECIMIENTO.
+		* t son multiplos de 10 segundos.
+		* CRECIMIENTO es constante y se define en el ResourceManager.
+		* NUMERO_CASAS es el numero de casas en el mapa en cada momento.
+	3) Comprobar que la actualizacion de aldeanos no se ve afectada por otras acciones.
+		* Por ejemplo, si al recolectar recursos aumenta el tiempo de actualizacion, no esta funcionando correctamente.
+
+PRUEBAS REALIZADAS:
+	24/10/2025
+		Entro en bucle infinito con la actualizacion de aldeanos y Godot no responde.
+		Se arregla el problema cambiando el codigo del ResourceManager.
