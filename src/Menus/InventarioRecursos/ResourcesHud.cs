@@ -8,9 +8,7 @@ public partial class ResourcesHud : CanvasLayer
 	private Label goldLabel;
 	private Label villagerLabel;
 
-	private const int MAX_RESOURCE = 99;
-	private Color normalColor = new Color(1, 1, 1); // Blanco
-	private Color maxColor = new Color(1, 0, 0);   // Rojo
+	private ResourceManager manager;
 
 	public override void _Ready()
 	{
@@ -19,37 +17,46 @@ public partial class ResourcesHud : CanvasLayer
 		goldLabel = GetNode<Label>("HBoxContainer/GoldContainer/GoldLabel");
 		villagerLabel = GetNode<Label>("HBoxContainer/VillagerContainer/VillagerLabel");
 
-		var manager = GetNode<ResourceManager>("/root/Main/ResourceManager");
+		manager = GetNode<ResourceManager>("/root/Main/ResourceManager");
 		manager.ResourceUpdated += OnResourceUpdated;
+		manager.VillagerCapacityUpdated += OnVillagerCapacityUpdated;
+
+		UpdateVillagerLabel();
 	}
 
 	private void OnResourceUpdated(string resourceName, int newValue)
 	{
-		// Limitar el valor a 99 antes de mostrarlo
-		int clampedValue = Mathf.Min(newValue, MAX_RESOURCE);
-
-		Label targetLabel = null;
-
 		switch (resourceName)
 		{
 			case "wood":
-				targetLabel = woodLabel;
-				break;
-			case "villager":
-				targetLabel = villagerLabel;
+				woodLabel.Text = newValue.ToString();
 				break;
 			case "stone":
-				targetLabel = stoneLabel;
+				stoneLabel.Text = newValue.ToString();
 				break;
 			case "gold":
-				targetLabel = goldLabel;
+				goldLabel.Text = newValue.ToString();
+				break;
+			case "villager":
+				UpdateVillagerLabel();
 				break;
 		}
+	}
 
-		if (targetLabel != null)
-		{
-			targetLabel.Text = clampedValue.ToString();
-			targetLabel.AddThemeColorOverride("font_color", clampedValue >= MAX_RESOURCE ? maxColor : normalColor);
-		}
+	private void OnVillagerCapacityUpdated()
+	{
+		UpdateVillagerLabel();
+	}
+
+	private void UpdateVillagerLabel()
+	{
+		int currentVillagers = manager.GetResource("villager");
+		int maxVillagers = manager.GetVillagerCapacity();
+
+		villagerLabel.Text = $"{currentVillagers} / {maxVillagers}";
+
+		// Color: rojo si alcanza el máximo
+		villagerLabel.AddThemeColorOverride("font_color",
+			currentVillagers >= maxVillagers ? new Color(1, 0, 0) : new Color(1, 1, 1));
 	}
 }
