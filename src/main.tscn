@@ -6,9 +6,9 @@
 [ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://src/PersonajePrincipal/Player.cs" id="2_lquwl"]
 [ext_resource type="PackedScene" uid="uid://fsq1fp7g6o7n" path="res://src/Menus/MenuSoldados/menuSoldados.tscn" id="3_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
+[ext_resource type="Script" uid="uid://2cph61lboe5o" path="res://src/MenuCanvas.cs" id="3_mlv6i"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="4_mlv6i"]
-[ext_resource type="Script" uid="uid://cri6keqbml7wo" path="res://src/Button.cs" id="5_tb146"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
 [ext_resource type="PackedScene" uid="uid://c677m228bca8p" path="res://src/Recursos/MinaPiedra/minaPiedraAnimado.tscn" id="7_rlaii"]
 [ext_resource type="Script" uid="uid://cb2shqdb8q060" path="res://src/Menus/InventarioRecursos/ResourceManager.cs" id="9_kf8lf"]
@@ -422,17 +422,27 @@ script = ExtResource("1_lquwl")
 
 [node name="ResourcesHUD" parent="." instance=ExtResource("2_5mrjc")]
 
-[node name="MenuSoldados" type="Node2D" parent="."]
+[node name="MenuCanvas" type="CanvasLayer" parent="."]
+script = ExtResource("3_mlv6i")
 
-[node name="MenuSoldados" parent="MenuSoldados" instance=ExtResource("3_d3u4l")]
-offset = Vector2(0, 120)
-transform = Transform2D(1, 0, 0, 1, 0, 120)
-
-[node name="Button" type="Button" parent="MenuSoldados"]
-offset_right = 225.0
+[node name="Boton" type="Button" parent="MenuCanvas"]
+top_level = true
+offset_left = 14.0
+offset_top = 140.0
+offset_right = 86.0
 offset_bottom = 212.0
 icon = ExtResource("4_mlv6i")
-script = ExtResource("5_tb146")
+icon_alignment = 1
+
+[node name="MenuSoldados" type="Control" parent="MenuCanvas"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MenuSoldados2" parent="MenuCanvas/MenuSoldados" instance=ExtResource("3_d3u4l")]
+offset = Vector2(0, 120)
+transform = Transform2D(1, 0, 0, 1, 0, 120)
 
 [node name="Mapa" type="Node2D" parent="."]
 
@@ -511,4 +521,4 @@ tile_set = SubResource("TileSet_kqbth")
 [node name="ResourceManager" type="Node" parent="."]
 script = ExtResource("9_kf8lf")
 
-[connection signal="pressed" from="MenuSoldados/Button" to="MenuSoldados/Button" method="_on_pressed"]
+[connection signal="pressed" from="MenuCanvas/Boton" to="MenuCanvas/Boton" method="_on_pressed"]
