@@ -1,33 +1,70 @@
-[gd_scene load_steps=6 format=3 uid="uid://iah8x7at2l31"]
+[gd_scene load_steps=10 format=3 uid="uid://iah8x7at2l31"]
 
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="1_3hdph"]
-[ext_resource type="Texture2D" uid="uid://bh6mm7bjgnrxk" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Pressed_07.png" id="2_05vxd"]
+[ext_resource type="Script" uid="uid://cv3u81yv6wuha" path="res://src/Construccion/MenuConstruccion.cs" id="1_ghgg2"]
+[ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="2_05vxd"]
+[ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="3_wwp1g"]
+[ext_resource type="Texture2D" uid="uid://c6yvjf3b1ejhc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_07.png" id="4_wwp1g"]
+[ext_resource type="Texture2D" uid="uid://dlq3jbg126h5p" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_3Slides.png" id="6_8qf8j"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_nguxq"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3hdph"]
-texture = ExtResource("1_3hdph")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3hdph"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_05vxd"]
 
-[node name="menuConstruccion" type="Control"]
-clip_contents = true
-layout_mode = 3
-anchors_preset = 0
-offset_right = 90.0
-offset_bottom = 91.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ee3t0"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
-[node name="Button" type="Button" parent="."]
-clip_contents = true
+[node name="menuConstruccion" type="CanvasLayer"]
+script = ExtResource("1_ghgg2")
+
+[node name="Panel1" type="Panel" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -94.0
+offset_right = 100.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3hdph")
+
+[node name="Button" type="TextureButton" parent="Panel1"]
 custom_minimum_size = Vector2(100, 100)
-layout_mode = 0
-offset_left = 1.0
-offset_top = 2.0
-offset_right = 101.0
-offset_bottom = 102.0
-theme_override_icons/icon = SubResource("ViewportTexture_nguxq")
-theme_override_styles/normal = SubResource("StyleBoxTexture_3hdph")
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+offset_right = 100.0
+grow_vertical = 0
 button_group = SubResource("ButtonGroup_05vxd")
-icon = ExtResource("2_05vxd")
-icon_alignment = 1
-expand_icon = true
+texture_normal = ExtResource("1_3hdph")
+texture_pressed = ExtResource("2_05vxd")
+texture_hover = ExtResource("3_wwp1g")
+stretch_mode = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="Panel1"]
+position = Vector2(51.5, 43)
+scale = Vector2(1.140625, 1.0625)
+texture = ExtResource("4_wwp1g")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel1"]
+visible = false
+layout_mode = 0
+offset_left = 105.0
+offset_top = -8.0
+offset_right = 489.0
+offset_bottom = 83.0
+
+[node name="Panel" type="Panel" parent="Panel1/HBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ee3t0")
+
+[node name="TextureRect" type="TextureRect" parent="Panel1/HBoxContainer/Panel"]
+layout_mode = 0
+offset_left = -14.0
+offset_top = -5.0
+offset_right = 405.0
+offset_bottom = 102.0
+texture = ExtResource("6_8qf8j")
+
+[connection signal="pressed" from="Panel1/Button" to="." method="On_button_pressed"]
