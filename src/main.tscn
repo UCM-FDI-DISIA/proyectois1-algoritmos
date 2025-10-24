@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=73 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://src/PersonajePrincipal/Player.cs" id="2_lquwl"]
 [ext_resource type="PackedScene" uid="uid://fsq1fp7g6o7n" path="res://src/Menus/MenuSoldados/menuSoldados.tscn" id="3_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
-[ext_resource type="Script" uid="uid://2cph61lboe5o" path="res://src/MenuCanvas.cs" id="3_mlv6i"]
+[ext_resource type="Script" uid="uid://bgjcg6ybyj862" path="res://src/ControlSoldados.cs" id="3_okx7f"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="4_mlv6i"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
@@ -14,6 +14,9 @@
 [ext_resource type="Script" uid="uid://cb2shqdb8q060" path="res://src/Menus/InventarioRecursos/ResourceManager.cs" id="9_kf8lf"]
 [ext_resource type="PackedScene" uid="uid://c6wex4pd4eg7t" path="res://src/Edificios/Casa/CasaAnimada.tscn" id="9_mgm53"]
 [ext_resource type="PackedScene" uid="uid://die6kbpl1cpp2" path="res://src/Edificios/Cuartel/CuartelAnimado.tscn" id="10_uewes"]
+[ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="14_d3u4l"]
+[ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="14_tb146"]
+[ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="15_e7lu8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("3_lquwl")
@@ -422,25 +425,14 @@ script = ExtResource("1_lquwl")
 
 [node name="ResourcesHUD" parent="." instance=ExtResource("2_5mrjc")]
 
-[node name="MenuCanvas" type="CanvasLayer" parent="."]
-script = ExtResource("3_mlv6i")
-
-[node name="Boton" type="Button" parent="MenuCanvas"]
-top_level = true
-offset_left = 14.0
-offset_top = 140.0
-offset_right = 86.0
-offset_bottom = 212.0
-icon = ExtResource("4_mlv6i")
-icon_alignment = 1
-
-[node name="MenuSoldados" type="Control" parent="MenuCanvas"]
+[node name="ControlSoldados" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("3_okx7f")
 
-[node name="MenuSoldados2" parent="MenuCanvas/MenuSoldados" instance=ExtResource("3_d3u4l")]
+[node name="MenuSoldados" parent="ControlSoldados" instance=ExtResource("3_d3u4l")]
 offset = Vector2(0, 120)
 transform = Transform2D(1, 0, 0, 1, 0, 120)
 
@@ -509,16 +501,31 @@ shape = SubResource("CircleShape2D_mgm53")
 [node name="Recursos" type="TileMapLayer" parent="Objetos"]
 z_as_relative = false
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAX/27/AAAAAAAAAQDF/9v/AAAAAAAAAQDQ/9v/AAAAAAAAAQDT//X/AAAAAAAAAQDU//H/AAAAAAAAAQDY//P/AAAAAAAAAQC4//n/AAAAAAAAAQDD/wYAAAAAAAAAAQDG/xAAAAAAAAAAAQDI/x8AAAAAAAAAAQDL/yEAAAAAAAAAAQDN/x0AAAAAAAAAAQDW/w0AAAAAAAAAAQDY/w4AAAAAAAAAAQDa/xEAAAAAAAAAAQDW/xYAAAAAAAAAAQDe/xQAAAAAAAAAAQDi/xIAAAAAAAAAAQDk/wwAAAAAAAAAAQDk/xYAAAAAAAAAAQDf/xkAAAAAAAAAAQDZ/xoAAAAAAAAAAQDX/yAAAAAAAAAAAQDa/yQAAAAAAAAAAQDd/x8AAAAAAAAAAQDf/yMAAAAAAAAAAQDj/yQAAAAAAAAAAQDx/xMAAAAAAAAAAQDz/xYAAAAAAAAAAQD5/xEAAAAAAAAAAQARABAAAAAAAAAAAQASABIAAAAAAAAAAQAUABEAAAAAAAAAAQAVAA4AAAAAAAAAAQAXACMAAAAAAAAAAQAlABsAAAAAAAAAAQAiABIAAAAAAAAAAQApABAAAAAAAAAAAQAoAAwAAAAAAAAAAQAEABEAAAAAAAAAAgAsAAcAAAAAAAAAAgATAOr/AAAAAAAAAgAdAOv/AAAAAAAAAgAdAOj/AAAAAAAAAgAlAPb/AAAAAAAAAgD3/97/AAAAAAAAAgD7/+H/AAAAAAAAAgDb/9//AAAAAAAAAgDB/93/AAAAAAAAAgC9/+//AAAAAAAAAgC7//z/AAAAAAAAAgAMAPX/AAAAAAAAAgAgAO//AAAAAAAAAwAuAA0AAAAAAAAAAwAeACAAAAAAAAAAAwAOABQAAAAAAAAAAwAKAAwAAAAAAAAAAwD+/w4AAAAAAAAAAwD7/wwAAAAAAAAAAwD8/xgAAAAAAAAAAwD8/yMAAAAAAAAAAwANAAUAAAAAAAAAAwD5/wIAAAAAAAAAAwC8/x0AAAAAAAAAAwC+/x8AAAAAAAAAAwC6/yIAAAAAAAAAAwC5/yQAAAAAAAAAAwDC/yMAAAAAAAAAAwDG/woAAAAAAAAAAwC8/wEAAAAAAAAAAwC///7/AAAAAAAAAwDO//j/AAAAAAAAAwDE//H/AAAAAAAAAwC6/+X/AAAAAAAAAwDH/97/AAAAAAAAAwDN/93/AAAAAAAAAwDQ/9//AAAAAAAAAwDj/+X/AAAAAAAAAwDv/+n/AAAAAAAAAwAcAAYAAAAAAAAAAwAIAAIAAAAAAAAAAQACAAQAAAAAAAAAAQD4//j/AAAAAAAAAQD6//r/AAAAAAAAAQD1//v/AAAAAAAAAQA=")
+tile_map_data = PackedByteArray("AAAX/27/AAAAAAAAAQDF/9v/AAAAAAAAAQDQ/9v/AAAAAAAAAQDT//X/AAAAAAAAAQDU//H/AAAAAAAAAQDY//P/AAAAAAAAAQC4//n/AAAAAAAAAQDD/wYAAAAAAAAAAQDG/xAAAAAAAAAAAQDI/x8AAAAAAAAAAQDL/yEAAAAAAAAAAQDN/x0AAAAAAAAAAQDW/w0AAAAAAAAAAQDY/w4AAAAAAAAAAQDa/xEAAAAAAAAAAQDW/xYAAAAAAAAAAQDe/xQAAAAAAAAAAQDi/xIAAAAAAAAAAQDk/wwAAAAAAAAAAQDk/xYAAAAAAAAAAQDf/xkAAAAAAAAAAQDZ/xoAAAAAAAAAAQDX/yAAAAAAAAAAAQDa/yQAAAAAAAAAAQDd/x8AAAAAAAAAAQDf/yMAAAAAAAAAAQDj/yQAAAAAAAAAAQDx/xMAAAAAAAAAAQDz/xYAAAAAAAAAAQD5/xEAAAAAAAAAAQARABAAAAAAAAAAAQASABIAAAAAAAAAAQAUABEAAAAAAAAAAQAVAA4AAAAAAAAAAQAXACMAAAAAAAAAAQAlABsAAAAAAAAAAQAiABIAAAAAAAAAAQApABAAAAAAAAAAAQAoAAwAAAAAAAAAAQAsAAcAAAAAAAAAAgATAOr/AAAAAAAAAgAdAOv/AAAAAAAAAgAdAOj/AAAAAAAAAgAlAPb/AAAAAAAAAgD3/97/AAAAAAAAAgD7/+H/AAAAAAAAAgDb/9//AAAAAAAAAgDB/93/AAAAAAAAAgC9/+//AAAAAAAAAgC7//z/AAAAAAAAAgAMAPX/AAAAAAAAAgAgAO//AAAAAAAAAwAuAA0AAAAAAAAAAwAeACAAAAAAAAAAAwAOABQAAAAAAAAAAwAKAAwAAAAAAAAAAwD+/w4AAAAAAAAAAwD7/wwAAAAAAAAAAwD8/xgAAAAAAAAAAwD8/yMAAAAAAAAAAwANAAUAAAAAAAAAAwD5/wIAAAAAAAAAAwC8/x0AAAAAAAAAAwC+/x8AAAAAAAAAAwC6/yIAAAAAAAAAAwC5/yQAAAAAAAAAAwDC/yMAAAAAAAAAAwDG/woAAAAAAAAAAwC8/wEAAAAAAAAAAwC///7/AAAAAAAAAwDO//j/AAAAAAAAAwDE//H/AAAAAAAAAwC6/+X/AAAAAAAAAwDH/97/AAAAAAAAAwDN/93/AAAAAAAAAwDQ/9//AAAAAAAAAwDj/+X/AAAAAAAAAwDv/+n/AAAAAAAAAwAcAAYAAAAAAAAAAwAIAAIAAAAAAAAAAQACAAQAAAAAAAAAAQD4//j/AAAAAAAAAQD6//r/AAAAAAAAAQD1//v/AAAAAAAAAQA=")
 tile_set = SubResource("TileSet_mgm53")
 
 [node name="Edificios" type="TileMapLayer" parent="Objetos"]
 z_as_relative = false
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAEAAoAAAAAAAAAAQAUAAcAAAAAAAAAAgA=")
+tile_map_data = PackedByteArray("AAAEAAoAAAAAAAAAAQADABIAAAAAAAAAAgA=")
 tile_set = SubResource("TileSet_kqbth")
 
 [node name="ResourceManager" type="Node" parent="."]
 script = ExtResource("9_kf8lf")
 
-[connection signal="pressed" from="MenuCanvas/Boton" to="MenuCanvas/Boton" method="_on_pressed"]
+[node name="BotonSoldados" type="Node2D" parent="."]
+
+[node name="Boton" type="TextureButton" parent="BotonSoldados"]
+offset_left = 192.0
+offset_top = 983.0
+offset_right = 270.0
+offset_bottom = 1055.0
+texture_normal = ExtResource("4_mlv6i")
+texture_pressed = ExtResource("14_tb146")
+texture_hover = ExtResource("15_e7lu8")
+
+[node name="Mas" type="Sprite2D" parent="BotonSoldados"]
+position = Vector2(224, 1015)
+texture = ExtResource("14_d3u4l")
+
+[connection signal="pressed" from="BotonSoldados/Boton" to="BotonSoldados/Boton" method="_on_pressed"]
