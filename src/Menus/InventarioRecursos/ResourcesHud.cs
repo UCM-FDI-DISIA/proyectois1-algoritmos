@@ -8,6 +8,10 @@ public partial class ResourcesHud : CanvasLayer
 	private Label goldLabel;
 	private Label villagerLabel;
 
+	private const int MAX_RESOURCE = 99;
+	private Color normalColor = new Color(1, 1, 1); // Blanco
+	private Color maxColor = new Color(1, 0, 0);   // Rojo
+
 	public override void _Ready()
 	{
 		woodLabel = GetNode<Label>("HBoxContainer/WoodContainer/WoodLabel");
@@ -21,20 +25,31 @@ public partial class ResourcesHud : CanvasLayer
 
 	private void OnResourceUpdated(string resourceName, int newValue)
 	{
+		// Limitar el valor a 99 antes de mostrarlo
+		int clampedValue = Mathf.Min(newValue, MAX_RESOURCE);
+
+		Label targetLabel = null;
+
 		switch (resourceName)
 		{
 			case "wood":
-				woodLabel.Text = newValue.ToString();
+				targetLabel = woodLabel;
 				break;
 			case "villager":
-				villagerLabel.Text = newValue.ToString();
+				targetLabel = villagerLabel;
 				break;
 			case "stone":
-				stoneLabel.Text = newValue.ToString();
+				targetLabel = stoneLabel;
 				break;
 			case "gold":
-				goldLabel.Text = newValue.ToString();
+				targetLabel = goldLabel;
 				break;
+		}
+
+		if (targetLabel != null)
+		{
+			targetLabel.Text = clampedValue.ToString();
+			targetLabel.AddThemeColorOverride("font_color", clampedValue >= MAX_RESOURCE ? maxColor : normalColor);
 		}
 	}
 }
