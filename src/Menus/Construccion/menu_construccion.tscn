@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3 uid="uid://iah8x7at2l31"]
+
+[ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="1_3hdph"]
+[ext_resource type="Script" uid="uid://cv3u81yv6wuha" path="res://src/Menus/Construccion/MenuConstruccion.cs" id="1_ghgg2"]
+[ext_resource type="Texture2D" uid="uid://c6yvjf3b1ejhc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_07.png" id="4_wwp1g"]
+[ext_resource type="Texture2D" uid="uid://b0p26dktrje8y" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Buildings/Blue Buildings/House1Boton.png" id="6_2gfwo"]
+[ext_resource type="Texture2D" uid="uid://dlq3jbg126h5p" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_3Slides.png" id="6_8qf8j"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g55pw"]
+content_margin_left = 30.0
+content_margin_bottom = 12.0
+texture = ExtResource("6_8qf8j")
+
+[node name="menuConstruccion" type="CanvasLayer"]
+script = ExtResource("1_ghgg2")
+
+[node name="ControlRaiz" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="BtnMenu" type="TextureButton" parent="ControlRaiz"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 880.0
+offset_right = 74.0
+offset_bottom = 944.0
+texture_normal = ExtResource("1_3hdph")
+
+[node name="Sprite2D" type="Sprite2D" parent="ControlRaiz/BtnMenu"]
+position = Vector2(30, 30)
+texture = ExtResource("4_wwp1g")
+
+[node name="PanelBarra" type="PanelContainer" parent="ControlRaiz"]
+clip_contents = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 0
+offset_left = 60.0
+offset_top = 880.0
+offset_right = 360.0
+offset_bottom = 944.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_g55pw")
+
+[node name="HBoxBotones" type="HBoxContainer" parent="ControlRaiz/PanelBarra"]
+layout_mode = 2
+theme_override_constants/separation = -47
+
+[node name="BtnCasa" type="TextureButton" parent="ControlRaiz/PanelBarra/HBoxBotones"]
+layout_mode = 2
+texture_normal = ExtResource("6_2gfwo")
+stretch_mode = 5
