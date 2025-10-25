@@ -1,10 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://fsq1fp7g6o7n"]
+[gd_scene load_steps=12 format=3 uid="uid://fsq1fp7g6o7n"]
 
 [ext_resource type="Texture2D" uid="uid://7coqstm4olxf" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Banners/Carved_3Slides.png" id="1_svn2r"]
 [ext_resource type="Texture2D" uid="uid://bc0t4hvtx1bkf" path="res://src/AssetsUsados/UI_Soldados/Warrior.png" id="2_s6o2e"]
 [ext_resource type="Texture2D" uid="uid://dvrc6nqo6d6qm" path="res://src/AssetsUsados/UI_Soldados/Archer.png" id="3_6qod5"]
+[ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="3_qasqj"]
+[ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="4_eomyb"]
 [ext_resource type="Texture2D" uid="uid://jh58qq1irqwa" path="res://src/AssetsUsados/UI_Soldados/Lancer.png" id="4_pmiql"]
+[ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="5_6wca1"]
 [ext_resource type="Texture2D" uid="uid://b5ivibj8nyguh" path="res://src/AssetsUsados/UI_Soldados/Monk.png" id="5_k48v8"]
+[ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="6_l68id"]
+[ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="7_03fmc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qasqj"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -38,10 +43,28 @@ layout_mode = 2
 texture = ExtResource("2_s6o2e")
 expand_mode = 1
 
-[node name="WoodLabel" type="Label" parent="Soldados/Warrior"]
+[node name="WarriorLabel" type="Label" parent="Soldados/Warrior"]
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
+
+[node name="ButtonW" type="Node2D" parent="Soldados/Warrior"]
+
+[node name="ButtonWarrior" type="TextureButton" parent="Soldados/Warrior/ButtonW"]
+z_as_relative = false
+y_sort_enabled = true
+offset_left = 1.0
+offset_top = 104.0
+offset_right = 65.0
+offset_bottom = 168.0
+texture_normal = ExtResource("3_qasqj")
+texture_pressed = ExtResource("4_eomyb")
+texture_hover = ExtResource("5_6wca1")
+texture_disabled = ExtResource("6_l68id")
+
+[node name="Mas" type="Sprite2D" parent="Soldados/Warrior/ButtonW"]
+position = Vector2(33, 136)
+texture = ExtResource("7_03fmc")
 
 [node name="Archer" type="VBoxContainer" parent="Soldados"]
 custom_minimum_size = Vector2(64, 64)
@@ -58,6 +81,25 @@ layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 
+[node name="ButtonA" type="Node2D" parent="Soldados/Archer"]
+position = Vector2(-68, 0)
+
+[node name="ButtonArcher" type="TextureButton" parent="Soldados/Archer/ButtonA"]
+z_as_relative = false
+y_sort_enabled = true
+offset_left = 65.0
+offset_top = 104.0
+offset_right = 129.0
+offset_bottom = 168.0
+texture_normal = ExtResource("3_qasqj")
+texture_pressed = ExtResource("4_eomyb")
+texture_hover = ExtResource("5_6wca1")
+texture_disabled = ExtResource("6_l68id")
+
+[node name="Mas" type="Sprite2D" parent="Soldados/Archer/ButtonA"]
+position = Vector2(97, 136)
+texture = ExtResource("7_03fmc")
+
 [node name="Lancer" type="VBoxContainer" parent="Soldados"]
 layout_mode = 2
 
@@ -72,6 +114,25 @@ layout_mode = 2
 text = "0"
 horizontal_alignment = 1
 
+[node name="ButtonL" type="Node2D" parent="Soldados/Lancer"]
+position = Vector2(-68, 0)
+
+[node name="ButtonLancer" type="TextureButton" parent="Soldados/Lancer/ButtonL"]
+z_as_relative = false
+y_sort_enabled = true
+offset_left = 69.0
+offset_top = 104.0
+offset_right = 133.0
+offset_bottom = 168.0
+texture_normal = ExtResource("3_qasqj")
+texture_pressed = ExtResource("4_eomyb")
+texture_hover = ExtResource("5_6wca1")
+texture_disabled = ExtResource("6_l68id")
+
+[node name="Mas" type="Sprite2D" parent="Soldados/Lancer/ButtonL"]
+position = Vector2(101, 136)
+texture = ExtResource("7_03fmc")
+
 [node name="Monk" type="VBoxContainer" parent="Soldados"]
 layout_mode = 2
 
@@ -85,3 +146,22 @@ expand_mode = 3
 layout_mode = 2
 text = "0"
 horizontal_alignment = 1
+
+[node name="ButtonM" type="Node2D" parent="Soldados/Monk"]
+position = Vector2(-68, 0)
+
+[node name="ButtonMonk" type="TextureButton" parent="Soldados/Monk/ButtonM"]
+z_as_relative = false
+y_sort_enabled = true
+offset_left = 65.0
+offset_top = 104.0
+offset_right = 129.0
+offset_bottom = 168.0
+texture_normal = ExtResource("3_qasqj")
+texture_pressed = ExtResource("4_eomyb")
+texture_hover = ExtResource("5_6wca1")
+texture_disabled = ExtResource("6_l68id")
+
+[node name="Mas" type="Sprite2D" parent="Soldados/Monk/ButtonM"]
+position = Vector2(97, 136)
+texture = ExtResource("7_03fmc")

@@ -78,6 +78,15 @@ public partial class ResourceManager : Node
 	{
 		return resources.ContainsKey(resourceName) ? resources[resourceName] : 0;
 	}
+	
+	public bool RemoveResource(string name, int amount)
+{
+	if (!resources.ContainsKey(name) || resources[name] < amount)
+		return false;
+
+	resources[name] -= amount;
+	return true;
+}
 
 	/*-----------------------
 		CRECIMIENTO DE ALDEANOS
