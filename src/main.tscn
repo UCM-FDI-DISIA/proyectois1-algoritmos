@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=75 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://src/PersonajePrincipal/Player.cs" id="2_lquwl"]
 [ext_resource type="PackedScene" uid="uid://iah8x7at2l31" path="res://src/Menus/Construccion/menu_construccion.tscn" id="2_okx7f"]
 [ext_resource type="PackedScene" uid="uid://fsq1fp7g6o7n" path="res://src/Menus/MenuSoldados/menuSoldados.tscn" id="3_d3u4l"]
-[ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="3_lquwl"]
+[ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
 [ext_resource type="Script" uid="uid://bgjcg6ybyj862" path="res://src/ControlSoldados.cs" id="3_okx7f"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="4_mlv6i"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="14_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="14_tb146"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="15_e7lu8"]
+[ext_resource type="Script" uid="uid://5j33igb5xeay" path="res://src/game_manager.gd" id="19_sta5p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("3_lquwl")
@@ -513,6 +514,8 @@ y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAEAAoAAAAAAAAAAQADABIAAAAAAAAAAgA=")
 tile_set = SubResource("TileSet_kqbth")
 
+[node name="CasasCompradas" type="Node2D" parent="Objetos/Edificios"]
+
 [node name="ResourceManager" type="Node" parent="."]
 script = ExtResource("9_kf8lf")
 
@@ -530,5 +533,8 @@ texture_hover = ExtResource("15_e7lu8")
 [node name="Mas" type="Sprite2D" parent="BotonSoldados"]
 position = Vector2(224, 1015)
 texture = ExtResource("14_d3u4l")
+
+[node name="GameManager" type="Node2D" parent="."]
+script = ExtResource("19_sta5p")
 
 [connection signal="pressed" from="BotonSoldados/Boton" to="BotonSoldados/Boton" method="_on_pressed"]
