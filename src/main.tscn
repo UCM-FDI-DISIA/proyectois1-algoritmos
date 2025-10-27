@@ -7,9 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://iah8x7at2l31" path="res://src/Menus/Construccion/menu_construccion.tscn" id="2_okx7f"]
 [ext_resource type="PackedScene" uid="uid://fsq1fp7g6o7n" path="res://src/Menus/MenuSoldados/menuSoldados.tscn" id="3_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
-[ext_resource type="Script" uid="uid://bgjcg6ybyj862" path="res://src/ControlSoldados.cs" id="3_okx7f"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="4_mlv6i"]
+[ext_resource type="Script" uid="uid://n5kmljuulr5b" path="res://src/Menus/MenuSoldados/MenuSoldados.cs" id="4_okx7f"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
 [ext_resource type="PackedScene" uid="uid://c677m228bca8p" path="res://src/Recursos/MinaPiedra/minaPiedraAnimado.tscn" id="7_rlaii"]
 [ext_resource type="Script" uid="uid://cb2shqdb8q060" path="res://src/Menus/InventarioRecursos/ResourceManager.cs" id="9_kf8lf"]
@@ -425,9 +425,14 @@ sources/0 = SubResource("TileSetScenesCollectionSource_uewes")
 [node name="Main" type="Node2D"]
 script = ExtResource("1_lquwl")
 
+[node name="ResourcesHUD" parent="." instance=ExtResource("2_5mrjc")]
+
 [node name="menuConstruccion" parent="." instance=ExtResource("2_okx7f")]
 
-[node name="ResourcesHUD" parent="." instance=ExtResource("2_5mrjc")]
+[node name="MenuSoldados" parent="." instance=ExtResource("3_d3u4l")]
+offset = Vector2(0, 120)
+transform = Transform2D(1, 0, 0, 1, 0, 120)
+script = ExtResource("4_okx7f")
 
 [node name="ResourceManager" type="Node" parent="."]
 script = ExtResource("9_kf8lf")
@@ -508,44 +513,16 @@ tile_set = SubResource("TileSet_kqbth")
 
 [node name="CasasCompradas" type="Node2D" parent="Objetos/Edificios"]
 
-[node name="ControlSoldados" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("3_okx7f")
-
-[node name="MenuSoldados" parent="ControlSoldados" instance=ExtResource("3_d3u4l")]
-offset = Vector2(0, 120)
-transform = Transform2D(1, 0, 0, 1, 0, 120)
-
-[node name="BotonS" type="TextureButton" parent="ControlSoldados"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = -0.35
-anchor_bottom = -0.2
+[node name="BotonS" type="TextureButton" parent="Objetos"]
 offset_left = 192.0
 offset_top = 983.0
-offset_right = 270.0
-offset_bottom = 1055.0
-mouse_filter = 2
-texture_normal = ExtResource("4_mlv6i")
-texture_pressed = ExtResource("14_tb146")
-texture_hover = ExtResource("15_e7lu8")
-metadata/_edit_use_anchors_ = true
-
-[node name="Mas" type="Sprite2D" parent="ControlSoldados"]
-position = Vector2(224, 1015)
-texture = ExtResource("14_d3u4l")
-
-[node name="Pruebas" type="TextureButton" parent="."]
-offset_left = 469.0
-offset_top = 218.0
-offset_right = 533.0
-offset_bottom = 282.0
+offset_right = 256.0
+offset_bottom = 1047.0
 texture_normal = ExtResource("4_mlv6i")
 texture_pressed = ExtResource("14_tb146")
 texture_hover = ExtResource("15_e7lu8")
 texture_disabled = ExtResource("19_sta5p")
 
-[connection signal="pressed" from="ControlSoldados/BotonS" to="ControlSoldados/BotonS" method="_on_pressed"]
+[node name="Mas" type="Sprite2D" parent="Objetos/BotonS"]
+position = Vector2(32, 32)
+texture = ExtResource("14_d3u4l")

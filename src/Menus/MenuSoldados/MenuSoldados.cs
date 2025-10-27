@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class SoldiersHud : CanvasLayer
+public partial class MenuSoldados : CanvasLayer
 {
 	private Label warriorLabel;
 	private Label archerLabel;
@@ -16,6 +16,14 @@ public partial class SoldiersHud : CanvasLayer
 	private SoldierManager soldierManager;
 	private ResourceManager resourceManager;
 
+	// Botón toggle en UI
+	private Button toggleButton;
+
+	// TextureButton externo
+	private TextureButton botonS;
+
+	private bool _mPressed = false;
+
 	public override void _Ready()
 	{
 		// Labels
@@ -24,11 +32,19 @@ public partial class SoldiersHud : CanvasLayer
 		lancerLabel = GetNode<Label>("HBoxContainer/LancerContainer/LancerLabel");
 		monkLabel = GetNode<Label>("HBoxContainer/MonkContainer/MonkLabel");
 
-		// Botones
+		// Botones de reclutamiento
 		buttonWarrior = GetNode<Button>("HBoxContainer/WarriorContainer/ButtonWarrior");
 		buttonArcher = GetNode<Button>("HBoxContainer/ArcherContainer/ButtonArcher");
 		buttonLancer = GetNode<Button>("HBoxContainer/LancerContainer/ButtonLancer");
 		buttonMonk = GetNode<Button>("HBoxContainer/MonkContainer/ButtonMonk");
+
+		// Botón toggle interno (puede estar en UI)
+		toggleButton = GetNode<Button>("../BotonToggleHUD");
+		toggleButton.Pressed += OnToggleButtonPressed;
+
+		// Botón externo BotonS
+		botonS = GetNode<TextureButton>("../Objetos/BotonS");
+		botonS.Pressed += OnToggleButtonPressed;
 
 		// Managers
 		soldierManager = GetNode<SoldierManager>("/root/Main/SoldierManager");
@@ -38,7 +54,7 @@ public partial class SoldiersHud : CanvasLayer
 		soldierManager.SoldierUpdated += OnSoldierUpdated;
 		resourceManager.ResourceUpdated += OnResourceChanged;
 
-		// Botones conectados
+		// Botones de reclutamiento
 		buttonWarrior.Pressed += () => OnButtonPressed("warrior");
 		buttonArcher.Pressed += () => OnButtonPressed("archer");
 		buttonLancer.Pressed += () => OnButtonPressed("lancer");
@@ -46,6 +62,26 @@ public partial class SoldiersHud : CanvasLayer
 
 		UpdateAllLabels();
 		UpdateButtonsState();
+
+		// Inicialmente oculto
+		this.Hide();
+	}
+
+	public override void _Process(double delta)
+	{
+		// Tecla M para alternar HUD
+		if (Input.IsKeyPressed(Key.M))
+		{
+			if (!_mPressed)
+			{
+				ToggleHUD();
+				_mPressed = true;
+			}
+		}
+		else
+		{
+			_mPressed = false;
+		}
 	}
 
 	private void OnButtonPressed(string type)
@@ -106,5 +142,16 @@ public partial class SoldiersHud : CanvasLayer
 				.SetTrans(Tween.TransitionType.Back)
 				.SetEase(Tween.EaseType.Out);
 		}
+	}
+
+	private void OnToggleButtonPressed()
+	{
+		ToggleHUD();
+	}
+
+	private void ToggleHUD()
+	{
+		this.Visible = !this.Visible;
+		GD.Print($"MenuSoldados.Visible = {this.Visible}");
 	}
 }
