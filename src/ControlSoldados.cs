@@ -1,26 +1,15 @@
 using Godot;
 using System;
 
-public partial class ControlSoldadosScript : Control
+public partial class ControlSoldados : Control
 {
 	private CanvasLayer menuSoldados;
-	private Button botonMenu;
 
 	public override void _Ready()
 	{
 		// Desde este nodo (ControlSoldados), MenuSoldados es hijo directo
 		menuSoldados = GetNode<CanvasLayer>("MenuSoldados");
 		menuSoldados.Visible = false; // Oculto inicialmente
-
-		// Botón está en otra parte, usamos ruta absoluta
-		botonMenu = GetNode<Button>("/root/Main/BotonSoldados/Boton");
-
-		botonMenu.Pressed += OnBotonMenuPressed;
-	}
-
-	private void OnBotonMenuPressed()
-	{
-		ToggleMenu();
 	}
 
 	private void ToggleMenu()
@@ -33,7 +22,8 @@ public partial class ControlSoldadosScript : Control
 	{
 		if (@event is InputEventKey keyEvent && keyEvent.Pressed && !keyEvent.Echo)
 		{
-			if (keyEvent.Keycode == Key.C)
+			// Tecla M
+			if (keyEvent.Keycode == Key.M)
 			{
 				ToggleMenu();
 			}

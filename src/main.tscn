@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="14_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="14_tb146"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="15_e7lu8"]
-[ext_resource type="Script" uid="uid://5j33igb5xeay" path="res://src/game_manager.gd" id="19_sta5p"]
+[ext_resource type="Texture2D" uid="uid://cl3jnlpxsvd7u" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Disable.png" id="19_sta5p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("3_lquwl")
@@ -429,16 +429,8 @@ script = ExtResource("1_lquwl")
 
 [node name="ResourcesHUD" parent="." instance=ExtResource("2_5mrjc")]
 
-[node name="ControlSoldados" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("3_okx7f")
-
-[node name="MenuSoldados" parent="ControlSoldados" instance=ExtResource("3_d3u4l")]
-offset = Vector2(0, 120)
-transform = Transform2D(1, 0, 0, 1, 0, 120)
+[node name="ResourceManager" type="Node" parent="."]
+script = ExtResource("9_kf8lf")
 
 [node name="Mapa" type="Node2D" parent="."]
 
@@ -516,25 +508,44 @@ tile_set = SubResource("TileSet_kqbth")
 
 [node name="CasasCompradas" type="Node2D" parent="Objetos/Edificios"]
 
-[node name="ResourceManager" type="Node" parent="."]
-script = ExtResource("9_kf8lf")
+[node name="ControlSoldados" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_okx7f")
 
-[node name="BotonSoldados" type="Node2D" parent="."]
+[node name="MenuSoldados" parent="ControlSoldados" instance=ExtResource("3_d3u4l")]
+offset = Vector2(0, 120)
+transform = Transform2D(1, 0, 0, 1, 0, 120)
 
-[node name="Boton" type="TextureButton" parent="BotonSoldados"]
+[node name="BotonS" type="TextureButton" parent="ControlSoldados"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = -0.35
+anchor_bottom = -0.2
 offset_left = 192.0
 offset_top = 983.0
 offset_right = 270.0
 offset_bottom = 1055.0
+mouse_filter = 2
 texture_normal = ExtResource("4_mlv6i")
 texture_pressed = ExtResource("14_tb146")
 texture_hover = ExtResource("15_e7lu8")
+metadata/_edit_use_anchors_ = true
 
-[node name="Mas" type="Sprite2D" parent="BotonSoldados"]
+[node name="Mas" type="Sprite2D" parent="ControlSoldados"]
 position = Vector2(224, 1015)
 texture = ExtResource("14_d3u4l")
 
-[node name="GameManager" type="Node2D" parent="."]
-script = ExtResource("19_sta5p")
+[node name="Pruebas" type="TextureButton" parent="."]
+offset_left = 469.0
+offset_top = 218.0
+offset_right = 533.0
+offset_bottom = 282.0
+texture_normal = ExtResource("4_mlv6i")
+texture_pressed = ExtResource("14_tb146")
+texture_hover = ExtResource("15_e7lu8")
+texture_disabled = ExtResource("19_sta5p")
 
-[connection signal="pressed" from="BotonSoldados/Boton" to="BotonSoldados/Boton" method="_on_pressed"]
+[connection signal="pressed" from="ControlSoldados/BotonS" to="ControlSoldados/BotonS" method="_on_pressed"]
