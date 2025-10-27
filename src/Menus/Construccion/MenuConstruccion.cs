@@ -8,6 +8,7 @@ public partial class MenuConstruccion : CanvasLayer
 	private PanelContainer panelBarra;
 	private HBoxContainer hboxBotones;
 	private TextureButton btnCasa;
+	private Sprite2D marcadorCasa;
 
 	// --- Construcción ---
 	private bool enConstruccion = false;
@@ -27,6 +28,7 @@ public partial class MenuConstruccion : CanvasLayer
 		panelBarra = GetNode<PanelContainer>("ControlRaiz/PanelBarra");
 		hboxBotones = GetNode<HBoxContainer>("ControlRaiz/PanelBarra/HBoxBotones");
 		btnCasa = GetNode<TextureButton>("ControlRaiz/PanelBarra/HBoxBotones/BtnCasa");
+		marcadorCasa = GetNode<Sprite2D>("ControlRaiz/PanelBarra/HBoxBotones/BtnCasa/Marcador");
 
 		// Ajustar MouseFilter para asegurar que reciben input
 		panelBarra.MouseFilter = Control.MouseFilterEnum.Stop;
@@ -34,6 +36,7 @@ public partial class MenuConstruccion : CanvasLayer
 
 		// Ocultar panel al inicio
 		panelBarra.Visible = false;
+		marcadorCasa.Visible = false;  
 
 		// Conectar eventos de manera segura
 		btnMenu.Connect("pressed", new Callable(this, nameof(OnMenuPressed)));
@@ -41,12 +44,13 @@ public partial class MenuConstruccion : CanvasLayer
 	}
 
 	private void OnMenuPressed()
-	{
+	{	
 		panelBarra.Visible = !panelBarra.Visible;
 	}
 
 	private void OnCasaPressed()
-	{
+	{	
+		marcadorCasa.Visible = !marcadorCasa.Visible;
 		// Evitar iniciar otro preview si ya estamos en construcción
 		if (enConstruccion)
 			return;
