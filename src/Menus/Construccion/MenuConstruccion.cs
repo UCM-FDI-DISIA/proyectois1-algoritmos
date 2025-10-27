@@ -44,9 +44,30 @@ public partial class MenuConstruccion : CanvasLayer
 	}
 
 	private void OnMenuPressed()
-	{	
-		panelBarra.Visible = !panelBarra.Visible;
+{
+	panelBarra.Visible = !panelBarra.Visible;
+
+	// Si se oculta el panel, reiniciar el estado del botón y marcador
+	if (!panelBarra.Visible)
+	{
+		// Desmarcar botón y ocultar marcador
+		btnCasa.ButtonPressed = false;
+		marcadorCasa.Visible = false;
+
+		// Cancelar cualquier modo de construcción activo
+		if (casaPreview != null)
+		{
+			casaPreview.QueueFree();
+			casaPreview = null;
+		}
+		enConstruccion = false;
 	}
+
+	// Ajustar MouseFilter según visibilidad (evita bloquear el botón)
+	panelBarra.MouseFilter = panelBarra.Visible
+		? Control.MouseFilterEnum.Stop
+		: Control.MouseFilterEnum.Ignore;
+}
 
 	private void OnCasaPressed()
 	{	
