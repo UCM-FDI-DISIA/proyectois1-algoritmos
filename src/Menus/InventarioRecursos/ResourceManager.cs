@@ -10,8 +10,6 @@ public partial class ResourceManager : Node
 	public delegate void VillagerCapacityUpdatedEventHandler();
 
 	// Variables generales
-	private int dinero = 1000; // Dinero inicial del jugador
-	private const int PRECIO_CASA = 500; // Precio de cada casa
 	private int houseCount = 0;
 	private const int VILLAGERS_PER_HOUSE = 50;
 
@@ -19,7 +17,14 @@ public partial class ResourceManager : Node
 	private int CRECIMIENTO_ALDEANOS = 0;
 	private const float TIEMPO_CRECIMIENTO = 10f;
 	private Timer actualizarTimer;
+	
+	//Variables compra casa
+	private const int CASA_WOOD_COST = 20;
+	private const int CASA_GOLD_COST = 10;
+	private const int CASA_STONE_COST = 5;
 
+	//Referencias
+	public Node2D contenedorCasas;
 	// Diccionario de recursos
 	private Godot.Collections.Dictionary<string, int> resources = new Godot.Collections.Dictionary<string, int>
 	{
@@ -30,7 +35,7 @@ public partial class ResourceManager : Node
 	};
 
 	// Escena de la casa
-	private PackedScene casaScene = GD.Load<PackedScene>("res://src/Edificios/Casa/CasaAnimada.tscn");
+	public PackedScene casaScene = GD.Load<PackedScene>("res://src/Edificios/Casa/CasaAnimada.tscn");
 
 	public override void _Ready()
 	{
@@ -39,6 +44,12 @@ public partial class ResourceManager : Node
 		actualizarTimer.OneShot = false;
 		actualizarTimer.Timeout += OnActualizarTimeout;
 		AddChild(actualizarTimer);
+		
+		// Carga la escena de la casa (ajusta la ruta si es distinta)
+		casaScene = GD.Load<PackedScene>("res://src/Edificios/Casa/CasaAnimada.tscn");
+		// Busca el nodo contenedor donde colocar las casas
+		contenedorCasas = GetNode<Node2D>("Objetos/Edificios/CasasCompradas");
+		
 	}
 
 	/*-----------------------
@@ -94,29 +105,35 @@ public partial class ResourceManager : Node
 		CASAS Y COMPRA
 	-------------------------*/
 
-	public void ComprarCasa(Node contenedor = null)
+public void ComprarCasa(Node contenedor = null)
+{
+	// Comprobamos si hay materiales suficientes
+	if (resources["wood"] >= CASA_WOOD_COST && resources["gold"] >= CASA_GOLD_COST && resources["stone"] >= CASA_STONE_COST)
 	{
-		if (dinero >= PRECIO_CASA)
-		{
-			dinero -= PRECIO_CASA;
+		// Restamos los recursos
+		resources["wood"] -= CASA_WOOD_COST;
+		resources["gold"] -= CASA_GOLD_COST;
+		resources["stone"] -= CASA_STONE_COST;
 
-			Node2D nuevaCasa = (Node2D)casaScene.Instantiate();
-			nuevaCasa.Position = new Vector2(200, 200);
+		// Instanciamos la casa
+		Node2D nuevaCasa = (Node2D)casaScene.Instantiate();
+		nuevaCasa.Position = new Vector2(200, 200);
 
-			if (contenedor != null)
-				contenedor.AddChild(nuevaCasa);
-			else
-				AddChild(nuevaCasa); // Por defecto, la añade al ResourceManager
-
-			AddHouse();
-
-			GD.Print($"Casa comprada. Dinero restante: {dinero}");
-		}
+		// Añadimos al contenedor correspondiente
+		if (contenedor != null)
+			contenedor.AddChild(nuevaCasa);
+		else if (contenedorCasas != null)
+			contenedorCasas.AddChild(nuevaCasa);
 		else
-		{
-			GD.Print("No tienes suficiente dinero para comprar una casa.");
-		}
+			AddChild(nuevaCasa);
 	}
+	else
+	{
+		GD.Print("❌ No tienes materiales suficientes para construir una casa.");
+	}
+}
+
+
 
 	public void AddHouse()
 	{

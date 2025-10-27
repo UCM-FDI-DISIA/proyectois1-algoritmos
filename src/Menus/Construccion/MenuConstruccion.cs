@@ -3,31 +3,41 @@ using System;
 
 public partial class MenuConstruccion : CanvasLayer
 {
-	private TextureButton btnMenu;      // Botón principal (carrito)
-	private PanelContainer panelBarra;  // Panel desplegable
-	private HBoxContainer hboxBotones;  // Contenedor de los botones
+	// --- Nodos de UI ---
+	private TextureButton btnMenu;
+	private PanelContainer panelBarra;
+	private HBoxContainer hboxBotones;
 	private TextureButton btnCasa;
-	private TextureButton btnGranero;
-	private TextureButton btnMolino;
+
+	// --- Construcción ---
+	private bool enConstruccion = false;
+	private Node2D casaPreview;
+	private ResourceManager resourceManager;
+
+	// --- Configuración cuadrícula ---
+	private const int GRID_SIZE = 64;
 
 	public override void _Ready()
 	{
+		// Buscar ResourceManager en la escena principal
+		resourceManager = GetTree().Root.GetNode<ResourceManager>("ResourceManager");
+
+		// Obtener nodos de UI
 		btnMenu = GetNode<TextureButton>("ControlRaiz/BtnMenu");
 		panelBarra = GetNode<PanelContainer>("ControlRaiz/PanelBarra");
 		hboxBotones = GetNode<HBoxContainer>("ControlRaiz/PanelBarra/HBoxBotones");
-
 		btnCasa = GetNode<TextureButton>("ControlRaiz/PanelBarra/HBoxBotones/BtnCasa");
-		btnGranero = GetNode<TextureButton>("ControlRaiz/PanelBarra/HBoxBotones/BtnGranero");
-		btnMolino = GetNode<TextureButton>("ControlRaiz/PanelBarra/HBoxBotones/BtnMolino");
 
-		// Panel oculto al inicio
+		// Ajustar MouseFilter para asegurar que reciben input
+		panelBarra.MouseFilter = Control.MouseFilterEnum.Stop;
+		btnCasa.MouseFilter = Control.MouseFilterEnum.Stop;
+
+		// Ocultar panel al inicio
 		panelBarra.Visible = false;
 
-		// Eventos
-		btnMenu.Pressed += OnMenuPressed;
-		btnCasa.Pressed += () => OnBuildingPressed("Casa");
-		btnGranero.Pressed += () => OnBuildingPressed("Granero");
-		btnMolino.Pressed += () => OnBuildingPressed("Molino");
+		// Conectar eventos de manera segura
+		btnMenu.Connect("pressed", new Callable(this, nameof(OnMenuPressed)));
+		btnCasa.Connect("pressed", new Callable(this, nameof(OnCasaPressed)));
 	}
 
 	private void OnMenuPressed()
@@ -35,10 +45,42 @@ public partial class MenuConstruccion : CanvasLayer
 		panelBarra.Visible = !panelBarra.Visible;
 	}
 
-	private void OnBuildingPressed(string tipo)
+	private void OnCasaPressed()
 	{
-		GD.Print($"Seleccionado edificio: {tipo}");
-		// Aquí luego añadirás la lógica para colocar la casa/granero/etc.
-	
+		// Evitar iniciar otro preview si ya estamos en construcción
+		if (enConstruccion)
+			return;
+
+		enConstruccion = true;
+
+		// Instanciar preview semi-transparente
+		casaPreview = (Node2D)resourceManager.casaScene.Instantiate();
+		casaPreview.Modulate = new Color(1, 1, 1, 0.5f);
+		resourceManager.contenedorCasas.AddChild(casaPreview);
+	}
+
+	public override void _Process(double delta)
+	{
+		if (!enConstruccion || casaPreview == null)
+			return;
+
+		// Seguir el ratón y ajustar a cuadrícula
+		Vector2 mousePos = GetViewport().GetMousePosition();
+		float x = Mathf.Floor(mousePos.X / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
+		float y = Mathf.Floor(mousePos.Y / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
+		casaPreview.Position = new Vector2(x, y);
+
+		// Colocar casa con clic izquierdo
+		if (Input.IsMouseButtonPressed(MouseButton.Left))
+		{
+			// Comprar casa y descontar recursos
+			resourceManager.ComprarCasa(resourceManager.contenedorCasas);
+			resourceManager.AddHouse();
+
+			// Hacer opaco y limpiar preview
+			casaPreview.Modulate = new Color(1, 1, 1, 1);
+			casaPreview = null;
+			enConstruccion = false;
+		}
 	}
 }
