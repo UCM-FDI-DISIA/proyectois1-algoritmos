@@ -7,43 +7,59 @@ Visita nuestra [Wiki](wiki) para mayor detalle.
 ---
 
 ### Índice
-* [Home](Home)
-* Documentación
-   * [Documento de Especificación de Requisitos](especificacionIEEE830.md)
-	   * [Sección 1: Introducción](IEEE830.md)
-	   * [Sección 2: Descripción](IEEE830descrip.md)
-	   * [Sección 3: Requisitos específicos](IEEE830requis.md)
-   * Documento técnico
-* Diseño gráfico
-   * [Estética y Diseño](estetica_papel.md)
-	   * [Interfaz](diseno_interfaz.md)
-	   * [Diseño de personajes](diseno_personajes.md)
-	   * [Diseño de recursos](diseno_recursos.md)
-   * [Enlazado de recursos](Enlazado-de-recursos)
-* Objetivos y planificación
-   * [Usuarios de _Feudalia_](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Historias-de-usuario).
-	   * [Historias de usuario](historiasusuario.md).
-	   * [DoD (Definition of Done)](definitionOfDone.md) 
-   * [Planificación de los Sprints](sprints.md)
-	   * [Backlog de los Sprints](backlogSprint.md)
-	   * [Revisión de los Sprints](revisionSprints.md)
-	   * [Retrospectiva de los Sprints](retrospectivaSprints.md)
-   * [Reuniones del equipo](reuniones.md)
-	   * [MVP y terminado](MVP.md)
-* Gestión de riesgos
-   * [Introducción](introduccionRiesgos.md) 
-   * [Priorización de riesgos del proyecto](priorizacionRiesgos.md)
-   * [Reducción, supervisión y gestión del riesgo](gestionRiesgos.md)
-   * [Planificación temporal](planificacionRiesgos.md)
-   * [Resumen](resumenRiesgos.md) 
 
-* Anexo
-   * [Documento IEEE830](https://docs.google.com/document/d/1hdwNOZvPmhaxj7iX_lu-zgpNqmKbLNv1iK7gSXKCvug/edit?tab=t.0#heading=h.u2atzjnlxad) (previo al Sprint 1).
-   * [Referencias - diseño](referencias_diseno.md).
-   * [Product Backlog](productBacklog.md).
+* [X Home](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki)
+
+#### Documentación
+
+* [Documento de Especificación de Requisitos](especificacionIEEE830.md).
+    * [Sección 1: Introducción](IEEE830intro.md).
+    * [Sección 2: Descripción general](IEEE830descrip.md).
+    * [Sección 3: Requisitos específicos](IEEE830requis.md).
+* [X Documento Técnico](documentotecnico.md).
+
+
+#### Diseño gráfico
+
+* [Estética y diseño](estetica_papel.md)
+    * [Interfaz](diseno_interfaz.md).
+    * [Diseño de personajes](diseno_personajes.md).
+    * [Diseño de recursos](diseno_recursos.md).
+* [Enlazado de recursos](Enlazado-de-recursos).
+
+#### Proceso Scrum
+
+* [Usuarios de _Feudalia_](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Historias-de-usuario).
+    * [Historias de usuario](historiasusuario.md).
+* [Planificación de los Sprints](sprints.md).
+    * [Revisión de los Sprints](revisionSprints.md).
+    * [Retrospectiva de los Sprints](retrospectivaSprints.md).
+    * [Sprint Backlog](backlogSprint.md).
+* [Reuniones del equipo](reuniones.md).
+    * [MVP - Producto Mínimo Viable](MVP.md).
+    * [X DoD (Definition of Done)](definitionOfDone.md). 
+* [Pruebas de Feudalia (control de calidad)](pruebas_feudalia.md).
+
+#### Control de calidad
+
+* [Control de calidad](control_de_calidad.md).
+
+#### Gestión de riesgos
+
+* [Introducción](introduccionRiesgos.md). 
+* [Priorización de riesgos del proyecto](priorizacionRiesgos.md).
+* [Reducción, supervisión y gestión del riesgo](gestionRiesgos.md).
+* [Planificación temporal](planificacionRiesgos.md).
+* [Resumen](resumenRiesgos.md). 
+
+##### Anexo
+
+* [Documento IEEE830](https://docs.google.com/document/d/1hdwNOZvPmhaxj7iX_lu-zgpNqmKbLNv1iK7gSXKCvug/edit?tab=t.0#heading=h.u2atzjnlxad) (previo al Sprint 1).
+* [Referencias y recursos](recursosyreferencias.md).
+* [Referencias - diseño](referencias_diseno.md).
+* [Product Backlog](productBacklog.md).
 
 ---
-
 ### Versiones
 
 ### Estado del proyecto:
