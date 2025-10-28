@@ -23,8 +23,9 @@ public partial class ResourceManager : Node
 	private const int CASA_GOLD_COST = 10;
 	private const int CASA_STONE_COST = 5;
 
-	// --- Referencias ---
-	public Node2D contenedorCasas;
+	// --- Referencias asignables en Inspector ---
+	[Export] public Node2D contenedorCasas;   // Nodo donde se agregarán las casas
+	[Export] public PackedScene casaScene;    // Escena de la casa
 
 	// --- Diccionario de recursos ---
 	private Godot.Collections.Dictionary<string, int> resources = new()
@@ -35,11 +36,16 @@ public partial class ResourceManager : Node
 		{ "villager", 0 }
 	};
 
-	// --- Escena de la casa ---
-	public PackedScene casaScene;
-
 	public override void _Ready()
 	{
+		GD.Print("[ResourceManager] Iniciando...");
+
+		// Revisar si las referencias fueron asignadas en el Inspector
+		if (contenedorCasas == null)
+			GD.PrintErr("❌ ContenedorCasas no asignado en ResourceManager. Arrastra CasasCompradas en el Inspector.");
+		if (casaScene == null)
+			GD.PrintErr("❌ casaScene no asignada en ResourceManager. Arrastra CasaAnimada.tscn en el Inspector.");
+
 		// Inicializar temporizador
 		actualizarTimer = new Timer
 		{
@@ -49,9 +55,7 @@ public partial class ResourceManager : Node
 		actualizarTimer.Timeout += OnActualizarTimeout;
 		AddChild(actualizarTimer);
 
-		// Cargar escena y contenedor
-		casaScene = GD.Load<PackedScene>("res://src/Edificios/Casa/CasaAnimada.tscn");
-		contenedorCasas = GetNode<Node2D>("Objetos/Edificios/CasasCompradas");
+		GD.Print("[ResourceManager] ResourceManager listo.");
 	}
 
 	/*-----------------------
@@ -73,6 +77,7 @@ public partial class ResourceManager : Node
 		}
 
 		EmitSignal(nameof(ResourceUpdated), name, resources[name]);
+		GD.Print($"[ResourceManager] Recurso {name} actualizado: {resources[name]}");
 	}
 
 	public bool RemoveResource(string name, int amount)
@@ -82,6 +87,7 @@ public partial class ResourceManager : Node
 
 		resources[name] -= amount;
 		EmitSignal(nameof(ResourceUpdated), name, resources[name]);
+		GD.Print($"[ResourceManager] Recurso {name} reducido a: {resources[name]}");
 		return true;
 	}
 
@@ -110,12 +116,15 @@ public partial class ResourceManager : Node
 		EmitSignal(nameof(ResourceUpdated), "wood", resources["wood"]);
 		EmitSignal(nameof(ResourceUpdated), "gold", resources["gold"]);
 		EmitSignal(nameof(ResourceUpdated), "stone", resources["stone"]);
+
+		GD.Print("[ResourceManager] Casa pagada. Recursos descontados.");
 	}
 
 	public void AddHouse()
 	{
 		houseCount++;
 		EmitSignal(nameof(VillagerCapacityUpdated));
+		GD.Print($"[ResourceManager] Nueva casa añadida. Total casas: {houseCount}");
 	}
 
 	public void RemoveHouse()
@@ -129,6 +138,8 @@ public partial class ResourceManager : Node
 			resources["villager"] = maxVillagers;
 			EmitSignal(nameof(ResourceUpdated), "villager", resources["villager"]);
 		}
+
+		GD.Print($"[ResourceManager] Casa eliminada. Total casas: {houseCount}");
 	}
 
 	public int GetVillagerCapacity() => houseCount * VILLAGERS_PER_HOUSE;
@@ -140,6 +151,7 @@ public partial class ResourceManager : Node
 	public void ActualizarAldeanos(int n)
 	{
 		CRECIMIENTO_ALDEANOS = n;
+		GD.Print($"[ResourceManager] ActualizarAldeanos llamado. Crecimiento por ciclo: {CRECIMIENTO_ALDEANOS}");
 		if (actualizarTimer.IsStopped())
 			BucleAldeanos();
 	}

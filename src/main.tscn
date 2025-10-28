@@ -433,8 +433,10 @@ script = ExtResource("1_lquwl")
 offset = Vector2(0, 120)
 transform = Transform2D(1, 0, 0, 1, 0, 120)
 
-[node name="ResourceManager" type="Node" parent="."]
+[node name="ResourceManager" type="Node" parent="." node_paths=PackedStringArray("contenedorCasas")]
 script = ExtResource("9_kf8lf")
+contenedorCasas = NodePath("../Objetos/Edificios/CasasCompradas")
+casaScene = ExtResource("9_mgm53")
 
 [node name="Mapa" type="Node2D" parent="."]
 
