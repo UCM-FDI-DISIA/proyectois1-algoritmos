@@ -4,20 +4,22 @@ using System;
 public partial class CasaAnimada : Node2D
 {
 	public static int numCasas = 0;
-
-	// Cuántos aldeanos nuevos produce cada casa por ciclo de crecimiento
 	private const int CRECIMIENTO_POR_CASA = 2;
+
+	// 🚧 Nueva variable para distinguir previews
+	public bool EsPreview = false;
 
 	public override void _Ready()
 	{
+		// Si es preview, no ejecutar lógica de crecimiento
+		if (EsPreview)
+			return;
+
 		numCasas++;
 
 		var manager = GetNode<ResourceManager>("/root/Main/ResourceManager");
 
-		//Notificamos al ResourceManager que hay una nueva casa
 		manager.AddHouse();
-
-		//Ajustamos el ritmo de crecimiento global en función de cuántas casas hay
 		manager.ActualizarAldeanos(CRECIMIENTO_POR_CASA * numCasas);
 
 		GD.Print($"[Casa] Construida nueva casa. Total casas: {numCasas}");
@@ -26,13 +28,14 @@ public partial class CasaAnimada : Node2D
 
 	public override void _ExitTree()
 	{
-		// Cuando se elimina la casa del árbol, se reduce el número de casas
+		// Si es preview, no restar tampoco
+		if (EsPreview)
+			return;
+
 		numCasas = Math.Max(0, numCasas - 1);
 
 		var manager = GetNode<ResourceManager>("/root/Main/ResourceManager");
 		manager.RemoveHouse();
-
-		// Recalcular el crecimiento según las casas restantes
 		manager.ActualizarAldeanos(CRECIMIENTO_POR_CASA * numCasas);
 
 		GD.Print($"[Casa] Se ha destruido una casa. Total casas: {numCasas}");

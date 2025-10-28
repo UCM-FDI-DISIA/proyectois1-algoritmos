@@ -36,53 +36,54 @@ public partial class MenuConstruccion : CanvasLayer
 
 		// Ocultar panel al inicio
 		panelBarra.Visible = false;
-		marcadorCasa.Visible = false;  
+		marcadorCasa.Visible = false;
 
-		// Conectar eventos de manera segura
+		// Conectar eventos
 		btnMenu.Connect("pressed", new Callable(this, nameof(OnMenuPressed)));
 		btnCasa.Connect("pressed", new Callable(this, nameof(OnCasaPressed)));
 	}
 
 	private void OnMenuPressed()
-{
-	panelBarra.Visible = !panelBarra.Visible;
-
-	// Si se oculta el panel, reiniciar el estado del botón y marcador
-	if (!panelBarra.Visible)
 	{
-		// Desmarcar botón y ocultar marcador
-		btnCasa.ButtonPressed = false;
-		marcadorCasa.Visible = false;
+		panelBarra.Visible = !panelBarra.Visible;
 
-		// Cancelar cualquier modo de construcción activo
-		if (casaPreview != null)
-		{
-			casaPreview.QueueFree();
-			casaPreview = null;
-		}
-		enConstruccion = false;
+		// Si se oculta el panel, reiniciar todo
+		if (!panelBarra.Visible)
+			CancelarConstruccion();
+
+		// Ajustar MouseFilter según visibilidad
+		panelBarra.MouseFilter = panelBarra.Visible
+			? Control.MouseFilterEnum.Stop
+			: Control.MouseFilterEnum.Ignore;
 	}
-
-	// Ajustar MouseFilter según visibilidad (evita bloquear el botón)
-	panelBarra.MouseFilter = panelBarra.Visible
-		? Control.MouseFilterEnum.Stop
-		: Control.MouseFilterEnum.Ignore;
-}
 
 	private void OnCasaPressed()
-	{	
-		marcadorCasa.Visible = !marcadorCasa.Visible;
-		// Evitar iniciar otro preview si ya estamos en construcción
-		if (enConstruccion)
-			return;
+{
+	marcadorCasa.Visible = !marcadorCasa.Visible;
 
-		enConstruccion = true;
+	// Evitar iniciar otro preview si ya estamos en construcción
+	if (enConstruccion)
+		return;
 
-		// Instanciar preview semi-transparente
-		casaPreview = (Node2D)resourceManager.casaScene.Instantiate();
-		casaPreview.Modulate = new Color(1, 1, 1, 0.5f);
-		resourceManager.contenedorCasas.AddChild(casaPreview);
+	enConstruccion = true;
+
+	// Instanciar preview semi-transparente
+	casaPreview = (Node2D)resourceManager.casaScene.Instantiate();
+
+
+	// ⚠️ Marcar que este objeto es un preview temporal
+	if (casaPreview is CasaAnimada casaScript)
+		casaScript.EsPreview = true;
+
+	// Aplicar transparencia solo a los nodos visuales
+	foreach (Node child in casaPreview.GetChildren())
+	{
+		if (child is CanvasItem visual)
+			visual.Modulate = new Color(1, 1, 1, 0.5f);
 	}
+
+	resourceManager.contenedorCasas.AddChild(casaPreview);
+}
 
 	public override void _Process(double delta)
 	{
@@ -95,17 +96,46 @@ public partial class MenuConstruccion : CanvasLayer
 		float y = Mathf.Floor(mousePos.Y / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
 		casaPreview.Position = new Vector2(x, y);
 
+		// Cancelar con clic derecho o tecla Esc
+		if (Input.IsMouseButtonPressed(MouseButton.Right) || Input.IsKeyPressed(Key.Escape))
+		{
+			CancelarConstruccion();
+			return;
+		}
+
 		// Colocar casa con clic izquierdo
 		if (Input.IsMouseButtonPressed(MouseButton.Left))
 		{
-			// Comprar casa y descontar recursos
-			resourceManager.ComprarCasa(resourceManager.contenedorCasas);
-			resourceManager.AddHouse();
+			// Verificar si hay recursos suficientes
+			if (resourceManager.PuedoComprarCasa())
+			{
+				resourceManager.PagarCasa();
+				resourceManager.AddHouse();
 
-			// Hacer opaco y limpiar preview
-			casaPreview.Modulate = new Color(1, 1, 1, 1);
-			casaPreview = null;
-			enConstruccion = false;
+				// Convertir preview en casa definitiva
+				casaPreview.Modulate = new Color(1, 1, 1, 1);
+				casaPreview = null;
+				enConstruccion = false;
+				marcadorCasa.Visible = false;
+			}
+			else
+			{
+				GD.Print("❌ No tienes materiales suficientes para construir una casa.");
+				CancelarConstruccion();
+			}
 		}
+	}
+
+	private void CancelarConstruccion()
+	{
+		if (casaPreview != null)
+		{
+			casaPreview.QueueFree();
+			casaPreview = null;
+		}
+
+		enConstruccion = false;
+		marcadorCasa.Visible = false;
+		btnCasa.ButtonPressed = false;
 	}
 }
