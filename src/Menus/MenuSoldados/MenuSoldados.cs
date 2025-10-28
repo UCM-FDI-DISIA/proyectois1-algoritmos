@@ -25,6 +25,16 @@ public partial class MenuSoldados : CanvasLayer
 	private TextureButton lancerButton;
 	private TextureButton monkButton;
 
+	// Sprites "Mas" de cada tipo
+	private Sprite2D warriorMas;
+	private Sprite2D archerMas;
+	private Sprite2D lancerMas;
+	private Sprite2D monkMas;
+
+	// Sprites del botón S
+	private Sprite2D botonSMas;
+	private Sprite2D botonSMenos;
+
 	// ----------------------------
 	// TOOLTIP
 	// ----------------------------
@@ -48,16 +58,13 @@ public partial class MenuSoldados : CanvasLayer
 	// TEMPORIZADOR VISIBILIDAD
 	// ----------------------------
 	private Timer hideTimer;
-	private const float HIDE_TIME = 10f; // 10 segundos
+	private const float HIDE_TIME = 20f;
 
 	public override void _Ready()
 	{
 		CallDeferred(nameof(InitializeMenu));
 	}
 
-	// ----------------------------
-	// INICIALIZACIÓN
-	// ----------------------------
 	private void InitializeMenu()
 	{
 		// --- Labels ---
@@ -66,25 +73,33 @@ public partial class MenuSoldados : CanvasLayer
 		labels["Lancer"]  = GetNodeOrNull<Label>("Soldados/Lancer/LancerLabel");
 		labels["Monk"]    = GetNodeOrNull<Label>("Soldados/Monk/MonkLabel");
 
-		foreach (var kv in labels)
-			if (kv.Value == null)
-				GD.PrintErr($"[MenuSoldados] Label '{kv.Key}' no encontrado");
-
 		// --- ResourceManager ---
-		resourceManager = GetNode<ResourceManager>("../ResourceManager");
+		resourceManager = GetNodeOrNull<ResourceManager>("../ResourceManager");
 		if (resourceManager == null)
 			GD.PrintErr("[MenuSoldados] ResourceManager no encontrado");
+		else
+			resourceManager.ResourceUpdated += OnResourceUpdated;
 
 		// --- Botón externo ---
 		botonS = GetNodeOrNull<TextureButton>("../Objetos/BotonS");
 		if (botonS != null)
 			botonS.Pressed += OnBotonSPressed;
 
-		// --- Botones de reclutamiento ---
+		// Sprites del botón S
+		botonSMas = botonS?.GetNodeOrNull<Sprite2D>("Mas");
+		botonSMenos = botonS?.GetNodeOrNull<Sprite2D>("Menos");
+
+		// --- Botones soldados ---
 		warriorButton = GetNodeOrNull<TextureButton>("Soldados/Warrior/ButtonW/ButtonWarrior");
 		archerButton  = GetNodeOrNull<TextureButton>("Soldados/Archer/ButtonA/ButtonArcher");
 		lancerButton  = GetNodeOrNull<TextureButton>("Soldados/Lancer/ButtonL/ButtonLancer");
 		monkButton    = GetNodeOrNull<TextureButton>("Soldados/Monk/ButtonM/ButtonMonk");
+
+		// Sprites "Mas"
+		warriorMas = GetNodeOrNull<Sprite2D>("Soldados/Warrior/ButtonW/Mas");
+		archerMas  = GetNodeOrNull<Sprite2D>("Soldados/Archer/ButtonA/Mas");
+		lancerMas  = GetNodeOrNull<Sprite2D>("Soldados/Lancer/ButtonL/Mas");
+		monkMas    = GetNodeOrNull<Sprite2D>("Soldados/Monk/ButtonM/Mas");
 
 		ConnectButtonEvents(warriorButton, "Warrior");
 		ConnectButtonEvents(archerButton,  "Archer");
@@ -93,7 +108,7 @@ public partial class MenuSoldados : CanvasLayer
 
 		// --- Tooltip ---
 		tooltipPreview = new Panel();
-		tooltipPreview.Modulate = new Color(0,0,0,0.7f);
+		tooltipPreview.Modulate = new Color(1, 1, 1, 0.8f);
 		tooltipPreview.Visible = false;
 		AddChild(tooltipPreview);
 
@@ -105,11 +120,17 @@ public partial class MenuSoldados : CanvasLayer
 		hideTimer = new Timer();
 		hideTimer.WaitTime = HIDE_TIME;
 		hideTimer.OneShot = true;
-		hideTimer.Timeout += HideMenu;
+		hideTimer.Timeout += () => {
+			HideMenu();
+			// restaurar sprites del botón S al ocultar automáticamente
+			if (botonSMas != null) botonSMas.Visible = true;
+			if (botonSMenos != null) botonSMenos.Visible = false;
+		};
 		AddChild(hideTimer);
 
 		UpdateAllLabels();
-		Visible = false; // menu empieza oculto
+		Visible = false;
+		UpdateButtonStates();
 	}
 
 	// ----------------------------
@@ -120,70 +141,118 @@ public partial class MenuSoldados : CanvasLayer
 		if (button == null) return;
 		button.Pressed += () => OnRecruitPressed(type);
 		button.MouseEntered += () => ShowTooltip(type);
-		button.MouseExited  += HideTooltip;
+		button.MouseExited += HideTooltip;
 	}
 
 	// ----------------------------
-	// PROCESO
+	// BOTÓN S PRESSED
 	// ----------------------------
-	public override void _Process(double delta)
+	private void OnBotonSPressed()
 	{
-		// Tooltip sigue al ratón
-		if (tooltipPreview.Visible)
+		if (Visible)
 		{
-			Vector2 mousePos = GetViewport().GetMousePosition();
-			Vector2 size = tooltipLabel.GetMinimumSize() + new Vector2(tooltipPadding*2, tooltipPadding*2);
-			tooltipPreview.Size = size;
-			tooltipPreview.Position = mousePos + new Vector2(12, -size.Y - 12);
+			HideMenu();
+			hideTimer.Stop();
+
+			// Cambiar sprites del botón S
+			if (botonSMas != null) botonSMas.Visible = true;
+			if (botonSMenos != null) botonSMenos.Visible = false;
+		}
+		else
+		{
+			Visible = true;
+			hideTimer.Start();
+			GD.Print("MenuSoldados mostrado");
+
+			// Cambiar sprites del botón S
+			if (botonSMas != null) botonSMas.Visible = false;
+			if (botonSMenos != null) botonSMenos.Visible = true;
 		}
 	}
 
 	// ----------------------------
-	// BOTON S PRESSED
+	// RECURSOS ACTUALIZADOS
 	// ----------------------------
-	private void OnBotonSPressed()
+	private void OnResourceUpdated(string resourceName, int newValue)
 	{
-		Visible = true;
-		hideTimer.Start(); // inicia temporizador de 10s
+		UpdateButtonStates();
 	}
 
 	// ----------------------------
 	// RECLUTAMIENTO
 	// ----------------------------
 	private void OnRecruitPressed(string type)
-{
-	if (resourceManager == null) return;
-	if (!soldierCounts.ContainsKey(type)) return;
-
-	// Reiniciar temporizador aunque no tengas recursos
-	hideTimer.Start();
-
-	// Costes del soldado
-	var costs = soldierCosts[type];
-
-	// Comprobar si hay suficientes recursos
-	bool canBuy = true;
-	foreach (var res in costs)
-		if (resourceManager.GetResource(res.Key) < res.Value)
-			canBuy = false;
-
-	if (!canBuy)
 	{
-		GD.Print($"No hay suficientes recursos para reclutar {type}");
-		return;
+		if (resourceManager == null) return;
+		if (!soldierCounts.ContainsKey(type)) return;
+
+		hideTimer.Start();
+
+		var costs = soldierCosts[type];
+
+		// Verificar recursos
+		bool canBuy = true;
+		foreach (var res in costs)
+			if (resourceManager.GetResource(res.Key) < res.Value)
+				canBuy = false;
+
+		if (!canBuy)
+		{
+			GD.Print($"No hay recursos suficientes para reclutar {type}");
+			return;
+		}
+
+		// Restar recursos
+		foreach (var res in costs)
+			resourceManager.RemoveResource(res.Key, res.Value);
+
+		soldierCounts[type]++;
+		if (labels.ContainsKey(type))
+			labels[type].Text = soldierCounts[type].ToString();
+
+		GD.Print($"Reclutado 1 {type}. Total = {soldierCounts[type]}");
+
+		UpdateButtonStates();
 	}
 
-	// Restar recursos
-	foreach (var res in costs)
-		resourceManager.RemoveResource(res.Key, res.Value);
+	// ----------------------------
+	// ACTUALIZAR ESTADO DE BOTONES
+	// ----------------------------
+	private void UpdateButtonStates()
+	{
+		foreach (var kv in soldierCosts)
+		{
+			string type = kv.Key;
+			bool canAfford = true;
 
-	// Sumar soldado
-	soldierCounts[type]++;
-	if (labels.ContainsKey(type) && labels[type] != null)
-		labels[type].Text = soldierCounts[type].ToString();
+			foreach (var res in kv.Value)
+			{
+				if (resourceManager.GetResource(res.Key) < res.Value)
+				{
+					canAfford = false;
+					break;
+				}
+			}
 
-	GD.Print($"Reclutado 1 {type}. Total = {soldierCounts[type]}");
-}
+			TextureButton button = null;
+			Sprite2D mas = null;
+
+			switch (type)
+			{
+				case "Warrior": button = warriorButton; mas = warriorMas; break;
+				case "Archer": button = archerButton; mas = archerMas; break;
+				case "Lancer": button = lancerButton; mas = lancerMas; break;
+				case "Monk": button = monkButton; mas = monkMas; break;
+			}
+
+			if (button != null)
+			{
+				button.Disabled = !canAfford;
+				if (mas != null)
+					mas.Visible = canAfford; // si no se puede pagar → Mas se oculta
+			}
+		}
+	}
 
 	// ----------------------------
 	// TOOLTIP
@@ -199,7 +268,31 @@ public partial class MenuSoldados : CanvasLayer
 					textParts.Add($"{r.Capitalize()}: {cost[r]}");
 
 			tooltipLabel.Text = string.Join("  ", textParts);
+
+			Vector2 mousePos = GetViewport().GetMousePosition();
+			Vector2 labelSize = tooltipLabel.GetMinimumSize() + new Vector2(tooltipPadding * 2, tooltipPadding * 2);
+			tooltipPreview.Size = labelSize;
+
+			Vector2 screenSize = GetViewport().GetVisibleRect().Size;
+			Vector2 tooltipPos = mousePos + new Vector2(16, 16);
+			if (tooltipPos.X + labelSize.X > screenSize.X)
+				tooltipPos.X = screenSize.X - labelSize.X - 8;
+			if (tooltipPos.Y + labelSize.Y > screenSize.Y)
+				tooltipPos.Y = screenSize.Y - labelSize.Y - 8;
+
+			tooltipPreview.Position = tooltipPos;
 			tooltipPreview.Visible = true;
+		}
+	}
+
+	public override void _Process(double delta)
+	{
+		if (tooltipPreview != null && tooltipPreview.Visible)
+		{
+			Vector2 mousePos = GetViewport().GetMousePosition();
+			Vector2 labelSize = tooltipLabel.GetMinimumSize() + new Vector2(tooltipPadding * 2, tooltipPadding * 2);
+			tooltipPreview.Size = labelSize;
+			tooltipPreview.Position = mousePos + new Vector2(8, 8);
 		}
 	}
 
@@ -215,7 +308,7 @@ public partial class MenuSoldados : CanvasLayer
 	public void UpdateAllLabels()
 	{
 		foreach (var kv in soldierCounts)
-			if (labels.ContainsKey(kv.Key) && labels[kv.Key] != null)
+			if (labels.ContainsKey(kv.Key))
 				labels[kv.Key].Text = kv.Value.ToString();
 	}
 
@@ -225,6 +318,6 @@ public partial class MenuSoldados : CanvasLayer
 	private void HideMenu()
 	{
 		Visible = false;
-		GD.Print("MenuSoldados oculto tras temporizador");
+		GD.Print("MenuSoldados oculto");
 	}
 }

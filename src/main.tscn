@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=75 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="14_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="14_tb146"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="15_e7lu8"]
+[ext_resource type="Texture2D" uid="uid://cn7k1sxw43l8b" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_09.png" id="19_sif16"]
 [ext_resource type="Texture2D" uid="uid://cl3jnlpxsvd7u" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Disable.png" id="19_sta5p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
@@ -528,3 +529,7 @@ texture_disabled = ExtResource("19_sta5p")
 [node name="Mas" type="Sprite2D" parent="Objetos/BotonS"]
 position = Vector2(32, 32)
 texture = ExtResource("14_d3u4l")
+
+[node name="Menos" type="Sprite2D" parent="Objetos/BotonS"]
+position = Vector2(32, 32)
+texture = ExtResource("19_sif16")
