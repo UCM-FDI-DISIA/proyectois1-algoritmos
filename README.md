@@ -2,62 +2,73 @@
 ## AlgoRitmos
 
 ### Wiki
-Visita nuestra [Wiki](wiki) para mayor detalle.
+Visita nuestra [Wiki](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki) para mayor detalle.
 
 ---
 
 ### Índice
 
-* [X Home](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki)
+* [Home](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki)
+
+---
 
 #### Documentación
 
-* [Documento de Especificación de Requisitos](especificacionIEEE830.md).
-    * [Sección 1: Introducción](IEEE830intro.md).
-    * [Sección 2: Descripción general](IEEE830descrip.md).
-    * [Sección 3: Requisitos específicos](IEEE830requis.md).
-* [X Documento Técnico](documentotecnico.md).
+* [Documento de Especificación de Requisitos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/EspecificacionIEEE830)
+  * [Sección 1: Introducción](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/IEEE830intro)
+  * [Sección 2: Descripción general](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/IEEE830descrip)
+  * [Sección 3: Requisitos específicos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/IEEE830requis)
+* [Documento Técnico](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/DocumentoTecnico)
 
+---
 
 #### Diseño gráfico
 
-* [Estética y diseño](estetica_papel.md)
-    * [Interfaz](diseno_interfaz.md).
-    * [Diseño de personajes](diseno_personajes.md).
-    * [Diseño de recursos](diseno_recursos.md).
-* [Enlazado de recursos](Enlazado-de-recursos).
+* [Estética y diseño](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Estetica_papel)
+  * [Interfaz](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Diseno_interfaz)
+  * [Diseño de personajes](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Diseno_personajes)
+  * [Diseño de recursos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Diseno_recursos)
+* [Enlazado de recursos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Enlazado-de-recursos)
+
+---
 
 #### Proceso Scrum
 
-* [Usuarios de _Feudalia_](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Historias-de-usuario).
-    * [Historias de usuario](historiasusuario.md).
-* [Planificación de los Sprints](sprints.md).
-    * [Revisión de los Sprints](revisionSprints.md).
-    * [Retrospectiva de los Sprints](retrospectivaSprints.md).
-    * [Sprint Backlog](backlogSprint.md).
-* [Reuniones del equipo](reuniones.md).
-    * [MVP - Producto Mínimo Viable](MVP.md).
-    * [X DoD (Definition of Done)](definitionOfDone.md). 
-* [Pruebas de Feudalia (control de calidad)](pruebas_feudalia.md).
+* [Usuarios de _Feudalia_](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Historias-de-usuario)
+  * [Historias de usuario](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/HistoriasUsuario)
+* [Planificación de los Sprints](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Sprints)
+  * [Revisión de los Sprints](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/RevisionSprints)
+  * [Retrospectiva de los Sprints](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/RetrospectivaSprints)
+  * [Sprint Backlog](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/BacklogSprint)
+* [Reuniones del equipo](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Reuniones)
+  * [MVP - Producto Mínimo Viable](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/MVP)
+  * [DoD (Definition of Done)](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/DefinitionOfDone)
+* [Pruebas de Feudalia (control de calidad)](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Pruebas_Feudalia)
+
+---
 
 #### Control de calidad
 
-* [Control de calidad](control_de_calidad.md).
+* [Control de calidad](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Control_de_calidad)
+
+---
 
 #### Gestión de riesgos
 
-* [Introducción](introduccionRiesgos.md). 
-* [Priorización de riesgos del proyecto](priorizacionRiesgos.md).
-* [Reducción, supervisión y gestión del riesgo](gestionRiesgos.md).
-* [Planificación temporal](planificacionRiesgos.md).
-* [Resumen](resumenRiesgos.md). 
+* [Introducción](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/IntroduccionRiesgos)
+* [Priorización de riesgos del proyecto](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/PriorizacionRiesgos)
+* [Reducción, supervisión y gestión del riesgo](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/GestionRiesgos)
+* [Planificación temporal](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/PlanificacionRiesgos)
+* [Resumen](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/ResumenRiesgos)
+
+---
 
 ##### Anexo
 
-* [Documento IEEE830](https://docs.google.com/document/d/1hdwNOZvPmhaxj7iX_lu-zgpNqmKbLNv1iK7gSXKCvug/edit?tab=t.0#heading=h.u2atzjnlxad) (previo al Sprint 1).
-* [Referencias y recursos](recursosyreferencias.md).
-* [Referencias - diseño](referencias_diseno.md).
-* [Product Backlog](productBacklog.md).
+* [Documento IEEE830 (previo al Sprint 1)](https://docs.google.com/document/d/1hdwNOZvPmhaxj7iX_lu-zgpNqmKbLNv1iK7gSXKCvug/edit?tab=t.0#heading=h.u2atzjnlxad)
+* [Referencias y recursos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/RecursosYReferencias)
+* [Referencias - diseño](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Referencias_Diseno)
+* [Product Backlog](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/ProductBacklog)
 
 ---
 ### Versiones
