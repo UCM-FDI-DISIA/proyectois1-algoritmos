@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://iah8x7at2l31"]
+[gd_scene load_steps=8 format=3 uid="uid://iah8x7at2l31"]
 
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="1_3hdph"]
 [ext_resource type="Script" uid="uid://cv3u81yv6wuha" path="res://src/Menus/Construccion/MenuConstruccion.cs" id="1_ghgg2"]
 [ext_resource type="Texture2D" uid="uid://c6yvjf3b1ejhc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_07.png" id="4_wwp1g"]
 [ext_resource type="Texture2D" uid="uid://b0p26dktrje8y" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Buildings/Blue Buildings/House1Boton.png" id="6_2gfwo"]
+[ext_resource type="Texture2D" uid="uid://br10q88ranhfu" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Pointers/02.png" id="6_7p221"]
 [ext_resource type="Texture2D" uid="uid://dlq3jbg126h5p" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_3Slides.png" id="6_8qf8j"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g55pw"]
@@ -16,11 +17,12 @@ script = ExtResource("1_ghgg2")
 
 [node name="ControlRaiz" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 2
+anchor_top = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_top = -648.0
+offset_bottom = -648.0
+grow_vertical = 0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
@@ -34,7 +36,7 @@ offset_bottom = 647.0
 texture_normal = ExtResource("1_3hdph")
 
 [node name="Sprite2D" type="Sprite2D" parent="ControlRaiz/BtnMenu"]
-position = Vector2(30, 30)
+position = Vector2(32, 32)
 texture = ExtResource("4_wwp1g")
 
 [node name="PanelBarra" type="PanelContainer" parent="ControlRaiz"]
@@ -54,7 +56,11 @@ theme_override_constants/separation = -47
 [node name="BtnCasa" type="TextureButton" parent="ControlRaiz/PanelBarra/HBoxBotones"]
 layout_mode = 2
 tooltip_text = "coste: 10 madera 5 piedra 1 oro"
+toggle_mode = true
 texture_normal = ExtResource("6_2gfwo")
 stretch_mode = 5
 
-[connection signal="pressed" from="ControlRaiz/PanelBarra/HBoxBotones/BtnCasa" to="." method="_on_btn_casa_pressed"]
+[node name="Marcador" type="Sprite2D" parent="ControlRaiz/PanelBarra/HBoxBotones/BtnCasa"]
+visible = false
+position = Vector2(16, 27)
+texture = ExtResource("6_7p221")

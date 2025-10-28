@@ -9,6 +9,7 @@ public partial class ResourcesHud : CanvasLayer
 	private Label villagerLabel;
 
 	private ResourceManager manager;
+	private const int MAX_RESOURCE = 99;
 
 	public override void _Ready()
 	{
@@ -21,25 +22,17 @@ public partial class ResourcesHud : CanvasLayer
 		manager.ResourceUpdated += OnResourceUpdated;
 		manager.VillagerCapacityUpdated += OnVillagerCapacityUpdated;
 
-		UpdateVillagerLabel();
+		UpdateAllLabels();
 	}
 
 	private void OnResourceUpdated(string resourceName, int newValue)
 	{
 		switch (resourceName)
 		{
-			case "wood":
-				woodLabel.Text = newValue.ToString();
-				break;
-			case "stone":
-				stoneLabel.Text = newValue.ToString();
-				break;
-			case "gold":
-				goldLabel.Text = newValue.ToString();
-				break;
-			case "villager":
-				UpdateVillagerLabel();
-				break;
+			case "wood": UpdateResourceLabel(woodLabel, newValue); break;
+			case "stone": UpdateResourceLabel(stoneLabel, newValue); break;
+			case "gold": UpdateResourceLabel(goldLabel, newValue); break;
+			case "villager": UpdateVillagerLabel(); break;
 		}
 	}
 
@@ -48,15 +41,27 @@ public partial class ResourcesHud : CanvasLayer
 		UpdateVillagerLabel();
 	}
 
+	private void UpdateResourceLabel(Label label, int value)
+	{
+		label.Text = value.ToString();
+		label.AddThemeColorOverride("font_color", value >= MAX_RESOURCE ? new Color(1, 0, 0) : new Color(1, 1, 1));
+	}
+
 	private void UpdateVillagerLabel()
 	{
 		int currentVillagers = manager.GetResource("villager");
 		int maxVillagers = manager.GetVillagerCapacity();
 
 		villagerLabel.Text = $"{currentVillagers} / {maxVillagers}";
-
-		// Color: rojo si alcanza el máximo
 		villagerLabel.AddThemeColorOverride("font_color",
 			currentVillagers >= maxVillagers ? new Color(1, 0, 0) : new Color(1, 1, 1));
+	}
+
+	private void UpdateAllLabels()
+	{
+		UpdateResourceLabel(woodLabel, manager.GetResource("wood"));
+		UpdateResourceLabel(stoneLabel, manager.GetResource("stone"));
+		UpdateResourceLabel(goldLabel, manager.GetResource("gold"));
+		UpdateVillagerLabel();
 	}
 }
