@@ -30,6 +30,10 @@ public partial class ResourceManager : Node
 		{ "villager", 0 }
 	};
 
+	public int GetCasaWoodCost() => CASA_WOOD_COST;
+	public int GetCasaGoldCost() => CASA_GOLD_COST;
+	public int GetCasaStoneCost() => CASA_STONE_COST;
+
 	public override void _Ready()
 	{
 		GD.Print("[ResourceManager] Iniciando...");

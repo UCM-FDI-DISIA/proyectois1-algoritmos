@@ -18,12 +18,16 @@ public partial class MenuConstruccion : CanvasLayer
 
 	public override void _Ready()
 	{
+	
+
 		// Buscar ResourceManager
 		resourceManager = GetTree().Root.GetNode<ResourceManager>("Main/ResourceManager");
 		if (resourceManager == null)
 			GD.PrintErr("ResourceManager no encontrado");
 		else
 			GD.Print("ResourceManager encontrado");
+			// Generar tooltip dinámico para el botón de casa
+
 
 		btnMenu = GetNode<TextureButton>("ControlRaiz/BtnMenu");
 		panelBarra = GetNode<PanelContainer>("ControlRaiz/PanelBarra");
@@ -37,6 +41,10 @@ public partial class MenuConstruccion : CanvasLayer
 		panelBarra.Visible = false;
 		marcadorCasa.Visible = false;
 
+		if (resourceManager != null)
+		{
+			btnCasa.TooltipText = $"Costo: Madera {resourceManager.GetCasaWoodCost()} | Piedra {resourceManager.GetCasaStoneCost()} | Oro {resourceManager.GetCasaGoldCost()}";
+		}
 		// Conectar señales usando evento
 		btnMenu.Pressed += OnMenuPressed;
 		btnCasa.Pressed += OnCasaPressed;
@@ -97,7 +105,10 @@ public partial class MenuConstruccion : CanvasLayer
 			return;
 
 		// Snap a la cuadrícula
-		Vector2 mousePos = GetViewport().GetMousePosition();
+		var camera = GetViewport().GetCamera2D();
+		Vector2 mousePos = camera.GetGlobalMousePosition();
+
+
 		float x = Mathf.Floor(mousePos.X / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
 		float y = Mathf.Floor(mousePos.Y / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
 		casaPreview.Position = new Vector2(x, y);
@@ -153,4 +164,5 @@ public partial class MenuConstruccion : CanvasLayer
 
 		GD.Print("Construcción cancelada");
 	}
+
 }

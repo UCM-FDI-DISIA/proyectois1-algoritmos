@@ -433,8 +433,10 @@ script = ExtResource("1_lquwl")
 offset = Vector2(0, 120)
 transform = Transform2D(1, 0, 0, 1, 0, 120)
 
-[node name="ResourceManager" type="Node" parent="."]
+[node name="ResourceManager" type="Node" parent="." node_paths=PackedStringArray("contenedorCasas")]
 script = ExtResource("9_kf8lf")
+contenedorCasas = NodePath("../Objetos/Edificios/CasasCompradas")
+casaScene = ExtResource("9_mgm53")
 
 [node name="Mapa" type="Node2D" parent="."]
 
@@ -515,6 +517,8 @@ tile_map_data = PackedByteArray("AAAEAAoAAAAAAAAAAQADABIAAAAAAAAAAgA=")
 tile_set = SubResource("TileSet_kqbth")
 
 [node name="CasasCompradas" type="Node2D" parent="Objetos/Edificios"]
+z_as_relative = false
+y_sort_enabled = true
 
 [node name="BotonS" type="TextureButton" parent="Objetos"]
 offset_left = 192.0
