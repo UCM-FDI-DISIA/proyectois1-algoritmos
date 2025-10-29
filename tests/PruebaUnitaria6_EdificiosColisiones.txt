@@ -5,10 +5,20 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 	1) Ejecutar el archivo.
 	2) Comprobar que el personaje principal colisiona con los siguientes edificios.
 		* Probar colision con recursos.
-			* Probar colision con casa.
+		* Probar colision con casa.
 	3) Comprobar que la casa está correctamente dispuesta en el mapa, sin entrar en conflicto con el resto de elementos.
+	4) Comprobar lo anterior con los edificios estaticos del mapa y con los edificios que construye el personaje.
 
 Nota: definimos colision como
 	1) el movimiento del personaje se vea interrumpido al intentar atravesar el objeto.
 	2) la animacion de movimiento del personaje no se ve afectada por la colision.
 	3) el personaje no "se desliza" al intentar atravesar el objeto.
+
+
+PRUEBAS REALIZADAS:
+	20/10/2025
+		Sin ninguna incidencia.
+	29/10/2025
+		Esta prueba falla con los edificios construidos.
+		Se ajusta el YSort de la capa correspondiente del mapa y se soluciona el fallo.
+		Se pasan las pruebas unitarias correctamente.
