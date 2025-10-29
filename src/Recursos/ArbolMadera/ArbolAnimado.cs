@@ -28,7 +28,6 @@ public partial class ArbolAnimado : StaticBody2D
 			rect.Size = CellSize;
 
 		anim.Play("Idle");
-		ZIndex = (int)Position.Y;
 
 		// Timer para regenerar
 		regenTimer = new Timer
