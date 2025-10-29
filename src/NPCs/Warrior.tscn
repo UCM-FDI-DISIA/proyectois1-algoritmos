@@ -1,6 +1,6 @@
 [gd_scene load_steps=52 format=3 uid="uid://wp7jueq0ljwu"]
 
-[ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="1_a0tws"]
+[ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="1_a0tws"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("1_a0tws")
@@ -384,7 +384,7 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_1umo4"]
 radius = 13.038404
 
-[node name="Node2D" type="Node2D"]
+[node name="Warrior" type="CharacterBody2D"]
 
 [node name="Animacion" type="AnimatedSprite2D" parent="."]
 z_as_relative = false
