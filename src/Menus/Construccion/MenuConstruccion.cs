@@ -12,22 +12,20 @@ public partial class MenuConstruccion : CanvasLayer
 	private bool enConstruccion = false;
 	private Node2D casaPreview;
 
+	private Area2D areaPreview; // 🔹 para detectar colisiones del preview
+	private bool puedeConstruir = true; // 🔹 evita construir sobre el jugador
+
 	private ResourceManager resourceManager;
 
 	private const int GRID_SIZE = 64;
 
 	public override void _Ready()
 	{
-	
-
-		// Buscar ResourceManager
 		resourceManager = GetTree().Root.GetNode<ResourceManager>("Main/ResourceManager");
 		if (resourceManager == null)
 			GD.PrintErr("ResourceManager no encontrado");
 		else
 			GD.Print("ResourceManager encontrado");
-			// Generar tooltip dinámico para el botón de casa
-
 
 		btnMenu = GetNode<TextureButton>("ControlRaiz/BtnMenu");
 		panelBarra = GetNode<PanelContainer>("ControlRaiz/PanelBarra");
@@ -45,7 +43,7 @@ public partial class MenuConstruccion : CanvasLayer
 		{
 			btnCasa.TooltipText = $"Costo: Madera {resourceManager.GetCasaWoodCost()} | Piedra {resourceManager.GetCasaStoneCost()} | Oro {resourceManager.GetCasaGoldCost()}";
 		}
-		// Conectar señales usando evento
+
 		btnMenu.Pressed += OnMenuPressed;
 		btnCasa.Pressed += OnCasaPressed;
 	}
@@ -81,22 +79,76 @@ public partial class MenuConstruccion : CanvasLayer
 		}
 
 		enConstruccion = true;
-
 		casaPreview = (Node2D)resourceManager.casaScene.Instantiate();
 
 		// ⚙️ Marcar como preview
 		if (casaPreview is CasaAnimada casaAnim)
 			casaAnim.EsPreview = true;
 
-		// Hacer semi-transparente
-		foreach (Node child in casaPreview.GetChildren())
-		{
-			if (child is CanvasItem visual)
-				visual.Modulate = new Color(1, 1, 1, 0.5f);
-		}
+		// 🔹 Hacer semi-transparente visualmente
+		TintPreview(new Color(1, 1, 1, 0.5f));
 
 		resourceManager.contenedorCasas.AddChild(casaPreview);
 		GD.Print("🏠 Preview de casa instanciado y agregado al contenedor");
+
+		// 🔹 Crear un Area2D para detectar solapamiento con el jugador
+		CrearAreaPreview();
+	}
+
+	private void CrearAreaPreview()
+	{
+		if (casaPreview == null) return;
+
+		areaPreview = new Area2D();
+		casaPreview.AddChild(areaPreview);
+
+		// Copiar el CollisionShape2D del prefab
+		var shapeOriginal = casaPreview.GetNode<CollisionShape2D>("CollisionShape2D");
+		if (shapeOriginal != null && shapeOriginal.Shape != null)
+		{
+			var nuevaForma = shapeOriginal.Shape.Duplicate() as Shape2D;
+			var shapeClone = new CollisionShape2D { Shape = nuevaForma };
+			areaPreview.AddChild(shapeClone);
+		}
+
+		areaPreview.Monitoring = true;
+		areaPreview.Monitorable = true;
+
+		// Capa y máscara (ajusta si usas otras capas)
+		areaPreview.CollisionLayer = 0;
+		areaPreview.CollisionMask = 1; // Asume que el jugador está en capa 1
+
+		areaPreview.BodyEntered += OnAreaPreviewBodyEntered;
+		areaPreview.BodyExited += OnAreaPreviewBodyExited;
+	}
+
+	private void OnAreaPreviewBodyEntered(Node body)
+	{
+		if (body.IsInGroup("jugador"))
+		{
+			puedeConstruir = false;
+			TintPreview(new Color(1, 0, 0, 0.4f)); // rojo = no se puede construir
+		}
+	}
+
+	private void OnAreaPreviewBodyExited(Node body)
+	{
+		if (body.IsInGroup("jugador"))
+		{
+			puedeConstruir = true;
+			TintPreview(new Color(1, 1, 1, 0.5f)); // blanco = sí se puede construir
+		}
+	}
+
+	private void TintPreview(Color color)
+	{
+		if (casaPreview == null) return;
+
+		foreach (Node child in casaPreview.GetChildren())
+		{
+			if (child is CanvasItem visual)
+				visual.Modulate = color;
+		}
 	}
 
 	public override void _Process(double delta)
@@ -104,10 +156,8 @@ public partial class MenuConstruccion : CanvasLayer
 		if (!enConstruccion || casaPreview == null)
 			return;
 
-		// Snap a la cuadrícula
 		var camera = GetViewport().GetCamera2D();
 		Vector2 mousePos = camera.GetGlobalMousePosition();
-
 
 		float x = Mathf.Floor(mousePos.X / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
 		float y = Mathf.Floor(mousePos.Y / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
@@ -123,17 +173,21 @@ public partial class MenuConstruccion : CanvasLayer
 		// Confirmar con clic izquierdo
 		if (Input.IsMouseButtonPressed(MouseButton.Left))
 		{
+			if (!puedeConstruir)
+			{
+				GD.Print("🚫 No puedes construir encima del personaje");
+				return;
+			}
+
 			if (resourceManager.PuedoComprarCasa())
 			{
 				resourceManager.PagarCasa();
 
-				// Crear la casa real
 				var casaReal = (CasaAnimada)resourceManager.casaScene.Instantiate();
 				casaReal.EsPreview = false;
 				casaReal.Position = casaPreview.Position;
 				resourceManager.contenedorCasas.AddChild(casaReal);
 
-				// Liberar preview
 				casaPreview.QueueFree();
 				casaPreview = null;
 				enConstruccion = false;
@@ -144,7 +198,7 @@ public partial class MenuConstruccion : CanvasLayer
 			}
 			else
 			{
-				GD.Print(" No tienes materiales suficientes para construir");
+				GD.Print("No tienes materiales suficientes para construir");
 				CancelarConstruccion();
 			}
 		}
@@ -158,11 +212,11 @@ public partial class MenuConstruccion : CanvasLayer
 			casaPreview = null;
 		}
 
+		areaPreview = null;
 		enConstruccion = false;
 		marcadorCasa.Visible = false;
 		btnCasa.ButtonPressed = false;
 
 		GD.Print("Construcción cancelada");
 	}
-
 }
