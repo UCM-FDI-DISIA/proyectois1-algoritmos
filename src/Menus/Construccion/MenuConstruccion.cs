@@ -63,37 +63,53 @@ public partial class MenuConstruccion : CanvasLayer
 	}
 
 	private void OnCasaPressed()
+{
+	marcadorCasa.Visible = !marcadorCasa.Visible;
+
+	if (enConstruccion)
 	{
-		marcadorCasa.Visible = !marcadorCasa.Visible;
-
-		if (enConstruccion)
-		{
-			GD.Print("Ya estás en modo construcción");
-			return;
-		}
-
-		if (resourceManager == null || resourceManager.casaScene == null || resourceManager.contenedorCasas == null)
-		{
-			GD.PrintErr("Faltan asignaciones en ResourceManager (casaScene o contenedorCasas)");
-			return;
-		}
-
-		enConstruccion = true;
-		casaPreview = (Node2D)resourceManager.casaScene.Instantiate();
-
-		// ⚙️ Marcar como preview
-		if (casaPreview is CasaAnimada casaAnim)
-			casaAnim.EsPreview = true;
-
-		// 🔹 Hacer semi-transparente visualmente
-		TintPreview(new Color(1, 1, 1, 0.5f));
-
-		resourceManager.contenedorCasas.AddChild(casaPreview);
-		GD.Print("🏠 Preview de casa instanciado y agregado al contenedor");
-
-		// 🔹 Crear un Area2D para detectar solapamiento con el jugador
-		CrearAreaPreview();
+		GD.Print("Ya estás en modo construcción");
+		return;
 	}
+
+	if (resourceManager == null || resourceManager.casaScene == null || resourceManager.contenedorCasas == null)
+	{
+		GD.PrintErr("Faltan asignaciones en ResourceManager (casaScene o contenedorCasas)");
+		return;
+	}
+
+	enConstruccion = true;
+	casaPreview = (Node2D)resourceManager.casaScene.Instantiate();
+
+	// ⚙️ Marcar como preview
+	if (casaPreview is CasaAnimada casaAnim)
+	{
+		casaAnim.EsPreview = true;
+
+		// 🚫 Desactivar el CollisionShape2D del preview para evitar vibraciones
+		var collisionShape = casaAnim.GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
+		if (collisionShape != null)
+			collisionShape.Disabled = true;
+
+		// Opcional: si el padre tiene CollisionObject2D (StaticBody2D o Area2D)
+		var collisionParent = casaAnim.GetNodeOrNull<CollisionObject2D>("CollisionObject2D");
+		if (collisionParent != null)
+		{
+			collisionParent.CollisionLayer = 0;
+			collisionParent.CollisionMask = 0;
+		}
+	}
+
+	// 🔹 Hacer semi-transparente visualmente
+	TintPreview(new Color(1, 1, 1, 0.5f));
+
+	resourceManager.contenedorCasas.AddChild(casaPreview);
+	GD.Print("🏠 Preview de casa instanciado y agregado al contenedor");
+
+	// 🔹 Crear el Area2D para detectar si está sobre el jugador (sin vibración)
+	CrearAreaPreview();
+}
+
 
 	private void CrearAreaPreview()
 	{
