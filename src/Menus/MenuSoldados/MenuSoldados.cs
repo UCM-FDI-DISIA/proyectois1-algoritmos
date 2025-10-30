@@ -88,6 +88,7 @@ public partial class MenuSoldados : CanvasLayer
 		// Sprites del botón S
 		botonSMas = botonS?.GetNodeOrNull<Sprite2D>("Mas");
 		botonSMenos = botonS?.GetNodeOrNull<Sprite2D>("Menos");
+		if (botonSMenos != null) botonSMenos.Visible = false;
 
 		// --- Botones soldados ---
 		warriorButton = GetNodeOrNull<TextureButton>("Soldados/Warrior/ButtonW/ButtonWarrior");
