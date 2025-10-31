@@ -12,6 +12,7 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 			* Comprobar que el personaje realiza la animacion de atacar en el sentido de su movimiento. 
 			* Comprobar que la animacion es distinta con el click derecho que con el izquierdo.
 
+
 PRUEBAS REALIZADAS:
 	10/2025
 		Sin ninguna incidencia.

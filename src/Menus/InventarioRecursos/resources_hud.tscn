@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://7coqstm4olxf" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Banners/Carved_3Slides.png" id="1_wdeym"]
 [ext_resource type="Texture2D" uid="uid://blfnw3ge2tpxp" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/G_Idle.png" id="3_ix1yk"]
 [ext_resource type="Texture2D" uid="uid://diptjqat7a84h" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/18.png" id="4_8aly1"]
-[ext_resource type="Texture2D" uid="uid://cbmjxcg71s832" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Decorations/Rocks/Rock2.1.png" id="4_ix1yk"]
+[ext_resource type="Texture2D" uid="uid://bso5x606mwmd2" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/05.png" id="4_ot7fl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aaxvf"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -37,8 +37,16 @@ layout_mode = 2
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/WoodContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = ExtResource("1_mkcvl")
 expand_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/WoodContainer/TextureRect"]
+layout_mode = 0
+offset_left = -19.0
+offset_top = -47.0
+offset_right = 109.0
+offset_bottom = 81.0
+scale = Vector2(0.8232258, 1.0240964)
+texture = ExtResource("1_mkcvl")
 
 [node name="WoodLabel" type="Label" parent="HBoxContainer/WoodContainer"]
 layout_mode = 2
@@ -49,10 +57,18 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/StoneContainer"]
-custom_minimum_size = Vector2(30, 30)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = ExtResource("4_ix1yk")
-stretch_mode = 1
+expand_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/StoneContainer/TextureRect"]
+layout_mode = 0
+offset_left = -5.0
+offset_top = 4.0
+offset_right = 59.0
+offset_bottom = 68.0
+scale = Vector2(1.1363636, 1.2222222)
+texture = ExtResource("4_ot7fl")
 
 [node name="StoneLabel" type="Label" parent="HBoxContainer/StoneContainer"]
 layout_mode = 2
@@ -65,8 +81,16 @@ layout_mode = 2
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/GoldContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+expand_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/GoldContainer/TextureRect"]
+layout_mode = 0
+offset_left = -16.000002
+offset_top = -14.0
+offset_right = 112.0
+offset_bottom = 114.0
+scale = Vector2(0.69601405, 0.6856467)
 texture = ExtResource("3_ix1yk")
-expand_mode = 3
 
 [node name="GoldLabel" type="Label" parent="HBoxContainer/GoldContainer"]
 layout_mode = 2
@@ -79,8 +103,16 @@ layout_mode = 2
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer/VillagerContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+expand_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/VillagerContainer/TextureRect"]
+layout_mode = 0
+offset_left = -3.0
+offset_top = -2.0
+offset_right = 189.0
+offset_bottom = 190.0
+scale = Vector2(0.35345882, 0.36037308)
 texture = ExtResource("4_8aly1")
-expand_mode = 3
 
 [node name="VillagerLabel" type="Label" parent="HBoxContainer/VillagerContainer"]
 layout_mode = 2

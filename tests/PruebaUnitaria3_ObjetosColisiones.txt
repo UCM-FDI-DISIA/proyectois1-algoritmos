@@ -1,4 +1,4 @@
-MECANICA A PROBAR: COLISIONES CON LOS OBJETOS SOLIDOS
+MECANICA A PROBAR: COLISIONES CON LOS OBJETOS SOLIDOS ESTATICOS DEL MAPA
 
 PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 	
@@ -19,8 +19,10 @@ Nota: definimos colision como
 	2) la animacion de movimiento del personaje no se ve afectada por la colision.
 	3) el personaje no "se desliza" al intentar atravesar el objeto.
 
+
 PRUEBAS REALIZADAS:
 	10/2025
 		Sin ninguna incidencia.
 	14/10/2025
 		Funciona correctamente, cumpliendo los requisitos, se pasa la prueba con éxito.
+	OTROS PUSH: Sin ninguna incidencia.

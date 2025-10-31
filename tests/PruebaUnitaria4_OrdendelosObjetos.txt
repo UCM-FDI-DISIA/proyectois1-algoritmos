@@ -11,16 +11,17 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 		* Si el personaje pasa detras del obejto, se ve detras.
 
 PRUEBAS REALIZADAS:
-	10/2025
-		DIA 13: Solo existe el objeto Arbol.
-			La mecanica no se implementa correctamente y el personaje aparece debajo del mapa.
-			Renunciamos a la implementacion con ZIndex y usamos Y-Sort.
-			Se obtiene una version funcional de esta mecanica y las anteiores pero se desconfigura al hacer push con el plugin de Godot.
-			Se recupera el codigo perdido, se hace push con Desktop y se verifica desde otro dispositivo que funciona correctamente.
-		DIA 14: Se annade la mecanica a los objetos "Mina de Piedra" y "Mina de Oro".
-		OTROS PUSH: Sin ninguna incidencia.
-	14/2025
+	13/10/2025
+		Solo existe el objeto Arbol.
+		La mecanica no se implementa correctamente y el personaje aparece debajo del mapa.
+		Renunciamos a la implementacion con ZIndex y usamos Y-Sort.
+		Se obtiene una version funcional de esta mecanica y las anteiores pero se desconfigura al hacer push con el plugin de Godot.
+		Se recupera el codigo perdido, se hace push con Desktop y se verifica desde otro dispositivo que funciona correctamente.
+	14/10/2025 
+		Se annade la mecanica a los objetos "Mina de Piedra" y "Mina de Oro".
+	14/10/2025
 		Se comprueba que los objetos cumplen lo requerido, se respeta el orden de aparición y la animación cuando dos objetos colisionan 
 		es la correcta. Se pasa la prueba con éxito.
-	17/2025 
+	17/10/2025 
 		Se identifica un problema con la mina de piedra. La imágen esmuy confusa y no queda claro cuándo el personaje debe estar delante y cuando detrás.
+	OTROS PUSH: Sin ninguna incidencia.

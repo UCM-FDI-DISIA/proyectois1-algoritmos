@@ -13,6 +13,7 @@ public partial class Player : CharacterBody2D
 	//Como el Main de Player
 	public override void _Ready()
 	{
+		AddToGroup("jugador");
 		animatedSprite = GetNode<AnimatedSprite2D>("Animacion");
 		//Esta es el AttackArea que determina el rango de ataque
 		attackArea = GetNode<Area2D>("AttackArea");

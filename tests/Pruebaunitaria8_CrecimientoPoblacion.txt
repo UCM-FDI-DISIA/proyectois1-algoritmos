@@ -1,4 +1,4 @@
-MECANICA A PROBAR: RECOLECCION MANUAL DE RECURSOS
+MECANICA A PROBAR: CRECIMIENTO DE POBLACIÓN
 
 PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 	
@@ -8,10 +8,18 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 		* t son multiplos de 10 segundos.
 		* CRECIMIENTO es constante y se define en el ResourceManager.
 		* NUMERO_CASAS es el numero de casas en el mapa en cada momento.
-	3) Comprobar que la actualizacion de aldeanos no se ve afectada por otras acciones.
+	3) Comprobar que los limites de poblacion son correctos.
+		* El número total de personas posible es NUMERO_CASAS * 50.
+		* Si el número total de personas iguala el máximo. Deja de crecer.
+	4) Si el total de personas disminuye por una compra, vuelve a aumentar bajo la relación correspondiente.
+	5) Comprobar que la actualizacion de aldeanos no se ve afectada por otras acciones.
 		* Por ejemplo, si al recolectar recursos aumenta el tiempo de actualizacion, no esta funcionando correctamente.
 
 PRUEBAS REALIZADAS:
 	24/10/2025
 		Entro en bucle infinito con la actualizacion de aldeanos y Godot no responde.
 		Se arregla el problema cambiando el codigo del ResourceManager.
+	29/10/2025
+		Se cambia la especificación de "crecimiento de población".
+		Anadimos un límite de crecimiento por casa y actualizamos el código.
+		Compruebo que funciona correctamente.

@@ -26,3 +26,7 @@ PRUEBAS REALIZADAS:
 		Sin ninguna incidencia.
 	15/10/2025
 		Seha desajustado la colocación de los objetos en el mapa.
+	29/10/2025
+		Se identifican bloques invisibles en el cuadrante principal.
+		Elimino las colisiones invisibles.
+	OTROS PUSH: Sin ninguna incidencia.

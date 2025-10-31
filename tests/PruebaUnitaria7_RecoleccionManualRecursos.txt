@@ -7,10 +7,13 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 	3) Hacer click derecho o izquierdo.
 		* El arbol debe hacer una animacion de "sacudida".
 		* Despues de la animacion de sacudida, se incrementa el contador arriba a la izquierda.
+		* Al atacar al arbol, aparece un sprite de madera temporalmente, con su correspondiente animacion.
+			* NOTA: la piedra no tiene sprite de piedra, sino animacion de "golpear".
 	4) Comprobar que la animacion termina correctamente y vuelve a su animacion estatica.
 	5) Comprobar que, rebasada la capacidad maxima del arbol, muere y ya no afecta el contador.
-	6) Comprobar que la interaccion se limita a un arbol.
+	6) Comprobar que la interaccion se limita a los arboles con los que interactua el personaje.
 	7) Comprobar que los pasos 1 - 7 para minas de oro y minas de piedra.
+
 
 PRUEBAS REALIZADAS:
 	20/10/2025

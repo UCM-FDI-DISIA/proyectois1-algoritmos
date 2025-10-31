@@ -6,89 +6,59 @@ public partial class ResourceManager : Node
 	[Signal] public delegate void ResourceUpdatedEventHandler(string resourceName, int newValue);
 	[Signal] public delegate void VillagerCapacityUpdatedEventHandler();
 
-	// Variables generales
 	private int houseCount = 0;
 	private const int VILLAGERS_PER_HOUSE = 50;
 
-	// Crecimiento de aldeanos
 	private int CRECIMIENTO_ALDEANOS = 0;
 	private const float TIEMPO_CRECIMIENTO = 10f;
 	private Timer actualizarTimer;
 
-	// Límite máximo de recursos
 	private const int MAX_RESOURCE = 99;
 
-	// Variables compra casa
 	private const int CASA_WOOD_COST = 20;
 	private const int CASA_GOLD_COST = 10;
 	private const int CASA_STONE_COST = 5;
 
-	// Referencias
-	public Node2D contenedorCasas;
+	[Export] public Node2D contenedorCasas;
+	[Export] public PackedScene casaScene;
 
-	// Diccionario de recursos
-	private Godot.Collections.Dictionary<string, int> resources = new Godot.Collections.Dictionary<string, int>
+	private Godot.Collections.Dictionary<string, int> resources = new()
 	{
 		{ "wood", 0 },
-		{ "villager", 0 },
 		{ "stone", 0 },
-		{ "gold", 0 }
+		{ "gold", 0 },
+		{ "villager", 0 }
 	};
 
-	// Escena de la casa
-	public PackedScene casaScene = GD.Load<PackedScene>("res://src/Edificios/Casa/CasaAnimada.tscn");
+	public int GetCasaWoodCost() => CASA_WOOD_COST;
+	public int GetCasaGoldCost() => CASA_GOLD_COST;
+	public int GetCasaStoneCost() => CASA_STONE_COST;
 
 	public override void _Ready()
 	{
-		actualizarTimer = new Timer();
-		actualizarTimer.WaitTime = TIEMPO_CRECIMIENTO;
-		actualizarTimer.OneShot = false;
+		GD.Print("[ResourceManager] Iniciando...");
+
+		if (contenedorCasas == null)
+			GD.PrintErr("contenedorCasas no asignado.");
+		if (casaScene == null)
+			GD.PrintErr("casaScene no asignada.");
+
+		actualizarTimer = new Timer { WaitTime = TIEMPO_CRECIMIENTO, OneShot = false };
 		actualizarTimer.Timeout += OnActualizarTimeout;
 		AddChild(actualizarTimer);
-
-		casaScene = GD.Load<PackedScene>("res://src/Edificios/Casa/CasaAnimada.tscn");
-		contenedorCasas = GetNode<Node2D>("Objetos/Edificios/CasasCompradas");
 	}
 
-	/*-----------------------
-		MANEJO DE RECURSOS
-	-------------------------*/
-
-	public void AddResource(string resourceName, int amount = 1)
+	// --- Recursos ---
+	public void AddResource(string name, int amount = 1)
 	{
-		if (!resources.ContainsKey(resourceName))
-			return;
+		if (!resources.ContainsKey(name)) return;
 
-		if (resourceName == "villager")
-		{
-			int maxVillagers = GetVillagerCapacity();
-			resources["villager"] = Mathf.Min(resources["villager"] + amount, maxVillagers);
-		}
+		if (name == "villager")
+			resources[name] = Mathf.Min(resources[name] + amount, GetVillagerCapacity());
 		else
-		{
-			resources[resourceName] = Mathf.Min(resources[resourceName] + amount, MAX_RESOURCE);
-		}
+			resources[name] = Mathf.Min(resources[name] + amount, MAX_RESOURCE);
 
-		EmitSignal(nameof(ResourceUpdated), resourceName, resources[resourceName]);
-	}
-
-	public void SetResource(string resourceName, int value)
-	{
-		if (!resources.ContainsKey(resourceName))
-			return;
-
-		if (resourceName == "villager")
-			value = Mathf.Min(value, GetVillagerCapacity());
-		else
-			value = Mathf.Min(value, MAX_RESOURCE);
-
-		resources[resourceName] = value;
-		EmitSignal(nameof(ResourceUpdated), resourceName, resources[resourceName]);
-	}
-
-	public int GetResource(string resourceName)
-	{
-		return resources.ContainsKey(resourceName) ? resources[resourceName] : 0;
+		EmitSignal(nameof(ResourceUpdated), name, resources[name]);
 	}
 
 	public bool RemoveResource(string name, int amount)
@@ -101,32 +71,20 @@ public partial class ResourceManager : Node
 		return true;
 	}
 
-	/*-----------------------
-		CASAS Y COMPRA
-	-------------------------*/
+	public int GetResource(string name) =>
+		resources.ContainsKey(name) ? resources[name] : 0;
 
-	public void ComprarCasa(Node contenedor = null)
+	// --- Casas ---
+	public bool PuedoComprarCasa() =>
+		resources["wood"] >= CASA_WOOD_COST &&
+		resources["gold"] >= CASA_GOLD_COST &&
+		resources["stone"] >= CASA_STONE_COST;
+
+	public void PagarCasa()
 	{
-		if (resources["wood"] >= CASA_WOOD_COST && resources["gold"] >= CASA_GOLD_COST && resources["stone"] >= CASA_STONE_COST)
-		{
-			resources["wood"] -= CASA_WOOD_COST;
-			resources["gold"] -= CASA_GOLD_COST;
-			resources["stone"] -= CASA_STONE_COST;
-
-			Node2D nuevaCasa = (Node2D)casaScene.Instantiate();
-			nuevaCasa.Position = new Vector2(200, 200);
-
-			if (contenedor != null)
-				contenedor.AddChild(nuevaCasa);
-			else if (contenedorCasas != null)
-				contenedorCasas.AddChild(nuevaCasa);
-			else
-				AddChild(nuevaCasa);
-		}
-		else
-		{
-			GD.Print("❌ No tienes materiales suficientes para construir una casa.");
-		}
+		RemoveResource("wood", CASA_WOOD_COST);
+		RemoveResource("gold", CASA_GOLD_COST);
+		RemoveResource("stone", CASA_STONE_COST);
 	}
 
 	public void AddHouse()
@@ -137,23 +95,14 @@ public partial class ResourceManager : Node
 
 	public void RemoveHouse()
 	{
-		houseCount = Mathf.Max(0, houseCount - 1);
+		houseCount = Math.Max(0, houseCount - 1);
 		EmitSignal(nameof(VillagerCapacityUpdated));
-
-		int maxVillagers = GetVillagerCapacity();
-		if (resources["villager"] > maxVillagers)
-		{
-			resources["villager"] = maxVillagers;
-			EmitSignal(nameof(ResourceUpdated), "villager", resources["villager"]);
-		}
 	}
 
 	public int GetVillagerCapacity() => houseCount * VILLAGERS_PER_HOUSE;
+	public int GetHouseCount() => houseCount;
 
-	/*-----------------------
-		CRECIMIENTO DE ALDEANOS
-	-------------------------*/
-
+	// --- Aldeanos ---
 	public void ActualizarAldeanos(int n)
 	{
 		CRECIMIENTO_ALDEANOS = n;
@@ -169,14 +118,7 @@ public partial class ResourceManager : Node
 			int maxVillagers = GetVillagerCapacity();
 
 			if (current < maxVillagers)
-			{
 				AddResource("villager", CRECIMIENTO_ALDEANOS);
-				GD.Print($"Aldeanos actualizados. Cantidad actual: {resources["villager"]}");
-			}
-			else
-			{
-				GD.Print("Capacidad máxima de aldeanos alcanzada.");
-			}
 		}
 	}
 

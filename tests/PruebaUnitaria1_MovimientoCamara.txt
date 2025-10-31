@@ -14,3 +14,4 @@ PRUEBAS REALIZADAS:
 		Sin ninguna incidencia.
 	14/10/2025
 		Funciona correctamente, cumpliendo todos los requisitos. Pasa la prueba con éxito.
+	OTROS PUSH: Sin ninguna incidencia.
