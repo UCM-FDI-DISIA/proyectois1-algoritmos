@@ -62,7 +62,7 @@ animations = [{
 "speed": 6.0
 }]
 
-[node name="MinaPiedraAnimado" type="StaticBody2D"]
+[node name="MinaPiedraAnimado" type="StaticBody2D" groups=["objeto_bloqueante"]]
 script = ExtResource("1_sm5a2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

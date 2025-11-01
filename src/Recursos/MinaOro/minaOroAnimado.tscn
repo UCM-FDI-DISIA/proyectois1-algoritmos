@@ -117,7 +117,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="MinaOroAnimado" type="StaticBody2D"]
+[node name="MinaOroAnimado" type="StaticBody2D" groups=["objeto_bloqueante"]]
 z_as_relative = false
 y_sort_enabled = true
 script = ExtResource("1_g5kcs")

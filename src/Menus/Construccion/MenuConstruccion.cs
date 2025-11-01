@@ -139,22 +139,22 @@ public partial class MenuConstruccion : CanvasLayer
 	}
 
 	private void OnAreaPreviewBodyEntered(Node body)
+{
+	if (body.IsInGroup("objeto_bloqueante") || body.IsInGroup("jugador"))
 	{
-		if (body.IsInGroup("jugador"))
-		{
-			puedeConstruir = false;
-			TintPreview(new Color(1, 0, 0, 0.4f)); // rojo = no se puede construir
-		}
+		puedeConstruir = false;
+		TintPreview(new Color(1, 0, 0, 0.4f));
 	}
+}
 
-	private void OnAreaPreviewBodyExited(Node body)
+private void OnAreaPreviewBodyExited(Node body)
+{
+	if (body.IsInGroup("objeto_bloqueante") || body.IsInGroup("jugador"))
 	{
-		if (body.IsInGroup("jugador"))
-		{
-			puedeConstruir = true;
-			TintPreview(new Color(1, 1, 1, 0.5f)); // blanco = sí se puede construir
-		}
+		puedeConstruir = true;
+		TintPreview(new Color(1, 1, 1, 0.5f));
 	}
+}
 
 	private void TintPreview(Color color)
 	{

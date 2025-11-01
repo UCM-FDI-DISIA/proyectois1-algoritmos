@@ -1,6 +1,6 @@
 [gd_scene load_steps=55 format=3 uid="uid://b8rmi03nk487q"]
 
-[ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="1_4flbx"]
+[ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://src/PersonajePrincipal/Player.cs" id="1_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://ij87wpgkey1d" path="res://src/AssetsUsados/Fondos/Captura desde 2025-09-26 12-29-29.png" id="3_hqtel"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_hqtel"]
@@ -387,7 +387,7 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sweqy"]
 size = Vector2(50, 93)
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" groups=["objeto_bloqueante"]]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_as_relative = false

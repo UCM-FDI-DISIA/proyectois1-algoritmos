@@ -28,6 +28,10 @@ version_control/autoload_on_startup=true
 
 enabled=PackedStringArray("res://addons/copilot/plugin.cfg")
 
+[global_group]
+
+objeto_bloqueante="No se puede construir sobre el"
+
 [input]
 
 ui_left={
