@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=79 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
@@ -19,6 +19,9 @@
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="15_e7lu8"]
 [ext_resource type="Texture2D" uid="uid://cn7k1sxw43l8b" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_09.png" id="19_sif16"]
 [ext_resource type="Texture2D" uid="uid://cl3jnlpxsvd7u" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Disable.png" id="19_sta5p"]
+[ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="20_ib8ht"]
+[ext_resource type="Texture2D" uid="uid://bevtjvf2gdrhe" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red_Pressed.png" id="21_43aqp"]
+[ext_resource type="Script" uid="uid://gjfuerdjd8rc" path="res://src/RockBattleArea.cs" id="22_ocmcv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("3_lquwl")
@@ -422,6 +425,9 @@ scenes/2/scene = ExtResource("10_uewes")
 tile_size = Vector2i(64, 64)
 sources/0 = SubResource("TileSetScenesCollectionSource_uewes")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_adv81"]
+size = Vector2(170.77423, 139.53598)
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_lquwl")
 
@@ -537,3 +543,31 @@ texture = ExtResource("14_d3u4l")
 [node name="Menos" type="Sprite2D" parent="Objetos/BotonS"]
 position = Vector2(32, 32)
 texture = ExtResource("19_sif16")
+
+[node name="BotonBatalla" type="Node2D" parent="Objetos"]
+
+[node name="RockBattleArea" type="Area2D" parent="Objetos/BotonBatalla"]
+position = Vector2(2967.0002, 2124)
+scale = Vector2(1.7449942, 1.719987)
+script = ExtResource("22_ocmcv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Objetos/BotonBatalla/RockBattleArea"]
+position = Vector2(42.97998, 27.325806)
+scale = Vector2(0.99999976, 1)
+shape = SubResource("RectangleShape2D_adv81")
+
+[node name="UI" type="CanvasLayer" parent="Objetos/BotonBatalla/RockBattleArea"]
+
+[node name="BattleButton" type="TextureButton" parent="Objetos/BotonBatalla/RockBattleArea/UI"]
+top_level = true
+z_as_relative = false
+y_sort_enabled = true
+offset_left = 2967.0002
+offset_top = 2124.0
+offset_right = 3031.0002
+offset_bottom = 2188.0
+scale = Vector2(1.7449942, 1.719987)
+texture_normal = ExtResource("20_ib8ht")
+texture_pressed = ExtResource("21_43aqp")
+texture_hover = ExtResource("15_e7lu8")
+texture_disabled = ExtResource("14_tb146")
