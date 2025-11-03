@@ -545,8 +545,10 @@ position = Vector2(32, 32)
 texture = ExtResource("19_sif16")
 
 [node name="BotonBatalla" type="Node2D" parent="Objetos"]
+z_index = 100
 
 [node name="RockBattleArea" type="Area2D" parent="Objetos/BotonBatalla"]
+z_index = 100
 position = Vector2(2967.0002, 2124)
 scale = Vector2(1.7449942, 1.719987)
 script = ExtResource("22_ocmcv")
@@ -556,12 +558,14 @@ position = Vector2(42.97998, 27.325806)
 scale = Vector2(0.99999976, 1)
 shape = SubResource("RectangleShape2D_adv81")
 
-[node name="UI" type="CanvasLayer" parent="Objetos/BotonBatalla/RockBattleArea"]
+[node name="UI" type="Node2D" parent="Objetos/BotonBatalla/RockBattleArea"]
+position = Vector2(-1700.2922, -1234.8931)
+scale = Vector2(0.5730678, 0.58139974)
 
 [node name="BattleButton" type="TextureButton" parent="Objetos/BotonBatalla/RockBattleArea/UI"]
 top_level = true
-z_as_relative = false
-y_sort_enabled = true
+z_index = 100
+custom_minimum_size = Vector2(64, 64)
 offset_left = 2967.0002
 offset_top = 2124.0
 offset_right = 3031.0002

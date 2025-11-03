@@ -1,115 +1,85 @@
 using Godot;
 using System;
 
-// Define la clase como parcial para coincidir con la convención de Godot
-public partial class RockBattleArea : Area2D // Cambiado de Node2D a Area2D para reflejar BodyEntered/Exited
+public partial class RockBattleArea : Area2D
 {
-	// La ruta exportada se mantiene, pero se usará la ruta absoluta en _Ready
-	// NOTA: Si el botón no se hace visible, la ruta ABSOLUTA es el problema.
-	[Export] private NodePath battleButtonPath = "/root/Main/Objetos/BotonBatalla/UI/BattleButton"; 
 	private TextureButton battleButton;
 	private CharacterBody2D player;
+
 	private float collectionTime = 0f;
-	private const float REQUIRED_TIME = 60f;
+	private const float REQUIRED_TIME = 20f;
 	private bool playerInArea = false;
-
-	// Constante para la ruta absoluta, facilitando la lectura
-	private const string ABSOLUTE_BUTTON_PATH = "/root/Main/Objetos/BotonBatalla/RockBattleArea/UI/BattleButton";
-
 
 	public override void _Ready()
 	{
-		GD.Print("🔹 RockBattleArea _Ready iniciado");
+		GD.Print("🧠 [RockBattleArea] Script cargado correctamente (modo mundo)");
 
-		// --- 1. REFERENCIA AL JUGADOR ---
-		var players = GetTree().GetNodesInGroup("jugador");
-		if (players.Count > 0)
-		{
-			// Se asume que el jugador es el primer nodo en el grupo
-			player = (CharacterBody2D)players[0];
-			GD.Print("✅ Jugador encontrado vía grupo");
-		}
+		// 1️⃣ Buscar jugador
+		player = GetTree().GetFirstNodeInGroup("jugador") as CharacterBody2D;
+		if (player != null)
+			GD.Print($"✅ Jugador encontrado: {player.Name}");
 		else
-		{
 			GD.PrintErr("❌ No se encontró jugador en el grupo 'jugador'");
-		}
 
-		// --- 2. REFERENCIA AL BOTÓN DE BATALLA ---
-		// NOTA: Se utiliza la ruta absoluta. Si el botón no aparece, VERIFICA esta ruta.
-		battleButton = GetNodeOrNull<TextureButton>(ABSOLUTE_BUTTON_PATH); 
-		
+		// 2️⃣ Buscar el botón en la jerarquía local
+		battleButton = GetNodeOrNull<TextureButton>("UI/BattleButton");
 		if (battleButton == null)
 		{
-			// Muestra la ruta fallida para facilitar la depuración en el editor de Godot
-			GD.PrintErr($"❌ No se encontró el botón TextureButton en la ruta: {ABSOLUTE_BUTTON_PATH}. ¡VERIFICA EL ÁRBOL DE ESCENAS y la ruta!");
+			GD.PrintErr("❌ No se encontró 'UI/BattleButton'");
 		}
 		else
 		{
-			GD.Print("✅ Botón encontrado en la escena");
-			// El botón debe estar oculto hasta que el jugador entre
-			battleButton.Visible = false; 
-			battleButton.Disabled = true;      // Deshabilitado hasta completar timer
-			
-			// Si necesitas conectar un método de batalla, hazlo aquí:
-			// battleButton.Pressed += OnBattleButtonPressed; 
+			battleButton.Visible = false;
+			battleButton.Disabled = true;
+			GD.Print($"✅ Botón inicializado en posición mundial {battleButton.GlobalPosition}");
 		}
 
-		// Conectar señales de Area2D (asegúrate de que el nodo sea de tipo Area2D)
-		// Las señales deben conectarse aquí, en la instancia del script
+		// 3️⃣ Conectar señales del área
 		BodyEntered += OnBodyEntered;
 		BodyExited += OnBodyExited;
 	}
 
 	public override void _Process(double delta)
 	{
-		// Solo procesa y muestra el botón si el jugador está en el área y el botón existe
-		if (playerInArea && battleButton != null)
+		collectionTime += (float)delta;
+
+		if (battleButton == null)
+			return;
+
+		// Mostrar el botón después de 20 segundos
+		if (collectionTime >= REQUIRED_TIME)
 		{
-			// Incrementa tiempo de recolección
-			collectionTime += (float)delta;
-			
-			// Mostrar el botón (si aún no está visible)
 			if (!battleButton.Visible)
 			{
 				battleButton.Visible = true;
-				// Cuando se hace visible por primera vez, puedes querer centrarlo o posicionarlo.
+				GD.Print("👁️ Botón visible tras 20 segundos");
 			}
 
-			// Activar/desactivar según el timer
-			battleButton.Disabled = collectionTime < REQUIRED_TIME;
-
-			if (battleButton.Disabled)
-				GD.Print($"⏳ Botón visible pero deshabilitado");
-			else
-				GD.Print("⚔️ Botón habilitado: listo para batallar");
+			battleButton.Disabled = !playerInArea;
 		}
 	}
 
 	private void OnBodyEntered(Node body)
 	{
-		// Verifica si el cuerpo que entró es el jugador
 		if (body == player)
 		{
 			playerInArea = true;
-			// ELIMINADO: collectionTime = 0f; -- El temporizador ahora no se reinicia al entrar
-			GD.Print("🚶‍♂️ Jugador entró en área de batalla. El tiempo de colección continúa.");
+			if (battleButton != null)
+				battleButton.Disabled = false;
+
+			GD.Print($"⚔️ Jugador '{player.Name}' entró al área -> botón habilitado");
 		}
 	}
 
 	private void OnBodyExited(Node body)
 	{
-		// Verifica si el cuerpo que salió es el jugador
 		if (body == player)
 		{
 			playerInArea = false;
-			// ELIMINADO: collectionTime = 0f; -- El temporizador ahora no se reinicia al salir
-			
 			if (battleButton != null)
-			{
-				battleButton.Visible = false; // Oculta el botón
-				battleButton.Disabled = true; // Deshabilita el botón
-			}
-			GD.Print("🏃 Jugador salió del área de batalla");
+				battleButton.Disabled = true;
+
+			GD.Print($"🏃 Jugador '{player.Name}' salió del área -> botón deshabilitado");
 		}
 	}
 }
