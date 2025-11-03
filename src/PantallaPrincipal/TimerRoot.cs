@@ -4,6 +4,7 @@ using System;
 public partial class TimerRoot : Control
 {
 	private Label timerLabel;
+	private Label warningLabel; 
 	private float remainingTime = 180; // 3 minutos en segundos
 	private int SEGUNDO_TIEMPO = 120;
 
@@ -11,6 +12,7 @@ public partial class TimerRoot : Control
 	{
 		var timer = GetNode<Timer>("CountdownTimer");
 		timerLabel = GetNode<Label>("TimerLabel");
+		warningLabel = GetNode<Label>("WarningLabel");
 		
 		timer.Timeout += OnTimerTimeout;
 		timer.Start();
@@ -45,6 +47,16 @@ public partial class TimerRoot : Control
 		else // 120 segundos o menos
 		{
 			timerLabel.Modulate = Colors.Red;
+		}
+		
+		// Controla la visibilidad de la etiqueta de advertencia
+		if (remainingTime > SEGUNDO_TIEMPO) // Mientras quede más de 2 minutos
+		{
+			warningLabel.Visible = true;
+		}
+		else // Cuando llega a 2 minutos o menos
+		{
+			warningLabel.Visible = false;
 		}
 	}
 }
