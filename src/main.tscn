@@ -563,6 +563,7 @@ position = Vector2(-1700.2922, -1234.8931)
 scale = Vector2(0.5730678, 0.58139974)
 
 [node name="BattleButton" type="TextureButton" parent="Objetos/BotonBatalla/RockBattleArea/UI"]
+visible = false
 top_level = true
 z_index = 100
 custom_minimum_size = Vector2(64, 64)
@@ -574,4 +575,4 @@ scale = Vector2(1.7449942, 1.719987)
 texture_normal = ExtResource("20_ib8ht")
 texture_pressed = ExtResource("21_43aqp")
 texture_hover = ExtResource("15_e7lu8")
-texture_disabled = ExtResource("14_tb146")
+texture_disabled = ExtResource("19_sta5p")

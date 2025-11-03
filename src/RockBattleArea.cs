@@ -7,7 +7,7 @@ public partial class RockBattleArea : Area2D
 	private CharacterBody2D player;
 
 	private float collectionTime = 0f;
-	private const float REQUIRED_TIME = 20f;
+	private const float REQUIRED_TIME = 40f;
 	private bool playerInArea = false;
 
 	public override void _Ready()
@@ -49,13 +49,14 @@ public partial class RockBattleArea : Area2D
 		// Mostrar el botón después de 20 segundos
 		if (collectionTime >= REQUIRED_TIME)
 		{
-			if (!battleButton.Visible)
+			/*if (!battleButton.Visible)
 			{
 				battleButton.Visible = true;
 				GD.Print("👁️ Botón visible tras 20 segundos");
 			}
+			*/
 
-			battleButton.Disabled = !playerInArea;
+			battleButton.Disabled = false;
 		}
 	}
 
@@ -65,7 +66,7 @@ public partial class RockBattleArea : Area2D
 		{
 			playerInArea = true;
 			if (battleButton != null)
-				battleButton.Disabled = false;
+				battleButton.Visible = true;
 
 			GD.Print($"⚔️ Jugador '{player.Name}' entró al área -> botón habilitado");
 		}
@@ -77,7 +78,7 @@ public partial class RockBattleArea : Area2D
 		{
 			playerInArea = false;
 			if (battleButton != null)
-				battleButton.Disabled = true;
+				battleButton.Visible = false;
 
 			GD.Print($"🏃 Jugador '{player.Name}' salió del área -> botón deshabilitado");
 		}
