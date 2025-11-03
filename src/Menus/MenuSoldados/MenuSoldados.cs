@@ -81,7 +81,7 @@ public partial class MenuSoldados : CanvasLayer
 			resourceManager.ResourceUpdated += OnResourceUpdated;
 
 		// --- Botón externo ---
-		botonS = GetNodeOrNull<TextureButton>("../Objetos/BotonS");
+		botonS = GetNodeOrNull<TextureButton>("../ElementosPantalla/BotonS");
 		if (botonS != null)
 			botonS.Pressed += OnBotonSPressed;
 

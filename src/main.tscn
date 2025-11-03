@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=81 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
@@ -22,6 +22,8 @@
 [ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="20_ib8ht"]
 [ext_resource type="Texture2D" uid="uid://bevtjvf2gdrhe" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red_Pressed.png" id="21_43aqp"]
 [ext_resource type="Script" uid="uid://gjfuerdjd8rc" path="res://src/RockBattleArea.cs" id="22_ocmcv"]
+[ext_resource type="Script" uid="uid://ef8aivyrkgea" path="res://src/PantallaPrincipal/TimerRoot.cs" id="23_43aqp"]
+[ext_resource type="Texture2D" uid="uid://knoivg0aqqle" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="24_ocmcv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("3_lquwl")
@@ -526,44 +528,27 @@ tile_set = SubResource("TileSet_kqbth")
 z_as_relative = false
 y_sort_enabled = true
 
-[node name="BotonS" type="TextureButton" parent="Objetos"]
-offset_left = 192.0
-offset_top = 983.0
-offset_right = 256.0
-offset_bottom = 1047.0
-texture_normal = ExtResource("4_mlv6i")
-texture_pressed = ExtResource("14_tb146")
-texture_hover = ExtResource("15_e7lu8")
-texture_disabled = ExtResource("19_sta5p")
+[node name="ElementosPantalla" type="Node2D" parent="."]
 
-[node name="Mas" type="Sprite2D" parent="Objetos/BotonS"]
-position = Vector2(32, 32)
-texture = ExtResource("14_d3u4l")
-
-[node name="Menos" type="Sprite2D" parent="Objetos/BotonS"]
-position = Vector2(32, 32)
-texture = ExtResource("19_sif16")
-
-[node name="BotonBatalla" type="Node2D" parent="Objetos"]
+[node name="BotonBatalla" type="Node2D" parent="ElementosPantalla"]
 z_index = 100
 
-[node name="RockBattleArea" type="Area2D" parent="Objetos/BotonBatalla"]
+[node name="RockBattleArea" type="Area2D" parent="ElementosPantalla/BotonBatalla"]
 z_index = 100
 position = Vector2(2967.0002, 2124)
 scale = Vector2(1.7449942, 1.719987)
 script = ExtResource("22_ocmcv")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Objetos/BotonBatalla/RockBattleArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea"]
 position = Vector2(42.97998, 27.325806)
 scale = Vector2(0.99999976, 1)
 shape = SubResource("RectangleShape2D_adv81")
 
-[node name="UI" type="Node2D" parent="Objetos/BotonBatalla/RockBattleArea"]
+[node name="UI" type="Node2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea"]
 position = Vector2(-1700.2922, -1234.8931)
 scale = Vector2(0.5730678, 0.58139974)
 
-[node name="BattleButton" type="TextureButton" parent="Objetos/BotonBatalla/RockBattleArea/UI"]
-visible = false
+[node name="BattleButton" type="TextureButton" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI"]
 top_level = true
 z_index = 100
 custom_minimum_size = Vector2(64, 64)
@@ -576,3 +561,49 @@ texture_normal = ExtResource("20_ib8ht")
 texture_pressed = ExtResource("21_43aqp")
 texture_hover = ExtResource("15_e7lu8")
 texture_disabled = ExtResource("19_sta5p")
+
+[node name="BotonS" type="TextureButton" parent="ElementosPantalla"]
+offset_left = 192.0
+offset_top = 983.0
+offset_right = 256.0
+offset_bottom = 1047.0
+texture_normal = ExtResource("4_mlv6i")
+texture_pressed = ExtResource("14_tb146")
+texture_hover = ExtResource("15_e7lu8")
+texture_disabled = ExtResource("19_sta5p")
+
+[node name="Mas" type="Sprite2D" parent="ElementosPantalla/BotonS"]
+position = Vector2(32, 32)
+texture = ExtResource("14_d3u4l")
+
+[node name="Menos" type="Sprite2D" parent="ElementosPantalla/BotonS"]
+position = Vector2(32, 32)
+texture = ExtResource("19_sif16")
+
+[node name="Timer" type="CanvasLayer" parent="ElementosPantalla"]
+
+[node name="TimerRoot" type="Control" parent="ElementosPantalla/Timer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("23_43aqp")
+
+[node name="RibbonBlue3Slides" type="Sprite2D" parent="ElementosPantalla/Timer/TimerRoot"]
+position = Vector2(1037, 60)
+texture = ExtResource("24_ocmcv")
+metadata/_edit_group_ = true
+
+[node name="TimerLabel" type="Label" parent="ElementosPantalla/Timer/TimerRoot"]
+layout_mode = 0
+offset_left = 982.0
+offset_top = 26.0
+offset_right = 1092.0
+offset_bottom = 79.0
+theme_override_font_sizes/font_size = 29
+text = "03:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_group_ = true
+
+[node name="CountdownTimer" type="Timer" parent="ElementosPantalla/Timer/TimerRoot"]
