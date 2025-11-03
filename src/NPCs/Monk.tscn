@@ -171,7 +171,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Heal_Monk",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -209,7 +209,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Heal_effect",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -232,7 +232,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Idle",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -249,7 +249,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"Run",
-"speed": 5.0
+"speed": 10.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_uve6q"]
@@ -259,9 +259,8 @@ radius = 23.021729
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_8d0wv")
-animation = &"Run"
-frame = 2
-frame_progress = 0.021186505
+animation = &"Idle"
+autoplay = "Idle"
 offset = Vector2(0, -22)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
