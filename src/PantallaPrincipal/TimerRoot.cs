@@ -5,8 +5,19 @@ public partial class TimerRoot : Control
 {
 	private Label timerLabel;
 	private Label warningLabel; 
-	private float remainingTime = 180; // 3 minutos en segundos
-	private int SEGUNDO_TIEMPO = 120;
+	private float remainingTime = 60; // 3 minutos en segundos
+	
+	private int SEGUNDO_TIEMPO = 30;
+	private int ULTIMOS_SEGUNDOS = 20;
+	private const String WARNING_1 = "No puedes atacar.";
+	private const String WARNING_2 = "¡Llega la última batalla!";
+	 
+	
+	// La declaración de la señal está perfecta.
+	[Signal]
+	public delegate void TiempoEspecificoAlcanzadoEventHandler();
+	
+	private bool senalYaEnviada = false; // El flag para emitir solo una vez.
 
 	public override void _Ready()
 	{
@@ -14,6 +25,7 @@ public partial class TimerRoot : Control
 		timerLabel = GetNode<Label>("TimerLabel");
 		warningLabel = GetNode<Label>("WarningLabel");
 		
+		// Conectamos la señal del Timer y lo iniciamos
 		timer.Timeout += OnTimerTimeout;
 		timer.Start();
 		UpdateLabel();
@@ -21,8 +33,14 @@ public partial class TimerRoot : Control
 
 	private void OnTimerTimeout()
 	{
-		remainingTime -= 1; // Decrementa el tiempo
-		
+		if (remainingTime <= 0)
+		{
+			// Si el tiempo ya es cero, no hacemos nada más.
+			return;
+		}
+
+		remainingTime -= 1; // Decrementa el tiempo en 1 segundo
+
 		if (remainingTime < 0)
 		{
 			remainingTime = 0;
@@ -30,6 +48,15 @@ public partial class TimerRoot : Control
 		}
 		
 		UpdateLabel();
+		
+		// --- AQUÍ VA LA LÓGICA CORRECTA ---
+		// Comprobamos la condición CADA SEGUNDO.
+		if (!senalYaEnviada && remainingTime <= SEGUNDO_TIEMPO)
+		{
+			GD.Print($"TimerRoot: El tiempo ha llegado a {SEGUNDO_TIEMPO}. ¡Emitiendo señal!");
+			EmitSignal(SignalName.TiempoEspecificoAlcanzado);
+			senalYaEnviada = true; // Marcamos que la señal ya se ha enviado para no repetirla.
+		}
 	}
 
 	private void UpdateLabel()
@@ -40,23 +67,18 @@ public partial class TimerRoot : Control
 		timerLabel.Text = $"{minutes:00}:{seconds:00}";
 		
 		// Cambia color basado en el tiempo
-		if (remainingTime > SEGUNDO_TIEMPO) // Arriba de 2 minutos
+		if (remainingTime > SEGUNDO_TIEMPO)
+			timerLabel.Modulate = Colors.White;
+		else if (remainingTime < ULTIMOS_SEGUNDOS)
 		{
-			timerLabel.Modulate = Colors.Green;
-		}
-		else // 120 segundos o menos
-		{
+			warningLabel.Modulate = Colors.Red;
 			timerLabel.Modulate = Colors.Red;
 		}
+		else
+			timerLabel.Modulate = Colors.Green;
 		
 		// Controla la visibilidad de la etiqueta de advertencia
-		if (remainingTime > SEGUNDO_TIEMPO) // Mientras quede más de 2 minutos
-		{
-			warningLabel.Visible = true;
-		}
-		else // Cuando llega a 2 minutos o menos
-		{
-			warningLabel.Visible = false;
-		}
+		warningLabel.Visible = remainingTime > SEGUNDO_TIEMPO || remainingTime < ULTIMOS_SEGUNDOS;
+		warningLabel.Text = remainingTime < ULTIMOS_SEGUNDOS ? WARNING_2 : WARNING_1;
 	}
 }

@@ -13,8 +13,6 @@ public partial class RockBattleArea : Area2D
 	// ----------------------------
 	// CONFIGURACIÓN
 	// ----------------------------
-	private float collectionTime = 0f;
-	private const float REQUIRED_TIME = 40f;
 	private bool playerInArea = false;
 
 	// ----------------------------
@@ -23,7 +21,7 @@ public partial class RockBattleArea : Area2D
 	public override void _Ready()
 	{
 		GD.Print("🧠 [RockBattleArea] Script cargado correctamente (modo mundo)");
-
+		
 		// Buscar jugador
 		player = GetTree().GetFirstNodeInGroup("jugador") as CharacterBody2D;
 		if (player != null)
@@ -37,7 +35,6 @@ public partial class RockBattleArea : Area2D
 
 		if (battleIcon != null)
 		{
-			battleIcon.ZIndex = 10;
 			battleIcon.Visible = false;
 		}
 		else
@@ -73,24 +70,33 @@ public partial class RockBattleArea : Area2D
 		// Conectar señales del área
 		BodyEntered += OnBodyEntered;
 		BodyExited += OnBodyExited;
+		
+		
+		
+		// 1. Obtener una referencia al nodo TimerRoot usando la ruta que proporcionaste
+		var timerNode = GetNode<TimerRoot>("../../Timer/Panel/TimerRoot");
+		// Es una buena práctica comprobar si el nodo se encontró
+		if (timerNode == null)
+		{
+			GD.PrintErr("Error: No se pudo encontrar el nodo TimerRoot en la ruta especificada.");
+			return;
+		}
+
+		// 2. Conectar la señal al método que la manejará
+		// La sintaxis es: emisor.NombreDeLaSeñal += NombreDelMetodoReceptor;
+		timerNode.TiempoEspecificoAlcanzado += OnTiempoEspecificoAlcanzado;
+		
 	}
 
 	// ----------------------------
 	// PROCESO PRINCIPAL
 	// ----------------------------
-	public override void _Process(double delta)
+	
+	public void OnTiempoEspecificoAlcanzado()
 	{
-		collectionTime += (float)delta;
-
-		if (battleButton == null)
-			return;
-
-		// Habilitar el botón después de cierto tiempo
-		if (collectionTime >= REQUIRED_TIME)
-		{
-			battleButton.Disabled = false;
-			battleButton.TooltipText = "";
-		}
+		GD.Print("SEÑAL RECIVIDA");
+		battleButton.Disabled = false;
+		battleIcon.Visible = true;
 	}
 
 	// ----------------------------
@@ -128,7 +134,7 @@ public partial class RockBattleArea : Area2D
 			GD.Print($"🏃 Jugador '{player.Name}' salió del área -> botón deshabilitado");
 		}
 	}
-
+	
 	// ----------------------------
 	// EVENTOS DE INTERFAZ (HOVER)
 	// ----------------------------

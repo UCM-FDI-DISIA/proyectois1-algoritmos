@@ -3,11 +3,7 @@ using System;
 
 public partial class GameState : Node
 {
-	private double collectedSeconds = 0;
-	private Timer collectionTimer;
-
-	[Signal] public delegate void CollectedTimeChangedEventHandler(double seconds);
-
+	/*
 	public override void _Ready()
 	{
 		collectionTimer = new Timer();
@@ -35,4 +31,5 @@ public partial class GameState : Node
 		collectedSeconds = 0;
 		EmitSignal(nameof(CollectedTimeChanged), collectedSeconds);
 	}
+	*/
 }

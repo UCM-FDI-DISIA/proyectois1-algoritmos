@@ -429,7 +429,7 @@ tile_size = Vector2i(64, 64)
 sources/0 = SubResource("TileSetScenesCollectionSource_uewes")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_adv81"]
-size = Vector2(170.77423, 139.53598)
+size = Vector2(238.39615, 201.16399)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lovvn"]
 
@@ -437,6 +437,8 @@ size = Vector2(170.77423, 139.53598)
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="Main" type="Node2D"]
+z_as_relative = false
+y_sort_enabled = true
 script = ExtResource("1_lquwl")
 
 [node name="ResourcesHUD" parent="." instance=ExtResource("2_5mrjc")]
@@ -535,23 +537,30 @@ z_as_relative = false
 y_sort_enabled = true
 
 [node name="ElementosPantalla" type="Node2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 
 [node name="BotonBatalla" type="Node2D" parent="ElementosPantalla"]
 z_index = 100
+z_as_relative = false
+y_sort_enabled = true
 
 [node name="RockBattleArea" type="Area2D" parent="ElementosPantalla/BotonBatalla"]
 z_index = 100
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(3024, 2166)
 scale = Vector2(1.7449942, 1.719987)
 script = ExtResource("22_ocmcv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea"]
-visible = false
-position = Vector2(42.97998, 27.325806)
+position = Vector2(9.168945, -3.4887695)
 scale = Vector2(0.99999976, 1)
 shape = SubResource("RectangleShape2D_adv81")
 
 [node name="UI" type="Node2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea"]
+z_as_relative = false
+y_sort_enabled = true
 position = Vector2(-1700.2922, -1234.8931)
 scale = Vector2(0.5730678, 0.58139974)
 
@@ -565,7 +574,7 @@ offset_top = 2142.0
 offset_right = 3056.0
 offset_bottom = 2206.0
 scale = Vector2(1.7449942, 1.719987)
-pivot_offset = Vector2(30.815063, 24.899414)
+pivot_offset = Vector2(30.06482, 14.47644)
 texture_normal = ExtResource("20_ib8ht")
 texture_pressed = ExtResource("21_43aqp")
 texture_hover = ExtResource("15_e7lu8")
@@ -574,20 +583,22 @@ texture_disabled = ExtResource("19_sta5p")
 [node name="StaticBody2D" type="StaticBody2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI/BattleButton"]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(-1700.2921, -1234.8931)
-scale = Vector2(0.5730677, 0.58139974)
+position = Vector2(-1700.2919, -1234.893)
+scale = Vector2(0.57306767, 0.58139974)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI/BattleButton/StaticBody2D"]
-z_index = 100
 z_as_relative = false
 y_sort_enabled = true
 shape = SubResource("RectangleShape2D_lovvn")
+debug_color = Color(0.63070875, 0.5267407, 0.1583556, 0.41960785)
 
 [node name="BattleIcon" type="Sprite2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI/BattleButton"]
-position = Vector2(32.067135, 23.794987)
-scale = Vector2(0.06692169, 0.07214986)
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(31.784058, 34.82556)
+scale = Vector2(0.06692168, 0.07214986)
 texture = ExtResource("19_adv81")
-offset = Vector2(25.689453, 56.408203)
+offset = Vector2(29.919922, -96.47461)
 
 [node name="BotonS" type="TextureButton" parent="ElementosPantalla"]
 offset_left = 192.0
@@ -649,10 +660,10 @@ metadata/_edit_group_ = true
 
 [node name="WarningLabel" type="Label" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
 layout_mode = 0
-offset_left = 960.0
-offset_top = 99.0
-offset_right = 1115.0
-offset_bottom = 124.0
+offset_left = 937.94745
+offset_top = 97.57726
+offset_right = 1142.7098
+offset_bottom = 122.57726
 text = "No puedes atacar"
 horizontal_alignment = 1
 metadata/_edit_group_ = true
