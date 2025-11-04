@@ -3,26 +3,35 @@ using System;
 
 public partial class RockBattleArea : Area2D
 {
+	// ----------------------------
+	// VARIABLES Y NODOS
+	// ----------------------------
 	private TextureButton battleButton;
 	private Sprite2D battleIcon; 
 	private CharacterBody2D player;
 
+	// ----------------------------
+	// CONFIGURACIÓN
+	// ----------------------------
 	private float collectionTime = 0f;
 	private const float REQUIRED_TIME = 40f;
 	private bool playerInArea = false;
 
+	// ----------------------------
+	// INICIALIZACIÓN
+	// ----------------------------
 	public override void _Ready()
 	{
 		GD.Print("🧠 [RockBattleArea] Script cargado correctamente (modo mundo)");
 
-		// 1️⃣ Buscar jugador
+		// Buscar jugador
 		player = GetTree().GetFirstNodeInGroup("jugador") as CharacterBody2D;
 		if (player != null)
 			GD.Print($"✅ Jugador encontrado: {player.Name}");
 		else
 			GD.PrintErr("❌ No se encontró jugador en el grupo 'jugador'");
 
-		// 2️⃣ Buscar el botón y el ícono
+		// Buscar el botón e ícono del menú de batalla
 		battleButton = GetNodeOrNull<TextureButton>("UI/BattleButton");
 		battleIcon = GetNodeOrNull<Sprite2D>("UI/BattleButton/BattleIcon");
 
@@ -32,9 +41,7 @@ public partial class RockBattleArea : Area2D
 			battleIcon.Visible = false;
 		}
 		else
-		{
 			GD.PrintErr("❌ No se encontró BattleIcon");
-		}
 
 		if (battleButton == null)
 		{
@@ -45,16 +52,16 @@ public partial class RockBattleArea : Area2D
 			battleButton.Visible = false;
 			battleButton.Disabled = true;
 			battleIcon.Visible = false;
-			battleButton.TooltipText = "Aún no puedes atacar"; // 👈 Tooltip inicial
+			battleButton.TooltipText = "Aún no puedes atacar";
 
-			// Conectar señales del botón para hover
+			// Conectar eventos de hover del ratón
 			battleButton.MouseEntered += OnButtonHover;
 			battleButton.MouseExited += OnButtonExit;
 
 			GD.Print($"✅ Botón inicializado en posición mundial {battleButton.GlobalPosition}");
 		}
 
-		// 3️⃣ Configurar colisión
+		// Configurar colisión para el botón
 		var collision = GetNode<CollisionShape2D>("UI/BattleButton/StaticBody2D/CollisionShape2D");
 		Vector2 textureSize = battleButton.TextureNormal.GetSize();
 
@@ -63,11 +70,14 @@ public partial class RockBattleArea : Area2D
 		collision.Shape = shape;
 		collision.Position = battleButton.Position + textureSize / 2;
 
-		// 4️⃣ Conectar señales del área
+		// Conectar señales del área
 		BodyEntered += OnBodyEntered;
 		BodyExited += OnBodyExited;
 	}
 
+	// ----------------------------
+	// PROCESO PRINCIPAL
+	// ----------------------------
 	public override void _Process(double delta)
 	{
 		collectionTime += (float)delta;
@@ -75,14 +85,17 @@ public partial class RockBattleArea : Area2D
 		if (battleButton == null)
 			return;
 
-		// Mostrar el botón después de 40 segundos
+		// Habilitar el botón después de cierto tiempo
 		if (collectionTime >= REQUIRED_TIME)
 		{
 			battleButton.Disabled = false;
-			battleButton.TooltipText = ""; // 👈 Borrar tooltip una vez que ya puede atacar
+			battleButton.TooltipText = "";
 		}
 	}
 
+	// ----------------------------
+	// EVENTOS DE COLISIÓN
+	// ----------------------------
 	private void OnBodyEntered(Node body)
 	{
 		if (body == player)
@@ -105,6 +118,7 @@ public partial class RockBattleArea : Area2D
 		if (body == player)
 		{
 			playerInArea = false;
+
 			if (battleButton != null)
 			{
 				battleButton.Visible = false;
@@ -115,7 +129,9 @@ public partial class RockBattleArea : Area2D
 		}
 	}
 
-	// 🧠 Señales para hover del mouse
+	// ----------------------------
+	// EVENTOS DE INTERFAZ (HOVER)
+	// ----------------------------
 	private void OnButtonHover()
 	{
 		if (battleButton.Disabled)

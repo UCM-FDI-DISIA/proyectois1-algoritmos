@@ -3,9 +3,15 @@ using System;
 
 public partial class Main : Node2D
 {
+	// =====================
+	// VARIABLES Y NODOS
+	// =====================
 	private TileMapLayer capaSuelo;
 	private Node2D capaObjetos;
 
+	// =====================
+	// INICIALIZACIÓN
+	// =====================
 	public override void _Ready()
 	{
 		// Obtener referencias a los nodos

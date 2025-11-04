@@ -3,6 +3,9 @@ using System;
 
 public partial class MenuConstruccion : CanvasLayer
 {
+	// =====================
+	// VARIABLES Y NODOS
+	// =====================
 	private TextureButton btnMenu;
 	private PanelContainer panelBarra;
 	private HBoxContainer hboxBotones;
@@ -12,13 +15,16 @@ public partial class MenuConstruccion : CanvasLayer
 	private bool enConstruccion = false;
 	private Node2D casaPreview;
 
-	private Area2D areaPreview; // 🔹 para detectar colisiones del preview
-	private bool puedeConstruir = true; // 🔹 evita construir sobre el jugador
+	private Area2D areaPreview;
+	private bool puedeConstruir = true;
 
 	private ResourceManager resourceManager;
 
 	private const int GRID_SIZE = 64;
 
+	// =====================
+	// INICIALIZACIÓN
+	// =====================
 	public override void _Ready()
 	{
 		resourceManager = GetTree().Root.GetNode<ResourceManager>("Main/ResourceManager");
@@ -48,6 +54,9 @@ public partial class MenuConstruccion : CanvasLayer
 		btnCasa.Pressed += OnCasaPressed;
 	}
 
+	// =====================
+	// HANDLERS DE EVENTOS
+	// =====================
 	private void OnMenuPressed()
 	{
 		panelBarra.Visible = !panelBarra.Visible;
@@ -59,114 +68,73 @@ public partial class MenuConstruccion : CanvasLayer
 			? Control.MouseFilterEnum.Stop
 			: Control.MouseFilterEnum.Ignore;
 
-		GD.Print($"🖱️ Panel de construcción {(panelBarra.Visible ? "visible" : "oculto")}");
+		GD.Print($"Panel de construcción {(panelBarra.Visible ? "visible" : "oculto")}");
 	}
 
 	private void OnCasaPressed()
-{
-	marcadorCasa.Visible = !marcadorCasa.Visible;
-
-	if (enConstruccion)
 	{
-		GD.Print("Ya estás en modo construcción");
-		return;
-	}
+		marcadorCasa.Visible = !marcadorCasa.Visible;
 
-	if (resourceManager == null || resourceManager.casaScene == null || resourceManager.contenedorCasas == null)
-	{
-		GD.PrintErr("Faltan asignaciones en ResourceManager (casaScene o contenedorCasas)");
-		return;
-	}
-
-	enConstruccion = true;
-	casaPreview = (Node2D)resourceManager.casaScene.Instantiate();
-
-	// ⚙️ Marcar como preview
-	if (casaPreview is CasaAnimada casaAnim)
-	{
-		casaAnim.EsPreview = true;
-
-		// 🚫 Desactivar el CollisionShape2D del preview para evitar vibraciones
-		var collisionShape = casaAnim.GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
-		if (collisionShape != null)
-			collisionShape.Disabled = true;
-
-		// Opcional: si el padre tiene CollisionObject2D (StaticBody2D o Area2D)
-		var collisionParent = casaAnim.GetNodeOrNull<CollisionObject2D>("CollisionObject2D");
-		if (collisionParent != null)
+		if (enConstruccion)
 		{
-			collisionParent.CollisionLayer = 0;
-			collisionParent.CollisionMask = 0;
-		}
-	}
-
-	// 🔹 Hacer semi-transparente visualmente
-	TintPreview(new Color(1, 1, 1, 0.5f));
-
-	resourceManager.contenedorCasas.AddChild(casaPreview);
-	GD.Print("🏠 Preview de casa instanciado y agregado al contenedor");
-
-	// 🔹 Crear el Area2D para detectar si está sobre el jugador (sin vibración)
-	CrearAreaPreview();
-}
-
-
-	private void CrearAreaPreview()
-	{
-		if (casaPreview == null) return;
-
-		areaPreview = new Area2D();
-		casaPreview.AddChild(areaPreview);
-
-		// Copiar el CollisionShape2D del prefab
-		var shapeOriginal = casaPreview.GetNode<CollisionShape2D>("CollisionShape2D");
-		if (shapeOriginal != null && shapeOriginal.Shape != null)
-		{
-			var nuevaForma = shapeOriginal.Shape.Duplicate() as Shape2D;
-			var shapeClone = new CollisionShape2D { Shape = nuevaForma };
-			areaPreview.AddChild(shapeClone);
+			GD.Print("Ya estás en modo construcción");
+			return;
 		}
 
-		areaPreview.Monitoring = true;
-		areaPreview.Monitorable = true;
+		if (resourceManager == null || resourceManager.casaScene == null || resourceManager.contenedorCasas == null)
+		{
+			GD.PrintErr("Faltan asignaciones en ResourceManager (casaScene o contenedorCasas)");
+			return;
+		}
 
-		// Capa y máscara (ajusta si usas otras capas)
-		areaPreview.CollisionLayer = 0;
-		areaPreview.CollisionMask = 1; // Asume que el jugador está en capa 1
+		enConstruccion = true;
+		casaPreview = (Node2D)resourceManager.casaScene.Instantiate();
 
-		areaPreview.BodyEntered += OnAreaPreviewBodyEntered;
-		areaPreview.BodyExited += OnAreaPreviewBodyExited;
+		if (casaPreview is CasaAnimada casaAnim)
+		{
+			casaAnim.EsPreview = true;
+
+			var collisionShape = casaAnim.GetNodeOrNull<CollisionShape2D>("CollisionShape2D");
+			if (collisionShape != null)
+				collisionShape.Disabled = true;
+
+			var collisionParent = casaAnim.GetNodeOrNull<CollisionObject2D>("CollisionObject2D");
+			if (collisionParent != null)
+			{
+				collisionParent.CollisionLayer = 0;
+				collisionParent.CollisionMask = 0;
+			}
+		}
+
+		TintPreview(new Color(1, 1, 1, 0.5f));
+
+		resourceManager.contenedorCasas.AddChild(casaPreview);
+		GD.Print("Preview de casa instanciado y agregado al contenedor");
+
+		CrearAreaPreview();
 	}
 
 	private void OnAreaPreviewBodyEntered(Node body)
-{
-	if (body.IsInGroup("objeto_bloqueante") || body.IsInGroup("jugador"))
 	{
-		puedeConstruir = false;
-		TintPreview(new Color(1, 0, 0, 0.4f));
-	}
-}
-
-private void OnAreaPreviewBodyExited(Node body)
-{
-	if (body.IsInGroup("objeto_bloqueante") || body.IsInGroup("jugador"))
-	{
-		puedeConstruir = true;
-		TintPreview(new Color(1, 1, 1, 0.5f));
-	}
-}
-
-	private void TintPreview(Color color)
-	{
-		if (casaPreview == null) return;
-
-		foreach (Node child in casaPreview.GetChildren())
+		if (body.IsInGroup("objeto_bloqueante") || body.IsInGroup("jugador"))
 		{
-			if (child is CanvasItem visual)
-				visual.Modulate = color;
+			puedeConstruir = false;
+			TintPreview(new Color(1, 0, 0, 0.4f));
 		}
 	}
 
+	private void OnAreaPreviewBodyExited(Node body)
+	{
+		if (body.IsInGroup("objeto_bloqueante") || body.IsInGroup("jugador"))
+		{
+			puedeConstruir = true;
+			TintPreview(new Color(1, 1, 1, 0.5f));
+		}
+	}
+
+	// =====================
+	// BUCLE PRINCIPAL
+	// =====================
 	public override void _Process(double delta)
 	{
 		if (!enConstruccion || casaPreview == null)
@@ -179,19 +147,17 @@ private void OnAreaPreviewBodyExited(Node body)
 		float y = Mathf.Floor(mousePos.Y / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2;
 		casaPreview.Position = new Vector2(x, y);
 
-		// Cancelar con clic derecho o ESC
 		if (Input.IsMouseButtonPressed(MouseButton.Right) || Input.IsKeyPressed(Key.Escape))
 		{
 			CancelarConstruccion();
 			return;
 		}
 
-		// Confirmar con clic izquierdo
 		if (Input.IsMouseButtonPressed(MouseButton.Left))
 		{
 			if (!puedeConstruir)
 			{
-				GD.Print("🚫 No puedes construir encima del personaje");
+				GD.Print("No puedes construir encima del personaje");
 				return;
 			}
 
@@ -217,6 +183,44 @@ private void OnAreaPreviewBodyExited(Node body)
 				GD.Print("No tienes materiales suficientes para construir");
 				CancelarConstruccion();
 			}
+		}
+	}
+
+	// =====================
+	// MÉTODOS AUXILIARES
+	// =====================
+	private void CrearAreaPreview()
+	{
+		if (casaPreview == null) return;
+
+		areaPreview = new Area2D();
+		casaPreview.AddChild(areaPreview);
+
+		var shapeOriginal = casaPreview.GetNode<CollisionShape2D>("CollisionShape2D");
+		if (shapeOriginal != null && shapeOriginal.Shape != null)
+		{
+			var nuevaForma = shapeOriginal.Shape.Duplicate() as Shape2D;
+			var shapeClone = new CollisionShape2D { Shape = nuevaForma };
+			areaPreview.AddChild(shapeClone);
+		}
+
+		areaPreview.Monitoring = true;
+		areaPreview.Monitorable = true;
+		areaPreview.CollisionLayer = 0;
+		areaPreview.CollisionMask = 1;
+
+		areaPreview.BodyEntered += OnAreaPreviewBodyEntered;
+		areaPreview.BodyExited += OnAreaPreviewBodyExited;
+	}
+
+	private void TintPreview(Color color)
+	{
+		if (casaPreview == null) return;
+
+		foreach (Node child in casaPreview.GetChildren())
+		{
+			if (child is CanvasItem visual)
+				visual.Modulate = color;
 		}
 	}
 

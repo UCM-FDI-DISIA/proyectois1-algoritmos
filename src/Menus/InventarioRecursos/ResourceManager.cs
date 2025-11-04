@@ -3,9 +3,15 @@ using System;
 
 public partial class ResourceManager : Node
 {
+	// ----------------------------
+	// SEÑALES
+	// ----------------------------
 	[Signal] public delegate void ResourceUpdatedEventHandler(string resourceName, int newValue);
 	[Signal] public delegate void VillagerCapacityUpdatedEventHandler();
 
+	// ----------------------------
+	// VARIABLES DE CASAS Y ALDEANOS
+	// ----------------------------
 	private int houseCount = 0;
 	private const int VILLAGERS_PER_HOUSE = 50;
 
@@ -13,15 +19,21 @@ public partial class ResourceManager : Node
 	private const float TIEMPO_CRECIMIENTO = 10f;
 	private Timer actualizarTimer;
 
+	// ----------------------------
+	// RECURSOS Y LÍMITES
+	// ----------------------------
 	private const int MAX_RESOURCE = 99;
 
+	// Costes de construcción de casa
 	private const int CASA_WOOD_COST = 20;
 	private const int CASA_GOLD_COST = 10;
 	private const int CASA_STONE_COST = 5;
 
+	// Referencias externas
 	[Export] public Node2D contenedorCasas;
 	[Export] public PackedScene casaScene;
 
+	// Diccionario de recursos
 	private Godot.Collections.Dictionary<string, int> resources = new()
 	{
 		{ "wood", 0 },
@@ -30,6 +42,9 @@ public partial class ResourceManager : Node
 		{ "villager", 0 }
 	};
 
+	// ----------------------------
+	// GETTERS DE COSTES DE CASA
+	// ----------------------------
 	public int GetCasaWoodCost() => CASA_WOOD_COST;
 	public int GetCasaGoldCost() => CASA_GOLD_COST;
 	public int GetCasaStoneCost() => CASA_STONE_COST;
@@ -48,7 +63,9 @@ public partial class ResourceManager : Node
 		AddChild(actualizarTimer);
 	}
 
-	// --- Recursos ---
+	// ----------------------------
+	// GESTIÓN DE RECURSOS
+	// ----------------------------
 	public void AddResource(string name, int amount = 1)
 	{
 		if (!resources.ContainsKey(name)) return;
@@ -74,7 +91,9 @@ public partial class ResourceManager : Node
 	public int GetResource(string name) =>
 		resources.ContainsKey(name) ? resources[name] : 0;
 
-	// --- Casas ---
+	// ----------------------------
+	// GESTIÓN DE CASAS
+	// ----------------------------
 	public bool PuedoComprarCasa() =>
 		resources["wood"] >= CASA_WOOD_COST &&
 		resources["gold"] >= CASA_GOLD_COST &&
@@ -102,7 +121,9 @@ public partial class ResourceManager : Node
 	public int GetVillagerCapacity() => houseCount * VILLAGERS_PER_HOUSE;
 	public int GetHouseCount() => houseCount;
 
-	// --- Aldeanos ---
+	// ----------------------------
+	// CRECIMIENTO DE ALDEANOS
+	// ----------------------------
 	public void ActualizarAldeanos(int n)
 	{
 		CRECIMIENTO_ALDEANOS = n;
@@ -122,6 +143,7 @@ public partial class ResourceManager : Node
 		}
 	}
 
+	// Bucle que activa o desactiva el temporizador de crecimiento
 	public void BucleAldeanos()
 	{
 		if (CRECIMIENTO_ALDEANOS > 0)
