@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=82 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="14_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="14_tb146"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="15_e7lu8"]
+[ext_resource type="Texture2D" uid="uid://b5evxdoxt2gog" path="res://Icono_BotonBatalla.png" id="19_adv81"]
 [ext_resource type="Texture2D" uid="uid://cn7k1sxw43l8b" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_09.png" id="19_sif16"]
 [ext_resource type="Texture2D" uid="uid://cl3jnlpxsvd7u" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Disable.png" id="19_sta5p"]
 [ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="20_ib8ht"]
@@ -561,6 +562,11 @@ texture_normal = ExtResource("20_ib8ht")
 texture_pressed = ExtResource("21_43aqp")
 texture_hover = ExtResource("15_e7lu8")
 texture_disabled = ExtResource("19_sta5p")
+
+[node name="BattleIcon" type="Sprite2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI/BattleButton"]
+position = Vector2(34.956993, 28.488539)
+scale = Vector2(0.07048752, 0.07434093)
+texture = ExtResource("19_adv81")
 
 [node name="BotonS" type="TextureButton" parent="ElementosPantalla"]
 offset_left = 192.0

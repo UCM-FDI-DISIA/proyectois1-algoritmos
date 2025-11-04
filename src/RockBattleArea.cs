@@ -4,6 +4,7 @@ using System;
 public partial class RockBattleArea : Area2D
 {
 	private TextureButton battleButton;
+	private Sprite2D battleIcon; 
 	private CharacterBody2D player;
 
 	private float collectionTime = 0f;
@@ -23,6 +24,7 @@ public partial class RockBattleArea : Area2D
 
 		// 2️⃣ Buscar el botón en la jerarquía local
 		battleButton = GetNodeOrNull<TextureButton>("UI/BattleButton");
+		battleIcon = GetNodeOrNull<Sprite2D>("UI/BattleButton/BattleIcon");
 		if (battleButton == null)
 		{
 			GD.PrintErr("❌ No se encontró 'UI/BattleButton'");
@@ -31,6 +33,7 @@ public partial class RockBattleArea : Area2D
 		{
 			battleButton.Visible = false;
 			battleButton.Disabled = true;
+			battleIcon.Visible = false; 
 			GD.Print($"✅ Botón inicializado en posición mundial {battleButton.GlobalPosition}");
 		}
 
@@ -67,6 +70,9 @@ public partial class RockBattleArea : Area2D
 			playerInArea = true;
 			if (battleButton != null)
 				battleButton.Visible = true;
+				if(battleButton.Disabled == false){
+					battleIcon.Visible = true; 
+				}
 
 			GD.Print($"⚔️ Jugador '{player.Name}' entró al área -> botón habilitado");
 		}
@@ -79,6 +85,7 @@ public partial class RockBattleArea : Area2D
 			playerInArea = false;
 			if (battleButton != null)
 				battleButton.Visible = false;
+				battleIcon.Visible = false; 
 
 			GD.Print($"🏃 Jugador '{player.Name}' salió del área -> botón deshabilitado");
 		}
