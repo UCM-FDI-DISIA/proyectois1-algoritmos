@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=83 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
@@ -431,6 +431,8 @@ sources/0 = SubResource("TileSetScenesCollectionSource_uewes")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_adv81"]
 size = Vector2(170.77423, 139.53598)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lovvn"]
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_lquwl")
 
@@ -536,11 +538,12 @@ z_index = 100
 
 [node name="RockBattleArea" type="Area2D" parent="ElementosPantalla/BotonBatalla"]
 z_index = 100
-position = Vector2(2967.0002, 2124)
+position = Vector2(3024, 2166)
 scale = Vector2(1.7449942, 1.719987)
 script = ExtResource("22_ocmcv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea"]
+visible = false
 position = Vector2(42.97998, 27.325806)
 scale = Vector2(0.99999976, 1)
 shape = SubResource("RectangleShape2D_adv81")
@@ -551,22 +554,37 @@ scale = Vector2(0.5730678, 0.58139974)
 
 [node name="BattleButton" type="TextureButton" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI"]
 top_level = true
-z_index = 100
+z_as_relative = false
+y_sort_enabled = true
 custom_minimum_size = Vector2(64, 64)
-offset_left = 2967.0002
-offset_top = 2124.0
-offset_right = 3031.0002
-offset_bottom = 2188.0
+offset_left = 2992.0
+offset_top = 2142.0
+offset_right = 3056.0
+offset_bottom = 2206.0
 scale = Vector2(1.7449942, 1.719987)
+pivot_offset = Vector2(30.815063, 24.899414)
 texture_normal = ExtResource("20_ib8ht")
 texture_pressed = ExtResource("21_43aqp")
 texture_hover = ExtResource("15_e7lu8")
 texture_disabled = ExtResource("19_sta5p")
 
+[node name="StaticBody2D" type="StaticBody2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI/BattleButton"]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(-1700.2921, -1234.8931)
+scale = Vector2(0.5730677, 0.58139974)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI/BattleButton/StaticBody2D"]
+z_index = 100
+z_as_relative = false
+y_sort_enabled = true
+shape = SubResource("RectangleShape2D_lovvn")
+
 [node name="BattleIcon" type="Sprite2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI/BattleButton"]
-position = Vector2(34.956993, 28.488539)
-scale = Vector2(0.07048752, 0.07434093)
+position = Vector2(32.067135, 23.794987)
+scale = Vector2(0.06692169, 0.07214986)
 texture = ExtResource("19_adv81")
+offset = Vector2(25.689453, 56.408203)
 
 [node name="BotonS" type="TextureButton" parent="ElementosPantalla"]
 offset_left = 192.0
