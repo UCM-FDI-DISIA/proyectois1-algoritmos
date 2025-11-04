@@ -14,3 +14,6 @@ PRUEBAS REALIZADAS:
 	03/11/2025
 		Sin ninguna incidencia.
 		Se definen el segundo tiempo como atributo para facilitar la modificación del código.
+	04/11/2025
+		El timer no se ajusta bien al espacio si se amplía la pantalla.
+		Se cambia la posición para que sea relativa en vez de absoluta.
