@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dtbcnr77qhwmn" path="res://src/PantallaAtaque/CampoBatalla.cs" id="1_oiqxd"]
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_y4nan"]
-[ext_resource type="PackedScene" path="res://src/NPCs/Archer.tscn" id="2_oiqxd"]
-[ext_resource type="PackedScene" path="res://src/NPCs/Lancer.tscn" id="3_1xmi4"]
-[ext_resource type="PackedScene" path="res://src/NPCs/Monk.tscn" id="4_xy66v"]
+[ext_resource type="PackedScene" uid="uid://mjwwmtytqu3d" path="res://src/NPCs/Archer.tscn" id="2_oiqxd"]
+[ext_resource type="PackedScene" uid="uid://de2xiwnbjke8v" path="res://src/NPCs/Lancer.tscn" id="3_1xmi4"]
+[ext_resource type="PackedScene" uid="uid://r6i5tub8og5d" path="res://src/NPCs/Monk.tscn" id="4_xy66v"]
 [ext_resource type="PackedScene" uid="uid://wp7jueq0ljwu" path="res://src/NPCs/Warrior.tscn" id="5_uaruk"]
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_hwple"]
@@ -42,5 +42,4 @@ tile_set = ExtResource("1_y4nan")
 [node name="Objetos" type="Node2D" parent="."]
 
 [node name="Tropas" type="TileMapLayer" parent="Objetos"]
-tile_map_data = PackedByteArray("AAACAAMAAAAAAAAAAQAEAAMAAAAAAAAAAQAGAAMAAAAAAAAAAQACAAUAAAAAAAAAAQAEAAUAAAAAAAAAAQAGAAUAAAAAAAAAAQACAAcAAAAAAAAAAgAEAAcAAAAAAAAAAgAGAAcAAAAAAAAAAgA=")
 tile_set = SubResource("TileSet_2w13s")
