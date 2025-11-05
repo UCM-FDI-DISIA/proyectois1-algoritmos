@@ -78,7 +78,7 @@ public partial class TimerRoot : Control
 	{
 		// Guardar estado de tropas actuales
 		GameState gameState = GameState.GetInstance();
-		gameState.SaveCurrentTroopsFromMenu();
+		
 
 		// Cambiar de escena
 		GetTree().ChangeSceneToFile("res://src/PantallaAtaque/campoBatalla.tscn");
