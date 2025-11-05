@@ -216,6 +216,11 @@ private void OnRecruitPressed(string type)
 		labels[type].Text = soldierCounts[type].ToString();
 
 	GD.Print($"Reclutado 1 {type}. Total = {soldierCounts[type]}");
+	var gs = GetNodeOrNull<GameState>("/root/GameState");
+if (gs != null)
+{
+	gs.AddTroops(type, 1); // o gs.AddTroops(type, 1);
+}
 
 	UpdateButtonStates();
 }
