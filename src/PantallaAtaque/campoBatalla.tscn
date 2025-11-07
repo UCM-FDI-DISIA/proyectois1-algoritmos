@@ -41,5 +41,11 @@ tile_set = ExtResource("1_y4nan")
 
 [node name="Objetos" type="Node2D" parent="."]
 
+[node name="TropasEnemigo" type="TileMapLayer" parent="Objetos"]
+
 [node name="Tropas" type="TileMapLayer" parent="Objetos"]
 tile_set = SubResource("TileSet_2w13s")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1915, 877)
+zoom = Vector2(0.28, 0.28)
