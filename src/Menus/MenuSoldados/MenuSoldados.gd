@@ -113,7 +113,7 @@ func initialize_menu() -> void:
 	add_child(tooltip_preview)
 
 	tooltip_label = Label.new()
-	tooltip_label.add_theme_color_override("font_color", Colors.white)
+	tooltip_label.add_theme_color_override("font_color", Color.WHITE)
 	tooltip_preview.add_child(tooltip_label)
 
 	# --- Timer ---
@@ -133,8 +133,9 @@ func initialize_menu() -> void:
 func _connect_button_events(button: TextureButton, type: String) -> void:
 	if button == null:
 		return
-	button.pressed.connect(lambda t=type: _on_recruit_pressed(t))
-	button.mouse_entered.connect(lambda t=type: _show_tooltip(t))
+	button.pressed.connect(Callable(self, "_on_recruit_pressed").bind(type))
+	button.mouse_entered.connect(Callable(self, "_show_tooltip").bind(type))
+
 	button.mouse_exited.connect(_hide_tooltip)
 
 func _on_boton_s_pressed() -> void:

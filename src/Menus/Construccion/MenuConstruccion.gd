@@ -50,7 +50,7 @@ func _ready() -> void:
 
 	btn_menu.pressed.connect(_on_menu_pressed)
 	btn_casa.pressed.connect(_on_casa_pressed)
-
+	
 # =====================
 # HANDLERS DE EVENTOS
 # =====================

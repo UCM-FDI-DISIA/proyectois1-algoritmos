@@ -455,6 +455,7 @@ script = ExtResource("6_jitvu")
 
 [node name="ResourceManager" type="Node" parent="."]
 script = ExtResource("6_lovvn")
+casa_scene = ExtResource("9_mgm53")
 
 [node name="Mapa" type="Node2D" parent="."]
 z_as_relative = false
