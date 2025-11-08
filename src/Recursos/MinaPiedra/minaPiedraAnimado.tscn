@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=3 uid="uid://c677m228bca8p"]
 
-[ext_resource type="Script" uid="uid://dtvsulgat5vng" path="res://src/Recursos/MinaPiedra/MinaPiedraAnimado.cs" id="1_sm5a2"]
+[ext_resource type="Script" uid="uid://4d8pl28x4p2h" path="res://src/Recursos/MinaPiedra/MinaPiedraAnimado.gd" id="1_sm5a2"]
 [ext_resource type="Texture2D" uid="uid://clo1xbg3upk24" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/06.png" id="1_wl0cj"]
 [ext_resource type="Texture2D" uid="uid://phsgl16ntrib" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/07.png" id="2_dh0kw"]
 [ext_resource type="Texture2D" uid="uid://bso5x606mwmd2" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/05.png" id="3_xrkcp"]

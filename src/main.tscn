@@ -1,18 +1,21 @@
-[gd_scene load_steps=84 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=87 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
 [ext_resource type="PackedScene" uid="uid://dtox61xw2rp3e" path="res://src/Menus/InventarioRecursos/resources_hud.tscn" id="2_5mrjc"]
-[ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://src/PersonajePrincipal/Player.cs" id="2_lquwl"]
 [ext_resource type="PackedScene" uid="uid://iah8x7at2l31" path="res://src/Menus/Construccion/menu_construccion.tscn" id="2_okx7f"]
 [ext_resource type="PackedScene" uid="uid://fsq1fp7g6o7n" path="res://src/Menus/MenuSoldados/menuSoldados.tscn" id="3_d3u4l"]
+[ext_resource type="Script" uid="uid://dw0dsq7ws1lha" path="res://src/Menus/InventarioRecursos/ResourcesHud.gd" id="3_lovvn"]
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="4_mlv6i"]
+[ext_resource type="Script" uid="uid://d1b7dq0vg20bb" path="res://src/Menus/Construccion/MenuConstruccion.gd" id="5_c2usk"]
+[ext_resource type="Script" uid="uid://d2e8dy1mo1k7w" path="res://src/Menus/MenuSoldados/MenuSoldados.gd" id="6_jitvu"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
+[ext_resource type="Script" uid="uid://dut20ponmt82k" path="res://src/ResourceManager.gd" id="6_lovvn"]
 [ext_resource type="PackedScene" uid="uid://c677m228bca8p" path="res://src/Recursos/MinaPiedra/minaPiedraAnimado.tscn" id="7_rlaii"]
-[ext_resource type="Script" uid="uid://cb2shqdb8q060" path="res://src/Menus/InventarioRecursos/ResourceManager.cs" id="9_kf8lf"]
 [ext_resource type="PackedScene" uid="uid://c6wex4pd4eg7t" path="res://src/Edificios/Casa/CasaAnimada.tscn" id="9_mgm53"]
+[ext_resource type="Script" uid="uid://c6vg12603g8ol" path="res://src/Player.gd" id="10_c2usk"]
 [ext_resource type="PackedScene" uid="uid://die6kbpl1cpp2" path="res://src/Edificios/Cuartel/CuartelAnimado.tscn" id="10_uewes"]
 [ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="14_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="14_tb146"]
@@ -440,17 +443,18 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 script = ExtResource("1_adv81")
 
 [node name="ResourcesHUD" parent="." instance=ExtResource("2_5mrjc")]
+script = ExtResource("3_lovvn")
 
 [node name="menuConstruccion" parent="." instance=ExtResource("2_okx7f")]
+script = ExtResource("5_c2usk")
 
 [node name="MenuSoldados" parent="." instance=ExtResource("3_d3u4l")]
 offset = Vector2(0, 120)
 transform = Transform2D(1, 0, 0, 1, 0, 120)
+script = ExtResource("6_jitvu")
 
-[node name="ResourceManager" type="Node" parent="." node_paths=PackedStringArray("contenedorCasas")]
-script = ExtResource("9_kf8lf")
-contenedorCasas = NodePath("../Objetos/Edificios/CasasCompradas")
-casaScene = ExtResource("9_mgm53")
+[node name="ResourceManager" type="Node" parent="."]
+script = ExtResource("6_lovvn")
 
 [node name="Mapa" type="Node2D" parent="."]
 z_as_relative = false
@@ -492,7 +496,7 @@ y_sort_enabled = true
 z_as_relative = false
 y_sort_enabled = true
 position = Vector2(1126, 619)
-script = ExtResource("2_lquwl")
+script = ExtResource("10_c2usk")
 
 [node name="Animacion" type="AnimatedSprite2D" parent="Objetos/Player"]
 z_as_relative = false

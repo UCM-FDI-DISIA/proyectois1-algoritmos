@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://b16fkyrsi8o7y"]
 
-[ext_resource type="Script" uid="uid://bkhnfuqehqwuc" path="res://src/Recursos/MinaOro/MinaOroAnimado.cs" id="1_g5kcs"]
+[ext_resource type="Script" uid="uid://b7s076gpi14ip" path="res://src/Recursos/MinaOro/MinaOroAnimado.gd" id="1_188qd"]
 [ext_resource type="Texture2D" uid="uid://bt11g46ev4u3d" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/GoldMine_Active.png" id="1_w6psx"]
 [ext_resource type="Texture2D" uid="uid://c427whupsje8b" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/GoldMine_Inactive.png" id="3_4727j"]
 [ext_resource type="Texture2D" uid="uid://dti2fl7yrpm64" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/GoldMine_Destroyed.png" id="4_4727j"]
@@ -120,7 +120,7 @@ animations = [{
 [node name="MinaOroAnimado" type="StaticBody2D" groups=["objeto_bloqueante"]]
 z_as_relative = false
 y_sort_enabled = true
-script = ExtResource("1_g5kcs")
+script = ExtResource("1_188qd")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
