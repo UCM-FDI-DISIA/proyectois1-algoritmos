@@ -1,6 +1,5 @@
-[gd_scene load_steps=13 format=3 uid="uid://fsq1fp7g6o7n"]
+[gd_scene load_steps=12 format=3 uid="uid://fsq1fp7g6o7n"]
 
-[ext_resource type="Script" uid="uid://n5kmljuulr5b" path="res://src/Menus/MenuSoldados/MenuSoldados.cs" id="1_eomyb"]
 [ext_resource type="Texture2D" uid="uid://7coqstm4olxf" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Banners/Carved_3Slides.png" id="1_svn2r"]
 [ext_resource type="Texture2D" uid="uid://bc0t4hvtx1bkf" path="res://src/AssetsUsados/UI_Soldados/Warrior.png" id="2_s6o2e"]
 [ext_resource type="Texture2D" uid="uid://dvrc6nqo6d6qm" path="res://src/AssetsUsados/UI_Soldados/Archer.png" id="3_6qod5"]
@@ -16,7 +15,6 @@
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="MenuSoldados" type="CanvasLayer"]
-script = ExtResource("1_eomyb")
 
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(264, 64)

@@ -17,7 +17,7 @@ config/icon="res://src/icon.svg"
 
 [autoload]
 
-GameState="*res://src/GameState.cs"
+GameState="*res://src/GameState.gd"
 
 [dotnet]
 
