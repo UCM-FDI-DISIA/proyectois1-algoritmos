@@ -1,11 +1,13 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public partial class CampoBatalla : Node2D
 {
 	private Node2D tropasNode;
 	private GameState gameState;
+	
 
 	[Export] public float Spacing = 96f; // separación entre tropas
 	[Export] public Vector2 TroopScale = new Vector2(3f, 3f); // tamaño de las tropas
@@ -178,19 +180,22 @@ public partial class CampoBatalla : Node2D
 
 	// ------------------ AVANCE AL CENTRO ------------------
 	private void StartBattle()
-	{
-		GD.Print("🏃 Tropas avanzando hacia el centro...");
+{
+	GD.Print("🏃 Tropas avanzando hacia el centro...");
 
-		float centerX = (BattlefieldTiles.X * TileSize.X) / 2;
-		totalTweens = playerTroops.Count + enemyTroops.Count;
-		tweensCompleted = 0;
+	float centerX = (BattlefieldTiles.X * TileSize.X) / 2;
+	float attackMargin = 120f; // espacio que dejamos entre los bandos
 
-		foreach (var troop in playerTroops)
-			TweenTroop(troop, centerX - 50);
+	totalTweens = playerTroops.Count + enemyTroops.Count;
+	tweensCompleted = 0;
 
-		foreach (var troop in enemyTroops)
-			TweenTroop(troop, centerX + 50);
-	}
+	foreach (var troop in playerTroops)
+		TweenTroop(troop, centerX - attackMargin); // se detienen antes del centro
+
+	foreach (var troop in enemyTroops)
+		TweenTroop(troop, centerX + attackMargin); // se detienen antes del centro
+}
+
 
 	private void TweenTroop(Node2D troop, float targetX)
 {
@@ -259,26 +264,42 @@ private AnimatedSprite2D FindSprite(Node node)
 
 	// ------------------ HUMO CENTRAL ------------------
 	private async void TriggerCentralExplosion()
+{
+	GD.Print("💥 Tropas llegan al centro. Ejecutando ataque simultáneo antes de humo.");
+
+	// Crear lista de tareas para todas las tropas
+	List<Task> attackTasks = new List<Task>();
+
+	foreach (var troop in playerTroops)
+		attackTasks.Add(PlayAttackAnimation(troop));
+
+	foreach (var troop in enemyTroops)
+		attackTasks.Add(PlayAttackAnimation(troop));
+
+	// Esperar a que todas terminen
+	await Task.WhenAll(attackTasks);
+
+	GD.Print("💨 Animaciones de ataque completadas. Creando humo.");
+
+	Vector2 center = new Vector2(BattlefieldTiles.X * TileSize.X / 2, BattlefieldTiles.Y * TileSize.Y / 2);
+
+	if (SmokeScene != null)
 	{
-		GD.Print("💥 Tropas llegan al centro. Explosión de humo.");
-
-		Vector2 center = new Vector2(BattlefieldTiles.X * TileSize.X / 2, BattlefieldTiles.Y * TileSize.Y / 2);
-
-		if (SmokeScene != null)
-		{
-			Node2D smoke = SmokeScene.Instantiate<Node2D>();
-			smoke.Position = center;
-			smoke.Scale = new Vector2(5f, 5f);
-			tropasNode.AddChild(smoke);
-		}
-
-		foreach (var t in playerTroops) t.Visible = false;
-		foreach (var t in enemyTroops) t.Visible = false;
-
-		await ToSignal(GetTree().CreateTimer(2f), SceneTreeTimer.SignalName.Timeout);
-
-		ShowBattleResult();
+		Node2D smoke = SmokeScene.Instantiate<Node2D>();
+		smoke.Position = center;
+		smoke.Scale = new Vector2(5f, 5f);
+		tropasNode.AddChild(smoke);
 	}
+
+	foreach (var t in playerTroops) t.Visible = false;
+	foreach (var t in enemyTroops) t.Visible = false;
+
+	await ToSignal(GetTree().CreateTimer(2f), SceneTreeTimer.SignalName.Timeout);
+
+	ShowBattleResult();
+}
+
+
 
 	// ------------------ RESULTADO ------------------
 	private async void ShowBattleResult()
@@ -345,4 +366,32 @@ private AnimatedSprite2D FindSprite(Node node)
 		GD.Print("📂 Cargando escena principal...");
 		GetTree().ChangeSceneToFile(MainScenePath);
 	}
+	
+	private async Task PlayAttackAnimation(Node2D troop)
+{
+	AnimatedSprite2D sprite = FindSprite(troop);
+	if (sprite == null)
+	{
+		GD.PrintErr($"❌ Tropas {troop.Name} no tiene AnimatedSprite2D para atacar");
+		return;
+	}
+
+	if (sprite.SpriteFrames.HasAnimation("Attack"))
+	{
+		sprite.Animation = "Attack";
+		sprite.Play();
+		GD.Print($"⚔️ Tropas {troop.Name} atacando");
+
+		// Usar duración fija conocida
+		float animLength = 1.1f; // duración en segundos de tu animación Attack
+		await ToSignal(GetTree().CreateTimer(animLength), SceneTreeTimer.SignalName.Timeout);
+	}
+	else
+	{
+		GD.PrintErr($"❌ Tropas {troop.Name} no tiene animación 'Attack'");
+	}
+}
+
+
+
 }

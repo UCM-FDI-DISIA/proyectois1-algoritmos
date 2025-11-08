@@ -170,7 +170,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_t6bct")
 }],
 "loop": true,
-"name": &"Heal_Monk",
+"name": &"Attack",
 "speed": 10.0
 }, {
 "frames": [{
