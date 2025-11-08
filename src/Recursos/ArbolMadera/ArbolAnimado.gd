@@ -1,54 +1,54 @@
 extends StaticBody2D
 class_name ArbolAnimado
 
-# =====================
-# NODOS
-# =====================
-var anim : AnimatedSprite2D
-var anim_tronco : AnimatedSprite2D
-var collision_shape : CollisionShape2D
-var regen_timer : Timer
-var death_delay_timer : Timer
+# =====================================================================
+# 🧾 NODOS
+# =====================================================================
+@onready var anim: AnimatedSprite2D = $AnimacionArbol
+@onready var anim_tronco: AnimatedSprite2D = $AnimacionTronco
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
-# =====================
-# ESTADO
-# =====================
-var is_dead := false
-var madera_queda := 3
-const MADERA := 5
-const MADERA_INICIAL := 3
-const TIEMPO_REGENERACION := 30.0
-const TIEMPO_MORIR := 0.01
+# =====================================================================
+# 🔧 VARIABLES EDITABLES
+# =====================================================================
+@export var cell_size: Vector2 = Vector2(64, 64)
+@export var MADERA_INICIAL: int = 3
+@export var MADERA_POR_GOLPE: int = 5
+@export var TIEMPO_REGENERACION: float = 30.0
+@export var TIEMPO_MORIR: float = 0.01
 
-@export var cell_size := Vector2(64, 64)
+# =====================================================================
+# 🎮 ESTADO
+# =====================================================================
+var is_dead: bool = false
+var madera_queda: int = MADERA_INICIAL
 
+# =====================================================================
+# ⚙️ INICIALIZACIÓN
+# =====================================================================
 func _ready() -> void:
-	anim = $AnimacionArbol
-	anim_tronco = $AnimacionTronco
-	collision_shape = $CollisionShape2D
-
 	if collision_shape.shape is RectangleShape2D:
 		collision_shape.shape.size = cell_size
 
 	anim.play("Idle")
 
-	# Timer para regenerar
-	regen_timer = Timer.new()
+	# Timer regeneración
+	var regen_timer := Timer.new()
 	regen_timer.wait_time = TIEMPO_REGENERACION
 	regen_timer.one_shot = true
 	regen_timer.timeout.connect(_on_regen_timer_timeout)
 	add_child(regen_timer)
 
-	# Timer para retrasar la animación de "Die"
-	death_delay_timer = Timer.new()
+	# Timer retraso "Die"
+	var death_delay_timer := Timer.new()
 	death_delay_timer.wait_time = TIEMPO_MORIR
 	death_delay_timer.one_shot = true
 	death_delay_timer.timeout.connect(_on_death_delay_timeout)
 	add_child(death_delay_timer)
 
-# =====================
-# RECOLECCIÓN DE RECURSOS
-# =====================
+# =====================================================================
+# ⚔️ RECOLECCIÓN
+# =====================================================================
 func hit() -> void:
 	if is_dead:
 		return
@@ -61,32 +61,32 @@ func hit() -> void:
 	anim.animation_finished.connect(_on_anim_finished)
 
 func _on_anim_finished() -> void:
-	if anim.animation == "chop":
-		# === SUMAR MADERA ANTES DE MORIR ===
-		var manager = get_node("/root/Main/ResourceManager")
-		manager.add_resource("wood", MADERA)
-		print("Madera añadida: +5")
+	if anim.animation != "chop":
+		return
 
-		anim.animation_finished.disconnect(_on_anim_finished)
+	# Entregar madera
+	var manager := get_node("/root/Main/ResourceManager") as ResourceManager
+	if manager:
+		manager.add_resource("wood", MADERA_POR_GOLPE)
+		print("Madera añadida: +%d" % MADERA_POR_GOLPE)
 
-		if madera_queda <= 0:
-			is_dead = true
-			death_delay_timer.start()  # Espera breve antes de "Die"
-		else:
-			anim.play("Idle")
+	anim.animation_finished.disconnect(_on_anim_finished)
+
+	if madera_queda <= 0:
+		is_dead = true
+		$Timer.new().create_timer(TIEMPO_MORIR).timeout.connect(_on_death_delay_timeout)
+	else:
+		anim.play("Idle")
 
 func _on_death_delay_timeout() -> void:
 	anim.play("Die")
-	if collision_shape != null:
-		collision_shape.disabled = true
-
-	print("Árbol caído. Regenerando en 30 segundos...")
-	regen_timer.start()
+	collision_shape.set_deferred("disabled", true)
+	print("Árbol caído. Regenerando en %.1f seg..." % TIEMPO_REGENERACION)
+	$Timer.new().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
 
 func _on_regen_timer_timeout() -> void:
 	print("Árbol regenerado.")
 	is_dead = false
 	madera_queda = MADERA_INICIAL
 	anim.play("Idle")
-	if collision_shape != null:
-		collision_shape.disabled = false
+	collision_shape.set_deferred("disabled", false)
