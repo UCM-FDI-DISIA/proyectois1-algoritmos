@@ -1,8 +1,12 @@
 extends CanvasLayer
 
 # =====================================================================
-# 🎨 VISUALES
+# 🔧 VARIABLES EDITABLES
 # =====================================================================
+@export var COST_WOOD := 10
+@export var COST_STONE := 5
+@export var COST_GOLD := 0
+
 @export var PREVIEW_ALPHA := 0.5
 @export var PREVIEW_BLOCK_COLOR := Color(1, 0, 0, 0.4)
 @export var PREVIEW_OK_COLOR := Color(1, 1, 1, 0.5)
@@ -70,7 +74,7 @@ func _on_casa_pressed() -> void:
 		var c := casa_preview as CasaAnimada
 		c.es_preview = true
 		var sh := c.get_node_or_null("CollisionShape2D")
-		if sh: sh.disabled = true
+		if sh: sh.set_deferred("disabled", true)
 		var co := c.get_node_or_null("CollisionObject2D")
 		if co:
 			co.collision_layer = 0
@@ -98,8 +102,8 @@ func _process(_delta: float) -> void:
 
 	var camera := get_viewport().get_camera_2d()
 	var mp := camera.get_global_mouse_position()
-	casa_preview.position = Vector2(snappedf(mp.x, GRID_SIZE) + GRID_SIZE*0.5,
-									snappedf(mp.y, GRID_SIZE) + GRID_SIZE*0.5)
+	casa_preview.global_position = Vector2(snapped(mp.x, GRID_SIZE) + GRID_SIZE * 0.5,
+										   snapped(mp.y, GRID_SIZE) + GRID_SIZE * 0.5)
 
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) or Input.is_key_pressed(KEY_ESCAPE):
 		_cancelar_construccion(); return
@@ -107,8 +111,8 @@ func _process(_delta: float) -> void:
 		if not puede_construir: print("[BuildHUD] Obstáculo detectado"); return
 		if resource_manager.puedo_comprar_casa():
 			resource_manager.pagar_casa()
-			var real := resource_manager.casa_scene.instantiate() as CasaAnimada
-			real.es_preview = false; real.position = casa_preview.position
+			var real: CasaAnimada = resource_manager.casa_scene.instantiate()
+			real.es_preview = false; real.global_position = casa_preview.global_position
 			resource_manager.contenedor_casas.add_child(real)
 			_cancelar_construccion()
 			print("[BuildHUD] Casa construida")
