@@ -120,11 +120,14 @@ func _process(delta: float) -> void:
 	var y = floor(mouse_pos.y / GRID_SIZE) * GRID_SIZE + GRID_SIZE / 2
 	casa_preview.position = Vector2(x, y)
 
-	if Input.is_mouse_button_pressed(MouseButton.RIGHT) or Input.is_key_pressed(Key.ESCAPE):
+	const MOUSE_LEFT = 1
+	const MOUSE_RIGHT = 2
+
+	if Input.is_mouse_button_pressed(MOUSE_RIGHT) or Input.is_key_pressed(KEY_ESCAPE):
 		_cancelar_construccion()
 		return
 
-	if Input.is_mouse_button_pressed(MouseButton.LEFT):
+	if Input.is_mouse_button_pressed(MOUSE_LEFT):
 		if not puede_construir:
 			print("No puedes construir encima del personaje")
 			return
@@ -141,7 +144,7 @@ func _process(delta: float) -> void:
 			casa_preview = null
 			en_construccion = false
 			marcador_casa.visible = false
-			btn_casa.pressed = false
+			btn_casa.release()  # <- CORREGIDO
 
 			print("Casa construida correctamente")
 		else:
@@ -189,6 +192,6 @@ func _cancelar_construccion() -> void:
 	area_preview = null
 	en_construccion = false
 	marcador_casa.visible = false
-	btn_casa.pressed = false
+	btn_casa.release()  # <- CORREGIDO
 
 	print("Construcción cancelada")

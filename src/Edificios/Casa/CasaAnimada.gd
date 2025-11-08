@@ -1,4 +1,5 @@
 extends Node2D
+class_name CasaAnimada
 
 const CRECIMIENTO_POR_CASA := 2
 var es_preview: bool = false

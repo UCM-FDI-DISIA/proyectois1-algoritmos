@@ -120,7 +120,7 @@ func initialize_menu() -> void:
 	hide_timer = Timer.new()
 	hide_timer.wait_time = HIDE_TIME
 	hide_timer.one_shot = true
-	hide_timer.timeout.connect(lambda: _on_hide_timer_timeout())
+	hide_timer.timeout.connect(_on_hide_timer_timeout)
 	add_child(hide_timer)
 
 	update_all_labels()
