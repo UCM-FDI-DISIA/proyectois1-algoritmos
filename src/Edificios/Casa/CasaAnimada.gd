@@ -1,26 +1,44 @@
 extends Node2D
 class_name CasaAnimada
 
-const CRECIMIENTO_POR_CASA := 2
+# =====================================================================
+# 🔧 VARIABLES EDITABLES
+# =====================================================================
+@export var CRECIMIENTO_POR_CASA := 2
+
+# =====================================================================
+# 🎮 ESTADO
+# =====================================================================
 var es_preview: bool = false
 
+# =====================================================================
+# ⚙️ INICIALIZACIÓN
+# =====================================================================
 func _ready() -> void:
-	# Si es preview, no ejecutar lógica de crecimiento
 	if es_preview:
 		return
 
 	var manager := get_node("/root/Main/ResourceManager") as ResourceManager
-	manager.add_house() # ✅ Se suma una sola vez
+	if manager == null:
+		push_error("[CasaAnimada] ResourceManager no encontrado")
+		return
+
+	manager.add_house()
 	manager.actualizar_aldeanos(CRECIMIENTO_POR_CASA * manager.get_house_count())
+	print("[Casa] Construida. Total casas: %d" % manager.get_house_count())
 
-	print("[Casa] Construida nueva casa. Total casas: %d" % manager.get_house_count())
-
+# =====================================================================
+# 🧹 AL SALIR DEL ÁRBOL
+# =====================================================================
 func _exit_tree() -> void:
 	if es_preview:
 		return
 
 	var manager := get_node("/root/Main/ResourceManager") as ResourceManager
+	if manager == null:
+		push_error("[CasaAnimada] ResourceManager no encontrado al destruir")
+		return
+
 	manager.remove_house()
 	manager.actualizar_aldeanos(CRECIMIENTO_POR_CASA * manager.get_house_count())
-
-	print("[Casa] Se ha destruido una casa. Total casas: %d" % manager.get_house_count())
+	print("[Casa] Destruida. Total casas: %d" % manager.get_house_count())
