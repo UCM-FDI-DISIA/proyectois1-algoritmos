@@ -1,70 +1,53 @@
 extends CanvasLayer
 
 # =====================================================================
-# VARIABLES Y NODOS
+# 🔧 VARIABLES EDITABLES
 # =====================================================================
+@export var HIDE_TIME := 20.0
+@export var TOOLTIP_PADDING := 6
 
-# =====================
-# LABELS Y SOLDADOS
-# =====================
-var labels := {}
-var soldier_counts := {
+# =====================================================================
+# 🧾 NODOS DE INTERFAZ
+# =====================================================================
+@onready var boton_s: TextureButton = get_node("../ElementosPantalla/BotonS")
+@onready var warrior_button: TextureButton = $Soldados/Warrior/ButtonW/ButtonWarrior
+@onready var archer_button: TextureButton  = $Soldados/Archer/ButtonA/ButtonArcher
+@onready var lancer_button: TextureButton  = $Soldados/Lancer/ButtonL/ButtonLancer
+@onready var monk_button: TextureButton    = $Soldados/Monk/ButtonM/ButtonMonk
+
+@onready var warrior_mas: Sprite2D = $Soldados/Warrior/ButtonW/Mas
+@onready var archer_mas: Sprite2D  = $Soldados/Archer/ButtonA/Mas
+@onready var lancer_mas: Sprite2D  = $Soldados/Lancer/ButtonL/Mas
+@onready var monk_mas: Sprite2D    = $Soldados/Monk/ButtonM/Mas
+
+@onready var boton_s_mas: Sprite2D   = boton_s.get_node("Mas")
+@onready var boton_s_menos: Sprite2D = boton_s.get_node("Menos")
+
+@onready var tooltip_preview: Panel = Panel.new()
+@onready var tooltip_label: Label   = Label.new()
+
+# =====================================================================
+# 📊 ESTADO LOCAL
+# =====================================================================
+var labels: Dictionary = {
+	"Warrior": null,
+	"Archer":  null,
+	"Lancer":  null,
+	"Monk":    null
+}
+var soldier_counts: Dictionary = {
 	"Warrior": 0,
-	"Archer": 0,
-	"Lancer": 0,
-	"Monk": 0
+	"Archer":  0,
+	"Lancer":  0,
+	"Monk":    0
 }
-
-# =====================
-# BOTONES
-# =====================
-var boton_s : TextureButton
-var warrior_button : TextureButton
-var archer_button : TextureButton
-var lancer_button : TextureButton
-var monk_button : TextureButton
-
-# Sprites "Mas" de cada tipo
-var warrior_mas : Sprite2D
-var archer_mas : Sprite2D
-var lancer_mas : Sprite2D
-var monk_mas : Sprite2D
-
-# Sprites del botón S
-var boton_s_mas : Sprite2D
-var boton_s_menos : Sprite2D
-
-# =====================
-# TOOLTIP
-# =====================
-var tooltip_preview : Panel
-var tooltip_label : Label
-const TOOLTIP_PADDING := 6
-
-# =====================
-# RECURSOS Y COSTES
-# =====================
-var resource_manager : ResourceManager
-var soldier_costs := {
-	"Warrior": { "villager": 1, "gold": 1, "wood": 0, "stone": 0 },
-	"Archer":  { "villager": 1, "gold": 2, "wood": 0, "stone": 0 },
-	"Lancer":  { "villager": 1, "gold": 3, "wood": 0, "stone": 0 },
-	"Monk":    { "villager": 1, "gold": 5, "wood": 0, "stone": 0 }
-}
-
-# =====================
-# TEMPORIZADOR VISIBILIDAD
-# =====================
-var hide_timer : Timer
-const HIDE_TIME := 20.0
+var resource_manager: ResourceManager
+var hide_timer: Timer
 
 # =====================================================================
-# INICIALIZACIÓN
+# ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
-	call_deferred("initialize_menu")
-
-func initialize_menu() -> void:
 	# --- Labels ---
 	labels["Warrior"] = $Soldados/Warrior/WarriorLabel
 	labels["Archer"]  = $Soldados/Archer/ArcherLabel
@@ -73,46 +56,15 @@ func initialize_menu() -> void:
 
 	# --- ResourceManager ---
 	resource_manager = get_node_or_null("../ResourceManager")
-	if resource_manager == null:
-		push_error("[MenuSoldados] ResourceManager no encontrado")
+	if resource_manager:
+		resource_manager.ResourceUpdated.connect(_on_resource_updated)
 	else:
-		resource_manager.connect("ResourceUpdated", Callable(self, "_on_resource_updated"))
-
-	# --- Botón externo ---
-	boton_s = get_node_or_null("../ElementosPantalla/BotonS")
-	if boton_s != null:
-		boton_s.pressed.connect(_on_boton_s_pressed)
-
-	# Sprites del botón S
-	boton_s_mas = boton_s.get_node_or_null("Mas") if boton_s != null else null
-	boton_s_menos = boton_s.get_node_or_null("Menos") if boton_s != null else null
-	if boton_s_menos != null:
-		boton_s_menos.visible = false
-
-	# --- Botones soldados ---
-	warrior_button = $Soldados/Warrior/ButtonW/ButtonWarrior
-	archer_button  = $Soldados/Archer/ButtonA/ButtonArcher
-	lancer_button  = $Soldados/Lancer/ButtonL/ButtonLancer
-	monk_button    = $Soldados/Monk/ButtonM/ButtonMonk
-
-	# Sprites "Mas"
-	warrior_mas = $Soldados/Warrior/ButtonW/Mas
-	archer_mas  = $Soldados/Archer/ButtonA/Mas
-	lancer_mas  = $Soldados/Lancer/ButtonL/Mas
-	monk_mas    = $Soldados/Monk/ButtonM/Mas
-
-	_connect_button_events(warrior_button, "Warrior")
-	_connect_button_events(archer_button,  "Archer")
-	_connect_button_events(lancer_button,  "Lancer")
-	_connect_button_events(monk_button,    "Monk")
+		push_error("[MenuSoldados] ResourceManager no encontrado")
 
 	# --- Tooltip ---
-	tooltip_preview = Panel.new()
-	tooltip_preview.modulate = Color(1,1,1,0.8)
+	tooltip_preview.modulate = Color(1, 1, 1, 0.8)
 	tooltip_preview.visible = false
 	add_child(tooltip_preview)
-
-	tooltip_label = Label.new()
 	tooltip_label.add_theme_color_override("font_color", Color.WHITE)
 	tooltip_preview.add_child(tooltip_label)
 
@@ -123,62 +75,65 @@ func initialize_menu() -> void:
 	hide_timer.timeout.connect(_on_hide_timer_timeout)
 	add_child(hide_timer)
 
+	# --- Botón S ---
+	boton_s.pressed.connect(_on_boton_s_pressed)
+	boton_s_menos.visible = false
+
+	# --- Botones de reclutamiento ---
+	_connect_button_events(warrior_button, "Warrior")
+	_connect_button_events(archer_button,  "Archer")
+	_connect_button_events(lancer_button,  "Lancer")
+	_connect_button_events(monk_button,    "Monk")
+
 	update_all_labels()
 	visible = false
 	_update_button_states()
 
 # =====================================================================
-# EVENTOS DE BOTONES Y RECURSOS
+# 🔁 SEÑALES
+# =====================================================================
+func _on_resource_updated(_resource: String, _value: int) -> void:
+	_update_button_states()
+
+func _on_hide_timer_timeout() -> void:
+	_hide_menu()
+
+# =====================================================================
+# 🎮 EVENTOS DE BOTONES
 # =====================================================================
 func _connect_button_events(button: TextureButton, type: String) -> void:
-	if button == null:
-		return
-	button.pressed.connect(Callable(self, "_on_recruit_pressed").bind(type))
-	button.mouse_entered.connect(Callable(self, "_show_tooltip").bind(type))
-
+	if button == null: return
+	button.pressed.connect(_on_recruit_pressed.bind(type))
+	button.mouse_entered.connect(_show_tooltip.bind(type))
 	button.mouse_exited.connect(_hide_tooltip)
 
 func _on_boton_s_pressed() -> void:
 	if visible:
 		_hide_menu()
 		hide_timer.stop()
-		if boton_s_mas != null:
-			boton_s_mas.visible = true
-		if boton_s_menos != null:
-			boton_s_menos.visible = false
+		boton_s_mas.visible   = true
+		boton_s_menos.visible = false
 	else:
 		visible = true
 		hide_timer.start()
-		print("MenuSoldados mostrado")
-		if boton_s_mas != null:
-			boton_s_mas.visible = false
-		if boton_s_menos != null:
-			boton_s_menos.visible = true
-
-func _on_resource_updated(resource_name: String, new_value: int) -> void:
-	_update_button_states()
+		boton_s_mas.visible   = false
+		boton_s_menos.visible = true
 
 func _on_recruit_pressed(type: String) -> void:
-	if resource_manager == null or not soldier_counts.has(type):
-		return
-
+	if resource_manager == null: return
 	hide_timer.start()
-	var costs = soldier_costs[type]
 
-	# Verificar recursos
-	for res_key in costs.keys():
-		if resource_manager.get_resource(res_key) < costs[res_key]:
+	var costs: Dictionary = resource_manager.get_soldier_costs(type)
+	for res in costs:
+		if resource_manager.get_resource(res) < costs[res]:
 			print("No hay recursos suficientes para reclutar %s" % type)
 			return
 
-	# Restar recursos
-	for res_key in costs.keys():
-		resource_manager.remove_resource(res_key, costs[res_key])
+	for res in costs:
+		resource_manager.remove_resource(res, costs[res])
 
 	soldier_counts[type] += 1
-	if labels.has(type):
-		labels[type].text = str(soldier_counts[type])
-
+	if labels.has(type): labels[type].text = str(soldier_counts[type])
 	print("Reclutado 1 %s. Total = %d" % [type, soldier_counts[type]])
 
 	var gs = get_node_or_null("/root/GameState")
@@ -188,87 +143,58 @@ func _on_recruit_pressed(type: String) -> void:
 	_update_button_states()
 
 # =====================================================================
-# MÉTODOS AUXILIARES
+# 🛠️ MÉTODOS AUXILIARES
 # =====================================================================
 func _update_button_states() -> void:
-	for type in soldier_costs.keys():
+	for type in labels:
+		var costs: Dictionary = resource_manager.get_soldier_costs(type)
 		var can_afford := true
-		for res_key in soldier_costs[type].keys():
-			if resource_manager.get_resource(res_key) < soldier_costs[type][res_key]:
+		for res in costs:
+			if resource_manager.get_resource(res) < costs[res]:
 				can_afford = false
 				break
 
 		var button: TextureButton
 		var mas: Sprite2D
-
 		match type:
-			"Warrior":
-				button = warrior_button
-				mas = warrior_mas
-			"Archer":
-				button = archer_button
-				mas = archer_mas
-			"Lancer":
-				button = lancer_button
-				mas = lancer_mas
-			"Monk":
-				button = monk_button
-				mas = monk_mas
-
-		if button != null:
-			button.disabled = not can_afford
-			if mas != null:
-				mas.visible = can_afford
+			"Warrior": button = warrior_button;  mas = warrior_mas
+			"Archer":  button = archer_button;   mas = archer_mas
+			"Lancer":  button = lancer_button;   mas = lancer_mas
+			"Monk":    button = monk_button;     mas = monk_mas
+		if button: button.disabled = not can_afford
+		if mas:    mas.visible      = can_afford
 
 func _show_tooltip(type: String) -> void:
-	if tooltip_preview == null or tooltip_label == null:
-		return
+	var costs: Dictionary = resource_manager.get_soldier_costs(type)
+	var txt: PackedStringArray = []
+	for res in costs:
+		if costs[res] > 0: txt.append("%s: %d" % [res.capitalize(), costs[res]])
+	tooltip_label.text = "  ".join(txt)
 
-	var cost = soldier_costs[type]
-	var text_parts := []
-	for r in ["wood", "stone", "gold", "villager"]:
-		if cost.has(r) and cost[r] > 0:
-			text_parts.append("%s: %d" % [r.capitalize(), cost[r]])
-
-	tooltip_label.text = "  ".join(text_parts)
-
-	var mouse_pos = get_viewport().get_mouse_position()
-	var label_size = tooltip_label.get_minimum_size() + Vector2(TOOLTIP_PADDING*2, TOOLTIP_PADDING*2)
-	tooltip_preview.size = label_size
-
-	var screen_size = get_viewport().get_visible_rect().size
-	var tooltip_pos = mouse_pos + Vector2(16,16)
-	if tooltip_pos.x + label_size.x > screen_size.x:
-		tooltip_pos.x = screen_size.x - label_size.x - 8
-	if tooltip_pos.y + label_size.y > screen_size.y:
-		tooltip_pos.y = screen_size.y - label_size.y - 8
-
-	tooltip_preview.position = tooltip_pos
+	var mp := get_viewport().get_mouse_position()
+	var ts := tooltip_label.get_minimum_size() + Vector2(TOOLTIP_PADDING*2, TOOLTIP_PADDING*2)
+	tooltip_preview.size = ts
+	var ss := get_viewport().get_visible_rect().size
+	var tp := mp + Vector2(16, 16)
+	if tp.x + ts.x > ss.x: tp.x = ss.x - ts.x - 8
+	if tp.y + ts.y > ss.y: tp.y = ss.y - ts.y - 8
+	tooltip_preview.position = tp
 	tooltip_preview.visible = true
 
-func _process(delta: float) -> void:
-	if tooltip_preview != null and tooltip_preview.visible:
-		var mouse_pos = get_viewport().get_mouse_position()
-		var label_size = tooltip_label.get_minimum_size() + Vector2(TOOLTIP_PADDING*2, TOOLTIP_PADDING*2)
-		tooltip_preview.size = label_size
-		tooltip_preview.position = mouse_pos + Vector2(8,8)
+func _process(_delta: float) -> void:
+	if tooltip_preview.visible:
+		var mp := get_viewport().get_mouse_position()
+		var ts := tooltip_label.get_minimum_size() + Vector2(TOOLTIP_PADDING*2, TOOLTIP_PADDING*2)
+		tooltip_preview.size = ts
+		tooltip_preview.position = mp + Vector2(8, 8)
 
 func _hide_tooltip() -> void:
-	if tooltip_preview != null:
-		tooltip_preview.visible = false
+	tooltip_preview.visible = false
 
 func update_all_labels() -> void:
-	for type in soldier_counts.keys():
-		if labels.has(type):
-			labels[type].text = str(soldier_counts[type])
+	for t in soldier_counts: labels[t].text = str(soldier_counts[t])
 
 func _hide_menu() -> void:
 	visible = false
-	print("MenuSoldados oculto")
-
-func _on_hide_timer_timeout() -> void:
-	_hide_menu()
-	if boton_s_mas != null:
-		boton_s_mas.visible = true
-	if boton_s_menos != null:
-		boton_s_menos.visible = false
+	boton_s_mas.visible   = true
+	boton_s_menos.visible = false

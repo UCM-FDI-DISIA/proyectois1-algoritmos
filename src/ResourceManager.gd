@@ -8,10 +8,19 @@ const VILLAGERS_PER_HOUSE := 50
 const TIEMPO_CRECIMIENTO := 10.0
 const MAX_RESOURCE := 99
 
-# ── ÚNICA fuente de costes ------------------------------------------
+# -------------------- COSTES DE CONSTRUCCIÓN -------------------------
 const CASA_WOOD_COST := 20
 const CASA_GOLD_COST := 5
 const CASA_STONE_COST := 5
+# --------------------------------------------------------------------
+
+# -------------------- COSTES DE SOLDADOS ----------------------------
+const SOLDIER_COSTS := {
+	"Warrior": { "villager": 1, "gold": 1, "wood": 1, "stone": 0 },
+	"Archer":  { "villager": 1, "gold": 2, "wood": 0, "stone": 0 },
+	"Lancer":  { "villager": 1, "gold": 3, "wood": 0, "stone": 0 },
+	"Monk":    { "villager": 1, "gold": 5, "wood": 0, "stone": 0 }
+}
 # --------------------------------------------------------------------
 
 @export var contenedor_casas: Node2D
@@ -22,12 +31,17 @@ var crecimiento_aldeanos := 0
 var actualizar_timer: Timer
 var resources := {"wood":0, "stone":0, "gold":0, "villager":0}
 
-# -------------- getters (los usa BuildHUD) ----------------------------
+# -------------- getters casa ---------------------------------------
 func get_casa_wood_cost() -> int: return CASA_WOOD_COST
 func get_casa_gold_cost()  -> int: return CASA_GOLD_COST
 func get_casa_stone_cost() -> int: return CASA_STONE_COST
 # --------------------------------------------------------------------
 
+# -------------- getter soldados -------------------------------------
+func get_soldier_costs(type: String) -> Dictionary:
+	return SOLDIER_COSTS.get(type, {})
+
+# --------------------------------------------------------------------
 func _ready() -> void:
 	actualizar_timer = Timer.new()
 	actualizar_timer.wait_time = TIEMPO_CRECIMIENTO
