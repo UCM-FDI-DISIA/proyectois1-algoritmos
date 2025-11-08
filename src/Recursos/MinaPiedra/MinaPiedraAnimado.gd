@@ -78,7 +78,7 @@ func hit() -> void:
 
 	if roca_queda <= 0:
 		is_depleted = true
-		$Timer.new().create_timer(TIEMPO_AGOTARSE).timeout.connect(_on_depletion_delay_timeout)
+		get_tree().create_timer(TIEMPO_AGOTARSE).timeout.connect(_on_depletion_delay_timeout)
 
 func _on_explosion_finished() -> void:
 	anim_explosion.visible = false
@@ -89,13 +89,13 @@ func _on_depletion_delay_timeout() -> void:
 	set_rocas_visibles(rocas_pequenas, true)
 	collision_shape.set_deferred("disabled", true)
 	print("Regenerando en %.1f seg..." % TIEMPO_REGENERACION)
-	$Timer.new().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
+	get_tree().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
 
 func shake_rocas() -> void:
 	var tween := create_tween()
 	for child in rocas_grandes.get_children():
 		if child is Node2D:
-			var original := child.position
+			var original: Vector2 = child.position
 			tween.tween_property(child, "position:x", original.x + randf() * 4.0 - 2.0, 0.05)
 			tween.tween_property(child, "position:x", original.x, 0.05)
 
@@ -107,7 +107,7 @@ func _on_regen_timer_timeout() -> void:
 	set_rocas_visibles(rocas_grandes, true)
 	collision_shape.set_deferred("disabled", false)
 
-func set_rocas_visibles(grupo: Node2D, visible: bool) -> void:
+func set_rocas_visibles(grupo: Node2D, is_visible: bool) -> void:
 	for child in grupo.get_children():
 		if child is Sprite2D:
-			child.visible = visible
+			child.visible = is_visible

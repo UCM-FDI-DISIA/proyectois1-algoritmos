@@ -9,5 +9,6 @@ extends Node2D
 # ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
-	# Las referencias ya se obtienen automáticamente con @onready
+	capa_suelo  = get_node("Mapa/Suelo")  # descomenta cuando exista
+	capa_objetos = get_node("Objetos/Recursos") # descomenta cuando exista
 	pass

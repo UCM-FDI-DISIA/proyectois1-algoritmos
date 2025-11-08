@@ -3,7 +3,7 @@ class_name ResourceManager
 
 signal ResourceUpdated(resource_name: String, new_value: int)
 signal VillagerCapacityUpdated()
-signal SoldierUpdated(type: String, count: int)        # <-- nueva
+signal SoldierUpdated(type: String, count: int)
 
 const VILLAGERS_PER_HOUSE := 50
 const TIEMPO_CRECIMIENTO  := 10.0
@@ -29,8 +29,6 @@ var house_count: int = 0
 var crecimiento_aldeanos: int = 0
 var actualizar_timer: Timer
 var resources: Dictionary = { "wood": 0, "stone": 0, "gold": 0, "villager": 0 }
-
-# ---- soldados ----
 var soldiers: Dictionary = { "Warrior": 0, "Archer": 0, "Lancer": 0, "Monk": 0 }
 
 # -----------------------------------------------------
@@ -89,22 +87,22 @@ func get_all_soldier_counts() -> Dictionary:
 # -----------------------------------------------------
 #  RECURSOS GENÉRICOS
 # -----------------------------------------------------
-func add_resource(name: String, amount: int = 1) -> void:
-	if not resources.has(name): return
-	if name == "villager":
-		resources[name] = min(resources[name] + amount, get_villager_capacity())
+func add_resource(res_name: String, amount: int = 1) -> void:
+	if not resources.has(res_name): return
+	if res_name == "villager":
+		resources[res_name] = min(resources[res_name] + amount, get_villager_capacity())
 	else:
-		resources[name] = min(resources[name] + amount, MAX_RESOURCE)
-	ResourceUpdated.emit(name, resources[name])
+		resources[res_name] = min(resources[res_name] + amount, MAX_RESOURCE)
+	ResourceUpdated.emit(res_name, resources[res_name])
 
-func remove_resource(name: String, amount: int) -> bool:
-	if not resources.has(name) or resources[name] < amount: return false
-	resources[name] -= amount
-	ResourceUpdated.emit(name, resources[name])
+func remove_resource(res_name: String, amount: int) -> bool:
+	if not resources.has(res_name) or resources[res_name] < amount: return false
+	resources[res_name] -= amount
+	ResourceUpdated.emit(res_name, resources[res_name])
 	return true
 
-func get_resource(name: String) -> int:
-	return resources.get(name, 0)
+func get_resource(res_name: String) -> int:
+	return resources.get(res_name, 0)
 
 # -----------------------------------------------------
 #  TIEMPO / ALDEANOS

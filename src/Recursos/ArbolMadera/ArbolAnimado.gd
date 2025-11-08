@@ -64,7 +64,6 @@ func _on_anim_finished() -> void:
 	if anim.animation != "chop":
 		return
 
-	# Entregar madera
 	var manager := get_node("/root/Main/ResourceManager") as ResourceManager
 	if manager:
 		manager.add_resource("wood", MADERA_POR_GOLPE)
@@ -74,7 +73,7 @@ func _on_anim_finished() -> void:
 
 	if madera_queda <= 0:
 		is_dead = true
-		$Timer.new().create_timer(TIEMPO_MORIR).timeout.connect(_on_death_delay_timeout)
+		get_tree().create_timer(TIEMPO_MORIR).timeout.connect(_on_death_delay_timeout)
 	else:
 		anim.play("Idle")
 
@@ -82,7 +81,7 @@ func _on_death_delay_timeout() -> void:
 	anim.play("Die")
 	collision_shape.set_deferred("disabled", true)
 	print("Árbol caído. Regenerando en %.1f seg..." % TIEMPO_REGENERACION)
-	$Timer.new().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
+	get_tree().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
 
 func _on_regen_timer_timeout() -> void:
 	print("Árbol regenerado.")

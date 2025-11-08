@@ -30,7 +30,7 @@ func _ready() -> void:
 # =====================================================================
 # 🔁 FÍSICA Y ENTRADA
 # =====================================================================
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	# Bloqueo mientras ataca
 	if is_attacking:
 		velocity = Vector2.ZERO
