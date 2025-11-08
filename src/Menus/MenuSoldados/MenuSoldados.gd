@@ -183,7 +183,7 @@ func _on_recruit_pressed(type: String) -> void:
 
 	var gs = get_node_or_null("/root/GameState")
 	if gs != null:
-		gs.call("AddTroops", type, 1)
+		gs.add_troops(type, 1)
 
 	_update_button_states()
 
