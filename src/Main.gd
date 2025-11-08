@@ -1,16 +1,18 @@
 extends Node2D
 
-# =====================
-# VARIABLES Y NODOS
-# =====================
-var capa_suelo : TileMapLayer
-var capa_objetos : Node2D
+# =====================================================================
+# 🔧 VARIABLES EDITABLES
+# =====================================================================
 
 # =====================
-# INICIALIZACIÓN
+# 🧱 CAPAS DEL MAPA
 # =====================
+@onready var capa_suelo: TileMapLayer = $Mapa/Suelo_0
+@onready var capa_objetos: Node2D = $Mapa/Objetos
+
+# =====================================================================
+# ⚙️ INICIALIZACIÓN
+# =====================================================================
 func _ready() -> void:
-	# Obtener referencias a los nodos
-	# capa_suelo = $Mapa/Suelo_0
-	# capa_objetos = $Mapa/Objetos
+	# Las referencias ya se obtienen automáticamente con @onready
 	pass
