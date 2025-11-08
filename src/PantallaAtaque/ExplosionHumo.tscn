@@ -42,9 +42,6 @@ region = Rect2(1536, 0, 192, 192)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": null
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_e4fx3")
 }, {
 "duration": 1.0,
@@ -74,7 +71,7 @@ animations = [{
 "duration": 1.0,
 "texture": null
 }],
-"loop": true,
+"loop": false,
 "name": &"Explosión",
 "speed": 5.0
 }]
@@ -82,8 +79,10 @@ animations = [{
 [node name="ExplosionHumo" type="Node2D"]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(573, 276.00003)
+position = Vector2(-0.9998779, 3.000061)
 scale = Vector2(5.324587, 4.9706273)
 sprite_frames = SubResource("SpriteFrames_ywj15")
 animation = &"Explosión"
-frame_progress = 0.060408603
+autoplay = "Explosión"
+frame = 9
+frame_progress = 1.0

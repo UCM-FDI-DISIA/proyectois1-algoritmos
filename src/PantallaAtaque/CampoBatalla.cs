@@ -48,102 +48,104 @@ public partial class CampoBatalla : Node2D
 
 	// ------------------ SPAWN JUGADOR ------------------
 	private void SpawnPlayerTroops()
+{
+	Dictionary<string, int> troopCounts = gameState.GetAllTroopCounts();
+
+	var troopScenes = new Dictionary<string, PackedScene>
 	{
-		Dictionary<string, int> troopCounts = gameState.GetAllTroopCounts();
+		{"Archer", (PackedScene)GD.Load("res://src/NPCs/Archer.tscn")},
+		{"Lancer", (PackedScene)GD.Load("res://src/NPCs/Lancer.tscn")},
+		{"Monk", (PackedScene)GD.Load("res://src/NPCs/Monk.tscn")},
+		{"Warrior", (PackedScene)GD.Load("res://src/NPCs/Warrior.tscn")}
+	};
 
-		var troopScenes = new Dictionary<string, PackedScene>
+	Vector2 battlefieldSize = BattlefieldTiles * TileSize;
+
+	// Calcular cuántas filas habrá y su altura total
+	int numRows = 0;
+	foreach (var kvp in troopCounts)
+		if (kvp.Value > 0) numRows++;
+
+	float totalHeight = numRows * Spacing * 1.2f; // altura total de todas las filas
+	float startY = (battlefieldSize.Y - totalHeight) / 2; // para centrar verticalmente
+
+	int index = 0;
+	foreach (var entry in troopCounts)
+	{
+		string troopName = entry.Key;
+		int count = entry.Value;
+		if (count <= 0 || !troopScenes.ContainsKey(troopName)) continue;
+
+		var scene = troopScenes[troopName];
+
+		float rowY = startY + index * Spacing * 1.2f; // posición Y de esta fila
+
+		for (int i = 0; i < count; i++)
 		{
-			{"Archer", (PackedScene)GD.Load("res://src/NPCs/Archer.tscn")},
-			{"Lancer", (PackedScene)GD.Load("res://src/NPCs/Lancer.tscn")},
-			{"Monk", (PackedScene)GD.Load("res://src/NPCs/Monk.tscn")},
-			{"Warrior", (PackedScene)GD.Load("res://src/NPCs/Warrior.tscn")}
-		};
+			Node2D troop = scene.Instantiate<Node2D>();
+			troop.Scale = TroopScale;
 
-		// ⚔️ Mitad izquierda del campo
-		Vector2 battlefieldSize = BattlefieldTiles * TileSize;
-		Rect2 izquierda = new Rect2(0, 0, battlefieldSize.X / 2, battlefieldSize.Y);
-
-		Vector2 startPosition = izquierda.Position + new Vector2(100, 100);
-		int index = 0;
-
-		foreach (var entry in troopCounts)
-		{
-			string troopName = entry.Key;
-			int count = entry.Value;
-			if (count <= 0) continue;
-			if (!troopScenes.ContainsKey(troopName)) continue;
-
-			var scene = troopScenes[troopName];
-
-			for (int i = 0; i < count; i++)
-			{
-				Node2D troop = scene.Instantiate<Node2D>();
-				troop.Scale = TroopScale;
-
-				// misma formación cuadrícula
-				float xOffset = (i % 5) * Spacing;
-				float yOffset = (index * Spacing * 1.2f) + (i / 5) * Spacing;
-
-				troop.Position = startPosition + new Vector2(xOffset, yOffset);
-				tropasNode.AddChild(troop);
-				playerTroops.Add(troop);
-			}
-
-			index++;
+			float xOffset = i * Spacing;
+			troop.Position = new Vector2(100 + xOffset, rowY);
+			tropasNode.AddChild(troop);
+			playerTroops.Add(troop);
 		}
 
-		GD.Print("✅ Tropas del jugador instanciadas en la mitad izquierda");
+		index++;
 	}
+
+	GD.Print("✅ Tropas del jugador centradas verticalmente");
+}
+
 
 	// ------------------ SPAWN ENEMIGO ------------------
 	private void SpawnEnemyTroops()
+{
+	var troopScenes = new Dictionary<string, PackedScene>
 	{
-		var troopScenes = new Dictionary<string, PackedScene>
+		{"Archer", (PackedScene)GD.Load("res://src/NPCs/Archer.tscn")},
+		{"Lancer", (PackedScene)GD.Load("res://src/NPCs/Lancer.tscn")},
+		{"Monk", (PackedScene)GD.Load("res://src/NPCs/Monk.tscn")},
+		{"Warrior", (PackedScene)GD.Load("res://src/NPCs/Warrior.tscn")}
+	};
+
+	Vector2 battlefieldSize = BattlefieldTiles * TileSize;
+
+	// contar filas de tropas enemigas
+	int numRows = troopScenes.Count;
+	float totalHeight = numRows * Spacing * 1.2f;
+	float startY = (battlefieldSize.Y - totalHeight) / 2;
+
+	int index = 0;
+	Random random = new Random();
+
+	foreach (var entry in troopScenes)
+	{
+		string troopName = entry.Key;
+		int count = random.Next(2, 10);
+		enemyCounts[troopName] = count;
+
+		var scene = entry.Value;
+
+		float rowY = startY + index * Spacing * 1.2f;
+
+		for (int i = 0; i < count; i++)
 		{
-			{"Archer", (PackedScene)GD.Load("res://src/NPCs/Archer.tscn")},
-			{"Lancer", (PackedScene)GD.Load("res://src/NPCs/Lancer.tscn")},
-			{"Monk", (PackedScene)GD.Load("res://src/NPCs/Monk.tscn")},
-			{"Warrior", (PackedScene)GD.Load("res://src/NPCs/Warrior.tscn")}
-		};
+			Node2D troop = scene.Instantiate<Node2D>();
+			troop.Scale = new Vector2(-TroopScale.X, TroopScale.Y); // mirar a la izquierda
 
-		Vector2 battlefieldSize = BattlefieldTiles * TileSize;
-		Rect2 derecha = new Rect2(battlefieldSize.X / 2, 0, battlefieldSize.X / 2, battlefieldSize.Y);
-
-		Vector2 startPosition = derecha.Position + new Vector2(100, 100);
-		int index = 0;
-		Random random = new Random();
-
-		foreach (var entry in troopScenes)
-		{
-			string troopName = entry.Key;
-			int count = random.Next(2, 10);
-			enemyCounts[troopName] = count;
-
-			var scene = entry.Value;
-
-			for (int i = 0; i < count; i++)
-			{
-				Node2D troop = scene.Instantiate<Node2D>();
-				// Mirroring horizontal para mirar a la izquierda
-				troop.Scale = new Vector2(-TroopScale.X, TroopScale.Y);
-
-				float xOffset = (i % 5) * Spacing;
-				float yOffset = (index * Spacing * 1.2f) + (i / 5) * Spacing;
-
-				troop.Position = new Vector2(
-					derecha.Position.X + derecha.Size.X - 100 - xOffset,
-					startPosition.Y + yOffset
-				);
-
-				tropasNode.AddChild(troop);
-				enemyTroops.Add(troop);
-			}
-
-			index++;
+			float xOffset = i * Spacing;
+			troop.Position = new Vector2(BattlefieldTiles.X * TileSize.X - 100 - xOffset, rowY);
+			tropasNode.AddChild(troop);
+			enemyTroops.Add(troop);
 		}
 
-		GD.Print("🟥 Tropas enemigas instanciadas en la mitad derecha (cantidades aleatorias)");
+		index++;
 	}
+
+	GD.Print("🟥 Tropas enemigas centradas verticalmente");
+}
+
 
 	// ------------------ CUENTA ATRÁS ------------------
 	private async void StartBattleCountdown()
@@ -154,8 +156,8 @@ public partial class CampoBatalla : Node2D
 		AddChild(canvas);
 
 		Label label = new Label();
-		label.HorizontalAlignment = HorizontalAlignment.Center;
-		label.VerticalAlignment = VerticalAlignment.Center;
+		label.HorizontalAlignment = HorizontalAlignment.Left;
+		label.VerticalAlignment = VerticalAlignment.Top;
 		label.AddThemeFontSizeOverride("font_size", 64);
 		label.AddThemeColorOverride("font_color", Colors.White);
 		canvas.AddChild(label);
@@ -256,7 +258,7 @@ public partial class CampoBatalla : Node2D
 				enemyPower += kvp.Value * weights[kvp.Key];
 
 		string resultText = playerPower > enemyPower
-			? $"🏆 ¡Gana el Jugador!"
+			? $"🏆 ¡Gana el Jugador! "
 			: playerPower < enemyPower
 				? $"💀 ¡Gana el Enemigo!"
 				: $"⚖️ ¡Empate!";
