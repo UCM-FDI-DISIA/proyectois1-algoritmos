@@ -449,10 +449,8 @@ offset = Vector2(0, 120)
 transform = Transform2D(1, 0, 0, 1, 0, 120)
 script = ExtResource("6_jitvu")
 
-[node name="ResourceManager" type="Node" parent="." node_paths=PackedStringArray("contenedor_casas")]
+[node name="ResourceManager" type="Node" parent="."]
 script = ExtResource("6_lovvn")
-contenedor_casas = NodePath("../Objetos/Edificios/CasasCompradas")
-casa_scene = ExtResource("9_mgm53")
 
 [node name="Mapa" type="Node2D" parent="."]
 z_as_relative = false

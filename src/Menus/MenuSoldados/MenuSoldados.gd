@@ -35,12 +35,6 @@ var labels: Dictionary = {
 	"Lancer":  null,
 	"Monk":    null
 }
-var soldier_counts: Dictionary = {
-	"Warrior": 0,
-	"Archer":  0,
-	"Lancer":  0,
-	"Monk":    0
-}
 var resource_manager: ResourceManager
 var hide_timer: Timer
 
@@ -58,6 +52,7 @@ func _ready() -> void:
 	resource_manager = get_node_or_null("../ResourceManager")
 	if resource_manager:
 		resource_manager.ResourceUpdated.connect(_on_resource_updated)
+		resource_manager.SoldierUpdated.connect(_on_soldier_updated)
 	else:
 		push_error("[MenuSoldados] ResourceManager no encontrado")
 
@@ -95,6 +90,10 @@ func _ready() -> void:
 func _on_resource_updated(_resource: String, _value: int) -> void:
 	_update_button_states()
 
+func _on_soldier_updated(type: String, _count: int) -> void:
+	if labels.has(type):
+		labels[type].text = str(resource_manager.get_soldier_count(type))
+
 func _on_hide_timer_timeout() -> void:
 	_hide_menu()
 
@@ -123,18 +122,7 @@ func _on_recruit_pressed(type: String) -> void:
 	if resource_manager == null: return
 	hide_timer.start()
 
-	var costs: Dictionary = resource_manager.get_soldier_costs(type)
-	for res in costs:
-		if resource_manager.get_resource(res) < costs[res]:
-			print("No hay recursos suficientes para reclutar %s" % type)
-			return
-
-	for res in costs:
-		resource_manager.remove_resource(res, costs[res])
-
-	soldier_counts[type] += 1
-	if labels.has(type): labels[type].text = str(soldier_counts[type])
-	print("Reclutado 1 %s. Total = %d" % [type, soldier_counts[type]])
+	resource_manager.reclutar_soldado(type)          # <-- nueva función
 
 	var gs = get_node_or_null("/root/GameState")
 	if gs != null:
@@ -192,7 +180,8 @@ func _hide_tooltip() -> void:
 	tooltip_preview.visible = false
 
 func update_all_labels() -> void:
-	for t in soldier_counts: labels[t].text = str(soldier_counts[t])
+	for t in labels:
+		labels[t].text = str(resource_manager.get_soldier_count(t))
 
 func _hide_menu() -> void:
 	visible = false
