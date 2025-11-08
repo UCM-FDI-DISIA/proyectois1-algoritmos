@@ -144,7 +144,8 @@ func _process(delta: float) -> void:
 			casa_preview = null
 			en_construccion = false
 			marcador_casa.visible = false
-			btn_casa.release()  # <- CORREGIDO
+			btn_casa.button_pressed = false
+
 
 			print("Casa construida correctamente")
 		else:
@@ -192,6 +193,6 @@ func _cancelar_construccion() -> void:
 	area_preview = null
 	en_construccion = false
 	marcador_casa.visible = false
-	btn_casa.release()  # <- CORREGIDO
+	btn_casa.button_pressed = false
 
 	print("Construcción cancelada")
