@@ -1,7 +1,7 @@
 [gd_scene load_steps=84 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
-[ext_resource type="Script" uid="uid://ds8yrhesu7jdu" path="res://src/Main.cs" id="1_lquwl"]
+[ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
 [ext_resource type="PackedScene" uid="uid://dtox61xw2rp3e" path="res://src/Menus/InventarioRecursos/resources_hud.tscn" id="2_5mrjc"]
 [ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://src/PersonajePrincipal/Player.cs" id="2_lquwl"]
 [ext_resource type="PackedScene" uid="uid://iah8x7at2l31" path="res://src/Menus/Construccion/menu_construccion.tscn" id="2_okx7f"]
@@ -437,7 +437,7 @@ size = Vector2(238.39615, 201.16399)
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_lquwl")
+script = ExtResource("1_adv81")
 
 [node name="ResourcesHUD" parent="." instance=ExtResource("2_5mrjc")]
 
