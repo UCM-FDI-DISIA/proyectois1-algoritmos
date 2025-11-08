@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=4 uid="uid://q3j8v7ot5ad6"]
+[gd_scene load_steps=9 format=4 uid="uid://q3j8v7ot5ad6"]
 
-[ext_resource type="Script" uid="uid://dtbcnr77qhwmn" path="res://src/PantallaAtaque/CampoBatalla.cs" id="1_oiqxd"]
+[ext_resource type="Script" uid="uid://bc5gx0lv15iaj" path="res://src/PantallaAtaque/CampoBatalla.gd" id="1_oiqxd"]
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_y4nan"]
-[ext_resource type="PackedScene" uid="uid://n1gg0gh44bpk" path="res://src/PantallaAtaque/ExplosionHumo.tscn" id="2_1xmi4"]
 [ext_resource type="PackedScene" uid="uid://mjwwmtytqu3d" path="res://src/NPCs/Archer.tscn" id="2_oiqxd"]
 [ext_resource type="PackedScene" uid="uid://de2xiwnbjke8v" path="res://src/NPCs/Lancer.tscn" id="3_1xmi4"]
 [ext_resource type="PackedScene" uid="uid://r6i5tub8og5d" path="res://src/NPCs/Monk.tscn" id="4_xy66v"]
@@ -20,8 +19,6 @@ sources/0 = SubResource("TileSetScenesCollectionSource_hwple")
 
 [node name="CampoBatalla" type="Node2D"]
 script = ExtResource("1_oiqxd")
-SmokeScene = ExtResource("2_1xmi4")
-MainScenePath = "res://src/main.tscn"
 
 [node name="Mapa" type="Node2D" parent="."]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://iah8x7at2l31"]
 
+[ext_resource type="Script" uid="uid://d1b7dq0vg20bb" path="res://src/Menus/Construccion/MenuConstruccion.gd" id="1_2gfwo"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="1_3hdph"]
-[ext_resource type="Script" uid="uid://cv3u81yv6wuha" path="res://src/Menus/Construccion/MenuConstruccion.cs" id="1_ghgg2"]
 [ext_resource type="Texture2D" uid="uid://c6yvjf3b1ejhc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_07.png" id="4_wwp1g"]
 [ext_resource type="Texture2D" uid="uid://b0p26dktrje8y" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Buildings/Blue Buildings/House1Boton.png" id="6_2gfwo"]
 [ext_resource type="Texture2D" uid="uid://br10q88ranhfu" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Pointers/02.png" id="6_7p221"]
@@ -13,7 +13,7 @@ content_margin_bottom = 12.0
 texture = ExtResource("6_8qf8j")
 
 [node name="menuConstruccion" type="CanvasLayer"]
-script = ExtResource("1_ghgg2")
+script = ExtResource("1_2gfwo")
 
 [node name="ControlRaiz" type="Control" parent="."]
 layout_mode = 3
