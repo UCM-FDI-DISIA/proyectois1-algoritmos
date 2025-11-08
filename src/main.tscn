@@ -26,8 +26,8 @@
 [ext_resource type="Texture2D" uid="uid://cl3jnlpxsvd7u" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Disable.png" id="19_sta5p"]
 [ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="20_ib8ht"]
 [ext_resource type="Texture2D" uid="uid://bevtjvf2gdrhe" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red_Pressed.png" id="21_43aqp"]
-[ext_resource type="Script" uid="uid://ef8aivyrkgea" path="res://src/PantallaPrincipal/TimerRoot.cs" id="23_43aqp"]
 [ext_resource type="Texture2D" uid="uid://knoivg0aqqle" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="24_ocmcv"]
+[ext_resource type="Script" uid="uid://dx4mnernx43c7" path="res://src/TimerRoot.gd" id="27_c2usk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("3_lquwl")
@@ -647,7 +647,7 @@ offset_top = -8.593748
 offset_right = -58.2733
 offset_bottom = 31.406252
 scale = Vector2(0.12147656, 0.40833026)
-script = ExtResource("23_43aqp")
+script = ExtResource("27_c2usk")
 
 [node name="RibbonBlue3Slides" type="Sprite2D" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
 position = Vector2(1037, 60)
