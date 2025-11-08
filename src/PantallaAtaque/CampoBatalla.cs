@@ -48,104 +48,101 @@ public partial class CampoBatalla : Node2D
 
 	// ------------------ SPAWN JUGADOR ------------------
 	private void SpawnPlayerTroops()
-{
-	Dictionary<string, int> troopCounts = gameState.GetAllTroopCounts();
-
-	var troopScenes = new Dictionary<string, PackedScene>
 	{
-		{"Archer", (PackedScene)GD.Load("res://src/NPCs/Archer.tscn")},
-		{"Lancer", (PackedScene)GD.Load("res://src/NPCs/Lancer.tscn")},
-		{"Monk", (PackedScene)GD.Load("res://src/NPCs/Monk.tscn")},
-		{"Warrior", (PackedScene)GD.Load("res://src/NPCs/Warrior.tscn")}
-	};
+		Dictionary<string, int> troopCounts = gameState.GetAllTroopCounts();
 
-	Vector2 battlefieldSize = BattlefieldTiles * TileSize;
-
-	// Calcular cuántas filas habrá y su altura total
-	int numRows = 0;
-	foreach (var kvp in troopCounts)
-		if (kvp.Value > 0) numRows++;
-
-	float totalHeight = numRows * Spacing * 1.2f; // altura total de todas las filas
-	float startY = (battlefieldSize.Y - totalHeight) / 2; // para centrar verticalmente
-
-	int index = 0;
-	foreach (var entry in troopCounts)
-	{
-		string troopName = entry.Key;
-		int count = entry.Value;
-		if (count <= 0 || !troopScenes.ContainsKey(troopName)) continue;
-
-		var scene = troopScenes[troopName];
-
-		float rowY = startY + index * Spacing * 1.2f; // posición Y de esta fila
-
-		for (int i = 0; i < count; i++)
+		var troopScenes = new Dictionary<string, PackedScene>
 		{
-			Node2D troop = scene.Instantiate<Node2D>();
-			troop.Scale = TroopScale;
+			{"Archer", (PackedScene)GD.Load("res://src/NPCs/Archer.tscn")},
+			{"Lancer", (PackedScene)GD.Load("res://src/NPCs/Lancer.tscn")},
+			{"Monk", (PackedScene)GD.Load("res://src/NPCs/Monk.tscn")},
+			{"Warrior", (PackedScene)GD.Load("res://src/NPCs/Warrior.tscn")}
+		};
 
-			float xOffset = i * Spacing;
-			troop.Position = new Vector2(100 + xOffset, rowY);
-			tropasNode.AddChild(troop);
-			playerTroops.Add(troop);
+		Vector2 battlefieldSize = BattlefieldTiles * TileSize;
+
+		// Contar filas de tropas que existen
+		int numRows = 0;
+		foreach (var kvp in troopCounts)
+			if (kvp.Value > 0) numRows++;
+
+		float extraSpacing = Spacing; // fila vacía entre tipos
+		float totalHeight = numRows * Spacing + (numRows - 1) * extraSpacing;
+		float startY = (battlefieldSize.Y - totalHeight) / 2;
+
+		int index = 0;
+		foreach (var entry in troopCounts)
+		{
+			string troopName = entry.Key;
+			int count = entry.Value;
+			if (count <= 0 || !troopScenes.ContainsKey(troopName)) continue;
+
+			var scene = troopScenes[troopName];
+			float rowY = startY + index * (Spacing + extraSpacing);
+
+			for (int i = 0; i < count; i++)
+			{
+				Node2D troop = scene.Instantiate<Node2D>();
+				troop.Scale = TroopScale;
+
+				float xOffset = i * Spacing;
+				troop.Position = new Vector2(100 + xOffset, rowY);
+				tropasNode.AddChild(troop);
+				playerTroops.Add(troop);
+			}
+
+			index++;
 		}
 
-		index++;
+		GD.Print("✅ Tropas del jugador centradas verticalmente con fila vacía entre tipos");
 	}
-
-	GD.Print("✅ Tropas del jugador centradas verticalmente");
-}
-
 
 	// ------------------ SPAWN ENEMIGO ------------------
 	private void SpawnEnemyTroops()
-{
-	var troopScenes = new Dictionary<string, PackedScene>
 	{
-		{"Archer", (PackedScene)GD.Load("res://src/NPCs/Archer.tscn")},
-		{"Lancer", (PackedScene)GD.Load("res://src/NPCs/Lancer.tscn")},
-		{"Monk", (PackedScene)GD.Load("res://src/NPCs/Monk.tscn")},
-		{"Warrior", (PackedScene)GD.Load("res://src/NPCs/Warrior.tscn")}
-	};
-
-	Vector2 battlefieldSize = BattlefieldTiles * TileSize;
-
-	// contar filas de tropas enemigas
-	int numRows = troopScenes.Count;
-	float totalHeight = numRows * Spacing * 1.2f;
-	float startY = (battlefieldSize.Y - totalHeight) / 2;
-
-	int index = 0;
-	Random random = new Random();
-
-	foreach (var entry in troopScenes)
-	{
-		string troopName = entry.Key;
-		int count = random.Next(2, 10);
-		enemyCounts[troopName] = count;
-
-		var scene = entry.Value;
-
-		float rowY = startY + index * Spacing * 1.2f;
-
-		for (int i = 0; i < count; i++)
+		var troopScenes = new Dictionary<string, PackedScene>
 		{
-			Node2D troop = scene.Instantiate<Node2D>();
-			troop.Scale = new Vector2(-TroopScale.X, TroopScale.Y); // mirar a la izquierda
+			{"Archer", (PackedScene)GD.Load("res://src/NPCs/Archer.tscn")},
+			{"Lancer", (PackedScene)GD.Load("res://src/NPCs/Lancer.tscn")},
+			{"Monk", (PackedScene)GD.Load("res://src/NPCs/Monk.tscn")},
+			{"Warrior", (PackedScene)GD.Load("res://src/NPCs/Warrior.tscn")}
+		};
 
-			float xOffset = i * Spacing;
-			troop.Position = new Vector2(BattlefieldTiles.X * TileSize.X - 100 - xOffset, rowY);
-			tropasNode.AddChild(troop);
-			enemyTroops.Add(troop);
+		Vector2 battlefieldSize = BattlefieldTiles * TileSize;
+
+		int numRows = troopScenes.Count;
+		float extraSpacing = Spacing; // fila vacía entre tipos
+		float totalHeight = numRows * Spacing + (numRows - 1) * extraSpacing;
+		float startY = (battlefieldSize.Y - totalHeight) / 2;
+
+		int index = 0;
+		Random random = new Random();
+
+		foreach (var entry in troopScenes)
+		{
+			string troopName = entry.Key;
+			int count = random.Next(2, 10);
+			enemyCounts[troopName] = count;
+
+			var scene = entry.Value;
+			float rowY = startY + index * (Spacing + extraSpacing);
+
+			for (int i = 0; i < count; i++)
+			{
+				Node2D troop = scene.Instantiate<Node2D>();
+				troop.Scale = new Vector2(-TroopScale.X, TroopScale.Y); // mirar a la izquierda
+
+				float xOffset = i * Spacing;
+				troop.Position = new Vector2(BattlefieldTiles.X * TileSize.X - 100 - xOffset, rowY);
+				tropasNode.AddChild(troop);
+				enemyTroops.Add(troop);
+			}
+
+			index++;
 		}
 
-		index++;
+		GD.Print("🟥 Tropas enemigas centradas verticalmente con fila vacía entre tipos");
 	}
-
-	GD.Print("🟥 Tropas enemigas centradas verticalmente");
-}
-
 
 	// ------------------ CUENTA ATRÁS ------------------
 	private async void StartBattleCountdown()
@@ -162,8 +159,7 @@ public partial class CampoBatalla : Node2D
 		label.AddThemeColorOverride("font_color", Colors.White);
 		canvas.AddChild(label);
 
-		Vector2 screenCenter = GetViewportRect().Size / 2;
-		label.Position = screenCenter;
+		label.Position = new Vector2(20, 20); // esquina superior izquierda
 
 		for (int i = 3; i > 0; i--)
 		{
@@ -197,19 +193,69 @@ public partial class CampoBatalla : Node2D
 	}
 
 	private void TweenTroop(Node2D troop, float targetX)
-	{
-		var tween = CreateTween();
-		tween.TweenProperty(troop, "position:x", targetX, TweenDuration)
-			 .SetTrans(Tween.TransitionType.Linear)
-			 .SetEase(Tween.EaseType.InOut);
+{
+	// Buscar automáticamente el AnimatedSprite2D dentro de la tropa
+	AnimatedSprite2D sprite = FindSprite(troop);
 
-		tween.Finished += () =>
-		{
-			tweensCompleted++;
-			if (tweensCompleted >= totalTweens)
-				TriggerCentralExplosion();
-		};
+	if (sprite == null)
+	{
+		GD.PrintErr($"❌ Tropas {troop.Name} no tiene ningún AnimatedSprite2D");
 	}
+	else
+	{
+		GD.Print($"🎬 Tropas {troop.Name} encontró AnimatedSprite2D {sprite.Name}");
+		
+		// Reproducir animación "Run" (asegúrate de mayúsculas)
+		if (sprite.SpriteFrames.HasAnimation("Run"))
+		{
+			sprite.Animation = "Run";
+			sprite.Play();
+			GD.Print($"🏃 Tropas {troop.Name} reproduciendo Run");
+		}
+		else
+		{
+			GD.PrintErr($"❌ Tropas {troop.Name} no tiene animación 'Run'");
+		}
+	}
+
+	// Tween para mover la tropa
+	var tween = CreateTween();
+	tween.TweenProperty(troop, "position:x", targetX, TweenDuration)
+		 .SetTrans(Tween.TransitionType.Linear)
+		 .SetEase(Tween.EaseType.InOut);
+
+	tween.Finished += () =>
+	{
+		if (sprite != null && sprite.SpriteFrames.HasAnimation("Idle"))
+		{
+			sprite.Animation = "Idle";
+			sprite.Play();
+			GD.Print($"😴 Tropas {troop.Name} reproduciendo Idle al terminar");
+		}
+
+		tweensCompleted++;
+		if (tweensCompleted >= totalTweens)
+			TriggerCentralExplosion();
+	};
+}
+
+// Función recursiva para encontrar el AnimatedSprite2D dentro de un nodo
+private AnimatedSprite2D FindSprite(Node node)
+{
+	foreach (Node child in node.GetChildren())
+	{
+		if (child is AnimatedSprite2D sprite)
+			return sprite;
+
+		var nested = FindSprite(child);
+		if (nested != null)
+			return nested;
+	}
+	return null;
+}
+
+
+
 
 	// ------------------ HUMO CENTRAL ------------------
 	private async void TriggerCentralExplosion()
@@ -269,7 +315,7 @@ public partial class CampoBatalla : Node2D
 		AddChild(canvas);
 
 		Label result = new Label
-		{	
+		{
 			Text = resultText,
 			HorizontalAlignment = HorizontalAlignment.Left,
 			VerticalAlignment = VerticalAlignment.Top
@@ -277,9 +323,7 @@ public partial class CampoBatalla : Node2D
 		result.AddThemeFontSizeOverride("font_size", 24); // tamaño más pequeño
 		result.AddThemeColorOverride("font_color", Colors.White);
 		canvas.AddChild(result);
-		result.Position = new Vector2(20, 20); // esquina superior izquierda con un pequeño margen
-
-		
+		result.Position = new Vector2(20, 20); // esquina superior izquierda
 
 		await ToSignal(GetTree().CreateTimer(2f), SceneTreeTimer.SignalName.Timeout);
 
