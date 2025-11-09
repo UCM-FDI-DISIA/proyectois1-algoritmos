@@ -41,7 +41,8 @@ Visita nuestra [Wiki](wiki) para mayor detalle.
    * [Documento IEEE830](https://docs.google.com/document/d/1hdwNOZvPmhaxj7iX_lu-zgpNqmKbLNv1iK7gSXKCvug/edit?tab=t.0#heading=h.u2atzjnlxad) (previo al Sprint 1).
    * [Referencias - diseño](referencias_diseno.md).
    * [Product Backlog](productBacklog.md).
-
+* Technical Design Document (TDD)
+   * [TDD](documentoTecnico.md).
 ---
 
 ### Versiones
