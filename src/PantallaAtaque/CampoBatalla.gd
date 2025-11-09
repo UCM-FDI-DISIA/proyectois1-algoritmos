@@ -233,10 +233,10 @@ func _show_battle_result() -> void:
 	print("📊 Calculando resultado...")
 
 	var weights := {
-		"Archer": 1,
-		"Lancer": 2,
-		"Monk":   3,
-		"Warrior":4
+		"Archer": 2,
+		"Lancer": 3,
+		"Monk":   4,
+		"Warrior":1
 	}
 
 	var player_power := 0
