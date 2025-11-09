@@ -13,7 +13,7 @@ extends Node2D
 # 🧾 NODOS
 # =====================================================================
 @onready var tropas_node: Node2D = $Objetos/Tropas
-@onready var game_state: Node   = get_node("/root/GameState")
+@onready var game_state: Node = get_node("/root/GameState")
 
 # =====================================================================
 # 📊 ESTADO
@@ -22,7 +22,7 @@ var tile_size: Vector2 = Vector2(64, 64)
 var battlefield_tiles: Vector2 = Vector2(60, 30)
 
 var player_troops: Array[Node2D] = []
-var enemy_troops: Array[Node2D]  = []
+var enemy_troops: Array[Node2D] = []
 var enemy_counts: Dictionary = {}
 
 var tweens_completed := 0
@@ -45,14 +45,17 @@ func _ready() -> void:
 func _spawn_player_troops() -> void:
 	var troop_counts: Dictionary = game_state.get_all_troop_counts()
 	var troop_scenes := {
-		"Archer":  preload("res://src/NPCs/Archer.tscn"),
-		"Lancer":  preload("res://src/NPCs/Lancer.tscn"),
-		"Monk":    preload("res://src/NPCs/Monk.tscn"),
+		"Archer": preload("res://src/NPCs/Archer.tscn"),
+		"Lancer": preload("res://src/NPCs/Lancer.tscn"),
+		"Monk": preload("res://src/NPCs/Monk.tscn"),
 		"Warrior": preload("res://src/NPCs/Warrior.tscn")
 	}
 
 	var battlefield_size := battlefield_tiles * tile_size
-	var num_rows := troop_counts.values().count(func(c): return c > 0)
+	var num_rows := 0
+	for c in troop_counts.values():
+		if c > 0:
+			num_rows += 1
 
 	var total_height := num_rows * spacing + (num_rows - 1) * spacing
 	var start_y := (battlefield_size.y - total_height) / 2.0
@@ -60,7 +63,8 @@ func _spawn_player_troops() -> void:
 	var index := 0
 	for troop_name in troop_counts.keys():
 		var count: int = troop_counts[troop_name]
-		if count <= 0 or not troop_scenes.has(troop_name): continue
+		if count <= 0 or not troop_scenes.has(troop_name):
+			continue
 
 		var scene: PackedScene = troop_scenes[troop_name]
 		var row_y := start_y + index * (spacing * 2.0)
@@ -80,9 +84,9 @@ func _spawn_player_troops() -> void:
 # =====================================================================
 func _spawn_enemy_troops() -> void:
 	var troop_scenes := {
-		"Archer":  preload("res://src/NPCs/Archer.tscn"),
-		"Lancer":  preload("res://src/NPCs/Lancer.tscn"),
-		"Monk":    preload("res://src/NPCs/Monk.tscn"),
+		"Archer": preload("res://src/NPCs/Archer.tscn"),
+		"Lancer": preload("res://src/NPCs/Lancer.tscn"),
+		"Monk": preload("res://src/NPCs/Monk.tscn"),
 		"Warrior": preload("res://src/NPCs/Warrior.tscn")
 	}
 
@@ -118,7 +122,7 @@ func _start_battle_countdown() -> void:
 
 	var label := Label.new()
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	label.vertical_alignment   = VERTICAL_ALIGNMENT_TOP
+	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	label.add_theme_font_size_override("font_size", 64)
 	label.add_theme_color_override("font_color", Color.WHITE)
 	label.position = Vector2(20, 20)
@@ -140,7 +144,6 @@ func _start_battle_countdown() -> void:
 # 🏃 MOVIMIENTO AL CENTRO
 # =====================================================================
 func _start_battle() -> void:
-	# Modular: comprobar si la batalla puede continuar
 	if not _check_forced_battle_result():
 		return
 
@@ -162,7 +165,6 @@ func _start_battle() -> void:
 # ⚡ MODULAR: Comprobar tropas y declarar ganador automático
 # =====================================================================
 func _check_forced_battle_result() -> bool:
-	# Devuelve true si la batalla debe continuar, false si hay ganador automático
 	if player_troops.is_empty():
 		print("⚠️ El jugador no tiene tropas. Gana el enemigo automáticamente.")
 		_show_battle_result_forced("enemy")
@@ -191,18 +193,16 @@ func _show_battle_result_forced(winner: String) -> void:
 func _tween_troop(troop: Node2D, target_x: float) -> void:
 	var sprite := _find_sprite(troop)
 	if sprite and sprite.sprite_frames.has_animation("Run"):
-		sprite.animation = "Run"
-		sprite.play()
+		sprite.play("Run")
 
 	var tween := create_tween()
-	tween.tween_property(troop, "position:x", target_x, tween_duration) \
-		.set_trans(Tween.TRANS_LINEAR) \
-		.set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(troop, "position:x", target_x, tween_duration)
+	tween.set_trans(Tween.TRANS_LINEAR)
+	tween.set_ease(Tween.EASE_IN_OUT)
 
 	tween.finished.connect(func():
 		if sprite and sprite.sprite_frames.has_animation("Idle"):
-			sprite.animation = "Idle"
-			sprite.play()
+			sprite.play("Idle")
 		tweens_completed += 1
 		if tweens_completed >= total_tweens:
 			_trigger_central_explosion()
@@ -213,9 +213,11 @@ func _tween_troop(troop: Node2D, target_x: float) -> void:
 # =====================================================================
 func _find_sprite(node: Node) -> AnimatedSprite2D:
 	for child in node.get_children():
-		if child is AnimatedSprite2D: return child
+		if child is AnimatedSprite2D:
+			return child
 		var nested := _find_sprite(child)
-		if nested: return nested
+		if nested:
+			return nested
 	return null
 
 # =====================================================================
@@ -232,10 +234,9 @@ func _trigger_central_explosion() -> void:
 	if smoke_scene:
 		var smoke := smoke_scene.instantiate() as Node2D
 		smoke.position = center
-		smoke.scale    = Vector2(5, 5)
+		smoke.scale = Vector2(5, 5)
 		tropas_node.add_child(smoke)
 
-	# Ocultar tropas
 	for t in player_troops + enemy_troops:
 		t.visible = false
 
@@ -251,8 +252,7 @@ func _play_all_attack_animations() -> void:
 	for troop in player_troops + enemy_troops:
 		var sprite := _find_sprite(troop)
 		if sprite and sprite.sprite_frames.has_animation("Attack"):
-			sprite.animation = "Attack"
-			sprite.play()
+			sprite.play("Attack")
 		animations.append(get_tree().create_timer(anim_length).timeout)
 	for s in animations:
 		await s
@@ -266,8 +266,8 @@ func _show_battle_result() -> void:
 	var weights := {
 		"Archer": 2,
 		"Lancer": 3,
-		"Monk":   4,
-		"Warrior":1
+		"Monk": 4,
+		"Warrior": 1
 	}
 
 	var player_power := 0
@@ -281,15 +281,18 @@ func _show_battle_result() -> void:
 			enemy_power += enemy_counts[troop_name] * weights[troop_name]
 
 	var result_text := ""
-	if   player_power > enemy_power: result_text = "🏆 ¡Gana el Jugador!"
-	elif player_power < enemy_power: result_text = "💀 ¡Gana el Enemigo!"
-	else:                            result_text = "⚖️ ¡Empate!"
+	if player_power > enemy_power:
+		result_text = "🏆 ¡Gana el Jugador!"
+	elif player_power < enemy_power:
+		result_text = "💀 ¡Gana el Enemigo!"
+	else:
+		result_text = "⚖️ ¡Empate!"
 
 	print("📣 Resultado → %s" % result_text)
 	_show_result_ui(result_text)
 
 # =====================================================================
-# 🖥️ MOSTRAR PANTALLA DE RESULTADO DETALLADA (Godot 4 compatible)
+# 🖥️ MOSTRAR PANTALLA DE RESULTADO DETALLADA
 # =====================================================================
 func pad_right(text: String, width: int) -> String:
 	var n := width - text.length()
@@ -300,50 +303,65 @@ func pad_right(text: String, width: int) -> String:
 func _show_result_ui(result_text: String) -> void:
 	print("📺 Mostrando pantalla de resultados...")
 
+	# --- Capa principal ---
 	var canvas := CanvasLayer.new()
 	add_child(canvas)
 
+	# --- Fondo negro full-screen ---
 	var bg := ColorRect.new()
 	bg.color = Color(0, 0, 0, 0.7)
-	bg.size = get_viewport_rect().size
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	canvas.add_child(bg)
 
+	# --- CenterContainer para centrar vertical y horizontalmente ---
 	var center_container := CenterContainer.new()
-	center_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	center_container.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	center_container.set_anchors_preset(Control.PRESET_FULL_RECT)
 	canvas.add_child(center_container)
 
+	# --- RichTextLabel centrado ---
 	var label := RichTextLabel.new()
 	label.bbcode_enabled = true
 	label.scroll_active = false
 	label.scroll_following = false
-	label.add_theme_font_size_override("font_size", 28)
-	label.rect_min_size = Vector2(800, 400)  # CORRECTO en Godot 4
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	label.fit_content = true
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	center_container.add_child(label)
 
+	# --- Formatear info de tropas ---
 	var player_info := _format_troop_info(game_state.get_all_troop_counts(), "Jugador").split("\n")
-	var enemy_info  := _format_troop_info(enemy_counts, "Enemigo").split("\n")
+	var enemy_info := _format_troop_info(enemy_counts, "Enemigo").split("\n")
 
 	var player_power := _calculate_power(game_state.get_all_troop_counts())
-	var enemy_power  := _calculate_power(enemy_counts)
+	var enemy_power := _calculate_power(enemy_counts)
 
+	# --- Color del resultado ---
 	var color := "yellow"
 	if result_text.find("Jugador") != -1 and result_text.find("Gana") != -1:
 		color = "green"
 	elif result_text.find("Enemigo") != -1 and result_text.find("Gana") != -1:
 		color = "red"
 
-	var col_width: int = 25
-	var col_spacing: int = 5
+	# --- Formateo de columnas de tropas ---
+	var col_width: int = 28
+	var col_spacing: int = 10
 	var max_lines: int = max(player_info.size(), enemy_info.size())
 	var lines: Array = []
 
 	for i in range(max_lines):
 		var p := player_info[i] if i < player_info.size() else ""
-		var e := enemy_info[i]  if i < enemy_info.size() else ""
-		lines.append(pad_right(p, col_width) + " ".repeat(col_spacing) + e)
+		var e := enemy_info[i] if i < enemy_info.size() else ""
+		lines.append("[center]%s%s%s[/center]" % [
+			pad_right(p, col_width),
+			" ".repeat(col_spacing),
+			e
+		])
 
-	var text := "[center][color=%s]%s[/color][/center]\n\n%s\n\n[center]⚔️ Poder Jugador: %d   💀 Poder Enemigo: %d[/center]" % [
+	# --- Texto final con poder y resultado ---
+	var text := "\n[center][color=%s][b]%s[/b][/color][/center]\n\n%s\n\n[center]⚔️ Poder Jugador: [b]%d[/b]   💀 Poder Enemigo: [b]%d[/b][/center]" % [
 		color,
 		result_text,
 		"\n".join(lines),
@@ -352,6 +370,21 @@ func _show_result_ui(result_text: String) -> void:
 	]
 
 	label.bbcode_text = text
+
+	# --- Ajuste de tamaño proporcional a pantalla real (Camera2D safe) ---
+	_update_label_font(label)
+
+	# --- Conectar redimensionamiento automático ---
+	get_viewport().connect("size_changed", Callable(self, "_update_label_font").bind(label))
+
+
+func _update_label_font(label: RichTextLabel) -> void:
+	# Tamaño y posición según la vista de la cámara
+	var screen_size := get_viewport().get_visible_rect().size
+	var font_size := int(screen_size.y * 0.06) # 6% del alto de pantalla
+	label.add_theme_font_size_override("font_size", font_size)
+	label.custom_minimum_size = screen_size * 0.9
+
 
 # =====================================================================
 # 🧾 FORMATEAR INFO DE TROPAS
@@ -364,13 +397,13 @@ func _format_troop_info(troop_dict: Dictionary, title: String) -> String:
 	return "\n".join(lines)
 
 # =====================================================================
-# 🧮 CALCULAR PODER TOTAL (reutilizable)
+# 🧮 CALCULAR PODER TOTAL
 # =====================================================================
 func _calculate_power(troop_dict: Dictionary) -> int:
 	var weights := {
 		"Archer": 2,
 		"Lancer": 3,
-		"Monk":   4,
+		"Monk": 4,
 		"Warrior": 1
 	}
 	var total := 0
