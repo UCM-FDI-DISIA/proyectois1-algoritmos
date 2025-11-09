@@ -19,3 +19,6 @@ PRUEBAS REALIZADAS:
 		Todo ha funcionado correctamente. Comentaré con el equipo el caso de no haber soldados. Ya que al atacar y no 
 		haber soldados es raro que se den espadazos al aire.
 	
+	9/11/25
+		Se ha producido el cambio propuesto y en cuanto se detecta que no hay soldados se declara el ganador sin 
+		iniciar combate.
