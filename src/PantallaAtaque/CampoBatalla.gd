@@ -189,7 +189,8 @@ func _show_battle_result_forced(winner: String) -> void:
 		result_text = "⚖️ ¡Empate!"
 
 	print("📣 Resultado → %s" % result_text)
-	_show_result_ui(result_text)
+	# CORRECCIÓN: Pasar enemy_counts para evitar error de argumentos faltantes.
+	_show_result_ui(result_text, enemy_counts)
 
 # =====================================================================
 # 🎞️ TWEEN INDIVIDUAL
@@ -232,8 +233,7 @@ func _trigger_central_explosion() -> void:
 	await _play_all_attack_animations()
 	print("💨 Animaciones de ataque completadas. Creando humo.")
 
-	var center := Vector2(battlefield_tiles.x * tile_size.x / 2.0,
-						  battlefield_tiles.y * tile_size.y / 2.0)
+	var center := Vector2(battlefield_tiles.x * tile_size.x / 2.0, battlefield_tiles.y * tile_size.y / 2.0)
 
 	if smoke_scene:
 		var smoke := smoke_scene.instantiate() as Node2D
@@ -257,7 +257,10 @@ func _play_all_attack_animations() -> void:
 		var sprite := _find_sprite(troop)
 		if sprite and sprite.sprite_frames.has_animation("Attack"):
 			sprite.play("Attack")
+		# Espera por el tiempo de la animación
 		animations.append(get_tree().create_timer(anim_length).timeout)
+	
+	# Espera hasta que todos los timers de animación hayan terminado
 	for s in animations:
 		await s
 
@@ -267,22 +270,9 @@ func _play_all_attack_animations() -> void:
 func _show_battle_result() -> void:
 	print("📊 Calculando resultado...")
 
-	var weights := {
-		"Archer": 2,
-		"Lancer": 3,
-		"Monk": 4,
-		"Warrior": 1
-	}
-
-	var player_power := 0
-	for troop_name in game_state.get_all_troop_counts().keys():
-		if weights.has(troop_name):
-			player_power += game_state.get_all_troop_counts()[troop_name] * weights[troop_name]
-
-	var enemy_power := 0
-	for troop_name in enemy_counts.keys():
-		if weights.has(troop_name):
-			enemy_power += enemy_counts[troop_name] * weights[troop_name]
+	# MEJORA: Utilizamos la función auxiliar _calculate_power para evitar código duplicado
+	var player_power := _calculate_power(game_state.get_all_troop_counts())
+	var enemy_power := _calculate_power(enemy_counts)
 
 	var result_text := ""
 	if player_power > enemy_power:
@@ -293,7 +283,8 @@ func _show_battle_result() -> void:
 		result_text = "⚖️ ¡Empate!"
 
 	print("📣 Resultado → %s" % result_text)
-	_show_result_ui(result_text)
+	# CORRECCIÓN: Pasar enemy_counts para evitar error de argumentos faltantes.
+	_show_result_ui(result_text, enemy_counts)
 
 # =====================================================================
 # 🖥️ MOSTRAR PANTALLA DE RESULTADO DETALLADA
@@ -304,25 +295,27 @@ func pad_right(text: String, width: int) -> String:
 		text += " ".repeat(n)
 	return text
 
-func _show_result_ui(result_text: String) -> void:
-	print("📺 Mostrando pantalla de resultados...")
+func _show_result_ui(result_text: String, enemy_counts: Dictionary) -> void:
+	print("📺 Mostrando pantalla de resultados (Versión Responsiva)...")
 
-	# --- Capa principal ---
+	# --- 1. Capa principal (CanvasLayer) ---
+	# Permite que la UI se renderice sobre el juego
 	var canvas := CanvasLayer.new()
 	add_child(canvas)
 
-	# --- Fondo negro full-screen ---
+	# --- 2. Fondo negro full-screen ---
 	var bg := ColorRect.new()
 	bg.color = Color(0, 0, 0, 0.7)
+	# Anclado a toda la pantalla (siempre)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	canvas.add_child(bg)
 
-	# --- CenterContainer para centrar vertical y horizontalmente ---
+	# --- 3. CenterContainer para centrar el RichTextLabel ---
 	var center_container := CenterContainer.new()
 	center_container.set_anchors_preset(Control.PRESET_FULL_RECT)
 	canvas.add_child(center_container)
 
-	# --- RichTextLabel centrado ---
+	# --- 4. RichTextLabel centrado ---
 	var label := RichTextLabel.new()
 	label.bbcode_enabled = true
 	label.scroll_active = false
@@ -331,24 +324,23 @@ func _show_result_ui(result_text: String) -> void:
 	label.fit_content = true
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	# Es crucial para que el texto se adapte al CenterContainer
+	label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	center_container.add_child(label)
 
-	# --- Formatear info de tropas ---
+	# --- Formatear y calcular (Lógica no modificada) ---
 	var player_info := _format_troop_info(game_state.get_all_troop_counts(), "Jugador").split("\n")
 	var enemy_info := _format_troop_info(enemy_counts, "Enemigo").split("\n")
 	var player_power := _calculate_power(game_state.get_all_troop_counts())
 	var enemy_power := _calculate_power(enemy_counts)
 
-	# --- Color del resultado ---
 	var color := "yellow"
 	if result_text.find("Jugador") != -1 and result_text.find("Gana") != -1:
 		color = "green"
 	elif result_text.find("Enemigo") != -1 and result_text.find("Gana") != -1:
 		color = "red"
 
-	# --- Formato de columnas ---
 	var col_width: int = 28
 	var col_spacing: int = 10
 	var max_lines: int = max(player_info.size(), enemy_info.size())
@@ -362,8 +354,7 @@ func _show_result_ui(result_text: String) -> void:
 			e
 		])
 
-	# --- Texto final ---
-	var text := "\n[center][color=%s][b]%s[/b][/color][/center]\n\n%s\n\n[center]⚔️ Poder Jugador: [b]%d[/b]   💀 Poder Enemigo: [b]%d[/b][/center]" % [
+	var text := "\n[center][color=%s][b]%s[/b][/color][/center]\n\n%s\n\n[center]⚔️ Poder Jugador: [b]%d[/b]   💀 Poder Enemigo: [b]%d[/b][/center]" % [
 		color,
 		result_text,
 		"\n".join(lines),
@@ -373,31 +364,38 @@ func _show_result_ui(result_text: String) -> void:
 	label.bbcode_text = text
 	_update_label_font(label)
 
-	# --- Configurar el botón para volver al menú ---
+
+	# ----------------------------------------------------
+	# --- 5. SOLUCIÓN AL POSICIONAMIENTO DEL BOTÓN (Responsivo) ---
+	# ----------------------------------------------------
+
+	# Creamos un contenedor dedicado para posicionar el botón.
+	var button_placement_container := CenterContainer.new()
+	canvas.add_child(button_placement_container)
+	
+	# La constante Control.PRESET_CUSTOM no es necesaria cuando se establecen los anclajes manualmente, 
+	# por lo que eliminamos la línea anterior.
+	
+	# Ancla Vertical: Desde el 70% de la pantalla hasta el 100%.
+	button_placement_container.anchor_top = 0.70
+	button_placement_container.anchor_bottom = 1.0
+	
+	# Ancla Horizontal: De lado a lado (0% a 100%)
+	button_placement_container.anchor_left = 0.0
+	button_placement_container.anchor_right = 1.0
+
+	# Eliminamos y re-adjuntamos el botón al nuevo contenedor centrado.
 	main_menu_button.get_parent().remove_child(main_menu_button)
-	canvas.add_child(main_menu_button)
-	# --- Agregar botón a CanvasLayer ---
-	main_menu_button.visible = true
-	canvas.add_child(main_menu_button)
+	button_placement_container.add_child(main_menu_button)
 
-# Escalar el botón
+	# Escalar el botón (esto ahora escala desde el centro, gracias a CenterContainer)
 	main_menu_button.scale = Vector2(1.75, 1.75)
-
-# Posicionar
-	var screen_size := get_viewport().get_visible_rect().size
-	main_menu_button.position = Vector2(
-	screen_size.x / 2 - 30,  # <-- pequeño ajuste hacia la izquierda
-	screen_size.y * 0.75
-)
-
-# Ajustar pivot para centrar correctamente con la escala
-	main_menu_button.pivot_offset = main_menu_button.get_size() * main_menu_button.scale / 2
+	main_menu_button.visible = true
 
 
-
-
-
-
+# =====================================================================
+# 🔙 VOLVER AL MENÚ
+# =====================================================================
 func _on_MainMenuButton_pressed() -> void:
 	if main_scene_path != "":
 		print("🔄 Volviendo al menú principal...")
@@ -406,17 +404,17 @@ func _on_MainMenuButton_pressed() -> void:
 		push_error("❌ main_scene_path no está configurado")
 
 
-
-
-
+# =====================================================================
+# ✒️ ACTUALIZAR FUENTE (RichTextLabel)
+# =====================================================================
 func _update_label_font(label: RichTextLabel) -> void:
 	# Tamaño y posición según la vista de la cámara
 	var screen_size := get_viewport().get_visible_rect().size
 	var font_size := int(screen_size.y * 0.06) # 6% del alto de pantalla
 	label.add_theme_font_size_override("font_size", font_size)
+	# Mantenemos el tamaño mínimo para que el texto ocupe un área visible
 	label.custom_minimum_size = screen_size * 0.9
 	
-
 
 # =====================================================================
 # 🧾 FORMATEAR INFO DE TROPAS
@@ -425,7 +423,7 @@ func _format_troop_info(troop_dict: Dictionary, title: String) -> String:
 	var lines := []
 	lines.append("👑 %s:" % title)
 	for troop_name in troop_dict.keys():
-		lines.append("   • %s × %d" % [troop_name, troop_dict[troop_name]])
+		lines.append("   • %s × %d" % [troop_name, troop_dict[troop_name]])
 	return "\n".join(lines)
 
 # =====================================================================
