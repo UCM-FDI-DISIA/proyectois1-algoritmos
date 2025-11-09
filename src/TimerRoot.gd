@@ -86,7 +86,7 @@ func _update_label() -> void:
 		warning_label.visible  = true
 	elif remaining_time <= SIGNAL_AT:
 		timer_label.modulate   = Color.GREEN
-		warning_label.text     = "No puedes atacar."
+		warning_label.text     = "Ya puedes atacar."
 		warning_label.visible  = true
 	else:
 		timer_label.modulate   = Color.WHITE
