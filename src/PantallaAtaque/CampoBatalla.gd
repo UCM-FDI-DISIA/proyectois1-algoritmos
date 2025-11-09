@@ -140,6 +140,10 @@ func _start_battle_countdown() -> void:
 # 🏃 MOVIMIENTO AL CENTRO
 # =====================================================================
 func _start_battle() -> void:
+	# Modular: comprobar si la batalla puede continuar
+	if not _check_forced_battle_result():
+		return
+
 	print("🏃 Tropas avanzando hacia el centro...")
 
 	var center_x := (battlefield_tiles.x * tile_size.x) / 2.0
@@ -153,6 +157,33 @@ func _start_battle() -> void:
 
 	for troop in enemy_troops:
 		_tween_troop(troop, center_x + attack_margin)
+
+# =====================================================================
+# ⚡ MODULAR: Comprobar tropas y declarar ganador automático
+# =====================================================================
+func _check_forced_battle_result() -> bool:
+	# Devuelve true si la batalla debe continuar, false si hay ganador automático
+	if player_troops.is_empty():
+		print("⚠️ El jugador no tiene tropas. Gana el enemigo automáticamente.")
+		_show_battle_result_forced("enemy")
+		return false
+	elif enemy_troops.is_empty():
+		print("⚠️ El enemigo no tiene tropas. Gana el jugador automáticamente.")
+		_show_battle_result_forced("player")
+		return false
+	return true
+
+func _show_battle_result_forced(winner: String) -> void:
+	var result_text := ""
+	if winner == "player":
+		result_text = "🏆 ¡Gana el Jugador!"
+	elif winner == "enemy":
+		result_text = "💀 ¡Gana el Enemigo!"
+	else:
+		result_text = "⚖️ ¡Empate!"
+
+	print("📣 Resultado → %s" % result_text)
+	_show_result_ui(result_text)
 
 # =====================================================================
 # 🎞️ TWEEN INDIVIDUAL
