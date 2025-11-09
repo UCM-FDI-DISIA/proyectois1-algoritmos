@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://q3j8v7ot5ad6"]
+[gd_scene load_steps=14 format=4 uid="uid://q3j8v7ot5ad6"]
 
 [ext_resource type="Script" uid="uid://bc5gx0lv15iaj" path="res://src/PantallaAtaque/CampoBatalla.gd" id="1_oiqxd"]
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_y4nan"]
@@ -7,6 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://de2xiwnbjke8v" path="res://src/NPCs/Lancer.tscn" id="3_1xmi4"]
 [ext_resource type="PackedScene" uid="uid://r6i5tub8og5d" path="res://src/NPCs/Monk.tscn" id="4_xy66v"]
 [ext_resource type="PackedScene" uid="uid://wp7jueq0ljwu" path="res://src/NPCs/Warrior.tscn" id="5_uaruk"]
+[ext_resource type="Texture2D" uid="uid://diap28dqccdx2" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red_3Slides.png" id="8_hwple"]
+[ext_resource type="Texture2D" uid="uid://dts7xpi4sx1eh" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red_3Slides_Pressed.png" id="9_2w13s"]
+[ext_resource type="Texture2D" uid="uid://dhomycmtlnciv" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover_3Slides.png" id="10_mntok"]
 
 [sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_hwple"]
 scenes/1/scene = ExtResource("2_oiqxd")
@@ -17,6 +20,8 @@ scenes/4/scene = ExtResource("5_uaruk")
 [sub_resource type="TileSet" id="TileSet_2w13s"]
 tile_size = Vector2i(64, 64)
 sources/0 = SubResource("TileSetScenesCollectionSource_hwple")
+
+[sub_resource type="SystemFont" id="SystemFont_wu8wx"]
 
 [node name="CampoBatalla" type="Node2D"]
 script = ExtResource("1_oiqxd")
@@ -53,3 +58,28 @@ tile_set = SubResource("TileSet_2w13s")
 position = Vector2(1915, 877)
 zoom = Vector2(0.28, 0.28)
 limit_enabled = false
+
+[node name="MainMenuButton" type="TextureButton" parent="."]
+z_index = 20
+offset_left = 1588.0
+offset_top = 1527.0
+offset_right = 1780.0
+offset_bottom = 1591.0
+scale = Vector2(4.058064, 4.6552362)
+pivot_offset = Vector2(93.39429, 26.636688)
+texture_normal = ExtResource("8_hwple")
+texture_pressed = ExtResource("9_2w13s")
+texture_hover = ExtResource("10_mntok")
+
+[node name="Label" type="Label" parent="MainMenuButton"]
+layout_mode = 0
+offset_left = 46.82036
+offset_top = 8.8072605
+offset_right = 154.82037
+offset_bottom = 31.80726
+scale = Vector2(0.9236397, 1.275901)
+theme_override_colors/font_color = Color(0.22897819, 1.2032687e-07, 4.2114408e-08, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = SubResource("SystemFont_wu8wx")
+text = "Volver al incio"

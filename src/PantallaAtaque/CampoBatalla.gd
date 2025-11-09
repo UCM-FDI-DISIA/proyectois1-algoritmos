@@ -8,6 +8,7 @@ extends Node2D
 @export var smoke_scene: PackedScene
 @export var main_scene_path: String = "res://src/UI/Main.tscn"
 @export var tween_duration: float = 3.0
+@onready var main_menu_button: TextureButton = $MainMenuButton
 
 # =====================================================================
 # 🧾 NODOS
@@ -38,6 +39,9 @@ func _ready() -> void:
 	_spawn_player_troops()
 	_spawn_enemy_troops()
 	_start_battle_countdown()
+	main_menu_button.visible = false
+	main_menu_button.pressed.connect(_on_MainMenuButton_pressed)
+
 
 # =====================================================================
 # 🪖 SPAWN JUGADOR
@@ -334,7 +338,6 @@ func _show_result_ui(result_text: String) -> void:
 	# --- Formatear info de tropas ---
 	var player_info := _format_troop_info(game_state.get_all_troop_counts(), "Jugador").split("\n")
 	var enemy_info := _format_troop_info(enemy_counts, "Enemigo").split("\n")
-
 	var player_power := _calculate_power(game_state.get_all_troop_counts())
 	var enemy_power := _calculate_power(enemy_counts)
 
@@ -345,12 +348,11 @@ func _show_result_ui(result_text: String) -> void:
 	elif result_text.find("Enemigo") != -1 and result_text.find("Gana") != -1:
 		color = "red"
 
-	# --- Formateo de columnas de tropas ---
+	# --- Formato de columnas ---
 	var col_width: int = 28
 	var col_spacing: int = 10
 	var max_lines: int = max(player_info.size(), enemy_info.size())
 	var lines: Array = []
-
 	for i in range(max_lines):
 		var p := player_info[i] if i < player_info.size() else ""
 		var e := enemy_info[i] if i < enemy_info.size() else ""
@@ -360,7 +362,7 @@ func _show_result_ui(result_text: String) -> void:
 			e
 		])
 
-	# --- Texto final con poder y resultado ---
+	# --- Texto final ---
 	var text := "\n[center][color=%s][b]%s[/b][/color][/center]\n\n%s\n\n[center]⚔️ Poder Jugador: [b]%d[/b]   💀 Poder Enemigo: [b]%d[/b][/center]" % [
 		color,
 		result_text,
@@ -368,14 +370,43 @@ func _show_result_ui(result_text: String) -> void:
 		player_power,
 		enemy_power
 	]
-
 	label.bbcode_text = text
-
-	# --- Ajuste de tamaño proporcional a pantalla real (Camera2D safe) ---
 	_update_label_font(label)
 
-	# --- Conectar redimensionamiento automático ---
-	get_viewport().connect("size_changed", Callable(self, "_update_label_font").bind(label))
+	# --- Configurar el botón para volver al menú ---
+	main_menu_button.get_parent().remove_child(main_menu_button)
+	canvas.add_child(main_menu_button)
+	# --- Agregar botón a CanvasLayer ---
+	main_menu_button.visible = true
+	canvas.add_child(main_menu_button)
+
+# Escalar el botón
+	main_menu_button.scale = Vector2(1.75, 1.75)
+
+# Posicionar
+	var screen_size := get_viewport().get_visible_rect().size
+	main_menu_button.position = Vector2(
+	screen_size.x / 2 - 30,  # <-- pequeño ajuste hacia la izquierda
+	screen_size.y * 0.75
+)
+
+# Ajustar pivot para centrar correctamente con la escala
+	main_menu_button.pivot_offset = main_menu_button.get_size() * main_menu_button.scale / 2
+
+
+
+
+
+
+func _on_MainMenuButton_pressed() -> void:
+	if main_scene_path != "":
+		print("🔄 Volviendo al menú principal...")
+		get_tree().change_scene_to_file(main_scene_path)
+	else:
+		push_error("❌ main_scene_path no está configurado")
+
+
+
 
 
 func _update_label_font(label: RichTextLabel) -> void:
@@ -384,6 +415,7 @@ func _update_label_font(label: RichTextLabel) -> void:
 	var font_size := int(screen_size.y * 0.06) # 6% del alto de pantalla
 	label.add_theme_font_size_override("font_size", font_size)
 	label.custom_minimum_size = screen_size * 0.9
+	
 
 
 # =====================================================================
