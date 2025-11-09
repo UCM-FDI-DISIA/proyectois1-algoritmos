@@ -289,42 +289,69 @@ func _show_battle_result() -> void:
 	_show_result_ui(result_text)
 
 # =====================================================================
-# 🖥️ MOSTRAR PANTALLA DE RESULTADO DETALLADA (CORREGIDA)
+# 🖥️ MOSTRAR PANTALLA DE RESULTADO DETALLADA (Godot 4 compatible)
 # =====================================================================
+func pad_right(text: String, width: int) -> String:
+	var n := width - text.length()
+	if n > 0:
+		text += " ".repeat(n)
+	return text
+
 func _show_result_ui(result_text: String) -> void:
 	print("📺 Mostrando pantalla de resultados...")
 
 	var canvas := CanvasLayer.new()
 	add_child(canvas)
 
-	# Fondo semitransparente
 	var bg := ColorRect.new()
 	bg.color = Color(0, 0, 0, 0.7)
 	bg.size = get_viewport_rect().size
 	canvas.add_child(bg)
 
-	# Label simple con información
-	var label := Label.new()
-	label.position = Vector2(20, 20)
-	label.add_theme_font_size_override("font_size", 24)
-	label.add_theme_color_override("font_color", Color.WHITE)
+	var center_container := CenterContainer.new()
+	center_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center_container.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	canvas.add_child(center_container)
 
-	# Texto con resultados y tropas
-	var player_info := _format_troop_info(game_state.get_all_troop_counts(), "Jugador")
-	var enemy_info  := _format_troop_info(enemy_counts, "Enemigo")
+	var label := RichTextLabel.new()
+	label.bbcode_enabled = true
+	label.scroll_active = false
+	label.scroll_following = false
+	label.add_theme_font_size_override("font_size", 28)
+	label.rect_min_size = Vector2(800, 400)  # CORRECTO en Godot 4
+	center_container.add_child(label)
+
+	var player_info := _format_troop_info(game_state.get_all_troop_counts(), "Jugador").split("\n")
+	var enemy_info  := _format_troop_info(enemy_counts, "Enemigo").split("\n")
 
 	var player_power := _calculate_power(game_state.get_all_troop_counts())
 	var enemy_power  := _calculate_power(enemy_counts)
 
-	label.text = "%s\n\n%s\n%s\n\n⚔️ Poder Jugador: %d\n💀 Poder Enemigo: %d" % [
+	var color := "yellow"
+	if result_text.find("Jugador") != -1 and result_text.find("Gana") != -1:
+		color = "green"
+	elif result_text.find("Enemigo") != -1 and result_text.find("Gana") != -1:
+		color = "red"
+
+	var col_width: int = 25
+	var col_spacing: int = 5
+	var max_lines: int = max(player_info.size(), enemy_info.size())
+	var lines: Array = []
+
+	for i in range(max_lines):
+		var p := player_info[i] if i < player_info.size() else ""
+		var e := enemy_info[i]  if i < enemy_info.size() else ""
+		lines.append(pad_right(p, col_width) + " ".repeat(col_spacing) + e)
+
+	var text := "[center][color=%s]%s[/color][/center]\n\n%s\n\n[center]⚔️ Poder Jugador: %d   💀 Poder Enemigo: %d[/center]" % [
+		color,
 		result_text,
-		player_info,
-		enemy_info,
+		"\n".join(lines),
 		player_power,
 		enemy_power
 	]
 
-	canvas.add_child(label)
+	label.bbcode_text = text
 
 # =====================================================================
 # 🧾 FORMATEAR INFO DE TROPAS
@@ -332,8 +359,8 @@ func _show_result_ui(result_text: String) -> void:
 func _format_troop_info(troop_dict: Dictionary, title: String) -> String:
 	var lines := []
 	lines.append("👑 %s:" % title)
-	for name in troop_dict.keys():
-		lines.append("   • %s × %d" % [name, troop_dict[name]])
+	for troop_name in troop_dict.keys():
+		lines.append("   • %s × %d" % [troop_name, troop_dict[troop_name]])
 	return "\n".join(lines)
 
 # =====================================================================
