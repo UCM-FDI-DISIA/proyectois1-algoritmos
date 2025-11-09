@@ -1,0 +1,21 @@
+MECÁNICA A PROBAR: Animación batalla
+
+OBJETIVO DE LA PRUEBA:
+	Comprobar que la animación se muestra de forma correcta y con el número de soldados correspondiente.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	1) Ejecutar el archivo
+	2) Conseguir recursos y comprar los soldados con los que se quiera hacer la verificación.
+	3) Comprobar que los soldados avanzan hasta el centro del campo y en el momento de colisionar sale una nube.
+	4) Ver que tras la colisión se muestra el resultado de la partida, de forma correcta. (el algoritmo se revisará en otra prueba)
+	5) Además de probar con un número de soldados, probar casos como no llevar ningún soldado, para ver que actúa como esperado.
+
+RESULTADO ESPERADO:
+	Lo que debería pasar es que aparecieran en pantalla el número de soldados de cada jugador, que avanzasen hacia el centro,
+	y alcolisionar saliera una nube de humo simulando la pelea, tras la cual se dictaminaría el ganador.
+
+PRUEBAS REALIZADAS:
+	9/11/25
+		Todo ha funcionado correctamente. Comentaré con el equipo el caso de no haber soldados. Ya que al atacar y no 
+		haber soldados es raro que se den espadazos al aire.
+	
