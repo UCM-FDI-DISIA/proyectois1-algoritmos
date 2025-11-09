@@ -131,3 +131,27 @@ func _ready() -> void:
 	actualizar_timer.one_shot = false
 	actualizar_timer.timeout.connect(_on_actualizar_timeout)
 	add_child(actualizar_timer)
+
+# -----------------------------------------------------
+#  CONSTRUCCIÓN DE CASAS
+# -----------------------------------------------------
+func puedo_comprar_casa() -> bool:
+	# Verifica si hay suficientes materiales para una casa
+	return (
+		get_resource("wood")  >= CASA_WOOD_COST and
+		get_resource("stone") >= CASA_STONE_COST and
+		get_resource("gold")  >= CASA_GOLD_COST
+	)
+
+func pagar_casa() -> bool:
+	# Intenta restar los recursos, devuelve true si se pudo pagar
+	if not puedo_comprar_casa():
+		return false
+
+	# Resta de forma segura usando remove_resource
+	remove_resource("wood",  CASA_WOOD_COST)
+	remove_resource("stone", CASA_STONE_COST)
+	remove_resource("gold",  CASA_GOLD_COST)
+
+	add_house()  # Aumenta la capacidad de aldeanos por casa construida
+	return true
