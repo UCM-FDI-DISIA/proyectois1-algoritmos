@@ -145,7 +145,7 @@ func _cancelar_construccion() -> void:
 	marcador_casa.visible = false; btn_casa.button_pressed = false
 
 func _actualizar_tooltip() -> void:
-	btn_casa.tooltip_text = "Costo: Madera %d | Piedra %d | Oro %d" % [
+	btn_casa.tooltip_text = "Coste: Madera %d | Piedra %d | Oro %d" % [
 		resource_manager.get_casa_wood_cost(),
 		resource_manager.get_casa_stone_cost(),
 		resource_manager.get_casa_gold_cost() ]
