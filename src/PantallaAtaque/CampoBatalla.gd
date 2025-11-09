@@ -258,33 +258,68 @@ func _show_battle_result() -> void:
 	_show_result_ui(result_text)
 
 # =====================================================================
-# 🖥️ MOSTRAR RESULTADO EN PANTALLA
+# 🖥️ MOSTRAR PANTALLA DE RESULTADO DETALLADA (CORREGIDA)
 # =====================================================================
 func _show_result_ui(result_text: String) -> void:
+	print("📺 Mostrando pantalla de resultados...")
+
 	var canvas := CanvasLayer.new()
 	add_child(canvas)
 
+	# Fondo semitransparente
+	var bg := ColorRect.new()
+	bg.color = Color(0, 0, 0, 0.7)
+	bg.size = get_viewport_rect().size
+	canvas.add_child(bg)
+
+	# Label simple con información
 	var label := Label.new()
-	label.text = result_text
+	label.position = Vector2(20, 20)
 	label.add_theme_font_size_override("font_size", 24)
 	label.add_theme_color_override("font_color", Color.WHITE)
-	label.position = Vector2(20, 20)
+
+	# Texto con resultados y tropas
+	var player_info := _format_troop_info(game_state.get_all_troop_counts(), "Jugador")
+	var enemy_info  := _format_troop_info(enemy_counts, "Enemigo")
+
+	var player_power := _calculate_power(game_state.get_all_troop_counts())
+	var enemy_power  := _calculate_power(enemy_counts)
+
+	label.text = "%s\n\n%s\n%s\n\n⚔️ Poder Jugador: %d\n💀 Poder Enemigo: %d" % [
+		result_text,
+		player_info,
+		enemy_info,
+		player_power,
+		enemy_power
+	]
+
 	canvas.add_child(label)
 
-	await get_tree().create_timer(2.0).timeout
+# =====================================================================
+# 🧾 FORMATEAR INFO DE TROPAS
+# =====================================================================
+func _format_troop_info(troop_dict: Dictionary, title: String) -> String:
+	var lines := []
+	lines.append("👑 %s:" % title)
+	for name in troop_dict.keys():
+		lines.append("   • %s × %d" % [name, troop_dict[name]])
+	return "\n".join(lines)
 
-	var fade := ColorRect.new()
-	fade.color = Color(0, 0, 0, 0)
-	fade.size  = get_viewport_rect().size
-	fade.z_index = 100
-	canvas.add_child(fade)
-
-	var fade_tween := create_tween()
-	fade_tween.tween_property(fade, "color:a", 1.0, 2.0)
-	await fade_tween.finished
-
-	print("📂 Cargando escena principal...")
-	get_tree().change_scene_to_file(main_scene_path)
+# =====================================================================
+# 🧮 CALCULAR PODER TOTAL (reutilizable)
+# =====================================================================
+func _calculate_power(troop_dict: Dictionary) -> int:
+	var weights := {
+		"Archer": 2,
+		"Lancer": 3,
+		"Monk":   4,
+		"Warrior": 1
+	}
+	var total := 0
+	for t in troop_dict.keys():
+		if weights.has(t):
+			total += troop_dict[t] * weights[t]
+	return total
 
 # =====================================================================
 # 🔧 HELPER: calcular Y de cada fila
