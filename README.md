@@ -2,7 +2,7 @@
 ## AlgoRitmos
 
 ### Wiki
-Visita nuestra [Wiki](wiki) para mayor detalle.
+Visita nuestra [Wiki](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki) para mayor detalle.
 
 ---
 
