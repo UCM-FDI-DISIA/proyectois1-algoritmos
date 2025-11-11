@@ -25,11 +25,8 @@ sources/0 = SubResource("TileSetScenesCollectionSource_hwple")
 
 [node name="CampoBatalla" type="Node2D"]
 script = ExtResource("1_oiqxd")
-spacing = null
-troop_scale = null
 smoke_scene = ExtResource("2_1xmi4")
 main_scene_path = "res://src/PantallaPrincipal/main_menu.tscn"
-tween_duration = null
 
 [node name="Mapa" type="Node2D" parent="."]
 
