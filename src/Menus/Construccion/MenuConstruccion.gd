@@ -144,17 +144,31 @@ func _process(_delta: float) -> void:
 # 🛠️ MÉTODOS AUXILIARES
 # =====================================================================
 func _crear_area_preview() -> void:
-	if casa_preview == null: return
-	area_preview = Area2D.new(); casa_preview.add_child(area_preview)
+	if casa_preview == null: 
+		return
+
+	area_preview = Area2D.new()
+	casa_preview.add_child(area_preview)
+
 	var sh := casa_preview.get_node_or_null("CollisionShape2D")
 	if sh and sh.shape:
-		var clon := CollisionShape2D.new(); clon.shape = sh.shape.duplicate()
+		var clon := CollisionShape2D.new()
+		clon.shape = sh.shape.duplicate()
+		
+		# Reducir colisión para dar margen (80% del tamaño original)
+		if clon.shape is RectangleShape2D:
+			clon.shape.extents *= 0.8
+		elif clon.shape is CircleShape2D:
+			clon.shape.radius *= 0.8
+		
 		area_preview.add_child(clon)
-	area_preview.monitoring = true; area_preview.monitorable = true
-	area_preview.collision_layer = 0; area_preview.collision_mask = 1
+
+	area_preview.monitoring = true
+	area_preview.monitorable = true
+	area_preview.collision_layer = 0
+	area_preview.collision_mask = 1
 	area_preview.body_entered.connect(_on_area_preview_body_entered)
 	area_preview.body_exited.connect(_on_area_preview_body_exited)
-
 func _tint_preview(c: Color) -> void:
 	if casa_preview == null: return
 	for ch in casa_preview.get_children():
@@ -182,14 +196,23 @@ func _es_sobre_terreno_valido(pos: Vector2) -> bool:
 		push_error("[BuildHUD] No se encontró /root/Main/Mapa")
 		return false
 
-	# 🚫 Primero bloquear agua (Subsuelo)
+	var margen = 8 # pixeles desde el borde para permitir un pequeño ajuste
+	var puntos = [
+		pos + Vector2(margen, margen),
+		pos + Vector2(-margen, margen),
+		pos + Vector2(margen, -margen),
+		pos + Vector2(-margen, -margen)
+	]
+
+	# Primero bloquear agua/subsuelo
 	var subsuelo = mapa.get_node_or_null("Subsuelo")
 	if subsuelo:
-		var cell_subsuelo = subsuelo.local_to_map(subsuelo.to_local(pos))
-		if subsuelo.get_cell_source_id(cell_subsuelo) != -1:
-			return false
+		for p in puntos:
+			var cell_subsuelo = subsuelo.local_to_map(subsuelo.to_local(p))
+			if subsuelo.get_cell_source_id(cell_subsuelo) != -1:
+				return false
 
-	# ✅ Comprobar tilemaps válidos
+	# Comprobar tilemaps válidos
 	var tilemaps_validos = [
 		mapa.get_node_or_null("Suelo"),
 		mapa.get_node_or_null("Nivel1"),
@@ -198,12 +221,16 @@ func _es_sobre_terreno_valido(pos: Vector2) -> bool:
 		mapa.get_node_or_null("Nivel4"),
 	]
 
-	for tm in tilemaps_validos:
-		if tm == null:
-			continue
-		var cell = tm.local_to_map(tm.to_local(pos))
-		if tm.get_cell_source_id(cell) != -1:
-			return true
+	for p in puntos:
+		var valido = false
+		for tm in tilemaps_validos:
+			if tm == null:
+				continue
+			var cell = tm.local_to_map(tm.to_local(p))
+			if tm.get_cell_source_id(cell) != -1:
+				valido = true
+				break
+		if not valido:
+			return false
 
-	# 🚫 Si no está en ningún tile válido
-	return false
+	return true
