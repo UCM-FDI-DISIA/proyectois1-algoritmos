@@ -1,7 +1,6 @@
-[gd_scene load_steps=55 format=3 uid="uid://b8rmi03nk487q"]
+[gd_scene load_steps=54 format=3 uid="uid://b8rmi03nk487q"]
 
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="1_4flbx"]
-[ext_resource type="Script" uid="uid://nxuykwqxjdit" path="res://src/PersonajePrincipal/Player.cs" id="1_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://ij87wpgkey1d" path="res://src/AssetsUsados/Fondos/Captura desde 2025-09-26 12-29-29.png" id="3_hqtel"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_hqtel"]
 
@@ -400,13 +399,13 @@ texture = ExtResource("3_hqtel")
 z_as_relative = false
 y_sort_enabled = true
 position = Vector2(580, 295)
-script = ExtResource("1_i3pqv")
 
 [node name="Animacion" type="AnimatedSprite2D" parent="Player"]
 z_as_relative = false
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_b26j0")
 animation = &"Idle"
+autoplay = "Idle"
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 z_as_relative = false

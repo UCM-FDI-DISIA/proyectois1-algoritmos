@@ -23,6 +23,7 @@ var last_direction := Vector2.RIGHT
 func _ready() -> void:
 	add_to_group("jugador")
 	attack_area.monitoring = true
+	animated_sprite.play("Idle") 
 	# Centro de la pantalla como punto de partida
 	position = get_viewport().get_visible_rect().size / 2
 	z_index = int(position.y)
