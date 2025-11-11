@@ -8,6 +8,13 @@
 
 config_version=5
 
+[GD-Sync]
+
+version="0.13"
+publicKey="435cb7b74bf3b495"
+privateKey="3310412047a5ad45"
+useSenderID=true
+
 [application]
 
 config/name="Feudalia"
@@ -18,6 +25,8 @@ config/icon="res://src/icon.svg"
 [autoload]
 
 GameState="*res://src/GameState.gd"
+GDSync="*res://addons/GD-Sync/MultiplayerClient.gd"
+MultiplayerManager="*res://network/MultiplayerManager.gd"
 
 [dotnet]
 
@@ -29,7 +38,7 @@ version_control/autoload_on_startup=true
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/GD-Sync/plugin.cfg")
 
 [global_group]
 
