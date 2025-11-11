@@ -94,30 +94,51 @@ func _on_area_preview_body_exited(body: Node) -> void:
 		puede_construir = true
 		_tint_preview(PREVIEW_OK_COLOR)
 
-# =====================================================================
-# 🔄 BUCLE PRINCIPAL
+#=====================================================================
+# 🔄 BUCLE PRINCIPAL REVISADO
 # =====================================================================
 func _process(_delta: float) -> void:
-	if not en_construccion or casa_preview == null: return
+	if not en_construccion or casa_preview == null:
+		return
 
 	var camera := get_viewport().get_camera_2d()
 	var mp := camera.get_global_mouse_position()
-	casa_preview.global_position = Vector2(snapped(mp.x, GRID_SIZE) + GRID_SIZE * 0.5,
-										   snapped(mp.y, GRID_SIZE) + GRID_SIZE * 0.5)
+	# Ajustar posición al grid
+	casa_preview.global_position = Vector2(
+		snapped(mp.x, GRID_SIZE) + GRID_SIZE * 0.5,
+		snapped(mp.y, GRID_SIZE) + GRID_SIZE * 0.5
+	)
 
+	# 🔍 Verificar si se puede construir
+	var sobre_terreno = _es_sobre_terreno_valido(casa_preview.global_position)
+	var area_libre = area_preview != null and area_preview.get_overlapping_bodies().size() == 0
+
+	puede_construir = sobre_terreno and area_libre
+
+	# Cambiar color del preview según sea válido o no
+	_tint_preview(PREVIEW_OK_COLOR if puede_construir else PREVIEW_BLOCK_COLOR)
+
+	# 🖱️ Control de cancelación
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT) or Input.is_key_pressed(KEY_ESCAPE):
-		_cancelar_construccion(); return
+		_cancelar_construccion()
+		return
+
+	# 🏗️ Construir
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		if not puede_construir: print("[BuildHUD] Obstáculo detectado"); return
+		if not puede_construir:
+			print("[BuildHUD] No se puede construir aquí (obstáculo o terreno inválido)")
+			return
 		if resource_manager.puedo_comprar_casa():
 			resource_manager.pagar_casa()
 			var real: CasaAnimada = resource_manager.casa_scene.instantiate()
-			real.es_preview = false; real.global_position = casa_preview.global_position
+			real.es_preview = false
+			real.global_position = casa_preview.global_position
 			resource_manager.contenedor_casas.add_child(real)
 			_cancelar_construccion()
 			print("[BuildHUD] Casa construida")
 		else:
-			print("[BuildHUD] Materiales insuficientes"); _cancelar_construccion()
+			print("[BuildHUD] Materiales insuficientes")
+			_cancelar_construccion()
 
 # =====================================================================
 # 🛠️ MÉTODOS AUXILIARES
@@ -149,3 +170,40 @@ func _actualizar_tooltip() -> void:
 		resource_manager.get_casa_wood_cost(),
 		resource_manager.get_casa_stone_cost(),
 		resource_manager.get_casa_gold_cost() ]
+
+# 
+
+# =====================================================================
+# 🛠️ VERIFICAR TERRENO VÁLIDO
+# =====================================================================
+func _es_sobre_terreno_valido(pos: Vector2) -> bool:
+	var mapa = get_node("/root/Main/Mapa")
+	if mapa == null:
+		push_error("[BuildHUD] No se encontró /root/Main/Mapa")
+		return false
+
+	# 🚫 Primero bloquear agua (Subsuelo)
+	var subsuelo = mapa.get_node_or_null("Subsuelo")
+	if subsuelo:
+		var cell_subsuelo = subsuelo.local_to_map(subsuelo.to_local(pos))
+		if subsuelo.get_cell_source_id(cell_subsuelo) != -1:
+			return false
+
+	# ✅ Comprobar tilemaps válidos
+	var tilemaps_validos = [
+		mapa.get_node_or_null("Suelo"),
+		mapa.get_node_or_null("Nivel1"),
+		mapa.get_node_or_null("Nivel2"),
+		mapa.get_node_or_null("Nivel3"),
+		mapa.get_node_or_null("Nivel4"),
+	]
+
+	for tm in tilemaps_validos:
+		if tm == null:
+			continue
+		var cell = tm.local_to_map(tm.to_local(pos))
+		if tm.get_cell_source_id(cell) != -1:
+			return true
+
+	# 🚫 Si no está en ningún tile válido
+	return false
