@@ -1,0 +1,19 @@
+
+MECÁNICA A PROBAR: Construcción casas
+
+OBJETIVO DE LA PRUEBA:
+	Comprobar que las casas se construyen deforma coherente.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	1) Ejecutar el archivo
+	2) Intentar construir sin recursos y ver que no es posible.
+	3) Construir con recursos y ver como se añade la casa, restando su coste.
+	4) Intentar construir en muros, puentes, agua y ver que no es posible.
+
+RESULTADO ESPERADO:
+	Que las casas se construyan en territorio apto y sin objetos. Y que tras ello se reste el coste de recursos.
+
+PRUEBAS REALIZADAS:
+	11/11/25
+		La visualización de la casa se vuelve roja cuando se situa encima de un terreno no construible.
+		Además si no hay recursos no se construye al clickar. Funciona como esperado.
