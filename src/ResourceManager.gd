@@ -10,7 +10,7 @@ const TIEMPO_CRECIMIENTO  := 10.0
 const MAX_RESOURCE        := 99
 
 # -------------------- COSTES -------------------------
-const CASA_WOOD_COST  := 20
+const CASA_WOOD_COST  := 2
 const CASA_GOLD_COST  := 5
 const CASA_STONE_COST := 5
 

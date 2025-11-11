@@ -14,21 +14,29 @@ grow_vertical = 2
 script = ExtResource("1_0r3o6")
 
 [node name="Background" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = -19.0
-offset_top = -15.0
-offset_right = 1171.0
-offset_bottom = 666.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_fu7sn")
 expand_mode = 1
 stretch_mode = 6
 
 [node name="PlayButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 436.0
-offset_top = 415.0
-offset_right = 760.0
-offset_bottom = 527.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.74100006
+anchor_right = 0.5
+anchor_bottom = 0.74100006
+offset_left = -162.0
+offset_top = -56.16803
+offset_right = 162.0
+offset_bottom = 55.83197
+grow_horizontal = 2
+grow_vertical = 2
 icon = ExtResource("3_fu7sn")
 flat = true
 icon_alignment = 1
