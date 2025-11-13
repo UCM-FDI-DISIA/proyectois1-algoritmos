@@ -1,16 +1,15 @@
-[gd_scene load_steps=17 format=3 uid="uid://c677m228bca8p"]
+[gd_scene load_steps=16 format=3 uid="uid://c677m228bca8p"]
 
 [ext_resource type="Script" uid="uid://4d8pl28x4p2h" path="res://src/Recursos/MinaPiedra/MinaPiedraAnimado.gd" id="1_sm5a2"]
 [ext_resource type="Texture2D" uid="uid://clo1xbg3upk24" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/06.png" id="1_wl0cj"]
 [ext_resource type="Texture2D" uid="uid://phsgl16ntrib" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/07.png" id="2_dh0kw"]
 [ext_resource type="Texture2D" uid="uid://bso5x606mwmd2" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/05.png" id="3_xrkcp"]
-[ext_resource type="Texture2D" uid="uid://dg6osshhfjoa2" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/08.png" id="4_0i0py"]
 [ext_resource type="Texture2D" uid="uid://inkvkba7l15g" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Effects/Explosion/Explosions.png" id="5_dh0kw"]
 [ext_resource type="Texture2D" uid="uid://xx1gjwd1rgkh" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/10.png" id="7_paksk"]
 [ext_resource type="Texture2D" uid="uid://dopipnxlkfjfk" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/04.png" id="8_8c583"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0jvj"]
-size = Vector2(192, 70)
+size = Vector2(192, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xrkcp"]
 atlas = ExtResource("5_dh0kw")
@@ -68,82 +67,7 @@ script = ExtResource("1_sm5a2")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(-2, 5)
 shape = SubResource("RectangleShape2D_e0jvj")
-
-[node name="06" type="Sprite2D" parent="."]
-visible = false
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(0, -6.9999924)
-scale = Vector2(0.96875, 0.96875)
-texture = ExtResource("1_wl0cj")
-offset = Vector2(-9.29032, 5.161289)
-metadata/_edit_group_ = true
-
-[node name="08" type="Sprite2D" parent="."]
-visible = false
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(0, -7)
-scale = Vector2(1.0000001, 1.0000001)
-texture = ExtResource("2_dh0kw")
-offset = Vector2(-23.999996, 19.999998)
-metadata/_edit_group_ = true
-
-[node name="05" type="Sprite2D" parent="."]
-visible = false
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(0, -7)
-texture = ExtResource("3_xrkcp")
-offset = Vector2(11, 23)
-metadata/_edit_group_ = true
-
-[node name="07" type="Sprite2D" parent="."]
-visible = false
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(0, -7)
-texture = ExtResource("1_wl0cj")
-offset = Vector2(25, -14)
-metadata/_edit_group_ = true
-
-[node name="09" type="Sprite2D" parent="."]
-visible = false
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(0, -7)
-texture = ExtResource("4_0i0py")
-offset = Vector2(45, 5)
-metadata/_edit_group_ = true
-
-[node name="10" type="Sprite2D" parent="."]
-visible = false
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(0, -7)
-texture = ExtResource("1_wl0cj")
-offset = Vector2(-23, -26)
-metadata/_edit_group_ = true
-
-[node name="11" type="Sprite2D" parent="."]
-visible = false
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(0, -7)
-texture = ExtResource("1_wl0cj")
-offset = Vector2(-47, -8)
-metadata/_edit_group_ = true
-
-[node name="12" type="Sprite2D" parent="."]
-visible = false
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(0, -7)
-texture = ExtResource("3_xrkcp")
-offset = Vector2(-22, -36)
-metadata/_edit_group_ = true
 
 [node name="AnimacionExplosion" type="AnimatedSprite2D" parent="."]
 visible = false
@@ -157,6 +81,7 @@ frame_progress = 1.0
 [node name="BigRocksContainer" type="Node2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
+position = Vector2(0, -13)
 
 [node name="RockBig1" type="Sprite2D" parent="BigRocksContainer"]
 position = Vector2(-15.000001, -17)
@@ -189,6 +114,7 @@ texture = ExtResource("2_dh0kw")
 [node name="SmallRocksContainer" type="Node2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
+position = Vector2(0, -13)
 
 [node name="RockSmall1" type="Sprite2D" parent="SmallRocksContainer"]
 position = Vector2(15, -6)

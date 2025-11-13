@@ -6,8 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://dti2fl7yrpm64" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/GoldMine_Destroyed.png" id="4_4727j"]
 [ext_resource type="Texture2D" uid="uid://dfgpjfyod5ww0" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/G_Spawn.png" id="5_188qd"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_188qd"]
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_188qd"]
 atlas = ExtResource("1_w6psx")
 region = Rect2(0, 0, 192, 128)
@@ -117,24 +115,20 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_188qd"]
+size = Vector2(192, 64)
+
 [node name="MinaOroAnimado" type="StaticBody2D" groups=["objeto_bloqueante"]]
 z_as_relative = false
 y_sort_enabled = true
 script = ExtResource("1_188qd")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(-1, -22)
-shape = SubResource("RectangleShape2D_188qd")
-one_way_collision_margin = 4.0
 
 [node name="AnimacionMina" type="AnimatedSprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_ui526")
 animation = &"Idle"
-offset = Vector2(-1, -31)
+offset = Vector2(0, -21)
 
 [node name="AnimacionOro" type="AnimatedSprite2D" parent="."]
 z_as_relative = false
@@ -144,3 +138,9 @@ sprite_frames = SubResource("SpriteFrames_cggiv")
 animation = &"bolsita"
 frame = 7
 frame_progress = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+shape = SubResource("RectangleShape2D_188qd")
+one_way_collision_margin = 4.0
