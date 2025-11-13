@@ -40,9 +40,9 @@ func _on_client_joined(client_id: int) -> void:
 
 
 func _on_client_left(client_id: int) -> void:
-	print("Cliente salió:", client_id)
-	players.erase(client_id)
-	quadrants_by_client.erase(client_id)
+	print("Cliente salió: ", client_id)
+	# players.erase(client_id)
+	# quadrants_by_client.erase(client_id)
 
 
 # ------------------------------------------------

@@ -103,12 +103,12 @@ func _spawn_enemy_troops(enemy_id : int) -> void:
 		"Warrior": preload("res://src/NPCs/Warrior.tscn")
 	}
 	
-	var troops_enemy : Dictionary = GDSync.player_get_data(enemy_id, "troops_by_client", {"Archer":0, "Lancer":0, "Monk":0, "Warrior":0}) 
-	print("Soy ", GDSync.get_client_id(), "Enemigo: ", troops_enemy)
+	enemy_counts = GDSync.player_get_data(enemy_id, "troops_by_client", {"Archer":0, "Lancer":0, "Monk":0, "Warrior":0}) 
+	print("Soy ", GDSync.get_client_id(), "Enemigo: ", enemy_counts)
 
 	var index := 0
 	for troop_name in troop_scenes.keys():
-		var count: int = troops_enemy[troop_name]
+		var count: int = enemy_counts[troop_name]
 		if count <= 0 or not troop_scenes.has(troop_name):
 			continue
 

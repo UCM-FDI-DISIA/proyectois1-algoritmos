@@ -91,4 +91,4 @@ func _on_battle_button_pressed() -> void:
 		return
 
 	print("✅ Botón presionado — cambiando a escena 'campoBatalla.tscn'...")
-	get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
+	GameState.attack_other()

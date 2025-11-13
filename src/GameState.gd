@@ -18,6 +18,7 @@ signal collected_time_changed(seconds: float)
 
 
 func _ready() -> void:
+	GDSync.player_data_changed.connect(_on_player_data_changed)
 	print("✅ GameState listo y accesible como singleton.")
 
 
@@ -59,3 +60,16 @@ func add_troops(type: String, amount: int) -> void:
 		troop_counts[type] += amount
 	GDSync.player_set_data("troops_by_client", troop_counts)
 	print("Alguien es un poco mas millonario ", troop_counts)
+
+func attack_other() -> void:
+	print("Iniciando ataque. Notificando a todos los jugadores para cambiar de escena.") 
+	# Aviso al otro jugador
+	GDSync.player_set_data("cambio_campo_batalla", true)
+	get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
+
+func _on_player_data_changed(client_id : int, key : String, value):
+	if client_id != GDSync.get_client_id() : 
+		print("Recibido de %d: %s = %s" % [client_id, key, str(value)])
+		print("Cambiando a la escena de Batalla: campoBatalla.tscn")
+		if key == "cambio_campo_batalla" :
+			get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
