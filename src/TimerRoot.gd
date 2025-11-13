@@ -5,7 +5,7 @@ signal tiempo_especifico_alcanzado
 # =====================================================================
 # 🔧 VARIABLES EDITABLES
 # =====================================================================
-@export var START_TIME := 30.0        # duración total (segundos)
+@export var START_TIME := 60.0        # duración total (segundos)
 @export var SIGNAL_AT   := 20.0       # segundo en el que se emite la señal
 @export var FINAL_WARN  := 10.0       # últimos segundos con advertencia roja
 @export var POST_DELAY  := 5.0        # segundos extra antes de cambiar de escena
@@ -86,8 +86,8 @@ func _update_label() -> void:
 		warning_label.visible  = true
 	elif remaining_time <= SIGNAL_AT:
 		timer_label.modulate   = Color.GREEN
-		warning_label.text     = "Ya puedes atacar."
-		warning_label.visible  = true
+		warning_label.visible  = false
 	else:
 		timer_label.modulate   = Color.WHITE
-		warning_label.visible  = false
+		warning_label.text     = "No puedes atacar."
+		warning_label.visible  = true

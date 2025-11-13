@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b5evxdoxt2gog"
-path="res://.godot/imported/Icono_BotonBatalla.png-cac026d5fe5f0f855b966e6260d47883.ctex"
+path="res://.godot/imported/Icono_BotonBatalla.png-876a99768ec17c844c99801dc0e19b8c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Icono_BotonBatalla.png"
-dest_files=["res://.godot/imported/Icono_BotonBatalla.png-cac026d5fe5f0f855b966e6260d47883.ctex"]
+source_file="res://src/AssetsUsados/Icono_BotonBatalla.png"
+dest_files=["res://.godot/imported/Icono_BotonBatalla.png-876a99768ec17c844c99801dc0e19b8c.ctex"]
 
 [params]
 
