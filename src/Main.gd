@@ -3,8 +3,8 @@ extends Node
 @onready var player = $"Objetos/Player"
 
 var quadrant_spawn_positions := {
-	0: Vector2(200, 200),      # Host
-	1: Vector2(2200, 200),     # Cliente
+	0: Vector2(350, 400),      # Jugador 0
+	1: Vector2(8200, 400),     # Jugador 1
 }
 
 func _ready() -> void:

@@ -14,6 +14,7 @@ func _ready() -> void:
 	GDSync.lobby_joined.connect(_on_lobby_joined)
 
 	GDSync.expose_func(_receive_quadrant_assignment)
+	
 
 
 # ------------------------------------------------
@@ -56,6 +57,7 @@ func _check_start_condition() -> void:
 	if players.size() >= 2:
 		print("✅ Dos jugadores detectados. Asignando cuadrantes y arrancando partida...")
 		_assign_quadrants()
+		
 		game_started = true
 
 		await get_tree().create_timer(1.0).timeout
@@ -79,6 +81,9 @@ func _assign_quadrants() -> void:
 		var client_id: int = players[i]
 		var q: int = available_quadrants[i]
 		quadrants_by_client[client_id] = q
+		
+		GDSync.player_set_data("quadrants_by_client", quadrants_by_client)
+		
 		print(" -> Jugador", client_id, "tiene cuadrante", q)
 		GDSync.call_func_on(client_id, _receive_quadrant_assignment, [q])
 
@@ -88,6 +93,7 @@ func _assign_quadrants() -> void:
 # ------------------------------------------------
 func _receive_quadrant_assignment(q_id: int) -> void:
 	my_quadrant_id = q_id
+	
 	print("Me asignaron el cuadrante:", my_quadrant_id)
 	GDSync.player_set_data("quadrant_id", q_id)
 
@@ -100,3 +106,9 @@ func get_my_quadrant() -> int:
 
 func get_player_quadrant(client_id: int) -> int:
 	return quadrants_by_client.get(client_id, -1)
+
+func get_enemy_id(client_id: int) -> int:
+	var enemy_id : int = players[0]
+	if (enemy_id == client_id) : enemy_id = players[1]
+	print(players, " mi enemigo es ", enemy_id)
+	return enemy_id

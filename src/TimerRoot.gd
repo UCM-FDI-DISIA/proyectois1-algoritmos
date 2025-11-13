@@ -5,9 +5,9 @@ signal tiempo_especifico_alcanzado
 # =====================================================================
 # 🔧 VARIABLES EDITABLES
 # =====================================================================
-@export var START_TIME := 60.0        # duración total (segundos)
-@export var SIGNAL_AT   := 30.0       # segundo en el que se emite la señal
-@export var FINAL_WARN  := 20.0       # últimos segundos con advertencia roja
+@export var START_TIME := 30.0        # duración total (segundos)
+@export var SIGNAL_AT   := 20.0       # segundo en el que se emite la señal
+@export var FINAL_WARN  := 10.0       # últimos segundos con advertencia roja
 @export var POST_DELAY  := 5.0        # segundos extra antes de cambiar de escena
 
 # =====================================================================

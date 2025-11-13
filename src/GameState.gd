@@ -7,7 +7,7 @@ extends Node
 # ===================================================
 
 var collected_seconds: float = 0
-var troop_counts := {
+var troop_counts : Dictionary = {
 	"Archer": 0,
 	"Lancer": 0,
 	"Monk": 0,
@@ -57,3 +57,5 @@ func get_all_troop_counts() -> Dictionary:
 func add_troops(type: String, amount: int) -> void:
 	if troop_counts.has(type):
 		troop_counts[type] += amount
+	GDSync.player_set_data("troops_by_client", troop_counts)
+	print("Alguien es un poco mas millonario ", troop_counts)

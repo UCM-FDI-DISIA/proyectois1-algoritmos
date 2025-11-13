@@ -36,8 +36,15 @@ func _ready() -> void:
 	if game_state == null:
 		push_error("❌ No se encontró GameState")
 		return
+	
 	_spawn_player_troops()
-	_spawn_enemy_troops()
+	# Le dice al GameState que este jugador esta listo para pelear
+	# Pregunta si todos los jugadores están listos
+	# Empieza el ataque
+	var my_id : int = GDSync.get_client_id()
+	var enemy_id : int = MultiplayerManager.get_enemy_id(my_id)
+	
+	_spawn_enemy_troops(enemy_id)
 	_start_battle_countdown()
 	main_menu_button.visible = false
 	main_menu_button.pressed.connect(_on_MainMenuButton_pressed)
@@ -47,14 +54,16 @@ func _ready() -> void:
 # 🪖 SPAWN JUGADOR
 # =====================================================================
 func _spawn_player_troops() -> void:
-	var troop_counts: Dictionary = game_state.get_all_troop_counts()
+	var troop_counts: Dictionary = GameState.get_all_troop_counts()
 	var troop_scenes := {
 		"Archer": preload("res://src/NPCs/Archer.tscn"),
 		"Lancer": preload("res://src/NPCs/Lancer.tscn"),
 		"Monk": preload("res://src/NPCs/Monk.tscn"),
 		"Warrior": preload("res://src/NPCs/Warrior.tscn")
 	}
-
+	
+	print("Soy el jugador: ", GDSync.get_client_id(), " y voy a actualizar mis tropas.")
+	
 	var battlefield_size := battlefield_tiles * tile_size
 	var num_rows := 0
 	for c in troop_counts.values():
@@ -86,22 +95,24 @@ func _spawn_player_troops() -> void:
 # =====================================================================
 # 🪖 SPAWN ENEMIGO
 # =====================================================================
-func _spawn_enemy_troops() -> void:
+func _spawn_enemy_troops(enemy_id : int) -> void:
 	var troop_scenes := {
 		"Archer": preload("res://src/NPCs/Archer.tscn"),
 		"Lancer": preload("res://src/NPCs/Lancer.tscn"),
 		"Monk": preload("res://src/NPCs/Monk.tscn"),
 		"Warrior": preload("res://src/NPCs/Warrior.tscn")
 	}
-
-	var rng := RandomNumberGenerator.new()
-	rng.randomize()
+	
+	var troops_enemy : Dictionary = GDSync.player_get_data(enemy_id, "troops_by_client", {"Archer":0, "Lancer":0, "Monk":0, "Warrior":0}) 
+	print("Soy ", GDSync.get_client_id(), "Enemigo: ", troops_enemy)
 
 	var index := 0
 	for troop_name in troop_scenes.keys():
+		var count: int = troops_enemy[troop_name]
+		if count <= 0 or not troop_scenes.has(troop_name):
+			continue
+
 		var scene: PackedScene = troop_scenes[troop_name]
-		var count: int = rng.randi_range(2, 9)
-		enemy_counts[troop_name] = count
 
 		var row_y := _row_y_for_index(index)
 
@@ -295,7 +306,7 @@ func pad_right(text: String, width: int) -> String:
 		text += " ".repeat(n)
 	return text
 
-func _show_result_ui(result_text: String, enemy_counts: Dictionary) -> void:
+func _show_result_ui(result_text: String, _enemy_counts: Dictionary) -> void:
 	print("📺 Mostrando pantalla de resultados (Versión Responsiva)...")
 
 	# --- 1. Capa principal (CanvasLayer) ---
@@ -331,9 +342,9 @@ func _show_result_ui(result_text: String, enemy_counts: Dictionary) -> void:
 
 	# --- Formatear y calcular (Lógica no modificada) ---
 	var player_info := _format_troop_info(game_state.get_all_troop_counts(), "Jugador").split("\n")
-	var enemy_info := _format_troop_info(enemy_counts, "Enemigo").split("\n")
+	var enemy_info := _format_troop_info(_enemy_counts, "Enemigo").split("\n")
 	var player_power := _calculate_power(game_state.get_all_troop_counts())
-	var enemy_power := _calculate_power(enemy_counts)
+	var enemy_power := _calculate_power(_enemy_counts)
 
 	var color := "yellow"
 	if result_text.find("Jugador") != -1 and result_text.find("Gana") != -1:
