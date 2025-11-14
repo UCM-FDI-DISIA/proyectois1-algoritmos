@@ -12,6 +12,8 @@ func _ready() -> void:
 	_place_player_by_quadrant()
 
 
+
+
 func _place_player_by_quadrant() -> void:
 	var q := MultiplayerManager.get_my_quadrant()
 

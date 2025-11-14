@@ -548,7 +548,6 @@ z_as_relative = false
 y_sort_enabled = true
 
 [node name="BotonBatalla" type="Node2D" parent="ElementosPantalla"]
-visible = false
 z_index = 100
 z_as_relative = false
 y_sort_enabled = true
@@ -610,19 +609,21 @@ scale = Vector2(0.06692168, 0.07214986)
 texture = ExtResource("19_adv81")
 offset = Vector2(29.919922, -96.47461)
 
-[node name="BotonBatalla1" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
-
 [node name="BotonBatalla2" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
-offset = Vector2(2150, 0)
-transform = Transform2D(1, 0, 0, 1, 2150, 0)
+offset_left = 2151.0
+offset_top = 5.0
+offset_right = 2151.0
+offset_bottom = 5.0
 
 [node name="BotonBatalla3" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
-offset = Vector2(0, 2150)
-transform = Transform2D(1, 0, 0, 1, 0, 2150)
+offset_top = 2150.0
+offset_bottom = 2150.0
 
 [node name="BotonBatalla4" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
-offset = Vector2(2150, 2150)
-transform = Transform2D(1, 0, 0, 1, 2150, 2150)
+offset_left = 2150.0
+offset_top = 2150.0
+offset_right = 2150.0
+offset_bottom = 2150.0
 
 [node name="BotonS" type="TextureButton" parent="ElementosPantalla"]
 offset_left = 192.0

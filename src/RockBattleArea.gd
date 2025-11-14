@@ -5,7 +5,6 @@ extends Area2D
 # =====================================================================
 @onready var battle_button: TextureButton = get_node("UI/BattleButton")
 @onready var battle_icon: Sprite2D        = get_node("UI/BattleButton/BattleIcon")
-@onready var player: CharacterBody2D      = get_tree().get_first_node_in_group("jugador")
 
 # =====================================================================
 # 🎮 ESTADO
@@ -13,16 +12,19 @@ extends Area2D
 var player_in_area := false
 
 # =====================================================================
+# ⚙️ REFERENCIA AL JUGADOR (asignar en el editor)
+# =====================================================================
+@export var player: CharacterBody2D
+
+# =====================================================================
 # ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
-	print("🧠 [RockBattleArea] Script cargado (modo mundo)")
-
 	if player == null:
-		push_error("❌ No se encontró jugador en el grupo 'jugador'")
-
+		push_error("❌ Asigna el nodo jugador al export var 'player' en el editor")
+	
 	# Botón oculto/deshabilitado por defecto
-	battle_button.visible  = false
+	battle_button.visible  = true
 	battle_button.disabled = true
 	battle_button.tooltip_text = "Aún no puedes atacar ⚔️"
 
@@ -31,23 +33,16 @@ func _ready() -> void:
 	battle_button.mouse_exited.connect(_on_button_exit)
 	battle_button.pressed.connect(_on_battle_button_pressed)
 
-	# Ajustar forma de colisión al tamaño del botón
-	var collision: CollisionShape2D = get_node("UI/BattleButton/StaticBody2D/CollisionShape2D")
-	var texture_size := battle_button.texture_normal.get_size()
-	collision.shape = RectangleShape2D.new()
-	collision.shape.size = texture_size * 2.0
-	collision.position   = battle_button.position + texture_size / 2.0
-
 	# Señales del área
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 
-	# Timer para habilitar el botón
+	# Timer opcional para habilitar el botón
 	var timer_node = get_node_or_null("../../Timer/Panel/TimerRoot")
 	if timer_node:
 		timer_node.connect("tiempo_especifico_alcanzado", Callable(self, "_on_tiempo_especifico_alcanzado"))
 	else:
-		push_error("❌ TimerRoot no encontrado")
+		push_warning("⚠️ TimerRoot no encontrado, el botón permanecerá deshabilitado hasta habilitarlo manualmente")
 
 # =====================================================================
 # 📡 EVENTOS PERSONALIZADOS

@@ -12,7 +12,9 @@ size = Vector2(238.39615, 201.16399)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tny1c"]
 
-[node name="BotonBatalla" type="CanvasLayer"]
+[node name="BotonBatalla" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 
 [node name="RockBattleArea" type="Area2D" parent="."]
 z_index = 100
@@ -29,10 +31,15 @@ position = Vector2(9.168945, -3.4887695)
 scale = Vector2(0.99999976, 1)
 shape = SubResource("RectangleShape2D_hymnk")
 
-[node name="UI" type="Node2D" parent="RockBattleArea"]
+[node name="UI" type="Control" parent="RockBattleArea"]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(-1700.2922, -1234.8931)
+layout_mode = 3
+anchors_preset = 0
+offset_left = -1732.9572
+offset_top = -1259.3119
+offset_right = -1732.9572
+offset_bottom = -1259.3119
 scale = Vector2(0.5730678, 0.58139974)
 
 [node name="BattleButton" type="TextureButton" parent="RockBattleArea/UI"]
@@ -40,6 +47,7 @@ top_level = true
 z_as_relative = false
 y_sort_enabled = true
 custom_minimum_size = Vector2(64, 64)
+layout_mode = 0
 offset_left = 2992.0
 offset_top = 2142.0
 offset_right = 3056.0
