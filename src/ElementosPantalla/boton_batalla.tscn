@@ -1,0 +1,72 @@
+[gd_scene load_steps=9 format=3 uid="uid://bg6kvrfqm2lc6"]
+
+[ext_resource type="Script" uid="uid://bx5dt564paiww" path="res://src/RockBattleArea.gd" id="1_v782i"]
+[ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="2_euree"]
+[ext_resource type="Texture2D" uid="uid://bevtjvf2gdrhe" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red_Pressed.png" id="3_m0srw"]
+[ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="4_74fe7"]
+[ext_resource type="Texture2D" uid="uid://cl3jnlpxsvd7u" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Disable.png" id="5_muqr6"]
+[ext_resource type="Texture2D" uid="uid://b5evxdoxt2gog" path="res://src/AssetsUsados/Icono_BotonBatalla.png" id="6_sbbk1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hymnk"]
+size = Vector2(238.39615, 201.16399)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tny1c"]
+
+[node name="BotonBatalla" type="CanvasLayer"]
+
+[node name="RockBattleArea" type="Area2D" parent="."]
+z_index = 100
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(3024, 2166)
+scale = Vector2(1.7449942, 1.719987)
+script = ExtResource("1_v782i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RockBattleArea"]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(9.168945, -3.4887695)
+scale = Vector2(0.99999976, 1)
+shape = SubResource("RectangleShape2D_hymnk")
+
+[node name="UI" type="Node2D" parent="RockBattleArea"]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(-1700.2922, -1234.8931)
+scale = Vector2(0.5730678, 0.58139974)
+
+[node name="BattleButton" type="TextureButton" parent="RockBattleArea/UI"]
+top_level = true
+z_as_relative = false
+y_sort_enabled = true
+custom_minimum_size = Vector2(64, 64)
+offset_left = 2992.0
+offset_top = 2142.0
+offset_right = 3056.0
+offset_bottom = 2206.0
+scale = Vector2(1.7449942, 1.719987)
+pivot_offset = Vector2(30.06482, 14.47644)
+texture_normal = ExtResource("2_euree")
+texture_pressed = ExtResource("3_m0srw")
+texture_hover = ExtResource("4_74fe7")
+texture_disabled = ExtResource("5_muqr6")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="RockBattleArea/UI/BattleButton"]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(-1700.2919, -1234.893)
+scale = Vector2(0.57306767, 0.58139974)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RockBattleArea/UI/BattleButton/StaticBody2D"]
+z_as_relative = false
+y_sort_enabled = true
+shape = SubResource("RectangleShape2D_tny1c")
+debug_color = Color(0.63070875, 0.5267407, 0.1583556, 0.41960785)
+
+[node name="BattleIcon" type="Sprite2D" parent="RockBattleArea/UI/BattleButton"]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(31.784058, 34.82556)
+scale = Vector2(0.06692168, 0.07214986)
+texture = ExtResource("6_sbbk1")
+offset = Vector2(29.919922, -96.47461)

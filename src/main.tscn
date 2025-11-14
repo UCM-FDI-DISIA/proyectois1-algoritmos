@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=86 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -24,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://cl3jnlpxsvd7u" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Disable.png" id="19_sta5p"]
 [ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="20_ib8ht"]
 [ext_resource type="Texture2D" uid="uid://bevtjvf2gdrhe" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red_Pressed.png" id="21_43aqp"]
+[ext_resource type="PackedScene" uid="uid://bg6kvrfqm2lc6" path="res://src/ElementosPantalla/boton_batalla.tscn" id="21_jitvu"]
 [ext_resource type="Texture2D" uid="uid://knoivg0aqqle" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="24_ocmcv"]
 [ext_resource type="Script" uid="uid://dx4mnernx43c7" path="res://src/TimerRoot.gd" id="27_c2usk"]
 
@@ -547,6 +548,7 @@ z_as_relative = false
 y_sort_enabled = true
 
 [node name="BotonBatalla" type="Node2D" parent="ElementosPantalla"]
+visible = false
 z_index = 100
 z_as_relative = false
 y_sort_enabled = true
@@ -607,6 +609,20 @@ position = Vector2(31.784058, 34.82556)
 scale = Vector2(0.06692168, 0.07214986)
 texture = ExtResource("19_adv81")
 offset = Vector2(29.919922, -96.47461)
+
+[node name="BotonBatalla1" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
+
+[node name="BotonBatalla2" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
+offset = Vector2(2150, 0)
+transform = Transform2D(1, 0, 0, 1, 2150, 0)
+
+[node name="BotonBatalla3" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
+offset = Vector2(0, 2150)
+transform = Transform2D(1, 0, 0, 1, 0, 2150)
+
+[node name="BotonBatalla4" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
+offset = Vector2(2150, 2150)
+transform = Transform2D(1, 0, 0, 1, 2150, 2150)
 
 [node name="BotonS" type="TextureButton" parent="ElementosPantalla"]
 offset_left = 192.0
