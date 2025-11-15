@@ -1,0 +1,26 @@
+[gd_scene load_steps=7 format=3 uid="uid://bbo05kp3bjw4u"]
+
+[ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="1_n5d0a"]
+[ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="2_irt26"]
+[ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="3_ce18t"]
+[ext_resource type="Texture2D" uid="uid://cl3jnlpxsvd7u" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Disable.png" id="4_0d63g"]
+[ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="5_6tngo"]
+[ext_resource type="Texture2D" uid="uid://cn7k1sxw43l8b" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_09.png" id="6_5h630"]
+
+[node name="BotonS" type="TextureButton"]
+offset_left = 192.0
+offset_top = 983.0
+offset_right = 256.0
+offset_bottom = 1047.0
+texture_normal = ExtResource("1_n5d0a")
+texture_pressed = ExtResource("2_irt26")
+texture_hover = ExtResource("3_ce18t")
+texture_disabled = ExtResource("4_0d63g")
+
+[node name="Mas" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
+texture = ExtResource("5_6tngo")
+
+[node name="Menos" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
+texture = ExtResource("6_5h630")

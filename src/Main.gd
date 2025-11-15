@@ -4,7 +4,7 @@ extends Node
 
 var quadrant_spawn_positions := {
 	0: Vector2(350, 400),      # Jugador 0
-	1: Vector2(450, 400),     # Jugador 1
+	1: Vector2(7500, 400),     # Jugador 1
 }
 
 func _ready() -> void:

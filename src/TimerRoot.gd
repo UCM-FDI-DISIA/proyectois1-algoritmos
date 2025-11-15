@@ -29,6 +29,7 @@ var time_over    := false
 # ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
+	GDSync.player_data_changed.connect(_on_player_data_changed)
 	remaining_time = START_TIME
 
 	main_timer.timeout.connect(_on_timer_timeout)
@@ -84,6 +85,8 @@ func _update_label() -> void:
 		warning_label.modulate = Color.RED
 		warning_label.text     = "¡Llega la última batalla!"
 		warning_label.visible  = true
+		if (remaining_time == FINAL_WARN):
+			GDSync.player_set_data("set_to_FINAL_WARN", true)
 	elif remaining_time <= SIGNAL_AT:
 		timer_label.modulate   = Color.GREEN
 		warning_label.visible  = false
@@ -91,3 +94,10 @@ func _update_label() -> void:
 		timer_label.modulate   = Color.WHITE
 		warning_label.text     = "No puedes atacar."
 		warning_label.visible  = true
+
+func _on_player_data_changed(client_id : int, key : String, value):
+	if client_id != GDSync.get_client_id() : 
+		print("Recibido de %d: %s = %s" % [client_id, key, str(value)])
+		print("Sincronizando timers.")
+		if key == "set_to_FINAL_WARN" :
+			remaining_time = FINAL_WARN

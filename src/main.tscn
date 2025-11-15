@@ -1,4 +1,4 @@
-[gd_scene load_steps=86 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=83 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://fsq1fp7g6o7n" path="res://src/Menus/MenuSoldados/menuSoldados.tscn" id="3_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
-[ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="4_mlv6i"]
 [ext_resource type="Script" uid="uid://d2e8dy1mo1k7w" path="res://src/Menus/MenuSoldados/MenuSoldados.gd" id="6_jitvu"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
 [ext_resource type="Script" uid="uid://dut20ponmt82k" path="res://src/ResourceManager.gd" id="6_lovvn"]
@@ -15,16 +14,14 @@
 [ext_resource type="PackedScene" uid="uid://c6wex4pd4eg7t" path="res://src/Edificios/Casa/CasaAnimada.tscn" id="9_mgm53"]
 [ext_resource type="Script" uid="uid://c6vg12603g8ol" path="res://src/Player.gd" id="10_c2usk"]
 [ext_resource type="PackedScene" uid="uid://die6kbpl1cpp2" path="res://src/Edificios/Cuartel/CuartelAnimado.tscn" id="10_uewes"]
-[ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="14_d3u4l"]
-[ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="14_tb146"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="15_e7lu8"]
 [ext_resource type="Script" uid="uid://bx5dt564paiww" path="res://src/RockBattleArea.gd" id="17_c2usk"]
 [ext_resource type="Texture2D" uid="uid://b5evxdoxt2gog" path="res://src/AssetsUsados/Icono_BotonBatalla.png" id="19_adv81"]
-[ext_resource type="Texture2D" uid="uid://cn7k1sxw43l8b" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_09.png" id="19_sif16"]
 [ext_resource type="Texture2D" uid="uid://cl3jnlpxsvd7u" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Disable.png" id="19_sta5p"]
 [ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="20_ib8ht"]
 [ext_resource type="Texture2D" uid="uid://bevtjvf2gdrhe" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red_Pressed.png" id="21_43aqp"]
 [ext_resource type="PackedScene" uid="uid://bg6kvrfqm2lc6" path="res://src/ElementosPantalla/boton_batalla.tscn" id="21_jitvu"]
+[ext_resource type="PackedScene" uid="uid://bbo05kp3bjw4u" path="res://src/BotonElementos/boton_s.tscn" id="22_ocmcv"]
 [ext_resource type="Texture2D" uid="uid://knoivg0aqqle" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="24_ocmcv"]
 [ext_resource type="Script" uid="uid://dx4mnernx43c7" path="res://src/TimerRoot.gd" id="27_c2usk"]
 
@@ -536,7 +533,7 @@ tile_set = SubResource("TileSet_mgm53")
 [node name="Edificios" type="TileMapLayer" parent="Objetos"]
 z_as_relative = false
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAADABIAAAAAAAAAAgAEAAUAAAAAAAAAAQBzABIAAAAAAAAAAgA=")
+tile_map_data = PackedByteArray("AAADABIAAAAAAAAAAgBzABIAAAAAAAAAAgAEAFMAAAAAAAAAAgB7AFQAAAAAAAAAAgA/ADEAAAAAAAAAAQA=")
 tile_set = SubResource("TileSet_kqbth")
 
 [node name="CasasCompradas" type="Node2D" parent="Objetos/Edificios"]
@@ -625,23 +622,25 @@ offset_top = 2150.0
 offset_right = 2150.0
 offset_bottom = 2150.0
 
-[node name="BotonS" type="TextureButton" parent="ElementosPantalla"]
-offset_left = 192.0
-offset_top = 983.0
-offset_right = 256.0
-offset_bottom = 1047.0
-texture_normal = ExtResource("4_mlv6i")
-texture_pressed = ExtResource("14_tb146")
-texture_hover = ExtResource("15_e7lu8")
-texture_disabled = ExtResource("19_sta5p")
+[node name="BotonS1" parent="ElementosPantalla" instance=ExtResource("22_ocmcv")]
 
-[node name="Mas" type="Sprite2D" parent="ElementosPantalla/BotonS"]
-position = Vector2(32, 32)
-texture = ExtResource("14_d3u4l")
+[node name="BotonS2" parent="ElementosPantalla" instance=ExtResource("22_ocmcv")]
+offset_left = 7360.0
+offset_top = 964.0
+offset_right = 7424.0
+offset_bottom = 1028.0
 
-[node name="Menos" type="Sprite2D" parent="ElementosPantalla/BotonS"]
-position = Vector2(32, 32)
-texture = ExtResource("19_sif16")
+[node name="BotonS3" parent="ElementosPantalla" instance=ExtResource("22_ocmcv")]
+offset_left = 7873.0
+offset_top = 5183.0
+offset_right = 7937.0
+offset_bottom = 5247.0
+
+[node name="BotonS4" parent="ElementosPantalla" instance=ExtResource("22_ocmcv")]
+offset_left = 251.0
+offset_top = 5112.0
+offset_right = 315.0
+offset_bottom = 5176.0
 
 [node name="Timer" type="CanvasLayer" parent="ElementosPantalla"]
 

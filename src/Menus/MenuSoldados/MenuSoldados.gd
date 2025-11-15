@@ -9,7 +9,7 @@ extends CanvasLayer
 # =====================================================================
 # 🧾 NODOS DE INTERFAZ
 # =====================================================================
-@onready var boton_s: TextureButton = get_node("../ElementosPantalla/BotonS")
+@onready var boton_s: TextureButton
 @onready var warrior_button: TextureButton = $Soldados/Warrior/ButtonW/ButtonWarrior
 @onready var archer_button: TextureButton  = $Soldados/Archer/ButtonA/ButtonArcher
 @onready var lancer_button: TextureButton  = $Soldados/Lancer/ButtonL/ButtonLancer
@@ -20,8 +20,8 @@ extends CanvasLayer
 @onready var lancer_mas: Sprite2D  = $Soldados/Lancer/ButtonL/Mas
 @onready var monk_mas: Sprite2D    = $Soldados/Monk/ButtonM/Mas
 
-@onready var boton_s_mas: Sprite2D   = boton_s.get_node("Mas")
-@onready var boton_s_menos: Sprite2D = boton_s.get_node("Menos")
+@onready var boton_s_mas: Sprite2D   
+@onready var boton_s_menos: Sprite2D
 
 @onready var tooltip_preview: Panel = Panel.new()
 @onready var tooltip_label: Label   = Label.new()
@@ -42,6 +42,15 @@ var hide_timer: Timer
 # ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
+	# --- Quadrant ---
+	var quadrant: int = MultiplayerManager.get_my_quadrant()
+	if (quadrant == 0) : boton_s = get_node("../ElementosPantalla/BotonS1")
+	else : if (quadrant == 1) : boton_s = get_node("../ElementosPantalla/BotonS2")
+	else : if (quadrant == 2) : boton_s = get_node("../ElementosPantalla/BotonS3")
+	else : if (quadrant == 3) : boton_s = get_node("../ElementosPantalla/BotonS4")
+	boton_s_mas = boton_s.get_node("Mas")
+	boton_s_menos = boton_s.get_node("Menos")
+	
 	# --- Labels ---
 	labels["Warrior"] = $Soldados/Warrior/WarriorLabel
 	labels["Archer"]  = $Soldados/Archer/ArcherLabel
