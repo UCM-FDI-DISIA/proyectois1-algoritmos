@@ -3,8 +3,8 @@ extends Area2D
 # =====================================================================
 # 🧾 NODOS
 # =====================================================================
-@onready var battle_button: TextureButton = get_node("UI/BattleButton")
-@onready var battle_icon: Sprite2D        = get_node("UI/BattleButton/BattleIcon")
+@onready var battle_button: TextureButton
+@onready var battle_icon: Sprite2D        
 
 # =====================================================================
 # 🎮 ESTADO
@@ -14,12 +14,24 @@ var player_in_area := false
 # =====================================================================
 # ⚙️ REFERENCIA AL JUGADOR (asignar en el editor)
 # =====================================================================
-@export var player: CharacterBody2D
+@onready var player: CharacterBody2D = get_node("/root/Main/Objetos/Player")
 
 # =====================================================================
 # ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
+	var quadrant : int = MultiplayerManager.get_my_quadrant()
+	match (quadrant):
+		0: battle_button = get_node("/root/Main/Objetos/BotonBatalla1") 
+		pass
+		1: battle_button = get_node("/root/Main/Objetos/BotonBatalla2") 
+		pass
+		2: battle_button = get_node("/root/Main/Objetos/BotonBatalla3")
+		pass
+		3: battle_button = get_node("/root/Main/Objetos/BotonBatalla4")
+		pass
+	battle_icon = battle_button.get_node("BattleIcon")
+	
 	if player == null:
 		push_error("❌ Asigna el nodo jugador al export var 'player' en el editor")
 	
@@ -38,7 +50,7 @@ func _ready() -> void:
 	body_exited.connect(_on_body_exited)
 
 	# Timer opcional para habilitar el botón
-	var timer_node = get_node_or_null("../../Timer/Panel/TimerRoot")
+	var timer_node = get_node_or_null("/root/Main/ElementosPantalla/Timer/Panel/TimerRoot")
 	if timer_node:
 		timer_node.connect("tiempo_especifico_alcanzado", Callable(self, "_on_tiempo_especifico_alcanzado"))
 	else:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=75 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -14,12 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://c6wex4pd4eg7t" path="res://src/Edificios/Casa/CasaAnimada.tscn" id="9_mgm53"]
 [ext_resource type="Script" uid="uid://c6vg12603g8ol" path="res://src/Player.gd" id="10_c2usk"]
 [ext_resource type="PackedScene" uid="uid://die6kbpl1cpp2" path="res://src/Edificios/Cuartel/CuartelAnimado.tscn" id="10_uewes"]
-[ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="15_e7lu8"]
-[ext_resource type="Script" uid="uid://bx5dt564paiww" path="res://src/RockBattleArea.gd" id="17_c2usk"]
-[ext_resource type="Texture2D" uid="uid://b5evxdoxt2gog" path="res://src/AssetsUsados/Icono_BotonBatalla.png" id="19_adv81"]
-[ext_resource type="Texture2D" uid="uid://cl3jnlpxsvd7u" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Disable.png" id="19_sta5p"]
-[ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="20_ib8ht"]
-[ext_resource type="Texture2D" uid="uid://bevtjvf2gdrhe" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red_Pressed.png" id="21_43aqp"]
 [ext_resource type="PackedScene" uid="uid://bg6kvrfqm2lc6" path="res://src/ElementosPantalla/boton_batalla.tscn" id="21_jitvu"]
 [ext_resource type="PackedScene" uid="uid://bbo05kp3bjw4u" path="res://src/BotonElementos/boton_s.tscn" id="22_ocmcv"]
 [ext_resource type="Texture2D" uid="uid://knoivg0aqqle" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="24_ocmcv"]
@@ -427,11 +421,6 @@ scenes/2/scene = ExtResource("10_uewes")
 tile_size = Vector2i(64, 64)
 sources/0 = SubResource("TileSetScenesCollectionSource_uewes")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_adv81"]
-size = Vector2(238.39615, 201.16399)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lovvn"]
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_adv81"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
@@ -540,87 +529,37 @@ tile_set = SubResource("TileSet_kqbth")
 z_as_relative = false
 y_sort_enabled = true
 
+[node name="BotonBatalla1" parent="Objetos" instance=ExtResource("21_jitvu")]
+offset_left = 3045.0
+offset_top = 2162.0
+offset_right = 3109.0
+offset_bottom = 2226.0
+
+[node name="BotonBatalla2" parent="Objetos" instance=ExtResource("21_jitvu")]
+offset_left = 5139.0
+offset_top = 2146.0
+offset_right = 5203.0
+offset_bottom = 2210.0
+
+[node name="BotonBatalla3" parent="Objetos" instance=ExtResource("21_jitvu")]
+offset_left = 2992.0002
+offset_top = 4302.0
+offset_right = 3056.0002
+offset_bottom = 4366.0
+
+[node name="BotonBatalla4" parent="Objetos" instance=ExtResource("21_jitvu")]
+offset_left = 5126.0
+offset_top = 4234.0
+offset_right = 5190.0
+offset_bottom = 4298.0
+
+[node name="BotonesYSort" type="Node2D" parent="Objetos"]
+z_as_relative = false
+y_sort_enabled = true
+
 [node name="ElementosPantalla" type="Node2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-
-[node name="BotonBatalla" type="Node2D" parent="ElementosPantalla"]
-z_index = 100
-z_as_relative = false
-y_sort_enabled = true
-
-[node name="RockBattleArea" type="Area2D" parent="ElementosPantalla/BotonBatalla"]
-z_index = 100
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(3024, 2166)
-scale = Vector2(1.7449942, 1.719987)
-script = ExtResource("17_c2usk")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea"]
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(9.168945, -3.4887695)
-scale = Vector2(0.99999976, 1)
-shape = SubResource("RectangleShape2D_adv81")
-
-[node name="UI" type="Node2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea"]
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(-1700.2922, -1234.8931)
-scale = Vector2(0.5730678, 0.58139974)
-
-[node name="BattleButton" type="TextureButton" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI"]
-top_level = true
-z_as_relative = false
-y_sort_enabled = true
-custom_minimum_size = Vector2(64, 64)
-offset_left = 2992.0
-offset_top = 2142.0
-offset_right = 3056.0
-offset_bottom = 2206.0
-scale = Vector2(1.7449942, 1.719987)
-pivot_offset = Vector2(30.06482, 14.47644)
-texture_normal = ExtResource("20_ib8ht")
-texture_pressed = ExtResource("21_43aqp")
-texture_hover = ExtResource("15_e7lu8")
-texture_disabled = ExtResource("19_sta5p")
-
-[node name="StaticBody2D" type="StaticBody2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI/BattleButton"]
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(-1700.2919, -1234.893)
-scale = Vector2(0.57306767, 0.58139974)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI/BattleButton/StaticBody2D"]
-z_as_relative = false
-y_sort_enabled = true
-shape = SubResource("RectangleShape2D_lovvn")
-debug_color = Color(0.63070875, 0.5267407, 0.1583556, 0.41960785)
-
-[node name="BattleIcon" type="Sprite2D" parent="ElementosPantalla/BotonBatalla/RockBattleArea/UI/BattleButton"]
-z_as_relative = false
-y_sort_enabled = true
-position = Vector2(31.784058, 34.82556)
-scale = Vector2(0.06692168, 0.07214986)
-texture = ExtResource("19_adv81")
-offset = Vector2(29.919922, -96.47461)
-
-[node name="BotonBatalla2" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
-offset_left = 2151.0
-offset_top = 5.0
-offset_right = 2151.0
-offset_bottom = 5.0
-
-[node name="BotonBatalla3" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
-offset_top = 2150.0
-offset_bottom = 2150.0
-
-[node name="BotonBatalla4" parent="ElementosPantalla" instance=ExtResource("21_jitvu")]
-offset_left = 2150.0
-offset_top = 2150.0
-offset_right = 2150.0
-offset_bottom = 2150.0
 
 [node name="BotonS1" parent="ElementosPantalla" instance=ExtResource("22_ocmcv")]
 
