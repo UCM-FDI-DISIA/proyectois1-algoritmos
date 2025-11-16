@@ -100,4 +100,4 @@ func _on_player_data_changed(client_id : int, key : String, value):
 		print("Recibido de %d: %s = %s" % [client_id, key, str(value)])
 		print("Sincronizando timers.")
 		if key == "set_to_FINAL_WARN" :
-			remaining_time = FINAL_WARN - 1
+			remaining_time = min(remaining_time, FINAL_WARN)
