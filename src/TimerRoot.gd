@@ -5,8 +5,8 @@ signal tiempo_especifico_alcanzado
 # =====================================================================
 # 🔧 VARIABLES EDITABLES
 # =====================================================================
-@export var START_TIME := 60.0        # duración total (segundos)
-@export var SIGNAL_AT   := 20.0       # segundo en el que se emite la señal
+@export var START_TIME := 120.0        # duración total (segundos)
+@export var SIGNAL_AT   := 90.0       # segundo en el que se emite la señal
 @export var FINAL_WARN  := 10.0       # últimos segundos con advertencia roja
 @export var POST_DELAY  := 5.0        # segundos extra antes de cambiar de escena
 
@@ -100,4 +100,4 @@ func _on_player_data_changed(client_id : int, key : String, value):
 		print("Recibido de %d: %s = %s" % [client_id, key, str(value)])
 		print("Sincronizando timers.")
 		if key == "set_to_FINAL_WARN" :
-			remaining_time = FINAL_WARN
+			remaining_time = FINAL_WARN - 1

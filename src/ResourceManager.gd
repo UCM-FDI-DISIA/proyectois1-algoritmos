@@ -43,7 +43,7 @@ func add_house() -> void:
 	VillagerCapacityUpdated.emit()
 
 func remove_house() -> void:
-	house_count  = max(0, house_count - 1)
+	house_count = max(0, house_count - 1)
 	VillagerCapacityUpdated.emit()
 
 func get_house_count() -> int:
@@ -153,5 +153,4 @@ func pagar_casa() -> bool:
 	remove_resource("stone", CASA_STONE_COST)
 	remove_resource("gold",  CASA_GOLD_COST)
 
-	add_house()  # Aumenta la capacidad de aldeanos por casa construida
 	return true

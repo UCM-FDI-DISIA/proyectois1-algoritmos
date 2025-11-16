@@ -3,9 +3,6 @@ extends CanvasLayer
 # =====================================================================
 # 🔧 VARIABLES EDITABLES
 # =====================================================================
-@export var COST_WOOD := 10
-@export var COST_STONE := 5
-@export var COST_GOLD := 0
 
 @export var PREVIEW_ALPHA := 0.5
 @export var PREVIEW_BLOCK_COLOR := Color(1, 0, 0, 0.4)
