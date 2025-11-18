@@ -1,6 +1,6 @@
 extends Control
 
-@onready var play_button: Button = $PlayButton
+@onready var play_button: Button = $PVPButton
 
 const LOBBY_NAME := "Feudalia_MainLobby"
 

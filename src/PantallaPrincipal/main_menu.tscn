@@ -38,7 +38,7 @@ grow_vertical = 2
 texture = ExtResource("2_0r3o6")
 expand_mode = 1
 
-[node name="PlayButton" type="Button" parent="."]
+[node name="PVPButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -84,5 +84,5 @@ flat = true
 icon_alignment = 1
 expand_icon = true
 
-[connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="PVPButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="PVEButton" to="." method="_on_play_button_pressed"]
