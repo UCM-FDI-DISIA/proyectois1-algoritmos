@@ -13,7 +13,7 @@ size = Vector2(192, 64)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p2kc1"]
 size = Vector2(318, 329)
 
-[node name="CasaAnimada" type="StaticBody2D"]
+[node name="CasaCanteros" type="StaticBody2D"]
 z_as_relative = false
 y_sort_enabled = true
 script = ExtResource("1_23v3c")

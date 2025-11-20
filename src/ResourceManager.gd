@@ -39,6 +39,7 @@ const SOLDIER_COSTS := {
 
 @export var contenedor_casas: Node2D
 @export var casa_scene: PackedScene
+@export var casa_canteros_scene : PackedScene
 
 var house_count: int = 0
 var canteros_house_count: int = 0

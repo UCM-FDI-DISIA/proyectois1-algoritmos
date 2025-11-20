@@ -17,6 +17,8 @@ extends CanvasLayer
 @onready var hbox_botones: HBoxContainer = $ControlRaiz/PanelBarra/HBoxBotones
 @onready var btn_casa: TextureButton = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasa
 @onready var marcador_casa: Sprite2D = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasa/Marcador
+@onready var btn_casa_canteros: TextureButton = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaCanteros
+@onready var marcador_canteros: Sprite2D = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaCanteros/Marcador
 
 # =====================================================================
 # 🏗️ ESTADO DE CONSTRUCCIÓN
@@ -40,6 +42,10 @@ func _ready() -> void:
 	btn_casa.mouse_filter = Control.MOUSE_FILTER_STOP
 	panel_barra.visible = false
 	marcador_casa.visible = false
+	btn_casa_canteros.mouse_filter = Control.MOUSE_FILTER_STOP
+	marcador_canteros.visible = false
+
+	btn_casa_canteros.pressed.connect(_on_casa_canteros_pressed)
 
 	_actualizar_tooltip()
 
@@ -91,6 +97,38 @@ func _on_area_preview_body_exited(body: Node) -> void:
 		puede_construir = true
 		_tint_preview(PREVIEW_OK_COLOR)
 
+func _on_casa_canteros_pressed() -> void:
+	marcador_canteros.visible = !marcador_canteros.visible
+
+	if en_construccion:
+		print("[BuildHUD] Ya en modo construcción (otra casa activa)")
+		return
+
+	if resource_manager == null or resource_manager.casa_canteros_scene == null or resource_manager.contenedor_casas == null:
+		push_error("[BuildHUD] Faltan asignaciones para CasaCanteros en ResourceManager")
+		return
+
+	en_construccion = true
+	casa_preview = resource_manager.casa_canteros_scene.instantiate() as Node2D
+
+	if casa_preview is CasaCanteros:
+		var c := casa_preview as CasaCanteros
+		# Marcar como preview si quieres impedir su lógica
+		c.set("is_preview", true)
+
+		var sh := c.get_node_or_null("CollisionShape2D")
+		if sh: sh.set_deferred("disabled", true)
+
+		var co := c.get_node_or_null("CollisionObject2D")
+		if co:
+			co.collision_layer = 0
+			co.collision_mask  = 0
+
+	_tint_preview(PREVIEW_OK_COLOR)
+	resource_manager.contenedor_casas.add_child(casa_preview)
+
+	_crear_area_preview()
+
 #=====================================================================
 # 🔄 BUCLE PRINCIPAL REVISADO
 # =====================================================================
@@ -125,17 +163,35 @@ func _process(_delta: float) -> void:
 		if not puede_construir:
 			print("[BuildHUD] No se puede construir aquí (obstáculo o terreno inválido)")
 			return
-		if resource_manager.puedo_comprar_casa():
-			resource_manager.pagar_casa()
-			var real: CasaAnimada = resource_manager.casa_scene.instantiate()
-			real.es_preview = false
-			real.global_position = casa_preview.global_position
-			resource_manager.contenedor_casas.add_child(real)
-			_cancelar_construccion()
-			print("[BuildHUD] Casa construida")
+		if btn_casa.button_pressed:
+			if resource_manager.puedo_comprar_casa():
+				resource_manager.pagar_casa()
+				var real := resource_manager.casa_scene.instantiate()
+				real.global_position = casa_preview.global_position
+				resource_manager.contenedor_casas.add_child(real)
+				_cancelar_construccion()
+				print("[BuildHUD] Construcción realizada")
+			else:
+				print("[BuildHUD] Materiales insuficientes para casa normal")
+				_cancelar_construccion()
+				return
+		elif btn_casa_canteros.button_pressed:
+			if resource_manager.puedo_comprar_casa_canteros():
+				resource_manager.pagar_casa_canteros()
+				var real := resource_manager.casa_canteros_scene.instantiate()
+				real.global_position = casa_preview.global_position
+				resource_manager.contenedor_casas.add_child(real)
+				_cancelar_construccion()
+				print("[BuildHUD] Construcción realizada")
+			else:
+				print("[BuildHUD] Materiales insuficientes para CasaCanteros")
+				_cancelar_construccion()
+				return
 		else:
-			print("[BuildHUD] Materiales insuficientes")
+			print("[BuildHUD] Ningún tipo de casa seleccionado")
 			_cancelar_construccion()
+			return
+	
 
 # =====================================================================
 # 🛠️ MÉTODOS AUXILIARES
@@ -173,8 +229,13 @@ func _tint_preview(c: Color) -> void:
 
 func _cancelar_construccion() -> void:
 	if casa_preview: casa_preview.queue_free()
-	casa_preview = null; area_preview = null; en_construccion = false
-	marcador_casa.visible = false; btn_casa.button_pressed = false
+	casa_preview = null
+	area_preview = null
+	en_construccion = false
+	marcador_casa.visible = false
+	marcador_canteros.visible = false
+	btn_casa.button_pressed = false
+	btn_casa_canteros.button_pressed = false
 
 func _actualizar_tooltip() -> void:
 	btn_casa.tooltip_text = "Coste: Madera %d | Piedra %d | Oro %d" % [
