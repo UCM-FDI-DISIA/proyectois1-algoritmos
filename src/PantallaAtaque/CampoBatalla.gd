@@ -37,15 +37,40 @@ func _ready() -> void:
 		push_error("❌ No se encontró GameState")
 		return
 	
+	# --- Spawn jugador ---
 	_spawn_player_troops()
-	# Le dice al GameState que este jugador esta listo para pelear
-	# Pregunta si todos los jugadores están listos
-	# Empieza el ataque
-	var my_id : int = GDSync.get_client_id()
-	var enemy_id : int = MultiplayerManager.get_enemy_id(my_id)
 	
-	_spawn_enemy_troops(enemy_id)
+	# --- Determinar enemigo (PVP o PVE) ---
+	var my_id: int = GDSync.get_client_id()
+	var enemy_troops_dict: Dictionary
+	
+	var mp := get_tree().get_multiplayer()
+	var all_peers := [mp.get_unique_id()]
+	all_peers.append_array(mp.get_peers())
+	print("Todos los jugadores conectados:", all_peers)
+
+	if all_peers.size() > 1:
+		# PVP: hay otro jugador además de ti
+		var enemy_id: int = MultiplayerManager.get_enemy_id(my_id)
+		enemy_troops_dict = GDSync.player_get_data(enemy_id, "troops_by_client", {
+			"Archer": 0,
+			"Lancer": 0,
+			"Monk": 0,
+			"Warrior": 0
+		})
+		print("👥 Enemigo PVP:", enemy_troops_dict)
+	else:
+		# PVE: generar enemigo aleatorio
+		enemy_troops_dict = _generate_ai_troops()
+		print("🤖 Enemigo PVE:", enemy_troops_dict)
+	
+	# --- Spawn enemigo ---
+	_spawn_enemy_troops(enemy_troops_dict)
+	
+	# --- Iniciar batalla ---
 	_start_battle_countdown()
+	
+	# --- Botón menú principal ---
 	main_menu_button.visible = false
 	main_menu_button.pressed.connect(_on_MainMenuButton_pressed)
 
@@ -54,7 +79,7 @@ func _ready() -> void:
 # 🪖 SPAWN JUGADOR
 # =====================================================================
 func _spawn_player_troops() -> void:
-	var troop_counts: Dictionary = GameState.get_all_troop_counts()
+	var troop_counts: Dictionary = game_state.get_all_troop_counts()
 	var troop_scenes := {
 		"Archer": preload("res://src/NPCs/Archer.tscn"),
 		"Lancer": preload("res://src/NPCs/Lancer.tscn"),
@@ -92,39 +117,51 @@ func _spawn_player_troops() -> void:
 		index += 1
 	print("✅ Tropas del jugador centradas")
 
+
 # =====================================================================
-# 🪖 SPAWN ENEMIGO
+# 🪖 SPAWN ENEMIGO (PVP o PVE)
 # =====================================================================
-func _spawn_enemy_troops(enemy_id : int) -> void:
+func _spawn_enemy_troops(enemy_data: Dictionary) -> void:
 	var troop_scenes := {
 		"Archer": preload("res://src/NPCs/Archer.tscn"),
 		"Lancer": preload("res://src/NPCs/Lancer.tscn"),
 		"Monk": preload("res://src/NPCs/Monk.tscn"),
 		"Warrior": preload("res://src/NPCs/Warrior.tscn")
 	}
-	
-	enemy_counts = GDSync.player_get_data(enemy_id, "troops_by_client", {"Archer":0, "Lancer":0, "Monk":0, "Warrior":0}) 
-	print("Soy ", GDSync.get_client_id(), "Enemigo: ", enemy_counts)
 
+	enemy_counts = enemy_data
 	var index := 0
 	for troop_name in troop_scenes.keys():
-		var count: int = enemy_counts[troop_name]
+		var count: int = enemy_counts.get(troop_name, 0)
 		if count <= 0 or not troop_scenes.has(troop_name):
 			continue
 
 		var scene: PackedScene = troop_scenes[troop_name]
-
 		var row_y := _row_y_for_index(index)
 
 		for i in range(count):
 			var troop: Node2D = scene.instantiate()
-			troop.scale = Vector2(-troop_scale.x, troop_scale.y)
+			troop.scale = Vector2(-troop_scale.x, troop_scale.y) # mirar hacia jugador
 			troop.position = Vector2(battlefield_tiles.x * tile_size.x - 100 - i * spacing, row_y)
 			tropas_node.add_child(troop)
 			enemy_troops.append(troop)
 
 		index += 1
 	print("🟥 Tropas enemigas centradas")
+
+
+# =====================================================================
+# 🤖 FUNCION AUXILIAR: Generar tropas AI PVE
+# =====================================================================
+func _generate_ai_troops() -> Dictionary:
+	var troops := {
+		"Archer": randi() % 5 + 1,   # mínimo 1
+		"Lancer": randi() % 5 + 1,
+		"Monk": randi() % 5 + 1,
+		"Warrior": randi() % 5 + 1
+	}
+	return troops
+
 
 # =====================================================================
 # ⏱️ CUENTA ATRÁS INICIAL
@@ -155,6 +192,7 @@ func _start_battle_countdown() -> void:
 
 	_start_battle()
 
+
 # =====================================================================
 # 🏃 MOVIMIENTO AL CENTRO
 # =====================================================================
@@ -176,8 +214,9 @@ func _start_battle() -> void:
 	for troop in enemy_troops:
 		_tween_troop(troop, center_x + attack_margin)
 
+
 # =====================================================================
-# ⚡ MODULAR: Comprobar tropas y declarar ganador automático
+# ⚡ COMPROBAR BATALLA FORZADA
 # =====================================================================
 func _check_forced_battle_result() -> bool:
 	if player_troops.is_empty():
@@ -190,6 +229,7 @@ func _check_forced_battle_result() -> bool:
 		return false
 	return true
 
+
 func _show_battle_result_forced(winner: String) -> void:
 	var result_text := ""
 	if winner == "player":
@@ -198,10 +238,9 @@ func _show_battle_result_forced(winner: String) -> void:
 		result_text = "💀 ¡Gana el Enemigo!"
 	else:
 		result_text = "⚖️ ¡Empate!"
-
 	print("📣 Resultado → %s" % result_text)
-	# CORRECCIÓN: Pasar enemy_counts para evitar error de argumentos faltantes.
 	_show_result_ui(result_text, enemy_counts)
+
 
 # =====================================================================
 # 🎞️ TWEEN INDIVIDUAL
@@ -224,6 +263,7 @@ func _tween_troop(troop: Node2D, target_x: float) -> void:
 			_trigger_central_explosion()
 	)
 
+
 # =====================================================================
 # 🔍 HELPER: AnimatedSprite2D anidado
 # =====================================================================
@@ -235,6 +275,7 @@ func _find_sprite(node: Node) -> AnimatedSprite2D:
 		if nested:
 			return nested
 	return null
+
 
 # =====================================================================
 # 💥 ATAQUE CENTRAL + HUMO
@@ -258,6 +299,7 @@ func _trigger_central_explosion() -> void:
 	await get_tree().create_timer(2.0).timeout
 	_show_battle_result()
 
+
 # =====================================================================
 # 🎞️ ANIMAR TODAS LAS TROPAS
 # =====================================================================
@@ -268,12 +310,11 @@ func _play_all_attack_animations() -> void:
 		var sprite := _find_sprite(troop)
 		if sprite and sprite.sprite_frames.has_animation("Attack"):
 			sprite.play("Attack")
-		# Espera por el tiempo de la animación
 		animations.append(get_tree().create_timer(anim_length).timeout)
 	
-	# Espera hasta que todos los timers de animación hayan terminado
 	for s in animations:
 		await s
+
 
 # =====================================================================
 # 📊 CÁLCULO DE RESULTADO
@@ -281,7 +322,6 @@ func _play_all_attack_animations() -> void:
 func _show_battle_result() -> void:
 	print("📊 Calculando resultado...")
 
-	# MEJORA: Utilizamos la función auxiliar _calculate_power para evitar código duplicado
 	var player_power := _calculate_power(game_state.get_all_troop_counts())
 	var enemy_power := _calculate_power(enemy_counts)
 
@@ -294,39 +334,25 @@ func _show_battle_result() -> void:
 		result_text = "⚖️ ¡Empate!"
 
 	print("📣 Resultado → %s" % result_text)
-	# CORRECCIÓN: Pasar enemy_counts para evitar error de argumentos faltantes.
 	_show_result_ui(result_text, enemy_counts)
 
-# =====================================================================
-# 🖥️ MOSTRAR PANTALLA DE RESULTADO DETALLADA
-# =====================================================================
-func pad_right(text: String, width: int) -> String:
-	var n := width - text.length()
-	if n > 0:
-		text += " ".repeat(n)
-	return text
 
+# =====================================================================
+# 🖥️ MOSTRAR PANTALLA DE RESULTADO
+# =====================================================================
 func _show_result_ui(result_text: String, _enemy_counts: Dictionary) -> void:
-	print("📺 Mostrando pantalla de resultados (Versión Responsiva)...")
-
-	# --- 1. Capa principal (CanvasLayer) ---
-	# Permite que la UI se renderice sobre el juego
 	var canvas := CanvasLayer.new()
 	add_child(canvas)
 
-	# --- 2. Fondo negro full-screen ---
 	var bg := ColorRect.new()
-	bg.color = Color(0, 0, 0, 0.7)
-	# Anclado a toda la pantalla (siempre)
+	bg.color = Color(0,0,0,0.7)
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	canvas.add_child(bg)
 
-	# --- 3. CenterContainer para centrar el RichTextLabel ---
 	var center_container := CenterContainer.new()
 	center_container.set_anchors_preset(Control.PRESET_FULL_RECT)
 	canvas.add_child(center_container)
 
-	# --- 4. RichTextLabel centrado ---
 	var label := RichTextLabel.new()
 	label.bbcode_enabled = true
 	label.scroll_active = false
@@ -335,12 +361,10 @@ func _show_result_ui(result_text: String, _enemy_counts: Dictionary) -> void:
 	label.fit_content = true
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	# Es crucial para que el texto se adapte al CenterContainer
 	label.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	center_container.add_child(label)
 
-	# --- Formatear y calcular (Lógica no modificada) ---
 	var player_info := _format_troop_info(game_state.get_all_troop_counts(), "Jugador").split("\n")
 	var enemy_info := _format_troop_info(_enemy_counts, "Enemigo").split("\n")
 	var player_power := _calculate_power(game_state.get_all_troop_counts())
@@ -375,31 +399,16 @@ func _show_result_ui(result_text: String, _enemy_counts: Dictionary) -> void:
 	label.bbcode_text = text
 	_update_label_font(label)
 
-
-	# ----------------------------------------------------
-	# --- 5. SOLUCIÓN AL POSICIONAMIENTO DEL BOTÓN (Responsivo) ---
-	# ----------------------------------------------------
-
-	# Creamos un contenedor dedicado para posicionar el botón.
+	# Posicionar botón menú
 	var button_placement_container := CenterContainer.new()
 	canvas.add_child(button_placement_container)
-	
-	# La constante Control.PRESET_CUSTOM no es necesaria cuando se establecen los anclajes manualmente, 
-	# por lo que eliminamos la línea anterior.
-	
-	# Ancla Vertical: Desde el 70% de la pantalla hasta el 100%.
 	button_placement_container.anchor_top = 0.70
 	button_placement_container.anchor_bottom = 1.0
-	
-	# Ancla Horizontal: De lado a lado (0% a 100%)
 	button_placement_container.anchor_left = 0.0
 	button_placement_container.anchor_right = 1.0
 
-	# Eliminamos y re-adjuntamos el botón al nuevo contenedor centrado.
 	main_menu_button.get_parent().remove_child(main_menu_button)
 	button_placement_container.add_child(main_menu_button)
-
-	# Escalar el botón (esto ahora escala desde el centro, gracias a CenterContainer)
 	main_menu_button.scale = Vector2(1.75, 1.75)
 	main_menu_button.visible = true
 
@@ -419,13 +428,11 @@ func _on_MainMenuButton_pressed() -> void:
 # ✒️ ACTUALIZAR FUENTE (RichTextLabel)
 # =====================================================================
 func _update_label_font(label: RichTextLabel) -> void:
-	# Tamaño y posición según la vista de la cámara
 	var screen_size := get_viewport().get_visible_rect().size
-	var font_size := int(screen_size.y * 0.06) # 6% del alto de pantalla
+	var font_size := int(screen_size.y * 0.06)
 	label.add_theme_font_size_override("font_size", font_size)
-	# Mantenemos el tamaño mínimo para que el texto ocupe un área visible
 	label.custom_minimum_size = screen_size * 0.9
-	
+
 
 # =====================================================================
 # 🧾 FORMATEAR INFO DE TROPAS
@@ -436,6 +443,7 @@ func _format_troop_info(troop_dict: Dictionary, title: String) -> String:
 	for troop_name in troop_dict.keys():
 		lines.append("   • %s × %d" % [troop_name, troop_dict[troop_name]])
 	return "\n".join(lines)
+
 
 # =====================================================================
 # 🧮 CALCULAR PODER TOTAL
@@ -453,6 +461,7 @@ func _calculate_power(troop_dict: Dictionary) -> int:
 			total += troop_dict[t] * weights[t]
 	return total
 
+
 # =====================================================================
 # 🔧 HELPER: calcular Y de cada fila
 # =====================================================================
@@ -460,3 +469,13 @@ func _row_y_for_index(index: int) -> float:
 	var total_height := (enemy_counts.size() - 1) * spacing * 2.0
 	var start_y := (battlefield_tiles.y * tile_size.y - total_height) / 2.0
 	return start_y + index * spacing * 2.0
+
+
+# =====================================================================
+# 🖇️ UTILIDADES
+# =====================================================================
+func pad_right(text: String, width: int) -> String:
+	var n := width - text.length()
+	if n > 0:
+		text += " ".repeat(n)
+	return text
