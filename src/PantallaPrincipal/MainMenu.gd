@@ -1,13 +1,22 @@
 extends Control
 
-@onready var play_button: Button = $PVPButton
+@onready var play_pvp_button: Button = $PVPButton
+@onready var play_pve_button: Button = $PVEButton
 
 const LOBBY_NAME := "Feudalia_MainLobby"
+const PVP_TIMEOUT := 30.0
+
+var game_mode := ""
+var wait_timer: SceneTreeTimer
+var players_in_lobby := 0
+
 
 func _ready():
-	play_button.pressed.connect(_on_play_pressed)
+	# Botones
+	play_pvp_button.pressed.connect(_on_pvp_pressed)
+	play_pve_button.pressed.connect(_on_pve_pressed)
 
-	# Señales informativas
+	# Señales de GD-Sync
 	GDSync.connected.connect(_on_connected)
 	GDSync.connection_failed.connect(_on_connection_failed)
 	GDSync.lobby_joined.connect(_on_lobby_joined)
@@ -15,49 +24,129 @@ func _ready():
 	GDSync.lobby_created.connect(_on_lobby_created)
 	GDSync.lobby_creation_failed.connect(_on_lobby_creation_failed)
 
-	# Arrancamos GD-Sync
+	# Señales para detectar jugadores
+	GDSync.client_joined.connect(_on_client_joined)
+	GDSync.client_left.connect(_on_client_left)
+
 	GDSync.start_multiplayer()
 
 
-func _on_play_pressed():
+
+# ============================================================
+# PVE DIRECTO
+# ============================================================
+
+func _on_pve_pressed():
+	game_mode = "PVE"
+	print("PVE → iniciando partida local...")
+	_load_main_game_scene()
+
+
+
+# ============================================================
+# PVP MATCHMAKING
+# ============================================================
+
+func _on_pvp_pressed():
+	game_mode = "PVP"
+
 	var username = "Jugador_" + str(randi() % 1000)
-	print("PLAY pulsado. Intentando conectar...")
+	print("PVP → intentando conectar...")
 
-	# Esperar a que GD-Sync esté inicializado
+	# Esperar inicialización
 	while not GDSync.has_method("lobby_join"):
-		print("Esperando inicialización de GD-Sync...")
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.3).timeout
 
-	# Esperar a tener ID válido
+	# Esperar client ID
 	while GDSync.get_client_id() <= 0:
-		print("Esperando ID de cliente...")
 		await get_tree().create_timer(0.2).timeout
 
-	print("Conectado con ID:", GDSync.get_client_id())
 	GDSync.player_set_username(username)
-	print("Nombre asignado:", username)
-
-	print("Intentando unirse al lobby:", LOBBY_NAME)
 	GDSync.lobby_join(LOBBY_NAME, "")
 
 
+
+# ============================================================
+# SEÑALES GD-SYNC
+# ============================================================
+
 func _on_connected():
-	print("GD-Sync conectado desde MainMenu.")
+	print("GD-Sync conectado.")
+
 
 func _on_connection_failed(err):
-	push_error("Error de conexión GD-Sync: %s" % str(err))
+	push_error("Error GD-Sync: %s" % str(err))
+
+
 
 func _on_lobby_join_failed(lobby_name: String, error: int):
-	print("No se pudo unir al lobby, lo creamos:", lobby_name)
-	GDSync.lobby_create(lobby_name, "", true, 2, {}) # máx 2 jugadores
+	print("Lobby no encontrado → creando nuevo...")
+	GDSync.lobby_create(lobby_name, "", true, 2, {})
+
+
+
+func _on_lobby_creation_failed(lobby_name: String, error: int):
+	push_error("Error creando lobby: %s" % str(error))
+
+
 
 func _on_lobby_created(lobby_name: String):
 	print("Lobby creado:", lobby_name)
 	GDSync.lobby_join(lobby_name, "")
 
-func _on_lobby_creation_failed(lobby_name: String, error: int):
-	push_error("Error creando lobby: %s" % str(error))
+
+
+# ============================================================
+# LOBBY JOINED → iniciar espera del otro jugador
+# ============================================================
 
 func _on_lobby_joined(lobby_name: String):
 	print("Unido al lobby:", lobby_name)
-	print("Esperando instrucciones del host o cambio de escena sincronizado...")
+
+	# Tú mismo ya cuentas como 1 jugador
+	players_in_lobby = 1
+
+	print("Esperando segundo jugador durante %s segundos..." % PVP_TIMEOUT)
+
+	wait_timer = get_tree().create_timer(PVP_TIMEOUT)
+	await wait_timer.timeout
+
+	# Si NO llegó nadie → PVE automático
+	if players_in_lobby < 2:
+		print("Timeout → entrando en PVE automático")
+		_load_main_game_scene()
+
+
+
+# ============================================================
+# DETECCIÓN DE JUGADORES
+# ============================================================
+
+func _on_client_joined(client_id: int):
+	players_in_lobby += 1
+	print("Jugador conectado:", client_id, " → total:", players_in_lobby)
+
+	# Al entrar el segundo → iniciar PVP
+	if game_mode == "PVP" and players_in_lobby >= 2:
+		print("¡Segundo jugador encontrado! Iniciando PVP…")
+		if wait_timer:
+			wait_timer.stop()
+		_load_main_game_scene()
+
+
+
+func _on_client_left(client_id: int):
+	players_in_lobby -= 1
+	print("Jugador salió:", client_id, " → total:", players_in_lobby)
+
+
+
+# ============================================================
+# CAMBIO A LA ESCENA DEL JUEGO REAL
+# ============================================================
+
+func _load_main_game_scene():
+	print("Cargando escena principal del juego...")
+
+	# CAMBIA SOLO ESTA RUTA:
+	get_tree().change_scene_to_file("res://src/main.tscn")
