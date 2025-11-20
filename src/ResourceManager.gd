@@ -14,6 +14,21 @@ const CASA_WOOD_COST  := 2
 const CASA_GOLD_COST  := 5
 const CASA_STONE_COST := 5
 
+# -------------------- COSTES CASA CANTEROS -------------------------
+const CANTEROS_WOOD_COST  := 5
+const CANTEROS_GOLD_COST  := 5
+const CANTEROS_STONE_COST := 15
+
+# -------------------- COSTES CASA LEÑADORES -------------------------
+const LENADORES_WOOD_COST  := 20
+const LENADORES_GOLD_COST  := 0
+const LENADORES_STONE_COST := 5
+
+# -------------------- COSTES CASA MINEROS -------------------------
+const MINEROS_WOOD_COST  := 10
+const MINEROS_GOLD_COST  := 20
+const MINEROS_STONE_COST := 10
+
 const SOLDIER_COSTS := {
 	"Warrior": { "villager": 1, "gold": 1, "wood": 0, "stone": 0 },
 	"Archer":  { "villager": 1, "gold": 2, "wood": 0, "stone": 0 },
@@ -26,6 +41,10 @@ const SOLDIER_COSTS := {
 @export var casa_scene: PackedScene
 
 var house_count: int = 0
+var canteros_house_count: int = 0
+var lenadores_house_count: int = 0
+var mineros_house_count: int = 0
+
 var crecimiento_aldeanos: int = 0
 var actualizar_timer: Timer
 var resources: Dictionary = { "wood": 0, "stone": 0, "gold": 0, "villager": 0 }
@@ -38,16 +57,32 @@ func get_casa_wood_cost() -> int: return CASA_WOOD_COST
 func get_casa_gold_cost()  -> int: return CASA_GOLD_COST
 func get_casa_stone_cost() -> int: return CASA_STONE_COST
 
+# -----------------------------------------------------
+#  CASA CANTEROS
+# -----------------------------------------------------
+func get_canteros_wood_cost() -> int: return CANTEROS_WOOD_COST
+func get_canteros_gold_cost() -> int: return CANTEROS_GOLD_COST
+func get_canteros_stone_cost() -> int: return CANTEROS_STONE_COST
+
 func add_house() -> void:
 	house_count += 1
 	VillagerCapacityUpdated.emit()
+
+func add_canteros_house() -> void:
+	canteros_house_count += 1
 
 func remove_house() -> void:
 	house_count = max(0, house_count - 1)
 	VillagerCapacityUpdated.emit()
 
+func remove_canteros_house() -> void:
+	canteros_house_count = max(0, canteros_house_count - 1)
+
 func get_house_count() -> int:
 	return house_count
+	
+func get_canteros_house_count() -> int:
+	return canteros_house_count
 
 func get_villager_capacity() -> int:
 	return house_count * VILLAGERS_PER_HOUSE
@@ -142,6 +177,13 @@ func puedo_comprar_casa() -> bool:
 		get_resource("stone") >= CASA_STONE_COST and
 		get_resource("gold")  >= CASA_GOLD_COST
 	)
+	
+func puedo_comprar_casa_canteros() -> bool:
+	return (
+		get_resource("wood")  >= CANTEROS_WOOD_COST and
+		get_resource("stone") >= CANTEROS_STONE_COST and
+		get_resource("gold")  >= CANTEROS_GOLD_COST
+	)
 
 func pagar_casa() -> bool:
 	# Intenta restar los recursos, devuelve true si se pudo pagar
@@ -152,5 +194,15 @@ func pagar_casa() -> bool:
 	remove_resource("wood",  CASA_WOOD_COST)
 	remove_resource("stone", CASA_STONE_COST)
 	remove_resource("gold",  CASA_GOLD_COST)
+
+	return true
+
+func pagar_casa_canteros() -> bool:
+	if not puedo_comprar_casa_canteros():
+		return false
+
+	remove_resource("wood",  CANTEROS_WOOD_COST)
+	remove_resource("stone", CANTEROS_STONE_COST)
+	remove_resource("gold",  CANTEROS_GOLD_COST)
 
 	return true
