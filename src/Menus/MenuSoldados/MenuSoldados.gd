@@ -44,6 +44,7 @@ var hide_timer: Timer
 func _ready() -> void:
 	# --- Quadrant ---
 	var quadrant: int = MultiplayerManager.get_my_quadrant()
+	print(GDSync.get_client_id(), " ", quadrant)
 	if (quadrant == 0) : boton_s = get_node("../ElementosPantalla/BotonS1")
 	else : if (quadrant == 1) : boton_s = get_node("../ElementosPantalla/BotonS2")
 	else : if (quadrant == 2) : boton_s = get_node("../ElementosPantalla/BotonS3")

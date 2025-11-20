@@ -20,14 +20,15 @@ func _ready():
 	GDSync.connected.connect(_on_connected)
 	GDSync.connection_failed.connect(_on_connection_failed)
 	GDSync.lobby_joined.connect(_on_lobby_joined)
-	GDSync.lobby_join_failed.connect(_on_lobby_join_failed)
 	GDSync.lobby_created.connect(_on_lobby_created)
 	GDSync.lobby_creation_failed.connect(_on_lobby_creation_failed)
 
 	# Señales para detectar jugadores
 	GDSync.client_joined.connect(_on_client_joined)
 	GDSync.client_left.connect(_on_client_left)
-
+	
+	# Solo el servidor inicia la lógica de “host”
+	# if multiplayer.is_server():
 	GDSync.start_multiplayer()
 
 
@@ -39,7 +40,8 @@ func _ready():
 func _on_pve_pressed():
 	game_mode = "PVE"
 	print("PVE → iniciando partida local...")
-	_load_main_game_scene()
+	
+	MultiplayerManager._adjust_for_one_player()
 
 
 
@@ -55,13 +57,18 @@ func _on_pvp_pressed():
 
 	# Esperar inicialización
 	while not GDSync.has_method("lobby_join"):
-		await get_tree().create_timer(0.3).timeout
+		await get_tree().create_timer(0.5).timeout
 
 	# Esperar client ID
 	while GDSync.get_client_id() <= 0:
+		print("Esperando ID de cliente...")
 		await get_tree().create_timer(0.2).timeout
-
+	
+	print("Conectado con ID: ", GDSync.get_client_id())
 	GDSync.player_set_username(username)
+	print("Nombre asignado: ", username)
+
+	print("Intentando unirse al lobby: ", LOBBY_NAME)
 	GDSync.lobby_join(LOBBY_NAME, "")
 
 
@@ -71,27 +78,20 @@ func _on_pvp_pressed():
 # ============================================================
 
 func _on_connected():
-	print("GD-Sync conectado.")
+	print("GD-Sync conectado desde MainMenu.")
 
 
 func _on_connection_failed(err):
-	push_error("Error GD-Sync: %s" % str(err))
-
-
-
-func _on_lobby_join_failed(lobby_name: String, error: int):
-	print("Lobby no encontrado → creando nuevo...")
-	GDSync.lobby_create(lobby_name, "", true, 2, {})
-
+	push_error("Error de conexión GD-Sync: %s" % str(err))
 
 
 func _on_lobby_creation_failed(lobby_name: String, error: int):
-	push_error("Error creando lobby: %s" % str(error))
+	push_error("Error creando lobby", lobby_name, ": %s" % str(error))
 
 
 
 func _on_lobby_created(lobby_name: String):
-	print("Lobby creado:", lobby_name)
+	print("Lobby creado: ", lobby_name)
 	GDSync.lobby_join(lobby_name, "")
 
 
@@ -114,7 +114,7 @@ func _on_lobby_joined(lobby_name: String):
 	# Si NO llegó nadie → PVE automático
 	if players_in_lobby < 2:
 		print("Timeout → entrando en PVE automático")
-		_load_main_game_scene()
+		# La inicialización del juego la llevo desde otro fichero.
 
 
 
@@ -129,24 +129,10 @@ func _on_client_joined(client_id: int):
 	# Al entrar el segundo → iniciar PVP
 	if game_mode == "PVP" and players_in_lobby >= 2:
 		print("¡Segundo jugador encontrado! Iniciando PVP…")
-		if wait_timer:
-			wait_timer.stop()
-		_load_main_game_scene()
+		# La inicialización del main se lleva desde otro fichero.
 
 
 
 func _on_client_left(client_id: int):
 	players_in_lobby -= 1
 	print("Jugador salió:", client_id, " → total:", players_in_lobby)
-
-
-
-# ============================================================
-# CAMBIO A LA ESCENA DEL JUEGO REAL
-# ============================================================
-
-func _load_main_game_scene():
-	print("Cargando escena principal del juego...")
-
-	# CAMBIA SOLO ESTA RUTA:
-	get_tree().change_scene_to_file("res://src/main.tscn")

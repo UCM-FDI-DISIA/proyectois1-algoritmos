@@ -70,6 +70,7 @@ func attack_other() -> void:
 func _on_player_data_changed(client_id : int, key : String, value):
 	if client_id != GDSync.get_client_id() : 
 		print("Recibido de %d: %s = %s" % [client_id, key, str(value)])
-		print("Cambiando a la escena de Batalla: campoBatalla.tscn")
+		
 		if key == "cambio_campo_batalla" :
+			print("Cambiando a la escena de Batalla: campoBatalla.tscn")
 			get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")

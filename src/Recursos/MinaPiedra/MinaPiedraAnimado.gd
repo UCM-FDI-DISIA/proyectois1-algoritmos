@@ -107,7 +107,7 @@ func _on_regen_timer_timeout() -> void:
 	set_rocas_visibles(rocas_grandes, true)
 	collision_shape.set_deferred("disabled", false)
 
-func set_rocas_visibles(grupo: Node2D, is_visible: bool) -> void:
+func set_rocas_visibles(grupo: Node2D, this_is_visible: bool) -> void:
 	for child in grupo.get_children():
 		if child is Sprite2D:
-			child.visible = is_visible
+			child.visible = this_is_visible

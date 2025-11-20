@@ -66,6 +66,18 @@ func _check_start_condition() -> void:
 	else:
 		print("Esperando más jugadores antes de iniciar...")
 
+# ------------------------------------------------
+
+func _adjust_for_one_player() -> void:
+	my_quadrant_id = 0
+	
+	var myid : int = GDSync.get_client_id()
+	print("PVE -> tengo un 'client_id' ", myid, " y mi cuadrante es ", my_quadrant_id)
+	players = [myid]
+	quadrants_by_client = { myid : my_quadrant_id }
+	
+	print("🌍 Ejecutando cambio de escena para un jugador...")
+	GDSync.change_scene("res://src/main.tscn")  # ✅ ruta correcta
 
 # ------------------------------------------------
 # 🔹 Asignación de cuadrantes
@@ -84,7 +96,7 @@ func _assign_quadrants() -> void:
 		
 		GDSync.player_set_data("quadrants_by_client", quadrants_by_client)
 		
-		print(" -> Jugador", client_id, "tiene cuadrante", q)
+		print(" -> Jugador ", client_id, " tiene cuadrante ", q)
 		GDSync.call_func_on(client_id, _receive_quadrant_assignment, [q])
 
 

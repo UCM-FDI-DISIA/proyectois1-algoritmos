@@ -75,8 +75,8 @@ func _on_post_timer_timeout() -> void:
 # 🖥️ ACTUALIZACIÓN UI
 # =====================================================================
 func _update_label() -> void:
-	var minutes := int(remaining_time) / 60
-	var seconds := int(remaining_time) % 60
+	var minutes : int = floori(remaining_time / 60.0)
+	var seconds : int = (int) (remaining_time) % 60
 	timer_label.text = "%02d:%02d" % [minutes, seconds]
 
 	# Colores y advertencias
