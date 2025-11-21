@@ -4,15 +4,17 @@ class_name CasaCanteros
 # ============================================================
 # 🔧 VARIABLES EDITABLES
 # ============================================================
-@export var coste_nuevo_cantero := 25          # COSTE del nuevo trabajador
-@export var max_canteros := 5                  # Máximo permitidos
-@export var canteros_iniciales := 2            # Aparecen por defecto
+@export var coste_nuevo_cantero := 25
+@export var max_canteros := 5
+@export var canteros_iniciales := 2
+@export var UI_OFFSET := Vector2(-45, -292) # Posición del botón sobre la casa
 
 # ============================================================
 # 🎮 ESTADO
 # ============================================================
 var canteros_actuales := 0
 var jugador_dentro := false
+var debug := true
 
 # ============================================================
 # 🧩 NODOS
@@ -31,33 +33,41 @@ func _ready() -> void:
 		push_error("[CasaCanteros] ERROR: ResourceManager no encontrado.")
 		return
 
-	# Registrar canteros iniciales → suman producción de piedra
-	resource_manager.add_resource("stone", 0) # asegura inicialización
-	# Si quieres producción automática, deberás programarla en ResourceManager
+	resource_manager.add_resource("stone", 0)
 
 	# Conectar señales
 	area_interaccion.body_entered.connect(_on_player_enter)
 	area_interaccion.body_exited.connect(_on_player_exit)
 	boton_cantero.pressed.connect(_on_comprar_cantero)
 
-	# Ocultar botón por defecto
+	# Posicionar botón sobre la casa
+	boton_cantero.position = UI_OFFSET
+	boton_cantero.z_index = 100
 	boton_cantero.visible = false
 
-	print("[CasaCanteros] Casa creada con %d canteros." % canteros_actuales)
-
+	if debug:
+		print("[CasaCanteros] Casa creada con %d canteros." % canteros_actuales)
+		print("[CasaCanteros] Botón posición local:", boton_cantero.position)
+		print("[CasaCanteros] Botón visible:", boton_cantero.visible)
+		print("[CasaCanteros] Botón z_index:", boton_cantero.z_index)
 
 # ============================================================
 # 🚪 DETECCIÓN DE JUGADOR
 # ============================================================
 func _on_player_enter(body):
-	if body.name == "Jugador": # Ajusta al nombre real
+	if body.is_in_group("jugador"):
 		jugador_dentro = true
 		_actualizar_boton()
+		if debug:
+			print("[CasaCanteros] Jugador entró. Botón actualizado.")
 
 func _on_player_exit(body):
-	if body.name == "Jugador":
+	if body.is_in_group("jugador"):
 		jugador_dentro = false
 		boton_cantero.visible = false
+		if debug:
+			print("[CasaCanteros] Jugador salió. Botón oculto.")
+
 
 
 # ============================================================
@@ -65,6 +75,10 @@ func _on_player_exit(body):
 # ============================================================
 func _actualizar_boton():
 	boton_cantero.visible = jugador_dentro and canteros_actuales < max_canteros
+	if debug:
+		print("[CasaCanteros] _actualizar_boton() → visible:", boton_cantero.visible)
+		print("[CasaCanteros] Botón global_position:", boton_cantero.global_position)
+		print("[CasaCanteros] Botón rect_size:", boton_cantero.rect_size if boton_cantero.has_method("rect_size") else "N/A")
 
 
 # ============================================================
@@ -75,22 +89,16 @@ func _on_comprar_cantero():
 		print("[CasaCanteros] Límite de canteros alcanzado.")
 		return
 
-	# Comprobación con el ResourceManager REAL
-	var piedra : int; 
-	piedra = resource_manager.get_resource("stone")
+	var piedra : int = resource_manager.get_resource("stone")
 	if piedra < coste_nuevo_cantero:
 		print("[CasaCanteros] No hay piedra suficiente (%d/%d)." %
 			[piedra, coste_nuevo_cantero])
 		return
 
-	# Resta el recurso
 	resource_manager.remove_resource("stone", coste_nuevo_cantero)
-
-	# Añade un cantero
 	canteros_actuales += 1
 	print("[CasaCanteros] Nuevo cantero añadido. Total: %d" % canteros_actuales)
 
-	# Actualización botón
 	_actualizar_boton()
 
 
@@ -98,6 +106,5 @@ func _on_comprar_cantero():
 # 🧹 AL ELIMINAR CASA
 # ============================================================
 func _exit_tree() -> void:
-	# Aquí podrías quitar producción si implementas producción de piedra
 	print("[CasaCanteros] Casa destruida. Se perdieron %d canteros." %
 		canteros_actuales)

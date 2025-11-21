@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://di4vbru44oxk6"]
 
-[ext_resource type="Script" uid="uid://bbyr8vnv45id4" path="res://src/Edificios/Casa/CasaAnimada.gd" id="1_23v3c"]
+[ext_resource type="Script" uid="uid://cq6simietmjfi" path="res://src/Edificios/CasaCanteros/CasaCanteros.gd" id="1_babg1"]
 [ext_resource type="Texture2D" uid="uid://dwsmtjigoiq26" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Buildings/Black Buildings/House1.png" id="2_p2kc1"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="3_babg1"]
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="4_u4a8y"]
@@ -16,7 +16,7 @@ size = Vector2(318, 329)
 [node name="CasaCanteros" type="StaticBody2D"]
 z_as_relative = false
 y_sort_enabled = true
-script = ExtResource("1_23v3c")
+script = ExtResource("1_babg1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_as_relative = false
@@ -37,7 +37,7 @@ shape = SubResource("RectangleShape2D_r1qpu")
 position = Vector2(0, -79.5)
 shape = SubResource("RectangleShape2D_p2kc1")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="Node2D" parent="."]
 
 [node name="ComprarCantero" type="TextureButton" parent="UI"]
 offset_left = -46.000004

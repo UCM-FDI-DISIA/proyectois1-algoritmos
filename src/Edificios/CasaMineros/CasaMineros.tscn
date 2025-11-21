@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cpby34c2ngbwr"]
 
-[ext_resource type="Script" uid="uid://bbyr8vnv45id4" path="res://src/Edificios/Casa/CasaAnimada.gd" id="1_p2gmq"]
+[ext_resource type="Script" uid="uid://dffyxkm3bh8hf" path="res://src/Edificios/CasaMineros/CasaMineros.gd" id="1_kjfbj"]
 [ext_resource type="Texture2D" uid="uid://ds2y2tw0kpaln" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Yellow.png" id="2_kjfbj"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="3_v6cf3"]
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="4_dhc7y"]
@@ -13,10 +13,10 @@ size = Vector2(192, 64)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p2kc1"]
 size = Vector2(318, 329)
 
-[node name="CasaLenadores" type="StaticBody2D"]
+[node name="CasaMineros" type="StaticBody2D"]
 z_as_relative = false
 y_sort_enabled = true
-script = ExtResource("1_p2gmq")
+script = ExtResource("1_kjfbj")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_as_relative = false
@@ -37,7 +37,7 @@ shape = SubResource("RectangleShape2D_r1qpu")
 position = Vector2(0, -79.5)
 shape = SubResource("RectangleShape2D_p2kc1")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="Node2D" parent="."]
 
 [node name="ComprarLenador" type="TextureButton" parent="UI"]
 offset_left = -46.000004
