@@ -43,6 +43,7 @@ enabled=PackedStringArray("res://addons/GD-Sync/plugin.cfg")
 [global_group]
 
 objeto_bloqueante="No se puede construir sobre el"
+arbol=""
 
 [input]
 

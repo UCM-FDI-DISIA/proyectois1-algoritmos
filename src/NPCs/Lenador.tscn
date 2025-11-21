@@ -1,6 +1,7 @@
-[gd_scene load_steps=22 format=3 uid="uid://c8poe0hltxepy"]
+[gd_scene load_steps=23 format=3 uid="uid://c8poe0hltxepy"]
 
 [ext_resource type="Texture2D" uid="uid://baoo8j02osvor" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Pawn/Red/Pawn_Red.png" id="1_4vglx"]
+[ext_resource type="Script" uid="uid://k3ocbkk7xf04" path="res://src/NPCs/lenador.gd" id="1_26hqc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_26hqc"]
 atlas = ExtResource("1_4vglx")
@@ -149,6 +150,7 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_bqcf6"]
 
 [node name="Lenador" type="CharacterBody2D"]
+script = ExtResource("1_26hqc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pnp14")
@@ -159,3 +161,5 @@ frame_progress = 0.6330314
 position = Vector2(0, 22)
 scale = Vector2(1.36, 1.44)
 shape = SubResource("CircleShape2D_bqcf6")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
