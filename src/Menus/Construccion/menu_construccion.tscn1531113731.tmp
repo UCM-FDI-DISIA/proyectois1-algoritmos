@@ -14,10 +14,6 @@ texture = ExtResource("6_8qf8j")
 
 [node name="menuConstruccion" type="CanvasLayer"]
 script = ExtResource("1_2gfwo")
-PREVIEW_ALPHA = null
-PREVIEW_BLOCK_COLOR = null
-PREVIEW_OK_COLOR = null
-GRID_SIZE = null
 
 [node name="ControlRaiz" type="Control" parent="."]
 layout_mode = 3

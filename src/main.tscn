@@ -1,4 +1,4 @@
-[gd_scene load_steps=75 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=76 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
 [ext_resource type="Script" uid="uid://dut20ponmt82k" path="res://src/ResourceManager.gd" id="6_lovvn"]
 [ext_resource type="PackedScene" uid="uid://c677m228bca8p" path="res://src/Recursos/MinaPiedra/minaPiedraAnimado.tscn" id="7_rlaii"]
+[ext_resource type="PackedScene" uid="uid://di4vbru44oxk6" path="res://src/Edificios/CasaCanteros/CasaCanteros.tscn" id="8_sta5p"]
 [ext_resource type="PackedScene" uid="uid://c6wex4pd4eg7t" path="res://src/Edificios/Casa/CasaAnimada.tscn" id="9_mgm53"]
 [ext_resource type="Script" uid="uid://c6vg12603g8ol" path="res://src/Player.gd" id="10_c2usk"]
 [ext_resource type="PackedScene" uid="uid://die6kbpl1cpp2" path="res://src/Edificios/Cuartel/CuartelAnimado.tscn" id="10_uewes"]
@@ -440,6 +441,7 @@ script = ExtResource("6_jitvu")
 script = ExtResource("6_lovvn")
 contenedor_casas = NodePath("../Objetos/Edificios/CasasCompradas")
 casa_scene = ExtResource("9_mgm53")
+casa_canteros_scene = ExtResource("8_sta5p")
 
 [node name="Mapa" type="Node2D" parent="."]
 z_as_relative = false
