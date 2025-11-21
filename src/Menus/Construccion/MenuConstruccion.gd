@@ -262,6 +262,17 @@ func _process(_delta: float) -> void:
 			"casa_lenadores":
 				if resource_manager.puedo_comprar_casa_lenadores():
 					real = resource_manager.casa_lenadores_scene.instantiate() as Node2D
+		
+					# 1. 💡 CORRECCIÓN CRÍTICA: Establecer la posición global de la casa.
+	   				 #    (Reemplaza 'posicion_de_construccion' con tu variable real)
+					real.global_position = camera.get_global_mouse_position()
+		
+		# 2. Añadir al árbol (necesario para que get_parent() funcione)
+					get_tree().get_root().add_child(real)
+		
+		# 3. Spawnear los leñadores (ahora se usa la posición correcta de la casa)
+					real.spawn_initial_lenadores_on_build() 
+		
 					resource_manager.pagar_casa_lenadores()
 					construccion_exitosa = true
 				else:
@@ -277,7 +288,7 @@ func _process(_delta: float) -> void:
 		
 		if construccion_exitosa and real != null:
 			real.global_position = pos
-			resource_manager.contenedor_casas.add_child(real)
+			# resource_manager.contenedor_casas.add_child(real)
 			print("[BuildHUD] Construcción realizada: %s" % casa_seleccionada)
 			_cancelar_construccion()
 		elif not construccion_exitosa:

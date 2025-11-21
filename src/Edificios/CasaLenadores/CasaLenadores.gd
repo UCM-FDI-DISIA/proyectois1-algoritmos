@@ -4,17 +4,26 @@ class_name CasaLenadores
 # ============================================================
 # 🔧 VARIABLES EDITABLES
 # ============================================================
-@export var coste_nuevo_lenador := 25
+@export var lenador_scene: PackedScene 
+@export var coste_madera_lenador := 5 
+@export var coste_aldeano_lenador := 1 
 @export var max_lenadores := 5
-@export var lenadores_iniciales := 2
-@export var UI_OFFSET := Vector2(-45, -292) # Posición del botón sobre la casa
+@export var lenadores_iniciales := 1 
+@export var UI_OFFSET := Vector2(-45, -292) 
+
+@export var SPAWN_RADIUS := 100.0 
+@export var MIN_DISTANCE := 50.0
+@export var COLLISION_CHECK_RADIUS := 10.0 
+@export_range(1, 15, 1) var MAX_SPAWN_ATTEMPTS := 10 
 
 # ============================================================
-# 🎮 ESTADO
+# 🎮 ESTADO 
 # ============================================================
 var lenadores_actuales := 0
 var jugador_dentro := false
 var debug := true
+var spawned_positions: Array[Vector2] = []
+var initial_spawn_complete := false
 
 # ============================================================
 # 🧩 NODOS
@@ -27,29 +36,106 @@ var debug := true
 # ⚙️ READY
 # ============================================================
 func _ready() -> void:
-	lenadores_actuales = lenadores_iniciales
+	randomize()
 
 	if resource_manager == null:
-		push_error("[CasaLenadores] ERROR: ResourceManager no encontrado.")
+		push_error("[CasaLenadores] ResourceManager no encontrado.")
 		return
 
-	resource_manager.add_resource("wood", 0) # asegura inicialización
+	if lenador_scene == null:
+		push_error("[CasaLenadores] No se asignó la escena del Leñador.")
 
-	# Conectar señales
 	area_interaccion.body_entered.connect(_on_player_enter)
 	area_interaccion.body_exited.connect(_on_player_exit)
 	boton_lenador.pressed.connect(_on_comprar_lenador)
 
-	# Posicionar botón sobre la casa
 	boton_lenador.position = UI_OFFSET
-	boton_lenador.z_index = 100
 	boton_lenador.visible = false
 
 	if debug:
-		print("[CasaLenadores] Casa creada con %d leñadores." % lenadores_actuales)
-		print("[CasaLenadores] Botón posición local:", boton_lenador.position)
-		print("[CasaLenadores] Botón visible:", boton_lenador.visible)
-		print("[CasaLenadores] Botón z_index:", boton_lenador.z_index)
+		print("[CasaLenadores] Inicializado correctamente.")
+
+func spawn_initial_lenadores_on_build() -> void: 
+	if initial_spawn_complete: 
+		return 
+	lenadores_actuales = 0 
+	spawned_positions.clear() 
+	var num_a_spawnear = lenadores_iniciales 
+	for _i in range(num_a_spawnear): 
+		resource_manager.remove_resource("villager", coste_aldeano_lenador) 
+		_spawn_lenador() 
+		lenadores_actuales += 1 
+		if debug: 
+			print("[CasaLenadores] Spawn inicial completado. Leñadores totales: %d." % lenadores_actuales) 
+			initial_spawn_complete = true
+
+# ============================================================
+# 🔍 CHEQUEO DE COLISIONES
+# ============================================================
+func _is_position_free(pos: Vector2) -> bool:
+	var space_state = get_world_2d().direct_space_state
+
+	var query := PhysicsPointQueryParameters2D.new()
+	query.position = pos
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	query.exclude = [self]  # ← para evitar que choque con la propia casa
+
+	var result = space_state.intersect_point(query, 1)
+	return result.is_empty()
+
+
+# ============================================================
+# 📍 NUEVA POSICIÓN ALEATORIA VÁLIDA
+# ============================================================
+func _get_random_spawn_position() -> Vector2:
+	var center := global_position
+	var attempts := 0
+
+	while attempts < MAX_SPAWN_ATTEMPTS:
+
+		var angle = randf_range(0, TAU)
+		var distance = randf_range(MIN_DISTANCE, SPAWN_RADIUS)
+		var pos = center + Vector2(cos(angle), sin(angle)) * distance
+
+		# 1. Distancia con leñadores previos
+		var ok := true
+		for prev in spawned_positions:
+			if prev.distance_to(pos) < MIN_DISTANCE:
+				ok = false
+				break
+
+		# 2. Chequeo de colisión del mundo
+		if ok and _is_position_free(pos):
+			spawned_positions.append(pos)
+			return pos
+
+		attempts += 1
+
+	# Si no encuentra hueco:
+	if debug:
+		print("[CasaLenadores] No se encontró posición válida tras %d intentos." % MAX_SPAWN_ATTEMPTS)
+
+	return center + Vector2(0, SPAWN_RADIUS)
+
+
+# ============================================================
+# 🧱 SPAWNEAR LEÑADOR
+# ============================================================
+func _spawn_lenador() -> void:
+	var npc = lenador_scene.instantiate()
+
+	npc.global_position = _get_random_spawn_position()
+
+	get_parent().add_child(npc)
+
+	var anim := npc.get_node_or_null("AnimatedSprite2D")
+	if anim:
+		anim.play("Idle")
+
+	if debug:
+		print("[CasaLenadores] Nuevo leñador en %s" % npc.global_position)
+
 
 # ============================================================
 # 🚪 DETECCIÓN DE JUGADOR
@@ -58,49 +144,42 @@ func _on_player_enter(body):
 	if body.is_in_group("jugador"):
 		jugador_dentro = true
 		_actualizar_boton()
-		if debug:
-			print("[CasaLenadores] Jugador entró. Botón actualizado.")
 
 func _on_player_exit(body):
 	if body.is_in_group("jugador"):
 		jugador_dentro = false
 		boton_lenador.visible = false
-		if debug:
-			print("[CasaLenadores] Jugador salió. Botón oculto.")
+
 
 # ============================================================
-# 🛠️ ACTUALIZAR BOTÓN
+# 🧰 BOTÓN
 # ============================================================
 func _actualizar_boton():
 	boton_lenador.visible = jugador_dentro and lenadores_actuales < max_lenadores
-	if debug:
-		print("[CasaLenadores] _actualizar_boton() → visible:", boton_lenador.visible)
-		print("[CasaLenadores] Botón global_position:", boton_lenador.global_position)
-		print("[CasaLenadores] Botón rect_size:", boton_lenador.rect_size if boton_lenador.has_method("rect_size") else "N/A")
+
 
 # ============================================================
-# 💰 COMPRAR NUEVO LEÑADOR
+# 💰 COMPRAR LEÑADOR
 # ============================================================
 func _on_comprar_lenador():
 	if lenadores_actuales >= max_lenadores:
-		print("[CasaLenadores] Límite de leñadores alcanzado.")
+		print("[CasaLenadores] Máximo alcanzado.")
 		return
 
-	var madera : int = resource_manager.get_resource("wood")
-	if madera < coste_nuevo_lenador:
-		print("[CasaLenadores] No hay madera suficiente (%d/%d)." %
-			[madera, coste_nuevo_lenador])
+	var wood : int = resource_manager.get_resource("wood")
+	var villagers :int = resource_manager.get_resource("villager")
+
+	if wood < coste_madera_lenador:
+		print("[CasaLenadores] No hay madera suficiente.")
+		return
+	if villagers < coste_aldeano_lenador:
+		print("[CasaLenadores] No hay aldeanos disponibles.")
 		return
 
-	resource_manager.remove_resource("wood", coste_nuevo_lenador)
+	resource_manager.remove_resource("wood", coste_madera_lenador)
+	resource_manager.remove_resource("villager", coste_aldeano_lenador)
+
+	_spawn_lenador()
+
 	lenadores_actuales += 1
-	print("[CasaLenadores] Nuevo leñador añadido. Total: %d" % lenadores_actuales)
-
 	_actualizar_boton()
-
-# ============================================================
-# 🧹 AL ELIMINAR CASA
-# ============================================================
-func _exit_tree() -> void:
-	print("[CasaLenadores] Casa destruida. Se perdieron %d leñadores." %
-		lenadores_actuales)

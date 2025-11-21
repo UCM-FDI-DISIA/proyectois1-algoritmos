@@ -21,9 +21,10 @@ const CANTEROS_GOLD_COST := 0
 const CANTEROS_STONE_COST := 0
 
 # CASA LEÑADORES
-const LENADORES_WOOD_COST := 15
+const LENADORES_WOOD_COST := 0
 const LENADORES_GOLD_COST := 0
 const LENADORES_STONE_COST := 0
+const LENADORES_VILLAGER_COST := 1; 
 
 # CASA MINEROS
 const MINEROS_WOOD_COST := 0
@@ -115,6 +116,9 @@ func get_lenadores_gold_cost() -> int:
 func get_lenadores_stone_cost() -> int:
 	return LENADORES_STONE_COST
 
+func get_lenadores_villager_cost() -> int:
+	return LENADORES_VILLAGER_COST
+
 func add_lenadores_house() -> void:
 	lenadores_house_count += 1
 
@@ -126,7 +130,7 @@ func get_lenadores_house_count() -> int:
 # -----------------------------------------------------
 
 # -----------------------------------------------------
-#  CASA LEÑADORES
+#  CASA MINEROS
 # -----------------------------------------------------
 func get_mineros_wood_cost() -> int:
 	return MINEROS_WOOD_COST
@@ -261,7 +265,8 @@ func puedo_comprar_casa_lenadores() -> bool:
 	return (
 		get_resource("wood") >= LENADORES_WOOD_COST and
 		get_resource("stone") >= LENADORES_STONE_COST and
-		get_resource("gold") >= LENADORES_GOLD_COST
+		get_resource("gold") >= LENADORES_GOLD_COST and 
+		get_resource("villager") >= LENADORES_VILLAGER_COST
 	)
 	
 func puedo_comprar_casa_mineros() -> bool:

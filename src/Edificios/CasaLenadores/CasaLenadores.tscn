@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cqhydyyoc76vl"]
+[gd_scene load_steps=10 format=3 uid="uid://cqhydyyoc76vl"]
 
 [ext_resource type="Script" uid="uid://bbxytg8kaeb0b" path="res://src/Edificios/CasaLenadores/CasaLenadores.gd" id="1_32eub"]
 [ext_resource type="Texture2D" uid="uid://cmbpk3drpqdpj" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Buildings/Wood_House/Goblin_House.png" id="2_32eub"]
+[ext_resource type="PackedScene" uid="uid://c8poe0hltxepy" path="res://src/NPCs/Lenador.tscn" id="2_nhwq6"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="3_eu8lv"]
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="4_5hp2e"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="5_dou3f"]
@@ -17,6 +18,7 @@ size = Vector2(318, 329)
 z_as_relative = false
 y_sort_enabled = true
 script = ExtResource("1_32eub")
+lenador_scene = ExtResource("2_nhwq6")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_as_relative = false
