@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=78 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://c6wex4pd4eg7t" path="res://src/Edificios/Casa/CasaAnimada.tscn" id="9_mgm53"]
 [ext_resource type="PackedScene" uid="uid://cqhydyyoc76vl" path="res://src/Edificios/CasaLenadores/CasaLenadores.tscn" id="9_sif16"]
 [ext_resource type="Script" uid="uid://c6vg12603g8ol" path="res://src/Player.gd" id="10_c2usk"]
+[ext_resource type="PackedScene" uid="uid://cpby34c2ngbwr" path="res://src/Edificios/CasaMineros/CasaMineros.tscn" id="10_d7bab"]
 [ext_resource type="PackedScene" uid="uid://die6kbpl1cpp2" path="res://src/Edificios/Cuartel/CuartelAnimado.tscn" id="10_uewes"]
 [ext_resource type="PackedScene" uid="uid://bg6kvrfqm2lc6" path="res://src/ElementosPantalla/boton_batalla.tscn" id="21_jitvu"]
 [ext_resource type="PackedScene" uid="uid://bbo05kp3bjw4u" path="res://src/BotonElementos/boton_s.tscn" id="22_ocmcv"]
@@ -444,6 +445,7 @@ contenedor_casas = NodePath("../Objetos/Edificios/CasasCompradas")
 casa_scene = ExtResource("9_mgm53")
 casa_canteros_scene = ExtResource("8_sta5p")
 casa_lenadores_scene = ExtResource("9_sif16")
+casa_mineros_scene = ExtResource("10_d7bab")
 
 [node name="Mapa" type="Node2D" parent="."]
 z_as_relative = false

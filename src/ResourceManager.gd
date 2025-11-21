@@ -42,6 +42,7 @@ const SOLDIER_COSTS := {
 @export var casa_scene: PackedScene
 @export var casa_canteros_scene : PackedScene
 @export var casa_lenadores_scene : PackedScene
+@export var casa_mineros_scene : PackedScene
 
 var house_count: int = 0
 var canteros_house_count: int = 0
@@ -121,6 +122,28 @@ func remove_lenadores_house() -> void:
 	lenadores_house_count = max(0, lenadores_house_count - 1)
 
 func get_lenadores_house_count() -> int:
+	return lenadores_house_count
+# -----------------------------------------------------
+
+# -----------------------------------------------------
+#  CASA LEÑADORES
+# -----------------------------------------------------
+func get_mineros_wood_cost() -> int:
+	return MINEROS_WOOD_COST
+
+func get_mineros_gold_cost() -> int:
+	return MINEROS_GOLD_COST
+
+func get_mineros_stone_cost() -> int:
+	return MINEROS_STONE_COST
+
+func add_mineros_house() -> void:
+	lenadores_house_count += 1
+
+func remove_mineros_house() -> void:
+	lenadores_house_count = max(0, lenadores_house_count - 1)
+
+func get_mineros_house_count() -> int:
 	return lenadores_house_count
 # -----------------------------------------------------
 
@@ -240,6 +263,14 @@ func puedo_comprar_casa_lenadores() -> bool:
 		get_resource("stone") >= LENADORES_STONE_COST and
 		get_resource("gold") >= LENADORES_GOLD_COST
 	)
+	
+func puedo_comprar_casa_mineros() -> bool:
+	# Casa Mineros
+	return (
+		get_resource("wood") >= MINEROS_WOOD_COST and
+		get_resource("stone") >= MINEROS_STONE_COST and
+		get_resource("gold") >= MINEROS_GOLD_COST
+	)
 
 func pagar_casa() -> bool:
 	if not puedo_comprar_casa():
@@ -274,5 +305,17 @@ func pagar_casa_lenadores() -> bool:
 	remove_resource("gold", LENADORES_GOLD_COST)
 	
 	add_lenadores_house()
+
+	return true
+
+func pagar_casa_mineros() -> bool:
+	if not puedo_comprar_casa_mineros():
+		return false
+
+	remove_resource("wood", MINEROS_WOOD_COST)
+	remove_resource("stone", MINEROS_STONE_COST)
+	remove_resource("gold", MINEROS_GOLD_COST)
+	
+	add_mineros_house()
 
 	return true

@@ -1,0 +1,54 @@
+[gd_scene load_steps=9 format=3 uid="uid://cpby34c2ngbwr"]
+
+[ext_resource type="Script" uid="uid://bbyr8vnv45id4" path="res://src/Edificios/Casa/CasaAnimada.gd" id="1_p2gmq"]
+[ext_resource type="Texture2D" uid="uid://ds2y2tw0kpaln" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Yellow.png" id="2_kjfbj"]
+[ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="3_v6cf3"]
+[ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="4_dhc7y"]
+[ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="5_3pk7p"]
+[ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="6_lvplb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r1qpu"]
+size = Vector2(192, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p2kc1"]
+size = Vector2(318, 329)
+
+[node name="CasaLenadores" type="StaticBody2D"]
+z_as_relative = false
+y_sort_enabled = true
+script = ExtResource("1_p2gmq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(0, -2.3841858e-07)
+scale = Vector2(1.6, 1.6)
+texture = ExtResource("2_kjfbj")
+offset = Vector2(0, -50)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+shape = SubResource("RectangleShape2D_r1qpu")
+
+[node name="interaccion" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="interaccion"]
+position = Vector2(0, -79.5)
+shape = SubResource("RectangleShape2D_p2kc1")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="ComprarLenador" type="TextureButton" parent="UI"]
+offset_left = -46.000004
+offset_top = -301.00003
+offset_right = 17.999996
+offset_bottom = -237.00003
+scale = Vector2(1.4282445, 1.3199995)
+texture_normal = ExtResource("3_v6cf3")
+texture_pressed = ExtResource("4_dhc7y")
+texture_hover = ExtResource("5_3pk7p")
+
+[node name="Mas" type="Sprite2D" parent="UI/ComprarLenador"]
+position = Vector2(31.507215, 31.81822)
+texture = ExtResource("6_lvplb")
