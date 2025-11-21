@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://4oaphcoyv6qq"]
+[gd_scene load_steps=22 format=3 uid="uid://4oaphcoyv6qq"]
 
 [ext_resource type="Script" uid="uid://bbf6hpx7xyk4e" path="res://src/Recursos/ArbolMadera/ArbolAnimado.gd" id="1_777f3"]
 [ext_resource type="Texture2D" uid="uid://chbs7mxhn2mf6" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png" id="1_xfbxd"]
@@ -81,6 +81,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rcsqm"]
 size = Vector2(64, 64)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_777f3"]
+size = Vector2(49, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_nclhg"]
 atlas = ExtResource("3_777f3")
 region = Rect2(128, 0, 128, 128)
@@ -148,13 +151,17 @@ y_sort_enabled = true
 position = Vector2(0, 4.7683716e-07)
 scale = Vector2(1.4, 1.4)
 sprite_frames = SubResource("SpriteFrames_uvlja")
-animation = &"Idle"
+animation = &"Die"
 offset = Vector2(-1.4117646, -63.999897)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
 shape = SubResource("RectangleShape2D_rcsqm")
+
+[node name="CollisionShapeChop" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 16)
+shape = SubResource("RectangleShape2D_777f3")
 
 [node name="regenTimer" type="Timer" parent="."]
 
