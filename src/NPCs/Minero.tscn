@@ -1,0 +1,161 @@
+[gd_scene load_steps=22 format=3 uid="uid://pgaqw4ivysq1"]
+
+[ext_resource type="Texture2D" uid="uid://bsen051ngs25a" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Pawn/Yellow/Pawn_Yellow.png" id="1_3yj1i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1djbl"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(0, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_drbef"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(192, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l76hc"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(384, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_18tly"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(576, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vp3ay"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(768, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0adks"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(960, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2iw4a"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6lae4"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jlu25"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gbohm"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(576, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0mbht"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(768, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2voeh"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(960, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_adu4s"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(0, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uwh4i"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(192, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2mc6b"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(384, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qdpvx"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(576, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2410n"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(768, 384, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6wrra"]
+atlas = ExtResource("1_3yj1i")
+region = Rect2(960, 384, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_66hj5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1djbl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_drbef")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l76hc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_18tly")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vp3ay")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0adks")
+}],
+"loop": true,
+"name": &"Caminar",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2iw4a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6lae4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jlu25")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gbohm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0mbht")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2voeh")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_adu4s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uwh4i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2mc6b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qdpvx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2410n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6wrra")
+}],
+"loop": true,
+"name": &"Recolectar",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_we2l8"]
+
+[node name="Minero" type="CharacterBody2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_66hj5")
+animation = &"Idle"
+frame_progress = 0.8594856
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 22)
+scale = Vector2(1.325, 1.24001)
+shape = SubResource("CircleShape2D_we2l8")
