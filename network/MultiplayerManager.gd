@@ -67,17 +67,29 @@ func _check_start_condition() -> void:
 		print("Esperando más jugadores antes de iniciar...")
 
 # ------------------------------------------------
-
+#  AJUSTES UN JUGADOR
+# ------------------------------------------------
 func _adjust_for_one_player() -> void:
 	my_quadrant_id = 0
 	
 	var myid : int = GDSync.get_client_id()
+	
+	if myid <= 0:
+		push_error("No se puede iniciar PVE sin un client_id válido")
+		return
+		
 	print("PVE -> tengo un 'client_id' ", myid, " y mi cuadrante es ", my_quadrant_id)
 	players = [myid]
 	quadrants_by_client = { myid : my_quadrant_id }
 	
-	print("🌍 Ejecutando cambio de escena para un jugador...")
-	GDSync.change_scene("res://src/main.tscn")  # ✅ ruta correcta
+	# Guardar datos del jugador
+	GDSync.player_set_data("quadrants_by_client", quadrants_by_client)
+	GDSync.player_set_data("quadrant_id", my_quadrant_id)
+	
+	# Cambiar escena (usar el mismo método que en PVP para consistencia)
+	print("🌍 Cambiando a escena principal para PVE...")
+	await get_tree().create_timer(0.5).timeout  # Pequeña espera para asegurar sincronización
+	get_tree().change_scene_to_file("res://src/main.tscn")
 
 # ------------------------------------------------
 # 🔹 Asignación de cuadrantes

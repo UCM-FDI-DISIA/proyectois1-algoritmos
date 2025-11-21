@@ -42,6 +42,12 @@ func _on_pve_pressed():
 	game_mode = "PVE"
 	print("PVE → iniciando partida local...")
 	
+	# Esperar a tener un client_id válido
+	while GDSync.get_client_id() <= 0:
+		print("Esperando ID de cliente para PVE...")
+		await get_tree().create_timer(0.2).timeout
+		
+	# Llamar al manager para configurar el modo PVE
 	MultiplayerManager._adjust_for_one_player()
 
 
