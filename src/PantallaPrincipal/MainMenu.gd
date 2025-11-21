@@ -20,6 +20,7 @@ func _ready():
 	GDSync.connected.connect(_on_connected)
 	GDSync.connection_failed.connect(_on_connection_failed)
 	GDSync.lobby_joined.connect(_on_lobby_joined)
+	GDSync.lobby_join_failed.connect(_on_lobby_join_failed)
 	GDSync.lobby_created.connect(_on_lobby_created)
 	GDSync.lobby_creation_failed.connect(_on_lobby_creation_failed)
 
@@ -28,8 +29,8 @@ func _ready():
 	GDSync.client_left.connect(_on_client_left)
 	
 	# Solo el servidor inicia la lógica de “host”
-	# if multiplayer.is_server():
-	GDSync.start_multiplayer()
+	if multiplayer.is_server():
+		GDSync.start_multiplayer()
 
 
 
@@ -88,11 +89,13 @@ func _on_connection_failed(err):
 func _on_lobby_creation_failed(lobby_name: String, error: int):
 	push_error("Error creando lobby", lobby_name, ": %s" % str(error))
 
-
-
 func _on_lobby_created(lobby_name: String):
 	print("Lobby creado: ", lobby_name)
 	GDSync.lobby_join(lobby_name, "")
+
+func _on_lobby_join_failed(lobby_name: String, error: int):
+	print("No se pudo unir al lobby, lo creamos:", lobby_name, ' ', error)
+	GDSync.lobby_create(lobby_name, "", true, 2, {}) # máx 2 jugadores
 
 
 
@@ -136,3 +139,14 @@ func _on_client_joined(client_id: int):
 func _on_client_left(client_id: int):
 	players_in_lobby -= 1
 	print("Jugador salió:", client_id, " → total:", players_in_lobby)
+
+
+# ============================================================
+# CAMBIO A LA ESCENA DEL JUEGO REAL
+# ============================================================
+
+func _load_main_game_scene():
+	print("Cargando escena principal del juego...")
+
+	# CAMBIA SOLO ESTA RUTA:
+	get_tree().call_deferred("change_scene_to_file", "res://scenes/Game.tscn")

@@ -48,8 +48,9 @@ func _ready() -> void:
 	var all_peers := [mp.get_unique_id()]
 	all_peers.append_array(mp.get_peers())
 	print("Todos los jugadores conectados:", all_peers)
-
-	if all_peers.size() > 1:
+	
+	# Utilizo el array de players para que también cuente al host
+	if MultiplayerManager.players.size() > 1:
 		# PVP: hay otro jugador además de ti
 		var enemy_id: int = MultiplayerManager.get_enemy_id(my_id)
 		enemy_troops_dict = GDSync.player_get_data(enemy_id, "troops_by_client", {
