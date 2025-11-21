@@ -37,7 +37,7 @@ shape = SubResource("RectangleShape2D_r1qpu")
 position = Vector2(0, -79.5)
 shape = SubResource("RectangleShape2D_p2kc1")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="Node2D" parent="."]
 
 [node name="ComprarLenador" type="TextureButton" parent="UI"]
 offset_left = -46.000004

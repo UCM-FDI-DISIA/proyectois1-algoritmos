@@ -7,17 +7,19 @@ class_name CasaMineros
 @export var coste_nuevo_minero := 25
 @export var max_mineros := 5
 @export var mineros_iniciales := 2
+@export var UI_OFFSET := Vector2(-45, -292) # Posición del botón sobre la casa
 
 # ============================================================
 # 🎮 ESTADO
 # ============================================================
-var mineros_actuales := 0 # Cambiado a mineros_actuales
+var mineros_actuales := 0
 var jugador_dentro := false
+var debug := true
 
 # ============================================================
 # 🧩 NODOS
 # ============================================================
-@onready var boton_minero := $UI/ComprarMinero # Ajustado el nombre del nodo del botón
+@onready var boton_minero := $UI/ComprarMinero
 @onready var area_interaccion := $interaccion
 @onready var resource_manager := get_node("/root/Main/ResourceManager")
 
@@ -31,72 +33,74 @@ func _ready() -> void:
 		push_error("[CasaMineros] ERROR: ResourceManager no encontrado.")
 		return
 
-	# Registrar mineros iniciales → suman producción de ORO (o el recurso que produzcan)
-	resource_manager.add_resource("gold", 0) # asegura inicialización de oro (o "stone" si produce piedra)
-	# Si quieres producción automática, deberás programarla en ResourceManager
+	resource_manager.add_resource("gold", 0) # asegura inicialización de oro
 
 	# Conectar señales
 	area_interaccion.body_entered.connect(_on_player_enter)
 	area_interaccion.body_exited.connect(_on_player_exit)
-	boton_minero.pressed.connect(_on_comprar_minero) # Conexión cambiada
+	boton_minero.pressed.connect(_on_comprar_minero)
 
-	# Ocultar botón por defecto
+	# Posicionar botón sobre la casa
+	boton_minero.position = UI_OFFSET
+	boton_minero.z_index = 100
 	boton_minero.visible = false
 
-	print("[CasaMineros] Casa creada con %d mineros." % mineros_actuales) # Mensaje cambiado
-
+	if debug:
+		print("[CasaMineros] Casa creada con %d mineros." % mineros_actuales)
+		print("[CasaMineros] Botón posición local:", boton_minero.position)
+		print("[CasaMineros] Botón visible:", boton_minero.visible)
+		print("[CasaMineros] Botón z_index:", boton_minero.z_index)
 
 # ============================================================
 # 🚪 DETECCIÓN DE JUGADOR
 # ============================================================
 func _on_player_enter(body):
-	if body.name == "Jugador": 
+	if body.is_in_group("jugador"):
 		jugador_dentro = true
 		_actualizar_boton()
+		if debug:
+			print("[CasaMineros] Jugador entró. Botón actualizado.")
 
 func _on_player_exit(body):
-	if body.name == "Jugador":
+	if body.is_in_group("jugador"):
 		jugador_dentro = false
-		boton_minero.visible = false # Botón cambiado
-
+		boton_minero.visible = false
+		if debug:
+			print("[CasaMineros] Jugador salió. Botón oculto.")
 
 # ============================================================
 # 🛠️ ACTUALIZAR BOTÓN
 # ============================================================
 func _actualizar_boton():
-	boton_minero.visible = jugador_dentro and mineros_actuales < max_mineros # Variables cambiadas
-
+	boton_minero.visible = jugador_dentro and mineros_actuales < max_mineros
+	if debug:
+		print("[CasaMineros] _actualizar_boton() → visible:", boton_minero.visible)
+		print("[CasaMineros] Botón global_position:", boton_minero.global_position)
+		print("[CasaMineros] Botón rect_size:", boton_minero.rect_size if boton_minero.has_method("rect_size") else "N/A")
 
 # ============================================================
 # 💰 COMPRAR NUEVO MINERO
 # ============================================================
-func _on_comprar_minero(): # Función cambiada
-	if mineros_actuales >= max_mineros: # Variable cambiada
+func _on_comprar_minero():
+	if mineros_actuales >= max_mineros:
 		print("[CasaMineros] Límite de mineros alcanzado.")
 		return
 
-	# Comprobación con el ResourceManager REAL
-	var oro : int # Recurso de pago cambiado a ORO
-	oro = resource_manager.get_resource("gold")
-	if oro < coste_nuevo_minero: # Variable cambiada
+	var oro : int = resource_manager.get_resource("gold")
+	if oro < coste_nuevo_minero:
 		print("[CasaMineros] No hay oro suficiente (%d/%d)." %
 			[oro, coste_nuevo_minero])
 		return
 
-	# Resta el recurso (ORO)
 	resource_manager.remove_resource("gold", coste_nuevo_minero)
-
-	# Añade un minero
-	mineros_actuales += 1 # Variable cambiada
+	mineros_actuales += 1
 	print("[CasaMineros] Nuevo minero añadido. Total: %d" % mineros_actuales)
 
-	# Actualización botón
 	_actualizar_boton()
-
 
 # ============================================================
 # 🧹 AL ELIMINAR CASA
 # ============================================================
 func _exit_tree() -> void:
 	print("[CasaMineros] Casa destruida. Se perdieron %d mineros." %
-		mineros_actuales) # Variable cambiada
+		mineros_actuales)

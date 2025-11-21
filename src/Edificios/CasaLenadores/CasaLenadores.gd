@@ -4,15 +4,17 @@ class_name CasaLenadores
 # ============================================================
 # 🔧 VARIABLES EDITABLES
 # ============================================================
-@export var coste_nuevo_lenador := 25	 	 	 # COSTE del nuevo trabajador (usaremos madera)
-@export var max_lenadores := 5	 	 	 	     # Máximo permitidos
-@export var lenadores_iniciales := 2	 	 	 # Aparecen por defecto
+@export var coste_nuevo_lenador := 25
+@export var max_lenadores := 5
+@export var lenadores_iniciales := 2
+@export var UI_OFFSET := Vector2(-45, -292) # Posición del botón sobre la casa
 
 # ============================================================
 # 🎮 ESTADO
 # ============================================================
 var lenadores_actuales := 0
 var jugador_dentro := false
+var debug := true
 
 # ============================================================
 # 🧩 NODOS
@@ -31,84 +33,74 @@ func _ready() -> void:
 		push_error("[CasaLenadores] ERROR: ResourceManager no encontrado.")
 		return
 
-	# Registrar recurso para el leñador (Madera)
 	resource_manager.add_resource("wood", 0) # asegura inicialización
-	# La lógica de producción automática debe ser manejada en ResourceManager o un Timer
 
 	# Conectar señales
 	area_interaccion.body_entered.connect(_on_player_enter)
 	area_interaccion.body_exited.connect(_on_player_exit)
 	boton_lenador.pressed.connect(_on_comprar_lenador)
 
-	# Ocultar botón por defecto
+	# Posicionar botón sobre la casa
+	boton_lenador.position = UI_OFFSET
+	boton_lenador.z_index = 100
 	boton_lenador.visible = false
 
-	print("[CasaLenadores] Casa creada con %d leñadores." % lenadores_actuales)
-
+	if debug:
+		print("[CasaLenadores] Casa creada con %d leñadores." % lenadores_actuales)
+		print("[CasaLenadores] Botón posición local:", boton_lenador.position)
+		print("[CasaLenadores] Botón visible:", boton_lenador.visible)
+		print("[CasaLenadores] Botón z_index:", boton_lenador.z_index)
 
 # ============================================================
 # 🚪 DETECCIÓN DE JUGADOR
 # ============================================================
 func _on_player_enter(body):
-	# Verificamos si es el jugador. Se puede usar un grupo "jugador" o verificar por nombre.
-	if body.is_in_group("jugador") or body.name == "Jugador": 
+	if body.is_in_group("jugador"):
 		jugador_dentro = true
 		_actualizar_boton()
+		if debug:
+			print("[CasaLenadores] Jugador entró. Botón actualizado.")
 
 func _on_player_exit(body):
-	if body.is_in_group("jugador") or body.name == "Jugador":
+	if body.is_in_group("jugador"):
 		jugador_dentro = false
 		boton_lenador.visible = false
-
+		if debug:
+			print("[CasaLenadores] Jugador salió. Botón oculto.")
 
 # ============================================================
 # 🛠️ ACTUALIZAR BOTÓN
 # ============================================================
 func _actualizar_boton():
-	# El botón es visible si el jugador está dentro Y no se ha alcanzado el máximo
 	boton_lenador.visible = jugador_dentro and lenadores_actuales < max_lenadores
-	
-	# También puedes actualizar el texto del botón aquí para reflejar el coste y el límite
-	if boton_lenador.visible:
-		boton_lenador.text = "Comprar Leñador\n(%d Madera)" % coste_nuevo_lenador
-
+	if debug:
+		print("[CasaLenadores] _actualizar_boton() → visible:", boton_lenador.visible)
+		print("[CasaLenadores] Botón global_position:", boton_lenador.global_position)
+		print("[CasaLenadores] Botón rect_size:", boton_lenador.rect_size if boton_lenador.has_method("rect_size") else "N/A")
 
 # ============================================================
-# 💰 COMPRAR NUEVO LEÑADOR (Lógica de coste en Madera)
+# 💰 COMPRAR NUEVO LEÑADOR
 # ============================================================
 func _on_comprar_lenador():
 	if lenadores_actuales >= max_lenadores:
 		print("[CasaLenadores] Límite de leñadores alcanzado.")
-		_actualizar_boton() # Oculta el botón por si acaso
 		return
 
-	# Comprobación de recurso (Madera - "wood")
-	var madera : int; 
-	madera = resource_manager.get_resource("wood")
+	var madera : int = resource_manager.get_resource("wood")
 	if madera < coste_nuevo_lenador:
 		print("[CasaLenadores] No hay madera suficiente (%d/%d)." %
 			[madera, coste_nuevo_lenador])
 		return
 
-	# Resta el recurso
 	resource_manager.remove_resource("wood", coste_nuevo_lenador)
-
-	# Añade un leñador (Incrementa el estado de producción)
 	lenadores_actuales += 1
-	
-	# Llamar a un método en ResourceManager para registrar al nuevo trabajador
-	# resource_manager.register_new_lenador() # Si tienes esta función
-
 	print("[CasaLenadores] Nuevo leñador añadido. Total: %d" % lenadores_actuales)
 
-	# Actualización botón
 	_actualizar_boton()
-
 
 # ============================================================
 # 🧹 AL ELIMINAR CASA
 # ============================================================
 func _exit_tree() -> void:
-	# Aquí podrías restar la producción de todos los leñadores al ResourceManager
 	print("[CasaLenadores] Casa destruida. Se perdieron %d leñadores." %
 		lenadores_actuales)

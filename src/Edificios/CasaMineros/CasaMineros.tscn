@@ -39,7 +39,7 @@ shape = SubResource("RectangleShape2D_p2kc1")
 
 [node name="UI" type="Node2D" parent="."]
 
-[node name="ComprarLenador" type="TextureButton" parent="UI"]
+[node name="ComprarMinero" type="TextureButton" parent="UI"]
 offset_left = -46.000004
 offset_top = -301.00003
 offset_right = 17.999996
@@ -49,6 +49,6 @@ texture_normal = ExtResource("3_v6cf3")
 texture_pressed = ExtResource("4_dhc7y")
 texture_hover = ExtResource("5_3pk7p")
 
-[node name="Mas" type="Sprite2D" parent="UI/ComprarLenador"]
+[node name="Mas" type="Sprite2D" parent="UI/ComprarMinero"]
 position = Vector2(31.507215, 31.81822)
 texture = ExtResource("6_lvplb")
