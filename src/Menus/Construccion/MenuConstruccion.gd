@@ -10,17 +10,24 @@ extends CanvasLayer
 @export var GRID_SIZE := 64
 
 # =====================================================================
-# 🧾 NODOS DE INTERFAZ
+# 🧾 NODOS DE INTERFAZ (Añadida Casa Mineros)
 # =====================================================================
 @onready var btn_menu: TextureButton = $ControlRaiz/BtnMenu
 @onready var panel_barra: PanelContainer = $ControlRaiz/PanelBarra
 @onready var hbox_botones: HBoxContainer = $ControlRaiz/PanelBarra/HBoxBotones
+
 @onready var btn_casa: TextureButton = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasa
 @onready var marcador_casa: Sprite2D = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasa/Marcador
+
 @onready var btn_casa_canteros: TextureButton = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaCanteros
 @onready var marcador_canteros: Sprite2D = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaCanteros/Marcador
+
 @onready var btn_casa_lenadores: TextureButton = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaLenadores
 @onready var marcador_lenadores: Sprite2D = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaLenadores/Marcador
+
+# 💡 NUEVOS NODOS: Casa Mineros
+@onready var btn_casa_mineros: TextureButton = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaMineros # Asegúrate de que existe este nodo en el árbol
+@onready var marcador_mineros: Sprite2D = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaMineros/Marcador # Asegúrate de que existe este nodo en el árbol
 
 # =====================================================================
 # 🏗️ ESTADO DE CONSTRUCCIÓN
@@ -30,6 +37,7 @@ var casa_preview: Node2D
 var area_preview: Area2D
 var puede_construir := true
 var resource_manager: ResourceManager
+# Tipos de casa: "casa_normal", "casa_canteros", "casa_lenadores", "casa_mineros"
 var casa_seleccionada: String = ""
 
 # =====================================================================
@@ -44,22 +52,28 @@ func _ready() -> void:
 	panel_barra.mouse_filter = Control.MOUSE_FILTER_STOP
 	panel_barra.visible = false
 	
+	# Aseguramos que todos los botones son de tipo Toggle
 	btn_casa.toggle_mode = true
 	btn_casa_canteros.toggle_mode = true
 	btn_casa_lenadores.toggle_mode = true
+	btn_casa_mineros.toggle_mode = true # Añadido
 	
 	btn_casa.mouse_filter = Control.MOUSE_FILTER_STOP
 	btn_casa_canteros.mouse_filter = Control.MOUSE_FILTER_STOP
 	btn_casa_lenadores.mouse_filter = Control.MOUSE_FILTER_STOP
+	btn_casa_mineros.mouse_filter = Control.MOUSE_FILTER_STOP # Añadido
 	
 	marcador_casa.visible = false
 	marcador_canteros.visible = false
 	marcador_lenadores.visible = false
+	marcador_mineros.visible = false # Añadido
 
+	# Conectar handlers
 	btn_menu.pressed.connect(_on_menu_pressed)
 	btn_casa.pressed.connect(_on_casa_pressed)
 	btn_casa_canteros.pressed.connect(_on_casa_canteros_pressed)
 	btn_casa_lenadores.pressed.connect(_on_casa_lenadores_pressed)
+	btn_casa_mineros.pressed.connect(_on_casa_mineros_pressed) # Añadido
 
 	_actualizar_tooltip()
 
@@ -74,13 +88,21 @@ func _on_menu_pressed() -> void:
 	panel_barra.mouse_filter = Control.MOUSE_FILTER_STOP if panel_barra.visible else Control.MOUSE_FILTER_IGNORE
 	print("[BuildHUD] Panel %s" % ("visible" if panel_barra.visible else "oculto"))
 
+func _desactivar_otros_botones() -> void:
+	"""Función auxiliar para desactivar todos los botones de construcción y sus marcadores."""
+	btn_casa.button_pressed = false
+	marcador_casa.visible = false
+	btn_casa_canteros.button_pressed = false
+	marcador_canteros.visible = false
+	btn_casa_lenadores.button_pressed = false
+	marcador_lenadores.visible = false
+	btn_casa_mineros.button_pressed = false # Añadido
+	marcador_mineros.visible = false # Añadido
+
 func _on_casa_pressed() -> void:
 	if btn_casa.button_pressed:
-		btn_casa_canteros.button_pressed = false
-		marcador_canteros.visible = false
-		btn_casa_lenadores.button_pressed = false
-		marcador_lenadores.visible = false
-		
+		_desactivar_otros_botones()
+		btn_casa.button_pressed = true # Reactivar el botón actual
 		_iniciar_construccion("casa_normal")
 	else:
 		_cancelar_construccion()
@@ -88,11 +110,8 @@ func _on_casa_pressed() -> void:
 
 func _on_casa_canteros_pressed() -> void:
 	if btn_casa_canteros.button_pressed:
-		btn_casa.button_pressed = false
-		marcador_casa.visible = false
-		btn_casa_lenadores.button_pressed = false
-		marcador_lenadores.visible = false
-		
+		_desactivar_otros_botones()
+		btn_casa_canteros.button_pressed = true
 		_iniciar_construccion("casa_canteros")
 	else:
 		_cancelar_construccion()
@@ -100,19 +119,24 @@ func _on_casa_canteros_pressed() -> void:
 
 func _on_casa_lenadores_pressed() -> void:
 	if btn_casa_lenadores.button_pressed:
-		btn_casa.button_pressed = false
-		marcador_casa.visible = false
-		btn_casa_canteros.button_pressed = false
-		marcador_canteros.visible = false
-		
+		_desactivar_otros_botones()
+		btn_casa_lenadores.button_pressed = true
 		_iniciar_construccion("casa_lenadores")
 	else:
 		_cancelar_construccion()
 	marcador_lenadores.visible = btn_casa_lenadores.button_pressed
 
+func _on_casa_mineros_pressed() -> void: # NUEVO HANDLER
+	if btn_casa_mineros.button_pressed:
+		_desactivar_otros_botones()
+		btn_casa_mineros.button_pressed = true
+		_iniciar_construccion("casa_mineros")
+	else:
+		_cancelar_construccion()
+	marcador_mineros.visible = btn_casa_mineros.button_pressed
 
 # ---------------------------------------------------------------------
-# MÉTODO CENTRALIZADO DE INICIO DE CONSTRUCCIÓN (CORREGIDO)
+# MÉTODO CENTRALIZADO DE INICIO DE CONSTRUCCIÓN
 # ---------------------------------------------------------------------
 func _iniciar_construccion(tipo_casa: String) -> void:
 	if en_construccion:
@@ -127,6 +151,8 @@ func _iniciar_construccion(tipo_casa: String) -> void:
 			scene_a_instanciar = resource_manager.casa_canteros_scene
 		"casa_lenadores":
 			scene_a_instanciar = resource_manager.casa_lenadores_scene
+		"casa_mineros": # Añadido
+			scene_a_instanciar = resource_manager.casa_mineros_scene # ASUME que esta variable existe en ResourceManager
 		_:
 			push_error("[BuildHUD] Tipo de casa desconocido: %s" % tipo_casa)
 			return
@@ -140,18 +166,13 @@ func _iniciar_construccion(tipo_casa: String) -> void:
 	
 	casa_preview = scene_a_instanciar.instantiate() as Node2D
 
-	# 🔄 Configuración de Preview (CORRECCIÓN PRINCIPAL DEL ERROR 'has_property')
+	# 🔄 Configuración de Preview
 	if casa_preview:
-		# Utilizamos 'set' que es más robusto si el objeto hereda de Node y tiene el script
-		# o si usamos la meta-programación de Object
-		if casa_preview.has_method("set"): # Asegura que es un Object válido
-			# Intentamos establecer la propiedad "es_preview" o "is_preview"
-			# La comprobación se hace sobre la instancia (casa_preview), no sobre el script.
-			if casa_preview.has_method("set_es_preview"): # Si el script usa un setter
+		if casa_preview.has_method("set"):
+			if casa_preview.has_method("set_es_preview"):
 				casa_preview.call("set_es_preview", true)
 			elif casa_preview.has_method("set_is_preview"):
 				casa_preview.call("set_is_preview", true)
-			
 		
 		# Desactivar colisión principal y limpiar layers
 		var sh := casa_preview.get_node_or_null("CollisionShape2D")
@@ -213,7 +234,7 @@ func _process(_delta: float) -> void:
 		_cancelar_construccion()
 		return
 
-	# 🏗️ Construir (Lógica de construcción con tres opciones)
+	# 🏗️ Construir (Lógica de construcción)
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		if not puede_construir:
 			print("[BuildHUD] No se puede construir aquí (obstáculo o terreno inválido)")
@@ -245,6 +266,14 @@ func _process(_delta: float) -> void:
 					construccion_exitosa = true
 				else:
 					print("[BuildHUD] Materiales insuficientes para CasaLeñadores")
+			"casa_mineros": # LÓGICA CASA MINEROS AÑADIDA
+				# ASUME que resource_manager.puedo_comprar_casa_mineros() y pagar_casa_mineros() existen
+				if resource_manager.puedo_comprar_casa_mineros(): 
+					real = resource_manager.casa_mineros_scene.instantiate() as Node2D
+					resource_manager.pagar_casa_mineros()
+					construccion_exitosa = true
+				else:
+					print("[BuildHUD] Materiales insuficientes para CasaMineros")
 		
 		if construccion_exitosa and real != null:
 			real.global_position = pos
@@ -298,9 +327,11 @@ func _cancelar_construccion(reset_buttons: bool = true) -> void:
 		marcador_casa.visible = false
 		marcador_canteros.visible = false
 		marcador_lenadores.visible = false
+		marcador_mineros.visible = false # Añadido
 		btn_casa.button_pressed = false
 		btn_casa_canteros.button_pressed = false
 		btn_casa_lenadores.button_pressed = false
+		btn_casa_mineros.button_pressed = false # Añadido
 
 func _actualizar_tooltip() -> void:
 	if resource_manager:
@@ -309,7 +340,12 @@ func _actualizar_tooltip() -> void:
 			resource_manager.get_casa_stone_cost(),
 			resource_manager.get_casa_gold_cost() ]
 		
-		
+		# Asumiendo que has añadido las funciones de coste a ResourceManager para mineros
+		if resource_manager.has_method("get_mineros_wood_cost"):
+			btn_casa_mineros.tooltip_text = "Coste: Madera %d | Piedra %d | Oro %d" % [
+				resource_manager.get_mineros_wood_cost(),
+				resource_manager.get_mineros_stone_cost(),
+				resource_manager.get_mineros_gold_cost() ]
 
 
 # =====================================================================
