@@ -127,7 +127,7 @@ script = ExtResource("1_188qd")
 z_as_relative = false
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_ui526")
-animation = &"Idle"
+animation = &"Depleted"
 offset = Vector2(0, -21)
 
 [node name="AnimacionOro" type="AnimatedSprite2D" parent="."]

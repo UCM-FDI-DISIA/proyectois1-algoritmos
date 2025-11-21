@@ -30,7 +30,6 @@ func _ready() -> void:
 	if collision_shape.shape is RectangleShape2D:
 		collision_shape.shape.size = cell_size
 
-	collision_shape.set_deferred("disabled", false)
 	anim.play("Idle")
 	z_index = int(position.y)
 
@@ -81,7 +80,6 @@ func _on_anim_finished() -> void:
 
 func _on_depletion_delay_timeout() -> void:
 	anim.play("Depleted")
-	collision_shape.set_deferred("disabled", true)
 	print("Mina agotada. Regenerando en %.1f seg..." % TIEMPO_REGENERACION)
 	get_tree().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
 
@@ -90,4 +88,3 @@ func _on_regen_timer_timeout() -> void:
 	is_depleted = false
 	oro_queda = ORO_INICIAL
 	anim.play("Idle")
-	collision_shape.set_deferred("disabled", false)
