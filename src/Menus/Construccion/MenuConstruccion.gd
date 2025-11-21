@@ -255,6 +255,9 @@ func _process(_delta: float) -> void:
 			"casa_canteros":
 				if resource_manager.puedo_comprar_casa_canteros():
 					real = resource_manager.casa_canteros_scene.instantiate() as Node2D
+					real.global_position = camera.get_global_mouse_position()
+					get_tree().get_root().add_child(real)
+					real.spawn_initial_canteros_on_build() 
 					resource_manager.pagar_casa_canteros()
 					construccion_exitosa = true
 				else:
@@ -262,25 +265,19 @@ func _process(_delta: float) -> void:
 			"casa_lenadores":
 				if resource_manager.puedo_comprar_casa_lenadores():
 					real = resource_manager.casa_lenadores_scene.instantiate() as Node2D
-		
-					# 1. 💡 CORRECCIÓN CRÍTICA: Establecer la posición global de la casa.
-	   				 #    (Reemplaza 'posicion_de_construccion' con tu variable real)
 					real.global_position = camera.get_global_mouse_position()
-		
-		# 2. Añadir al árbol (necesario para que get_parent() funcione)
 					get_tree().get_root().add_child(real)
-		
-		# 3. Spawnear los leñadores (ahora se usa la posición correcta de la casa)
 					real.spawn_initial_lenadores_on_build() 
-		
 					resource_manager.pagar_casa_lenadores()
 					construccion_exitosa = true
 				else:
 					print("[BuildHUD] Materiales insuficientes para CasaLeñadores")
-			"casa_mineros": # LÓGICA CASA MINEROS AÑADIDA
-				# ASUME que resource_manager.puedo_comprar_casa_mineros() y pagar_casa_mineros() existen
+			"casa_mineros":
 				if resource_manager.puedo_comprar_casa_mineros(): 
 					real = resource_manager.casa_mineros_scene.instantiate() as Node2D
+					real.global_position = camera.get_global_mouse_position()
+					get_tree().get_root().add_child(real)
+					real.spawn_initial_mineros_on_build() 
 					resource_manager.pagar_casa_mineros()
 					construccion_exitosa = true
 				else:

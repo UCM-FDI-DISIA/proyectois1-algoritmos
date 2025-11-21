@@ -19,6 +19,7 @@ const CASA_STONE_COST := 5
 const CANTEROS_WOOD_COST := 0
 const CANTEROS_GOLD_COST := 0
 const CANTEROS_STONE_COST := 0
+const CANTEROS_VILLAGER_COST := 1; 
 
 # CASA LEÑADORES
 const LENADORES_WOOD_COST := 0
@@ -30,6 +31,7 @@ const LENADORES_VILLAGER_COST := 1;
 const MINEROS_WOOD_COST := 0
 const MINEROS_GOLD_COST := 0
 const MINEROS_STONE_COST := 0
+const MINEROS_VILLAGER_COST := 1; 
 
 const SOLDIER_COSTS := {
 	"Warrior": { "villager": 1, "gold": 1, "wood": 0, "stone": 0 },
@@ -104,6 +106,9 @@ func remove_canteros_house() -> void:
 func get_canteros_house_count() -> int:
 	return canteros_house_count
 
+func get_canteros_villager_cost() -> int:
+	return CANTEROS_VILLAGER_COST
+
 # -----------------------------------------------------
 #  CASA LEÑADORES
 # -----------------------------------------------------
@@ -149,6 +154,9 @@ func remove_mineros_house() -> void:
 
 func get_mineros_house_count() -> int:
 	return lenadores_house_count
+
+func get_mineros_villager_cost() -> int:
+	return MINEROS_VILLAGER_COST
 # -----------------------------------------------------
 
 func get_villager_capacity() -> int:
@@ -257,7 +265,8 @@ func puedo_comprar_casa_canteros() -> bool:
 	return (
 		get_resource("wood") >= CANTEROS_WOOD_COST and
 		get_resource("stone") >= CANTEROS_STONE_COST and
-		get_resource("gold") >= CANTEROS_GOLD_COST
+		get_resource("gold") >= CANTEROS_GOLD_COST and 
+		get_resource("villager") >= CANTEROS_VILLAGER_COST
 	)
 
 func puedo_comprar_casa_lenadores() -> bool:
@@ -274,7 +283,8 @@ func puedo_comprar_casa_mineros() -> bool:
 	return (
 		get_resource("wood") >= MINEROS_WOOD_COST and
 		get_resource("stone") >= MINEROS_STONE_COST and
-		get_resource("gold") >= MINEROS_GOLD_COST
+		get_resource("gold") >= MINEROS_GOLD_COST and 
+		get_resource("villager") >= MINEROS_VILLAGER_COST
 	)
 
 func pagar_casa() -> bool:

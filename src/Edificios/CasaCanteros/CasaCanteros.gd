@@ -1,30 +1,34 @@
 extends Node2D
-class_name CasaCanteros
+class_name CasaCanteros # ⬅️ CLASE CAMBIADA
 
 # ============================================================
 # 🔧 VARIABLES EDITABLES
 # ============================================================
-@export var cantero_scene: PackedScene
-@export var coste_piedra_cantero := 5 # Coste de PIEDRA por Cantero
-@export var coste_aldeano_cantero := 1 # Coste de POBLACIÓN por Cantero
-@export var max_canteros := 5
-@export var canteros_iniciales := 2 # Canteros a crear al inicio
-@export var UI_OFFSET := Vector2(-45, -292) # Posición del botón sobre la casa
-@export var SPAWN_RADIUS := 100.0 # Radio máximo de aparición alrededor de la casa
+@export var cantero_scene: PackedScene # ⬅️ NPC CAMBIADO
+@export var coste_piedra_cantero := 2 # ⬅️ RECURSO Y PRECIO CAMBIADO (Ej: 10)
+@export var coste_aldeano_cantero := 1 # ⬅️ NPC CAMBIADO (Sigue siendo 1 aldeano)
+@export var max_canteros := 5 # ⬅️ NOMBRE CAMBIADO
+@export var canteros_iniciales := 1 # ⬅️ NOMBRE CAMBIADO
+@export var UI_OFFSET := Vector2(-45, -292) 
+
+@export var SPAWN_RADIUS := 400.0 
+@export var MIN_DISTANCE := 190.0
+@export var COLLISION_CHECK_RADIUS := 10.0 
+@export_range(1, 15, 1) var MAX_SPAWN_ATTEMPTS := 10 
 
 # ============================================================
-# 🎮 ESTADO
+# 🎮 ESTADO 
 # ============================================================
-var canteros_actuales := 0
+var canteros_actuales := 0 # ⬅️ NOMBRE CAMBIADO
 var jugador_dentro := false
 var debug := true
-# Almacena las posiciones ocupadas para evitar superposiciones
 var spawned_positions: Array[Vector2] = []
+var initial_spawn_complete := false
 
 # ============================================================
 # 🧩 NODOS
 # ============================================================
-@onready var boton_cantero := $UI/ComprarCantero
+@onready var boton_cantero := $UI/ComprarCantero # ⬅️ NOMBRE CAMBIADO (Deberás renombrar el nodo botón en tu escena)
 @onready var area_interaccion := $interaccion
 @onready var resource_manager := get_node("/root/Main/ResourceManager")
 
@@ -32,60 +36,156 @@ var spawned_positions: Array[Vector2] = []
 # ⚙️ READY
 # ============================================================
 func _ready() -> void:
-	
+	randomize()
+
 	if resource_manager == null:
-		push_error("[CasaCanteros] ERROR: ResourceManager no encontrado.")
+		push_error("[CasaCanteros] ResourceManager no encontrado.") # ⬅️ NOMBRE CAMBIADO
 		return
+
 	if cantero_scene == null:
-		push_error("[CasaCanteros] ERROR: La escena 'Cantero' no está asignada.")
+		push_error("[CasaCanteros] No se asignó la escena del Cantero.") # ⬅️ NOMBRE CAMBIADO
 	
 	# Asegura que los recursos iniciales existen en el manager
-	resource_manager.add_resource("stone", 0)
+	resource_manager.add_resource("stone", 0) # ⬅️ RECURSO CAMBIADO (Stone)
 	resource_manager.add_resource("villager", 0)
 
-	# Lógica para spawn inicial
-	_spawn_initial_canteros() 
 
-	# Conectar señales
 	area_interaccion.body_entered.connect(_on_player_enter)
 	area_interaccion.body_exited.connect(_on_player_exit)
-	boton_cantero.pressed.connect(_on_comprar_cantero)
+	boton_cantero.pressed.connect(_on_comprar_cantero) # ⬅️ CONEXIÓN CAMBIADA
 
-	# Posicionar botón sobre la casa
 	boton_cantero.position = UI_OFFSET
 	boton_cantero.z_index = 100
 	boton_cantero.visible = false
-	
-	if debug:
-		print("[CasaCanteros] Casa creada con %d canteros." % canteros_actuales)
 
-# ----------------------------------------------------------------------
-# Generación de canteros iniciales
-# ----------------------------------------------------------------------
-func _spawn_initial_canteros() -> void:
-	var aldeanos_actuales : int = resource_manager.get_resource("villager")
-	var num_a_spawnear = min(canteros_iniciales, max_canteros)
+	if debug:
+		print("[CasaCanteros] Inicializado correctamente.") # ⬅️ NOMBRE CAMBIADO
+
+func spawn_initial_canteros_on_build() -> void: # ⬅️ NOMBRE MANTENIDO POR COMPATIBILIDAD CON LA LÓGICA DE CONSTRUCCIÓN
+	if initial_spawn_complete: 
+		return 
 	
-	# Chequea si hay población suficiente para los iniciales
-	if aldeanos_actuales < num_a_spawnear:
-			print("[CasaCanteros] Advertencia: Población (%d) insuficiente para spawnear %d canteros iniciales." % [aldeanos_actuales, canteros_iniciales])
-	else:
-		for _i in range(num_a_spawnear):
-			# Restar la población por cada cantero creado
-			resource_manager.remove_resource("villager", coste_aldeano_cantero)
-		
-			# Spawnear el NPC
-			_spawn_cantero()
-		
-			# Actualizar el contador de la casa
-			canteros_actuales += 1
+	spawned_positions.clear() 
 	
-	# Si no se pudo crear ninguno, el contador inicial se queda en 0
-	if canteros_actuales == 0:
-		canteros_actuales = 0
+	var aldeanos_actuales : int = resource_manager.get_resource("villager") 
+	var num_a_spawnear = canteros_iniciales # ⬅️ NOMBRE CAMBIADO
+	
+	var canteros_pagables = floor(float(aldeanos_actuales) / coste_aldeano_cantero) # ⬅️ NOMBRE CAMBIADO
+	num_a_spawnear = min(num_a_spawnear, max_canteros, canteros_pagables) # ⬅️ NOMBRE CAMBIADO
+	
+	for i in range(num_a_spawnear): 
+		resource_manager.remove_resource("villager", coste_aldeano_cantero) # ⬅️ NOMBRE CAMBIADO
+		_spawn_cantero() # ⬅️ LLAMADA A FUNCIÓN CAMBIADA
+		canteros_actuales += 1 # ⬅️ NOMBRE CAMBIADO
+		
+	if debug: 
+		print("[CasaCanteros] Spawn inicial completado. Canteros totales: %d." % canteros_actuales) # ⬅️ NOMBRE CAMBIADO
+		
+	initial_spawn_complete = true
 
 # ============================================================
-# 🚪 DETECCIÓN DE JUGADOR
+# 🔍 CHEQUEO DE COLISIONES (Sin cambios necesarios)
+# ============================================================
+func _is_position_free(pos: Vector2) -> bool:
+	var space_state = get_world_2d().direct_space_state
+
+	var query := PhysicsPointQueryParameters2D.new()
+	query.position = pos
+	query.collide_with_bodies = true
+	query.collide_with_areas = true
+	
+	query.exclude = [area_interaccion.get_rid()]
+
+	var result = space_state.intersect_point(query, 1)
+	return result.is_empty()
+
+
+# ============================================================
+# 📍 NUEVA POSICIÓN ALEATORIA VÁLIDA (Sin cambios necesarios)
+# ============================================================
+func _get_random_spawn_position() -> Vector2:
+	var center := global_position
+	var attempts := 0
+
+	while attempts < MAX_SPAWN_ATTEMPTS:
+
+		var angle = randf_range(PI / 2.0, 3.0 * PI / 2.0)
+		var distance = randf_range(MIN_DISTANCE, SPAWN_RADIUS) 
+		
+		var offset = Vector2(cos(angle), sin(angle)) * distance
+		var pos = center + offset
+
+		# 1. Distancia con NPCs previos
+		var ok := true
+		for prev in spawned_positions:
+			if prev.distance_to(pos) < MIN_DISTANCE:
+				ok = false
+				break
+
+		# 2. Chequeo de colisión del mundo
+		if ok and _is_position_free(pos):
+			spawned_positions.append(pos)
+			return pos
+
+		attempts += 1
+
+	if debug:
+		push_warning("[CasaCanteros] Advertencia: No se encontró posición válida tras %d intentos en %s. Usando fallback." % [MAX_SPAWN_ATTEMPTS, center]) # ⬅️ NOMBRE CAMBIADO
+
+	return center + Vector2(0, SPAWN_RADIUS)
+
+
+# ============================================================
+# 🧱 SPAWNEAR CANTERO
+# ============================================================
+func _spawn_cantero() -> void: # ⬅️ FUNCIÓN CAMBIADA
+	var npc = cantero_scene.instantiate() # ⬅️ ESCENA CAMBIADA
+
+	npc.global_position = _get_random_spawn_position()
+
+	if get_parent() != null:
+		get_parent().add_child(npc)
+	else:
+		push_error("[CasaCanteros] ERROR: No se pudo añadir el cantero al árbol.") # ⬅️ NOMBRE CAMBIADO
+		npc.queue_free()
+		return
+
+	var anim := npc.get_node_or_null("AnimatedSprite2D")
+	if anim:
+		anim.play("Idle")
+
+	if debug:
+		print("[CasaCanteros] Nuevo cantero en %s" % npc.global_position) # ⬅️ NOMBRE CAMBIADO
+
+
+# ============================================================
+# 💰 COMPRAR CANTERO
+# ============================================================
+func _on_comprar_cantero(): # ⬅️ FUNCIÓN CAMBIADA
+	if canteros_actuales >= max_canteros: # ⬅️ NOMBRE CAMBIADO
+		print("[CasaCanteros] Máximo alcanzado.") # ⬅️ NOMBRE CAMBIADO
+		return
+
+	var stone : int = resource_manager.get_resource("stone") # ⬅️ RECURSO CAMBIADO (Stone)
+	var villagers :int = resource_manager.get_resource("villager")
+
+	if stone < coste_piedra_cantero: # ⬅️ RECURSO Y COSTO CAMBIADO
+		print("[CasaCanteros] No hay piedra suficiente.") # ⬅️ RECURSO CAMBIADO
+		return
+	if villagers < coste_aldeano_cantero: # ⬅️ COSTO CAMBIADO
+		print("[CasaCanteros] No hay aldeanos disponibles.") # ⬅️ NOMBRE CAMBIADO
+		return
+
+	resource_manager.remove_resource("stone", coste_piedra_cantero) # ⬅️ RECURSO Y COSTO CAMBIADO
+	resource_manager.remove_resource("villager", coste_aldeano_cantero) # ⬅️ COSTO CAMBIADO
+
+	_spawn_cantero() # ⬅️ LLAMADA A FUNCIÓN CAMBIADA
+
+	canteros_actuales += 1 # ⬅️ NOMBRE CAMBIADO
+	_actualizar_boton()
+
+# ============================================================
+# 🚪 DETECCIÓN DE JUGADOR (Sin cambios)
 # ============================================================
 func _on_player_enter(body):
 	if body.is_in_group("jugador"):
@@ -95,116 +195,11 @@ func _on_player_enter(body):
 func _on_player_exit(body):
 	if body.is_in_group("jugador"):
 		jugador_dentro = false
-		boton_cantero.visible = false
+		boton_cantero.visible = false # ⬅️ NOMBRE CAMBIADO
 
 
 # ============================================================
-# 🛠️ ACTUALIZAR BOTÓN
+# 🧰 BOTÓN (Sin cambios)
 # ============================================================
 func _actualizar_boton():
-	boton_cantero.visible = jugador_dentro and canteros_actuales < max_canteros
-
-
-# ============================================================
-# 💰 COMPRAR NUEVO CANTERO
-# ============================================================
-func _on_comprar_cantero():
-	if canteros_actuales >= max_canteros:
-		print("[CasaCanteros] Límite de canteros alcanzado.")
-		return
-
-	# 1. Chequear recursos
-	var piedra_actual : int = resource_manager.get_resource("stone")
-	var aldeanos_actuales : int = resource_manager.get_resource("villager")
-
-	if piedra_actual < coste_piedra_cantero:
-		print("[CasaCanteros] No hay piedra suficiente (%d/%d)." %
-			[piedra_actual, coste_piedra_cantero])
-		return
-		
-	if aldeanos_actuales < coste_aldeano_cantero:
-		print("[CasaCanteros] No hay aldeanos (población) disponible (%d/%d)." %
-			[aldeanos_actuales, coste_aldeano_cantero])
-		return
-
-	# 2. Restar recursos
-	resource_manager.remove_resource("stone", coste_piedra_cantero)
-	resource_manager.remove_resource("villager", coste_aldeano_cantero) # Resta 1 de población
-
-	# 3. Instanciar y configurar el Cantero
-	if cantero_scene != null:
-		_spawn_cantero()
-
-	# 4. Actualizar estado y UI
-	canteros_actuales += 1
-	print("[CasaCanteros] Nuevo cantero añadido. Total: %d" % canteros_actuales)
-	_actualizar_boton()
-
-
-# ============================================================
-# 👶 LÓGICA DE SPAWN ALEATORIO RESTRINGIDO (INFERIOR)
-# ============================================================
-
-const MIN_DISTANCE := 30.0 
-
-func _get_random_spawn_position() -> Vector2:
-	var house_center = self.global_position
-	var new_pos: Vector2
-	var attempts = 0
-	var max_attempts = 10 
-
-	while attempts < max_attempts:
-		
-		# 💡 CAMBIO CLAVE: Restringir el ángulo a la mitad INFERIOR (delantera) del círculo.
-		# Esto va de 0 a PI radianes (0° a 180°), asumiendo que el eje Y positivo es ABAJO.
-		var final_angle = randf_range(0.0, PI) 
-		
-		# NOTA: Si la casa tiene una rotación diferente de 0, 
-		# deberías añadir esa rotación (self.global_rotation) a final_angle.
-		# Dejamos 0.0 a PI si la casa no está rotada.
-
-		var distance = randf_range(MIN_DISTANCE, SPAWN_RADIUS) 
-		
-		var offset = Vector2(cos(final_angle), sin(final_angle)) * distance
-		new_pos = house_center + offset
-		
-		var is_too_close = false
-		for existing_pos in spawned_positions:
-			if existing_pos.distance_to(new_pos) < MIN_DISTANCE:
-				is_too_close = true
-				break
-		
-		if not is_too_close:
-			spawned_positions.append(new_pos)
-			return new_pos
-
-		attempts += 1
-	
-	# Fallback: una posición simple en la parte inferior (Y positivo)
-	return house_center + SPAWN_RADIUS * Vector2(0, 1) 
-
-
-func _spawn_cantero() -> void:
-	var cantero_npc = cantero_scene.instantiate()
-	
-	cantero_npc.global_position = _get_random_spawn_position()
-	
-	# Añadir al árbol
-	get_parent().add_child(cantero_npc)
-	
-	# Iniciar animación 'Idle'
-	var anim_sprite: AnimatedSprite2D = cantero_npc.get_node_or_null("AnimatedSprite2D")
-	if anim_sprite:
-		anim_sprite.play("Idle")
-		if debug:
-			print("[CasaCanteros] Cantero instanciado en %s." % cantero_npc.global_position)
-	else:
-		push_error("[CasaCanteros] ERROR: No se encontró 'AnimatedSprite2D' en la escena del Cantero.")
-
-
-# ============================================================
-# 🧹 AL ELIMINAR CASA
-# ============================================================
-func _exit_tree() -> void:
-	print("[CasaCanteros] Casa destruida. Se perdieron %d canteros." %
-		canteros_actuales)
+	boton_cantero.visible = jugador_dentro and canteros_actuales < max_canteros # ⬅️ NOMBRE CAMBIADO

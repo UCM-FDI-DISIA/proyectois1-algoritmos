@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cpby34c2ngbwr"]
+[gd_scene load_steps=10 format=3 uid="uid://cpby34c2ngbwr"]
 
 [ext_resource type="Script" uid="uid://dffyxkm3bh8hf" path="res://src/Edificios/CasaMineros/CasaMineros.gd" id="1_kjfbj"]
 [ext_resource type="Texture2D" uid="uid://ds2y2tw0kpaln" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Yellow.png" id="2_kjfbj"]
+[ext_resource type="PackedScene" uid="uid://pgaqw4ivysq1" path="res://src/NPCs/Minero.tscn" id="2_w4fy1"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="3_v6cf3"]
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="4_dhc7y"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="5_3pk7p"]
@@ -17,6 +18,7 @@ size = Vector2(318, 329)
 z_as_relative = false
 y_sort_enabled = true
 script = ExtResource("1_kjfbj")
+minero_scene = ExtResource("2_w4fy1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_as_relative = false
