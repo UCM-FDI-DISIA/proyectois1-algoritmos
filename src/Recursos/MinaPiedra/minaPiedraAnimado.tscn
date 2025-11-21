@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c677m228bca8p"]
+[gd_scene load_steps=17 format=3 uid="uid://c677m228bca8p"]
 
 [ext_resource type="Script" uid="uid://4d8pl28x4p2h" path="res://src/Recursos/MinaPiedra/MinaPiedraAnimado.gd" id="1_sm5a2"]
 [ext_resource type="Texture2D" uid="uid://clo1xbg3upk24" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Deco/06.png" id="1_wl0cj"]
@@ -10,6 +10,9 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0jvj"]
 size = Vector2(192, 64)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0i0py"]
+radius = 58.553394
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xrkcp"]
 atlas = ExtResource("5_dh0kw")
@@ -68,6 +71,11 @@ script = ExtResource("1_sm5a2")
 z_as_relative = false
 y_sort_enabled = true
 shape = SubResource("RectangleShape2D_e0jvj")
+
+[node name="CollisionShapeSmall" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 0.5)
+scale = Vector2(1, 0.52000064)
+shape = SubResource("CircleShape2D_0i0py")
 
 [node name="AnimacionExplosion" type="AnimatedSprite2D" parent="."]
 visible = false
