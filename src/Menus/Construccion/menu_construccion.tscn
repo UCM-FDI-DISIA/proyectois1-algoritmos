@@ -65,7 +65,7 @@ stretch_mode = 5
 
 [node name="Marcador" type="Sprite2D" parent="ControlRaiz/PanelBarra/HBoxBotones/BtnCasa"]
 visible = false
-position = Vector2(16, 27)
+position = Vector2(24, 26)
 texture = ExtResource("6_7p221")
 
 [node name="BtnCasaCanteros" type="TextureButton" parent="ControlRaiz/PanelBarra/HBoxBotones"]
