@@ -19,6 +19,8 @@ extends CanvasLayer
 @onready var marcador_casa: Sprite2D = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasa/Marcador
 @onready var btn_casa_canteros: TextureButton = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaCanteros
 @onready var marcador_canteros: Sprite2D = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaCanteros/Marcador
+@onready var btn_casa_lenadores: TextureButton = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaLenadores
+@onready var marcador_lenadores: Sprite2D = $ControlRaiz/PanelBarra/HBoxBotones/BtnCasaLenadores/Marcador
 
 # =====================================================================
 # 🏗️ ESTADO DE CONSTRUCCIÓN
@@ -28,7 +30,7 @@ var casa_preview: Node2D
 var area_preview: Area2D
 var puede_construir := true
 var resource_manager: ResourceManager
-var casa_seleccionada: String = "" # "casa_normal" o "casa_canteros"
+var casa_seleccionada: String = ""
 
 # =====================================================================
 # ⚙️ INICIALIZACIÓN
@@ -42,19 +44,22 @@ func _ready() -> void:
 	panel_barra.mouse_filter = Control.MOUSE_FILTER_STOP
 	panel_barra.visible = false
 	
-	# Aseguramos que los botones son de tipo Toggle
 	btn_casa.toggle_mode = true
 	btn_casa_canteros.toggle_mode = true
+	btn_casa_lenadores.toggle_mode = true
 	
 	btn_casa.mouse_filter = Control.MOUSE_FILTER_STOP
 	btn_casa_canteros.mouse_filter = Control.MOUSE_FILTER_STOP
+	btn_casa_lenadores.mouse_filter = Control.MOUSE_FILTER_STOP
+	
 	marcador_casa.visible = false
 	marcador_canteros.visible = false
+	marcador_lenadores.visible = false
 
-	# Conectar handlers
 	btn_menu.pressed.connect(_on_menu_pressed)
 	btn_casa.pressed.connect(_on_casa_pressed)
 	btn_casa_canteros.pressed.connect(_on_casa_canteros_pressed)
+	btn_casa_lenadores.pressed.connect(_on_casa_lenadores_pressed)
 
 	_actualizar_tooltip()
 
@@ -71,43 +76,60 @@ func _on_menu_pressed() -> void:
 
 func _on_casa_pressed() -> void:
 	if btn_casa.button_pressed:
-		# Se ha pulsado Casa, desactivar Casa Canteros y comenzar preview
 		btn_casa_canteros.button_pressed = false
 		marcador_canteros.visible = false
+		btn_casa_lenadores.button_pressed = false
+		marcador_lenadores.visible = false
+		
 		_iniciar_construccion("casa_normal")
 	else:
-		# Se ha deseleccionado Casa
 		_cancelar_construccion()
 	marcador_casa.visible = btn_casa.button_pressed
 
 func _on_casa_canteros_pressed() -> void:
 	if btn_casa_canteros.button_pressed:
-		# Se ha pulsado Casa Canteros, desactivar Casa normal y comenzar preview
 		btn_casa.button_pressed = false
 		marcador_casa.visible = false
+		btn_casa_lenadores.button_pressed = false
+		marcador_lenadores.visible = false
+		
 		_iniciar_construccion("casa_canteros")
 	else:
-		# Se ha deseleccionado Casa Canteros
 		_cancelar_construccion()
 	marcador_canteros.visible = btn_casa_canteros.button_pressed
 
+func _on_casa_lenadores_pressed() -> void:
+	if btn_casa_lenadores.button_pressed:
+		btn_casa.button_pressed = false
+		marcador_casa.visible = false
+		btn_casa_canteros.button_pressed = false
+		marcador_canteros.visible = false
+		
+		_iniciar_construccion("casa_lenadores")
+	else:
+		_cancelar_construccion()
+	marcador_lenadores.visible = btn_casa_lenadores.button_pressed
+
+
 # ---------------------------------------------------------------------
-# MÉTODO CENTRALIZADO DE INICIO DE CONSTRUCCIÓN (Corregido)
+# MÉTODO CENTRALIZADO DE INICIO DE CONSTRUCCIÓN (CORREGIDO)
 # ---------------------------------------------------------------------
 func _iniciar_construccion(tipo_casa: String) -> void:
-	# Si ya estamos en construcción, cancelamos la anterior sin limpiar el estado del botón
 	if en_construccion:
-		_cancelar_construccion(false) 
-
+		_cancelar_construccion(false)
+	
 	var scene_a_instanciar: PackedScene
 	
-	if tipo_casa == "casa_normal":
-		scene_a_instanciar = resource_manager.casa_scene
-	elif tipo_casa == "casa_canteros":
-		scene_a_instanciar = resource_manager.casa_canteros_scene
-	else:
-		push_error("[BuildHUD] Tipo de casa desconocido: %s" % tipo_casa)
-		return
+	match tipo_casa:
+		"casa_normal":
+			scene_a_instanciar = resource_manager.casa_scene
+		"casa_canteros":
+			scene_a_instanciar = resource_manager.casa_canteros_scene
+		"casa_lenadores":
+			scene_a_instanciar = resource_manager.casa_lenadores_scene
+		_:
+			push_error("[BuildHUD] Tipo de casa desconocido: %s" % tipo_casa)
+			return
 
 	if scene_a_instanciar == null or resource_manager.contenedor_casas == null:
 		push_error("[BuildHUD] Faltan asignaciones para %s en ResourceManager" % tipo_casa)
@@ -118,22 +140,22 @@ func _iniciar_construccion(tipo_casa: String) -> void:
 	
 	casa_preview = scene_a_instanciar.instantiate() as Node2D
 
-	# 🔄 Configuración de Preview unificada y ROBUSTA
+	# 🔄 Configuración de Preview (CORRECCIÓN PRINCIPAL DEL ERROR 'has_property')
 	if casa_preview:
-		# Intenta establecer la propiedad 'es_preview' o 'is_preview' si existe.
-		# Esto no usa has_property() para mayor compatibilidad, pero asume que la propiedad
-		# existe si el script de CasaAnimada/CasaCanteros está adjunto.
-		if casa_preview is CasaAnimada:
-			var c := casa_preview as CasaAnimada
-			c.es_preview = true # Asumimos que esta propiedad existe en CasaAnimada
-		elif casa_preview.get_script() and casa_preview.get_script().has_property("is_preview"):
-			casa_preview.set("is_preview", true) # Para CasaCanteros o genérico
-		elif casa_preview.get_script() and casa_preview.get_script().has_property("es_preview"):
-			casa_preview.set("es_preview", true)
+		# Utilizamos 'set' que es más robusto si el objeto hereda de Node y tiene el script
+		# o si usamos la meta-programación de Object
+		if casa_preview.has_method("set"): # Asegura que es un Object válido
+			# Intentamos establecer la propiedad "es_preview" o "is_preview"
+			# La comprobación se hace sobre la instancia (casa_preview), no sobre el script.
+			if casa_preview.has_method("set_es_preview"): # Si el script usa un setter
+				casa_preview.call("set_es_preview", true)
+			elif casa_preview.has_method("set_is_preview"):
+				casa_preview.call("set_is_preview", true)
+			
 		
-		# Desactivar colisión principal y limpiar layers para que no bloquee otros objetos
+		# Desactivar colisión principal y limpiar layers
 		var sh := casa_preview.get_node_or_null("CollisionShape2D")
-		if sh: sh.set_deferred("disabled", true) # Desactiva la colisión real de la casa
+		if sh: sh.set_deferred("disabled", true)
 
 		var co := casa_preview.get_node_or_null("CollisionObject2D")
 		if co:
@@ -147,16 +169,15 @@ func _iniciar_construccion(tipo_casa: String) -> void:
 # =====================================================================
 # 📡 HANDLERS DE COLISIÓN (Simplificados)
 # =====================================================================
-# Estos ya no necesitan cambiar 'puede_construir', ya que _process comprueba el tamaño del array.
-# Los mantenemos por si el usuario tiene lógica adicional en ellos.
+
 func _on_area_preview_body_entered(body: Node) -> void:
-	pass # La lógica de bloqueo se hace en _process
+	pass
 
 func _on_area_preview_body_exited(body: Node) -> void:
-	pass # La lógica de desbloqueo se hace en _process
+	pass
 
 #=====================================================================
-# 🔄 BUCLE PRINCIPAL (Corregido y Unificado)
+# 🔄 BUCLE PRINCIPAL
 # =====================================================================
 func _process(_delta: float) -> void:
 	if not en_construccion or casa_preview == null or casa_seleccionada == "":
@@ -173,17 +194,15 @@ func _process(_delta: float) -> void:
 	# 🔍 Verificar si se puede construir
 	var sobre_terreno = _es_sobre_terreno_valido(casa_preview.global_position)
 	
-	# 💡 CORRECCIÓN para el color rojo: verificamos si el área está libre.
+	# Verificamos si el área está libre de obstáculos/jugador
 	var cuerpos_superpuestos = 0
 	if area_preview != null:
-		# Sólo contamos los cuerpos que pertenecen a los grupos que bloquean
 		for body in area_preview.get_overlapping_bodies():
 			if body.is_in_group("objeto_bloqueante") or body.is_in_group("jugador"):
 				cuerpos_superpuestos += 1
 	
 	var area_libre = cuerpos_superpuestos == 0
 
-	# 'puede_construir' ahora depende de ambas condiciones
 	puede_construir = sobre_terreno and area_libre
 
 	# Cambiar color del preview según sea válido o no
@@ -194,38 +213,45 @@ func _process(_delta: float) -> void:
 		_cancelar_construccion()
 		return
 
-	# 🏗️ Construir (Lógica corregida para el error de tipado 'real')
+	# 🏗️ Construir (Lógica de construcción con tres opciones)
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		if not puede_construir:
 			print("[BuildHUD] No se puede construir aquí (obstáculo o terreno inválido)")
 			return
 		
-		var real: Node2D = null # Declaración con tipo para evitar el error
+		var real: Node2D = null
 		var construccion_exitosa: bool = false
 		var pos: Vector2 = casa_preview.global_position
 
-		if casa_seleccionada == "casa_normal":
-			if resource_manager.puedo_comprar_casa():
-				real = resource_manager.casa_scene.instantiate() as Node2D
-				resource_manager.pagar_casa()
-				construccion_exitosa = true
-			else:
-				print("[BuildHUD] Materiales insuficientes para casa normal")
-		elif casa_seleccionada == "casa_canteros":
-			if resource_manager.puedo_comprar_casa_canteros():
-				real = resource_manager.casa_canteros_scene.instantiate() as Node2D
-				resource_manager.pagar_casa_canteros()
-				construccion_exitosa = true
-			else:
-				print("[BuildHUD] Materiales insuficientes para CasaCanteros")
-
+		match casa_seleccionada:
+			"casa_normal":
+				if resource_manager.puedo_comprar_casa():
+					real = resource_manager.casa_scene.instantiate() as Node2D
+					resource_manager.pagar_casa()
+					construccion_exitosa = true
+				else:
+					print("[BuildHUD] Materiales insuficientes para casa normal")
+			"casa_canteros":
+				if resource_manager.puedo_comprar_casa_canteros():
+					real = resource_manager.casa_canteros_scene.instantiate() as Node2D
+					resource_manager.pagar_casa_canteros()
+					construccion_exitosa = true
+				else:
+					print("[BuildHUD] Materiales insuficientes para CasaCanteros")
+			"casa_lenadores":
+				if resource_manager.puedo_comprar_casa_lenadores():
+					real = resource_manager.casa_lenadores_scene.instantiate() as Node2D
+					resource_manager.pagar_casa_lenadores()
+					construccion_exitosa = true
+				else:
+					print("[BuildHUD] Materiales insuficientes para CasaLeñadores")
+		
 		if construccion_exitosa and real != null:
 			real.global_position = pos
 			resource_manager.contenedor_casas.add_child(real)
 			print("[BuildHUD] Construcción realizada: %s" % casa_seleccionada)
 			_cancelar_construccion()
 		elif not construccion_exitosa:
-			# Si la construcción falló por materiales, cancelamos el preview
 			_cancelar_construccion()
 	
 
@@ -233,7 +259,7 @@ func _process(_delta: float) -> void:
 # 🛠️ MÉTODOS AUXILIARES
 # =====================================================================
 func _crear_area_preview() -> void:
-	if casa_preview == null: 
+	if casa_preview == null:
 		return
 
 	area_preview = Area2D.new()
@@ -242,30 +268,23 @@ func _crear_area_preview() -> void:
 	var sh := casa_preview.get_node_or_null("CollisionShape2D")
 	if sh and sh.shape:
 		var clon := CollisionShape2D.new()
-		# Usamos una copia del shape para el Area2D
-		clon.shape = sh.shape.duplicate() 
-		
-		# NOTA: Se ha quitado la reducción de tamaño del 80% para asegurar que el preview
-		# tiene el mismo comportamiento que la casa final.
-		
+		clon.shape = sh.shape.duplicate()
 		area_preview.add_child(clon)
 
 	area_preview.monitoring = true
 	area_preview.monitorable = true
-	# Limpiamos las capas de colisión y solo usamos la máscara para DETECTAR obstáculos
-	area_preview.collision_layer = 0 
-	area_preview.collision_mask = 1 # Asume que objetos_bloqueantes están en el layer 1
+	area_preview.collision_layer = 0
+	area_preview.collision_mask = 1
 
-	# Conexiones de señal
 	area_preview.body_entered.connect(_on_area_preview_body_entered)
 	area_preview.body_exited.connect(_on_area_preview_body_exited)
 
 func _tint_preview(c: Color) -> void:
 	if casa_preview == null: return
 	for ch in casa_preview.get_children():
-		if ch is CanvasItem: 
+		if ch is CanvasItem:
 			var final_color = c
-			final_color.a = PREVIEW_ALPHA 
+			final_color.a = PREVIEW_ALPHA
 			ch.modulate = final_color
 
 func _cancelar_construccion(reset_buttons: bool = true) -> void:
@@ -278,8 +297,10 @@ func _cancelar_construccion(reset_buttons: bool = true) -> void:
 	if reset_buttons:
 		marcador_casa.visible = false
 		marcador_canteros.visible = false
+		marcador_lenadores.visible = false
 		btn_casa.button_pressed = false
 		btn_casa_canteros.button_pressed = false
+		btn_casa_lenadores.button_pressed = false
 
 func _actualizar_tooltip() -> void:
 	if resource_manager:
@@ -287,6 +308,9 @@ func _actualizar_tooltip() -> void:
 			resource_manager.get_casa_wood_cost(),
 			resource_manager.get_casa_stone_cost(),
 			resource_manager.get_casa_gold_cost() ]
+		
+		
+
 
 # =====================================================================
 # 🛠️ VERIFICAR TERRENO VÁLIDO (Sin cambios)

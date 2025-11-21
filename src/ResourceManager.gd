@@ -6,40 +6,42 @@ signal VillagerCapacityUpdated()
 signal SoldierUpdated(type: String, count: int)
 
 const VILLAGERS_PER_HOUSE := 50
-const TIEMPO_CRECIMIENTO  := 10.0
-const MAX_RESOURCE        := 99
+const TIEMPO_CRECIMIENTO := 10.0
+const MAX_RESOURCE := 99
 
 # -------------------- COSTES -------------------------
-const CASA_WOOD_COST  := 2
-const CASA_GOLD_COST  := 5
+# CASA NORMAL
+const CASA_WOOD_COST := 2
+const CASA_GOLD_COST := 5
 const CASA_STONE_COST := 5
 
-# -------------------- COSTES CASA CANTEROS -------------------------
-const CANTEROS_WOOD_COST  := 5
-const CANTEROS_GOLD_COST  := 5
+# CASA CANTEROS
+const CANTEROS_WOOD_COST := 0
+const CANTEROS_GOLD_COST := 0
 const CANTEROS_STONE_COST := 15
 
-# -------------------- COSTES CASA LEÑADORES -------------------------
-const LENADORES_WOOD_COST  := 20
-const LENADORES_GOLD_COST  := 0
-const LENADORES_STONE_COST := 5
+# CASA LEÑADORES
+const LENADORES_WOOD_COST := 15
+const LENADORES_GOLD_COST := 0
+const LENADORES_STONE_COST := 0
 
-# -------------------- COSTES CASA MINEROS -------------------------
-const MINEROS_WOOD_COST  := 10
-const MINEROS_GOLD_COST  := 20
-const MINEROS_STONE_COST := 10
+# CASA MINEROS
+const MINEROS_WOOD_COST := 0
+const MINEROS_GOLD_COST := 5
+const MINEROS_STONE_COST := 0
 
 const SOLDIER_COSTS := {
 	"Warrior": { "villager": 1, "gold": 1, "wood": 0, "stone": 0 },
-	"Archer":  { "villager": 1, "gold": 2, "wood": 0, "stone": 0 },
-	"Lancer":  { "villager": 1, "gold": 3, "wood": 0, "stone": 0 },
-	"Monk":    { "villager": 1, "gold": 5, "wood": 0, "stone": 0 }
+	"Archer": { "villager": 1, "gold": 2, "wood": 0, "stone": 0 },
+	"Lancer": { "villager": 1, "gold": 3, "wood": 0, "stone": 0 },
+	"Monk": { "villager": 1, "gold": 5, "wood": 0, "stone": 0 }
 }
 # -----------------------------------------------------
 
 @export var contenedor_casas: Node2D
 @export var casa_scene: PackedScene
 @export var casa_canteros_scene : PackedScene
+@export var casa_lenadores_scene : PackedScene
 
 var house_count: int = 0
 var canteros_house_count: int = 0
@@ -48,48 +50,88 @@ var mineros_house_count: int = 0
 
 var crecimiento_aldeanos: int = 0
 var actualizar_timer: Timer
+
+# 💡 CORRECCIÓN: Inicialización de recursos de forma segura al inicio
+# Define los recursos que deben existir, el valor inicial puede ser 0
 var resources: Dictionary = { "wood": 0, "stone": 0, "gold": 0, "villager": 0 }
 var soldiers: Dictionary = { "Warrior": 0, "Archer": 0, "Lancer": 0, "Monk": 0 }
 
+# =====================================================================
+# ⚙️ INICIALIZACIÓN (READY)
+# =====================================================================
+func _ready() -> void:
+	# 💡 CORRECCIÓN: Asegura que el timer se crea en _ready
+	actualizar_timer = Timer.new()
+	actualizar_timer.wait_time = TIEMPO_CRECIMIENTO
+	actualizar_timer.one_shot = false
+	actualizar_timer.timeout.connect(_on_actualizar_timeout)
+	add_child(actualizar_timer)
+
+## 🏡 Lógica de Casas
 # -----------------------------------------------------
-#  CASA
+#  CASA NORMAL
 # -----------------------------------------------------
 func get_casa_wood_cost() -> int: return CASA_WOOD_COST
-func get_casa_gold_cost()  -> int: return CASA_GOLD_COST
+func get_casa_gold_cost() -> int: return CASA_GOLD_COST
 func get_casa_stone_cost() -> int: return CASA_STONE_COST
-
-# -----------------------------------------------------
-#  CASA CANTEROS
-# -----------------------------------------------------
-func get_canteros_wood_cost() -> int: return CANTEROS_WOOD_COST
-func get_canteros_gold_cost() -> int: return CANTEROS_GOLD_COST
-func get_canteros_stone_cost() -> int: return CANTEROS_STONE_COST
 
 func add_house() -> void:
 	house_count += 1
 	VillagerCapacityUpdated.emit()
 
-func add_canteros_house() -> void:
-	canteros_house_count += 1
-
 func remove_house() -> void:
 	house_count = max(0, house_count - 1)
 	VillagerCapacityUpdated.emit()
 
+func get_house_count() -> int:
+	return house_count
+
+# -----------------------------------------------------
+#  CASA CANTEROS
+# -----------------------------------------------------
+func get_canteros_wood_cost() -> int: return CANTEROS_WOOD_COST
+func get_canteros_gold_cost() -> int: return CANTEROS_GOLD_COST
+func get_canteros_stone_cost() -> int: return CANTEROS_STONE_COST
+
+func add_canteros_house() -> void:
+	canteros_house_count += 1
+
 func remove_canteros_house() -> void:
 	canteros_house_count = max(0, canteros_house_count - 1)
 
-func get_house_count() -> int:
-	return house_count
-	
 func get_canteros_house_count() -> int:
 	return canteros_house_count
 
+# -----------------------------------------------------
+#  CASA LEÑADORES
+# -----------------------------------------------------
+func get_lenadores_wood_cost() -> int:
+	return LENADORES_WOOD_COST
+
+func get_lenadores_gold_cost() -> int:
+	return LENADORES_GOLD_COST
+
+func get_lenadores_stone_cost() -> int:
+	return LENADORES_STONE_COST
+
+func add_lenadores_house() -> void:
+	lenadores_house_count += 1
+
+func remove_lenadores_house() -> void:
+	lenadores_house_count = max(0, lenadores_house_count - 1)
+
+func get_lenadores_house_count() -> int:
+	return lenadores_house_count
+# -----------------------------------------------------
+
 func get_villager_capacity() -> int:
+	# Solo la casa normal contribuye a la capacidad de aldeanos
 	return house_count * VILLAGERS_PER_HOUSE
 
+
+## ⚔️ Lógica de Soldados
 # -----------------------------------------------------
-#  SOLDADOS
+#  SOLDADOS
 # -----------------------------------------------------
 func get_soldier_costs(type: String) -> Dictionary:
 	return SOLDIER_COSTS.get(type, {})
@@ -108,7 +150,8 @@ func reclutar_soldado(type: String) -> void:
 
 	var costs: Dictionary = get_soldier_costs(type)
 	for res in costs:
-		remove_resource(res, costs[res])
+		# Utilizamos remove_resource para restar y emitir la señal
+		remove_resource(res, costs[res]) 
 
 	soldiers[type] += 1
 	SoldierUpdated.emit(type, soldiers[type])
@@ -120,15 +163,20 @@ func get_soldier_count(type: String) -> int:
 func get_all_soldier_counts() -> Dictionary:
 	return soldiers.duplicate()
 
+
+## 💎 Lógica de Recursos
 # -----------------------------------------------------
-#  RECURSOS GENÉRICOS
+#  RECURSOS GENÉRICOS
 # -----------------------------------------------------
 func add_resource(res_name: String, amount: int = 1) -> void:
-	if not resources.has(res_name): return
+	# Utilizamos get para evitar un error si la clave no existe, aunque se inicializa en _ready
+	if not resources.has(res_name): return 
+	
 	if res_name == "villager":
 		resources[res_name] = min(resources[res_name] + amount, get_villager_capacity())
 	else:
 		resources[res_name] = min(resources[res_name] + amount, MAX_RESOURCE)
+		
 	ResourceUpdated.emit(res_name, resources[res_name])
 
 func remove_resource(res_name: String, amount: int) -> bool:
@@ -138,10 +186,14 @@ func remove_resource(res_name: String, amount: int) -> bool:
 	return true
 
 func get_resource(res_name: String) -> int:
+	# 💡 CORRECCIÓN: Usamos .get(key, default) para devolver 0 si la clave no existe.
+	# Esto evita el error si el diccionario no se ha inicializado o si se pide un recurso no definido.
 	return resources.get(res_name, 0)
 
+
+## ⏱️ Lógica de Tiempo y Aldeanos
 # -----------------------------------------------------
-#  TIEMPO / ALDEANOS
+#  TIEMPO / ALDEANOS
 # -----------------------------------------------------
 func actualizar_aldeanos(n: int) -> void:
 	crecimiento_aldeanos = n
@@ -150,51 +202,54 @@ func actualizar_aldeanos(n: int) -> void:
 func _on_actualizar_timeout() -> void:
 	if crecimiento_aldeanos > 0:
 		var current := get_resource("villager")
-		var max_v   := get_villager_capacity()
+		var max_v := get_villager_capacity()
 		if current < max_v:
 			add_resource("villager", crecimiento_aldeanos)
 
 func bucle_aldeanos() -> void:
-	if crecimiento_aldeanos > 0: actualizar_timer.start()
-	else: actualizar_timer.stop()
+	# Se comprueba que el timer existe antes de usarlo
+	if actualizar_timer:
+		if crecimiento_aldeanos > 0: actualizar_timer.start()
+		else: actualizar_timer.stop()
 
-# -----------------------------------------------------
-#  UTILIDADES
-# -----------------------------------------------------
-func _ready() -> void:
-	actualizar_timer = Timer.new()
-	actualizar_timer.wait_time = TIEMPO_CRECIMIENTO
-	actualizar_timer.one_shot = false
-	actualizar_timer.timeout.connect(_on_actualizar_timeout)
-	add_child(actualizar_timer)
 
+## 🏗️ Lógica de Construcción
 # -----------------------------------------------------
-#  CONSTRUCCIÓN DE CASAS
+#  CONSTRUCCIÓN DE CASAS
 # -----------------------------------------------------
 func puedo_comprar_casa() -> bool:
-	# Verifica si hay suficientes materiales para una casa
+	# Casa Normal
 	return (
-		get_resource("wood")  >= CASA_WOOD_COST and
+		get_resource("wood") >= CASA_WOOD_COST and
 		get_resource("stone") >= CASA_STONE_COST and
-		get_resource("gold")  >= CASA_GOLD_COST
+		get_resource("gold") >= CASA_GOLD_COST
 	)
 	
 func puedo_comprar_casa_canteros() -> bool:
+	# Casa Canteros
 	return (
-		get_resource("wood")  >= CANTEROS_WOOD_COST and
+		get_resource("wood") >= CANTEROS_WOOD_COST and
 		get_resource("stone") >= CANTEROS_STONE_COST and
-		get_resource("gold")  >= CANTEROS_GOLD_COST
+		get_resource("gold") >= CANTEROS_GOLD_COST
+	)
+
+func puedo_comprar_casa_lenadores() -> bool:
+	# Casa Leñadores
+	return (
+		get_resource("wood") >= LENADORES_WOOD_COST and
+		get_resource("stone") >= LENADORES_STONE_COST and
+		get_resource("gold") >= LENADORES_GOLD_COST
 	)
 
 func pagar_casa() -> bool:
-	# Intenta restar los recursos, devuelve true si se pudo pagar
 	if not puedo_comprar_casa():
 		return false
 
-	# Resta de forma segura usando remove_resource
-	remove_resource("wood",  CASA_WOOD_COST)
+	remove_resource("wood", CASA_WOOD_COST)
 	remove_resource("stone", CASA_STONE_COST)
-	remove_resource("gold",  CASA_GOLD_COST)
+	remove_resource("gold", CASA_GOLD_COST)
+	
+	add_house()
 
 	return true
 
@@ -202,8 +257,22 @@ func pagar_casa_canteros() -> bool:
 	if not puedo_comprar_casa_canteros():
 		return false
 
-	remove_resource("wood",  CANTEROS_WOOD_COST)
+	remove_resource("wood", CANTEROS_WOOD_COST)
 	remove_resource("stone", CANTEROS_STONE_COST)
-	remove_resource("gold",  CANTEROS_GOLD_COST)
+	remove_resource("gold", CANTEROS_GOLD_COST)
+	
+	add_canteros_house()
+
+	return true
+	
+func pagar_casa_lenadores() -> bool:
+	if not puedo_comprar_casa_lenadores():
+		return false
+
+	remove_resource("wood", LENADORES_WOOD_COST)
+	remove_resource("stone", LENADORES_STONE_COST)
+	remove_resource("gold", LENADORES_GOLD_COST)
+	
+	add_lenadores_house()
 
 	return true

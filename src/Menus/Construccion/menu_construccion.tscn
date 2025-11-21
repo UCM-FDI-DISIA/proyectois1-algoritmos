@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://iah8x7at2l31"]
+[gd_scene load_steps=12 format=3 uid="uid://iah8x7at2l31"]
 
 [ext_resource type="Script" uid="uid://d1b7dq0vg20bb" path="res://src/Menus/Construccion/MenuConstruccion.gd" id="1_2gfwo"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="1_3hdph"]
@@ -6,6 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://b0p26dktrje8y" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Buildings/Blue Buildings/House1Boton.png" id="6_2gfwo"]
 [ext_resource type="Texture2D" uid="uid://br10q88ranhfu" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Pointers/02.png" id="6_7p221"]
 [ext_resource type="Texture2D" uid="uid://dlq3jbg126h5p" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_3Slides.png" id="6_8qf8j"]
+[ext_resource type="Texture2D" uid="uid://bqdk6pjmcxa80" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Buildings/Blue Buildings/House1.png" id="7_xa1ub"]
+[ext_resource type="Texture2D" uid="uid://dwsmtjigoiq26" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Buildings/Black Buildings/House1.png" id="8_iu7r0"]
+[ext_resource type="Texture2D" uid="uid://cmbpk3drpqdpj" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Buildings/Wood_House/Goblin_House.png" id="9_olv6k"]
+[ext_resource type="Texture2D" uid="uid://ds2y2tw0kpaln" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Yellow.png" id="10_4emxh"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g55pw"]
 content_margin_left = 30.0
@@ -14,10 +18,6 @@ texture = ExtResource("6_8qf8j")
 
 [node name="menuConstruccion" type="CanvasLayer"]
 script = ExtResource("1_2gfwo")
-PREVIEW_ALPHA = null
-PREVIEW_BLOCK_COLOR = null
-PREVIEW_OK_COLOR = null
-GRID_SIZE = null
 
 [node name="ControlRaiz" type="Control" parent="."]
 layout_mode = 3
@@ -72,6 +72,11 @@ visible = false
 position = Vector2(24, 26)
 texture = ExtResource("6_7p221")
 
+[node name="Casa" type="Sprite2D" parent="ControlRaiz/PanelBarra/HBoxBotones/BtnCasa"]
+position = Vector2(24, 23.999983)
+scale = Vector2(0.31640625, 0.30143234)
+texture = ExtResource("7_xa1ub")
+
 [node name="BtnCasaCanteros" type="TextureButton" parent="ControlRaiz/PanelBarra/HBoxBotones"]
 custom_minimum_size = Vector2(48, 48)
 layout_direction = 2
@@ -84,6 +89,11 @@ stretch_mode = 5
 visible = false
 position = Vector2(24, 27)
 texture = ExtResource("6_7p221")
+
+[node name="CasaCanteros" type="Sprite2D" parent="ControlRaiz/PanelBarra/HBoxBotones/BtnCasaCanteros"]
+position = Vector2(25.000004, 24.999987)
+scale = Vector2(0.31835946, 0.28906238)
+texture = ExtResource("8_iu7r0")
 
 [node name="BtnCasaLenadores" type="TextureButton" parent="ControlRaiz/PanelBarra/HBoxBotones"]
 custom_minimum_size = Vector2(48, 48)
@@ -98,6 +108,11 @@ visible = false
 position = Vector2(24, 27)
 texture = ExtResource("6_7p221")
 
+[node name="CasaLenadores" type="Sprite2D" parent="ControlRaiz/PanelBarra/HBoxBotones/BtnCasaLenadores"]
+position = Vector2(23.999994, 26.000015)
+scale = Vector2(0.32519522, 0.3177083)
+texture = ExtResource("9_olv6k")
+
 [node name="BtnCasaMineros" type="TextureButton" parent="ControlRaiz/PanelBarra/HBoxBotones"]
 custom_minimum_size = Vector2(48, 48)
 layout_direction = 2
@@ -110,3 +125,8 @@ stretch_mode = 5
 visible = false
 position = Vector2(24, 27)
 texture = ExtResource("6_7p221")
+
+[node name="CasaMineros" type="Sprite2D" parent="ControlRaiz/PanelBarra/HBoxBotones/BtnCasaMineros"]
+position = Vector2(24.500013, 24.000006)
+scale = Vector2(0.33593753, 0.30208343)
+texture = ExtResource("10_4emxh")
