@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://di4vbru44oxk6"]
+[gd_scene load_steps=10 format=3 uid="uid://di4vbru44oxk6"]
 
 [ext_resource type="Script" uid="uid://cq6simietmjfi" path="res://src/Edificios/CasaCanteros/CasaCanteros.gd" id="1_babg1"]
 [ext_resource type="Texture2D" uid="uid://dwsmtjigoiq26" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Buildings/Black Buildings/House1.png" id="2_p2kc1"]
+[ext_resource type="PackedScene" uid="uid://bkb0u5qqbitvg" path="res://src/NPCs/Cantero.tscn" id="2_u4a8y"]
 [ext_resource type="Texture2D" uid="uid://t2gmocpragiq" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue.png" id="3_babg1"]
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="4_u4a8y"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="5_3dfje"]
@@ -17,6 +18,7 @@ size = Vector2(318, 329)
 z_as_relative = false
 y_sort_enabled = true
 script = ExtResource("1_babg1")
+cantero_scene = ExtResource("2_u4a8y")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_as_relative = false
