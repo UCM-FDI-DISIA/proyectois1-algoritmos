@@ -1,0 +1,16 @@
+MECÁNICA A PROBAR: Conexión del multijugador 
+
+OBJETIVO DE LA PRUEBA:
+	Comprobar que la conexión a partida desde el menú principal es correcta.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	1) Ejecutar el juego
+	2) Intentar conectar a partida con otro usuario en multijugador.
+	3) Comprobar que se entra en partida sin un retardo mayor a 15 segundos.
+	4) Asegurarse de que el timer y la sincronización de ambos jugadores es correcta.
+
+RESULTADO ESPERADO:
+	Poder entrar al juego desde el menú principal y conectar 
+  correctamente con el otro usuario jugador de la partida.
+
+PRUEBAS REALIZADAS:
