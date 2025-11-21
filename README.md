@@ -24,7 +24,7 @@ Visita nuestra [Wiki](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wi
    * [Usuarios de _Feudalia_](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Historias-de-usuario).
 	   * [Historias de usuario](historiasusuario.md).
 	   * [DoD (Definition of Done)](definitionOfDone.md) 
-   * [Planificación de los Sprints](sprints.md)
+   * [Planificación de los Sprints](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/sprints.md)
 	   * [Backlog de los Sprints](backlogSprint.md)
 	   * [Revisión de los Sprints](revisionSprints.md)
 	   * [Retrospectiva de los Sprints](retrospectivaSprints.md)
