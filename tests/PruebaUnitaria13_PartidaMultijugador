@@ -15,3 +15,8 @@ RESULTADO ESPERADO:
   con todas las funcionalidades correctas y las interacciones con el jugador oponente sincronizadas.
 
 PRUEBAS REALIZADAS:
+22/11/25
+Se puede jugar la partida, no hay retardo y las funcionalidades se desarrollan correctamente. No obstante
+al finalizar la batalla aunque el resultado de ganador y perdedor era coherente, no coincidían los puntos
+de cada ejército. Saliendo en la pantalla del perdedor que su oponente tenía 38 puntos, mientras que en la 
+pantalla de este aparecían 30. Las figuras representadas tampoco coincidían.
