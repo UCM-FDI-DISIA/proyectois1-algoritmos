@@ -1,0 +1,24 @@
+MECÁNICA A PROBAR: Gestión de modos de partida
+
+OBJETIVO DE LA PRUEBA:
+Comprobar que la selección de modos de partida se ejecuta correctamente, gestionando el modo multijugador y 
+cambiando a modo automático si no se consigue emparejar al jugador.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+1) Ejecutar el archivo / iniciar el juego.
+2) Acceder a la pantalla de selección de modos de partida.
+3) Seleccionar el modo multijugador y comprobar que el sistema inicia el proceso de emparejamiento.
+4) Verificar que, si no se encuentra un jugador disponible en el tiempo estipulado, el juego cambia automáticamente 
+al modo automático.
+5) Una vez dentro del modo correspondiente (multijugador o automático), confirmar que el modo seleccionado no interfiere
+con las funcionalidades normales del juego.
+
+RESULTADO ESPERADO:
+Lo que debería pasar es que el jugador pueda seleccionar el modo multijugador sin problemas, que el sistema busque 
+emparejamiento y, en caso de no encontrarlo, cambie automáticamente al modo automático, garantizando que la partida 
+continúa con normalidad y sin errores.
+
+PRUEBAS REALIZADAS:
+22/11/25
+La selección del modo multijugador empareja y entra en partida. No obstante, al entrar con solo uno de los jugadores, lo
+esperado hubiera sido que al no tener con quien jugar ejecutara el modo automático. Sin embargo, así no ha ocurrido.
