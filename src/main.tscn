@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=79 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -6,18 +6,19 @@
 [ext_resource type="PackedScene" uid="uid://iah8x7at2l31" path="res://src/Menus/Construccion/menu_construccion.tscn" id="2_okx7f"]
 [ext_resource type="PackedScene" uid="uid://fsq1fp7g6o7n" path="res://src/Menus/MenuSoldados/menuSoldados.tscn" id="3_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
-[ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
+[ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Edificios/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="Script" uid="uid://d2e8dy1mo1k7w" path="res://src/Menus/MenuSoldados/MenuSoldados.gd" id="6_jitvu"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
 [ext_resource type="Script" uid="uid://dut20ponmt82k" path="res://src/ResourceManager.gd" id="6_lovvn"]
 [ext_resource type="PackedScene" uid="uid://c677m228bca8p" path="res://src/Recursos/MinaPiedra/minaPiedraAnimado.tscn" id="7_rlaii"]
-[ext_resource type="PackedScene" uid="uid://di4vbru44oxk6" path="res://src/Edificios/CasaCanteros/CasaCanteros.tscn" id="8_sta5p"]
+[ext_resource type="PackedScene" uid="uid://di4vbru44oxk6" path="res://src/Edificios/CasaCanteros.tscn" id="8_sta5p"]
 [ext_resource type="PackedScene" uid="uid://c6wex4pd4eg7t" path="res://src/Edificios/Casa/CasaAnimada.tscn" id="9_mgm53"]
 [ext_resource type="PackedScene" uid="uid://cqhydyyoc76vl" path="res://src/Edificios/CasaLenadores/CasaLenadores.tscn" id="9_sif16"]
 [ext_resource type="Script" uid="uid://c6vg12603g8ol" path="res://src/Player.gd" id="10_c2usk"]
 [ext_resource type="PackedScene" uid="uid://cpby34c2ngbwr" path="res://src/Edificios/CasaMineros/CasaMineros.tscn" id="10_d7bab"]
 [ext_resource type="PackedScene" uid="uid://die6kbpl1cpp2" path="res://src/Edificios/Cuartel/CuartelAnimado.tscn" id="10_uewes"]
 [ext_resource type="PackedScene" uid="uid://bg6kvrfqm2lc6" path="res://src/ElementosPantalla/boton_batalla.tscn" id="21_jitvu"]
+[ext_resource type="Script" uid="uid://j5u3eni8i8em" path="res://src/matchmaking_recursos.gd" id="22_ib8ht"]
 [ext_resource type="PackedScene" uid="uid://bbo05kp3bjw4u" path="res://src/BotonElementos/boton_s.tscn" id="22_ocmcv"]
 [ext_resource type="Texture2D" uid="uid://knoivg0aqqle" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="24_ocmcv"]
 [ext_resource type="Script" uid="uid://dx4mnernx43c7" path="res://src/TimerRoot.gd" id="27_c2usk"]
@@ -638,3 +639,6 @@ horizontal_alignment = 1
 metadata/_edit_group_ = true
 
 [node name="CountdownTimer" type="Timer" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
+
+[node name="Matchmaker" type="Node2D" parent="."]
+script = ExtResource("22_ib8ht")

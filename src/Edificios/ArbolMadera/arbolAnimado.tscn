@@ -1,6 +1,6 @@
 [gd_scene load_steps=22 format=3 uid="uid://4oaphcoyv6qq"]
 
-[ext_resource type="Script" uid="uid://bbf6hpx7xyk4e" path="res://src/Recursos/ArbolMadera/ArbolAnimado.gd" id="1_777f3"]
+[ext_resource type="Script" uid="uid://bbf6hpx7xyk4e" path="res://src/Edificios/ArbolMadera/ArbolAnimado.gd" id="1_777f3"]
 [ext_resource type="Texture2D" uid="uid://chbs7mxhn2mf6" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png" id="1_xfbxd"]
 [ext_resource type="Texture2D" uid="uid://cfmb6qvyik4lk" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/W_Spawn.png" id="3_777f3"]
 

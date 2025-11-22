@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="6_4jc68"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r1qpu"]
-size = Vector2(192, 93)
+size = Vector2(192, 70)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p2kc1"]
 size = Vector2(318, 329)
@@ -31,7 +31,7 @@ offset = Vector2(0, -50)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(0, 14.5)
+position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_r1qpu")
 
 [node name="interaccion" type="Area2D" parent="."]

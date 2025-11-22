@@ -17,6 +17,10 @@ class_name MinaOroAnimado
 @export var TIEMPO_REGENERACION: float = 30.0
 @export var TIEMPO_AGOTARSE: float = 0.3
 
+# Añadimos variables para Matchmaker
+@export var capacity := 1   # por defecto 1 Cantero
+var resource_type := "gold"
+
 # =====================================================================
 # 🎮 ESTADO
 # =====================================================================
@@ -27,6 +31,12 @@ var oro_queda: int = ORO_INICIAL
 # ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
+	
+
+	# Registro en Matchmaker
+	#if is_instance_valid("matchmaking_recursos"):
+	#	Matchmaker.register_resource(self)
+
 	if collision_shape.shape is RectangleShape2D:
 		collision_shape.shape.size = cell_size
 
@@ -88,3 +98,13 @@ func _on_regen_timer_timeout() -> void:
 	is_depleted = false
 	oro_queda = ORO_INICIAL
 	anim.play("Idle")
+
+# =====================================================================
+# ⚔️ RECOLECCIÓN AUTOMÁTICA
+# =====================================================================
+
+func get_capacity() -> int:
+	return capacity
+
+func get_type() -> String:
+	return resource_type
