@@ -285,7 +285,7 @@ func _process(_delta: float) -> void:
 		
 		if construccion_exitosa and real != null:
 			real.global_position = pos
-			# resource_manager.contenedor_casas.add_child(real)
+			resource_manager.contenedor_casas.add_child(real)
 			print("[BuildHUD] Construcción realizada: %s" % casa_seleccionada)
 			_cancelar_construccion()
 		elif not construccion_exitosa:

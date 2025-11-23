@@ -147,13 +147,13 @@ func get_mineros_stone_cost() -> int:
 	return MINEROS_STONE_COST
 
 func add_mineros_house() -> void:
-	lenadores_house_count += 1
+	mineros_house_count += 1
 
 func remove_mineros_house() -> void:
-	lenadores_house_count = max(0, lenadores_house_count - 1)
+	mineros_house_count = max(0, mineros_house_count - 1)
 
 func get_mineros_house_count() -> int:
-	return lenadores_house_count
+	return mineros_house_count
 
 func get_mineros_villager_cost() -> int:
 	return MINEROS_VILLAGER_COST

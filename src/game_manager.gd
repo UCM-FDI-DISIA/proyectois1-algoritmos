@@ -7,7 +7,7 @@ const PRECIO_CASA = 500  # Precio de cada casa
 #onready var contenedor_casas = get_node("Objetos/Edificios/CasasCompradas")  # Ajusta la ruta si es necesario
 
 # Escena de la casa
-var casa_scene = preload("res://src/Edificios/Casa/CasaAnimada.gd")
+var casa_scene = preload("res://src/Edificios/Casa/CasaAnimada.tscn")
 
 func comprar_casa():
 	if dinero >= PRECIO_CASA:
