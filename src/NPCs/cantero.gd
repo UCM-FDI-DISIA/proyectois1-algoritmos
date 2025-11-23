@@ -2,13 +2,12 @@ extends CharacterBody2D
 class_name Cantero
 
 @export var speed := 100.0
-#var target_resource := null
+
 var current_state := "IDLE" # estados: "IDLE", "MOVING", "GATHERING"
 
 func _ready():
-	# registrarse en el Matchmaker
-	#if is_instance_valid(Matchmaker):
-	#	Matchmaker.register_collector(self)
+	pass   # De momento no hace nada
+
 
 func _process(_delta):
 	match current_state:
@@ -18,3 +17,19 @@ func _process(_delta):
 			_move_to_resource(_delta)
 		"GATHERING":
 			_gather(_delta)
+
+
+# =====================================================
+# 🧠 LÓGICA DE IA — Placeholders
+# =====================================================
+
+func _find_resource() -> void:
+	pass
+
+
+func _move_to_resource(delta: float) -> void:
+	pass
+
+
+func _gather(delta: float) -> void:
+	pass

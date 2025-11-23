@@ -28,9 +28,6 @@ func _ready():
 	GDSync.client_joined.connect(_on_client_joined)
 	GDSync.client_left.connect(_on_client_left)
 	
-	# Solo el servidor inicia la lógica de “host”
-	if multiplayer.is_server():
-		GDSync.start_multiplayer()
 
 
 
@@ -39,16 +36,23 @@ func _ready():
 # ============================================================
 
 func _on_pve_pressed():
-	game_mode = "PVE"
-	print("PVE → iniciando partida local...")
-	
-	# Esperar a tener un client_id válido
-	while GDSync.get_client_id() <= 0:
-		print("Esperando ID de cliente para PVE...")
-		await get_tree().create_timer(0.2).timeout
-		
-	# Llamar al manager para configurar el modo PVE
-	MultiplayerManager._adjust_for_one_player()
+	MultiplayerManager.players = [1]
+	MultiplayerManager.my_quadrant_id = 0
+	MultiplayerManager.quadrants_by_client = {1: 0}
+
+	GameState.game_mode = "PVE"
+	print("🎮 Modo PVE seleccionado")
+
+	# Configuración local del estado del jugador (limpiar tropas)
+	GameState.troop_counts = {
+		"Archer": GameState.get_troop_count("Archer"),
+		"Lancer": GameState.get_troop_count("Lancer"),
+		"Monk": GameState.get_troop_count("Monk"),
+		"Warrior": GameState.get_troop_count("Warrior")
+	}
+
+	print("🌍 Cargando mapa principal en modo PVE...")
+	get_tree().change_scene_to_file("res://src/main.tscn")
 
 
 
@@ -63,8 +67,7 @@ func _on_pvp_pressed():
 	print("PVP → intentando conectar...")
 
 	# Esperar inicialización
-	while not GDSync.has_method("lobby_join"):
-		await get_tree().create_timer(0.5).timeout
+	await GDSync.connected
 
 	# Esperar client ID
 	while GDSync.get_client_id() <= 0:

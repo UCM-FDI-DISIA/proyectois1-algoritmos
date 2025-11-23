@@ -6,6 +6,9 @@ extends Node
 # Este script se añade como Autoload (singleton)
 # ===================================================
 
+var game_mode := "PVP"
+var is_pve: bool = false   # ⬅️ nuevo: indica si estamos en PVE
+
 var collected_seconds: float = 0
 var troop_counts : Dictionary = {
 	"Archer": 0,
@@ -18,6 +21,7 @@ signal collected_time_changed(seconds: float)
 
 
 func _ready() -> void:
+	is_pve = false  # siempre arrancamos en “no PVE” hasta que MainMenu diga lo contrario
 	GDSync.player_data_changed.connect(_on_player_data_changed)
 	print("✅ GameState listo y accesible como singleton.")
 

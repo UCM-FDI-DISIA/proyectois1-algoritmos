@@ -15,11 +15,17 @@ func _ready() -> void:
 
 
 func _place_player_by_quadrant() -> void:
-	var q := MultiplayerManager.get_my_quadrant()
+	var q: int
 
-	if q == -1:
-		push_warning("Aún no tengo cuadrante, usando 0 por defecto.")
+	if GameState.is_pve:
+		# 🔹 Un solo jugador, siempre en el cuadrante 0
 		q = 0
+	else:
+		# 🔹 Modo PVP: usar MultiplayerManager
+		q = MultiplayerManager.get_my_quadrant()
+		if q == -1:
+			push_warning("Aún no tengo cuadrante, usando 0 por defecto.")
+			q = 0
 
 	if quadrant_spawn_positions.has(q):
 		player.global_position = quadrant_spawn_positions[q]
