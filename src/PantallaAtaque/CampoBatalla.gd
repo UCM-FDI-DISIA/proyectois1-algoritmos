@@ -43,33 +43,19 @@ func _ready() -> void:
 	# --- Determinar enemigo (PVP o PVE) ---
 	var enemy_troops_dict: Dictionary
 
-	if GameState.game_mode == "PVE":
+	if GameState.is_pve:
 		print("🤖 Modo PVE → usando IA local")
 		enemy_troops_dict = _generate_ai_troops()
-
 	else:
 		print("👥 Modo PVP → leyendo tropas del enemigo real")
-
-		var my_id := GDSync.get_client_id()
-		var enemy_id := MultiplayerManager.get_enemy_id(my_id)
-
+		var my_id: int = GDSync.get_client_id()
+		var enemy_id: int = MultiplayerManager.get_enemy_id(my_id)
 		enemy_troops_dict = GDSync.player_get_data(enemy_id, "troops_by_client", {
 			"Archer": 0,
 			"Lancer": 0,
 			"Monk": 0,
 			"Warrior": 0
 		})
-
-	# Información útil para debugging
-	var mp := get_tree().get_multiplayer()
-	var all_peers := [mp.get_unique_id()]
-	all_peers.append_array(mp.get_peers())
-	print("Todos los jugadores conectados:", all_peers)
-
-	# Si solo hay 1 jugador -> IA
-	if MultiplayerManager.players.size() <= 1:
-		print("🤖 Enemigo PVE:", enemy_troops_dict)
-	else:
 		print("👥 Enemigo PVP:", enemy_troops_dict)
 
 	# --- Spawn enemigo ---
@@ -95,7 +81,7 @@ func _spawn_player_troops() -> void:
 		"Warrior": preload("res://src/NPCs/Warrior.tscn")
 	}
 
-	print("Soy el jugador:", GDSync.get_client_id(), "→ generando tropas...")
+	print("Soy el jugador: ", GDSync.get_client_id(), " y voy a actualizar mis tropas.")
 
 	var battlefield_size := battlefield_tiles * tile_size
 	var num_rows := 0
@@ -123,12 +109,11 @@ func _spawn_player_troops() -> void:
 			player_troops.append(troop)
 
 		index += 1
-
 	print("✅ Tropas del jugador centradas")
 
 
 # =====================================================================
-# 🪖 SPAWN ENEMIGO
+# 🪖 SPAWN ENEMIGO (PVP o PVE)
 # =====================================================================
 func _spawn_enemy_troops(enemy_data: Dictionary) -> void:
 	var troop_scenes := {
@@ -140,10 +125,9 @@ func _spawn_enemy_troops(enemy_data: Dictionary) -> void:
 
 	enemy_counts = enemy_data
 	var index := 0
-
 	for troop_name in troop_scenes.keys():
 		var count: int = enemy_counts.get(troop_name, 0)
-		if count <= 0:
+		if count <= 0 or not troop_scenes.has(troop_name):
 			continue
 
 		var scene: PackedScene = troop_scenes[troop_name]
@@ -151,26 +135,26 @@ func _spawn_enemy_troops(enemy_data: Dictionary) -> void:
 
 		for i in range(count):
 			var troop: Node2D = scene.instantiate()
-			troop.scale = Vector2(-troop_scale.x, troop_scale.y)
+			troop.scale = Vector2(-troop_scale.x, troop_scale.y) # mirar hacia jugador
 			troop.position = Vector2(battlefield_tiles.x * tile_size.x - 100 - i * spacing, row_y)
 			tropas_node.add_child(troop)
 			enemy_troops.append(troop)
 
 		index += 1
-
 	print("🟥 Tropas enemigas centradas")
 
 
 # =====================================================================
-# 🤖 FUNCION AUXILIAR: IA
+# 🤖 FUNCION AUXILIAR: Generar tropas AI PVE
 # =====================================================================
 func _generate_ai_troops() -> Dictionary:
-	return {
-		"Archer":  randi() % 5 + 1,
-		"Lancer":  randi() % 5 + 1,
-		"Monk":    randi() % 5 + 1,
+	var troops := {
+		"Archer": randi() % 5 + 1,   # mínimo 1
+		"Lancer": randi() % 5 + 1,
+		"Monk": randi() % 5 + 1,
 		"Warrior": randi() % 5 + 1
 	}
+	return troops
 
 
 # =====================================================================

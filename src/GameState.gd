@@ -1,14 +1,14 @@
 extends Node
 
-# ===================================================
-# GameState.gd
-# ===================================================
-# Este script se añade como Autoload (singleton)
-# ===================================================
+# ----------------------------------------------------
+#  MODO DE JUEGO
+# ----------------------------------------------------
+var is_pve: bool = false          # true = PVE local, false = PVP online
+var game_mode: String = "PVP"     # solo por claridad / debug
 
-var game_mode := "PVP"
-var is_pve: bool = false   # ⬅️ nuevo: indica si estamos en PVE
-
+# ----------------------------------------------------
+#  TIEMPO Y TROPAS
+# ----------------------------------------------------
 var collected_seconds: float = 0
 var troop_counts : Dictionary = {
 	"Archer": 0,
@@ -21,9 +21,11 @@ signal collected_time_changed(seconds: float)
 
 
 func _ready() -> void:
-	is_pve = false  # siempre arrancamos en “no PVE” hasta que MainMenu diga lo contrario
-	GDSync.player_data_changed.connect(_on_player_data_changed)
-	print("✅ GameState listo y accesible como singleton.")
+	# Sigue escuchando cambios de datos de jugadores (solo útil en PVP)
+	if GDSync.has_signal("player_data_changed"):
+		GDSync.player_data_changed.connect(_on_player_data_changed)
+
+	print("✅ GameState listo y accesible como singleton. Modo:", game_mode)
 
 
 func start_timer() -> void:
@@ -42,7 +44,7 @@ func _on_timer_timeout() -> void:
 
 
 # ===========================
-# TROPAS
+#   TROPAS
 # ===========================
 func set_troop_count(type: String, count: int) -> void:
 	if troop_counts.has(type):
@@ -62,19 +64,33 @@ func get_all_troop_counts() -> Dictionary:
 func add_troops(type: String, amount: int) -> void:
 	if troop_counts.has(type):
 		troop_counts[type] += amount
+
+	# Solo tiene sentido en PVP, pero no pasa nada si se llama también en PVE
 	GDSync.player_set_data("troops_by_client", troop_counts)
-	print("Alguien es un poco mas millonario ", troop_counts)
+	print("Tropas actualizadas:", troop_counts)
 
+
+# ===========================
+#   ATAQUE
+# ===========================
 func attack_other() -> void:
-	print("Iniciando ataque. Notificando a todos los jugadores para cambiar de escena.") 
-	# Aviso al otro jugador
-	GDSync.player_set_data("cambio_campo_batalla", true)
-	get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
+	if is_pve:
+		print("Iniciando ataque PVE local → cambio solo mi escena.")
+		get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
+	else:
+		print("Iniciando ataque PVP. Notificando a todos los jugadores para cambiar de escena.")
+		GDSync.player_set_data("cambio_campo_batalla", true)
+		get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
 
-func _on_player_data_changed(client_id : int, key : String, value):
-	if client_id != GDSync.get_client_id() : 
+
+func _on_player_data_changed(client_id: int, key: String, value) -> void:
+	# Solo reacciona en PVP
+	if is_pve:
+		return
+
+	if client_id != GDSync.get_client_id():
 		print("Recibido de %d: %s = %s" % [client_id, key, str(value)])
-		
-		if key == "cambio_campo_batalla" :
+
+		if key == "cambio_campo_batalla":
 			print("Cambiando a la escena de Batalla: campoBatalla.tscn")
 			get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
