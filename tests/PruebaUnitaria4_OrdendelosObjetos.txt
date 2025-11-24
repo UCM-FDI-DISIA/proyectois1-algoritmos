@@ -12,16 +12,16 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 
 PRUEBAS REALIZADAS:
 	13/10/2025
-		Solo existe el objeto Arbol.
-		La mecanica no se implementa correctamente y el personaje aparece debajo del mapa.
-		Renunciamos a la implementacion con ZIndex y usamos Y-Sort.
-		Se obtiene una version funcional de esta mecanica y las anteiores pero se desconfigura al hacer push con el plugin de Godot.
-		Se recupera el codigo perdido, se hace push con Desktop y se verifica desde otro dispositivo que funciona correctamente.
+		Solo existe el objeto Árbol.
+		La mecánica no se implementa correctamente y el personaje aparece debajo del mapa.
+		Renunciamos a la implementación con ZIndex y usamos Y-Sort.
+		Se obtiene una version funcional de esta mecanica y las anteriores pero se desconfigura al hacer push con el plugin de Godot.
+		Se recupera el código perdido, se hace push con Desktop y se verifica desde otro dispositivo que funciona correctamente.
 	14/10/2025 
-		Se annade la mecanica a los objetos "Mina de Piedra" y "Mina de Oro".
+		Se añade la mecánica a los objetos "Mina de Piedra" y "Mina de Oro".
 	14/10/2025
 		Se comprueba que los objetos cumplen lo requerido, se respeta el orden de aparición y la animación cuando dos objetos colisionan 
 		es la correcta. Se pasa la prueba con éxito.
 	17/10/2025 
-		Se identifica un problema con la mina de piedra. La imágen esmuy confusa y no queda claro cuándo el personaje debe estar delante y cuando detrás.
+		Se identifica un problema con la mina de piedra. La imagen es muy confusa y no queda claro cuándo el personaje debe estar delante y cuando detrás.
 	OTROS PUSH: Sin ninguna incidencia.

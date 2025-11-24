@@ -12,7 +12,7 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 
 RESULTADO ESPERADO:
 	Lo que debería pasar es que aparecieran en pantalla el número de soldados de cada jugador, que avanzasen hacia el centro,
-	y alcolisionar saliera una nube de humo simulando la pelea, tras la cual se dictaminaría el ganador.
+	y al colisionar saliera una nube de humo simulando la pelea, tras la cual se dictaminaría el ganador.
 
 PRUEBAS REALIZADAS:
 	9/11/25

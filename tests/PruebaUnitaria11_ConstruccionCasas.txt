@@ -15,5 +15,5 @@ RESULTADO ESPERADO:
 
 PRUEBAS REALIZADAS:
 	11/11/25
-		La visualización de la casa se vuelve roja cuando se situa encima de un terreno no construible.
+		La visualización de la casa se vuelve roja cuando se sitúa encima de un terreno no construible.
 		Además si no hay recursos no se construye al clickar. Funciona como esperado.

@@ -3,20 +3,20 @@ MECANICA A PROBAR: RECOLECCION MANUAL DE RECURSOS
 PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 	
 	1) Ejecutar el archivo.
-	2) Buscar un Arbol y entrar en su zona de colision (chocar con el arbol).
+	2) Buscar un Árbol y entrar en su zona de colisión (chocar con el árbol).
 	3) Hacer click derecho o izquierdo.
-		* El arbol debe hacer una animacion de "sacudida".
-		* Despues de la animacion de sacudida, se incrementa el contador arriba a la izquierda.
-		* Al atacar al arbol, aparece un sprite de madera temporalmente, con su correspondiente animacion.
-			* NOTA: la piedra no tiene sprite de piedra, sino animacion de "golpear".
-	4) Comprobar que la animacion termina correctamente y vuelve a su animacion estatica.
-	5) Comprobar que, rebasada la capacidad maxima del arbol, muere y ya no afecta el contador.
-	6) Comprobar que la interaccion se limita a los arboles con los que interactua el personaje.
+		* El árbol debe hacer una animación de "sacudida".
+		* Después de la animación de sacudida, se incrementa el contador arriba a la izquierda.
+		* Al atacar al árbol, aparece un sprite de madera temporalmente, con su correspondiente animación.
+			* NOTA: la piedra no tiene sprite de piedra, sino animación de "golpear".
+	4) Comprobar que la animación termina correctamente y vuelve a su animación estática.
+	5) Comprobar que, rebasada la capacidad máxima del árbol, muere y ya no afecta el contador.
+	6) Comprobar que la interacción se limita a los arboles con los que interactúa el personaje.
 	7) Comprobar que los pasos 1 - 7 para minas de oro y minas de piedra.
 
 
 PRUEBAS REALIZADAS:
 	20/10/2025
-		No funcionan las interacciones con el Arbol. No se detectan bien las senales.
+		No funcionan las interacciones con el Árbol. No se detectan bien las señales.
 	20/10/2025
-		Finalmente funcionan los arboles, la mecamica se traslada al resto de recursos.
+		Finalmente funcionan los arboles, la mecánica se traslada al resto de recursos.

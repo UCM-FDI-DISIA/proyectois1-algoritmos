@@ -20,3 +20,5 @@ Se puede jugar la partida, no hay retardo y las funcionalidades se desarrollan c
 al finalizar la batalla aunque el resultado de ganador y perdedor era coherente, no coincidían los puntos
 de cada ejército. Saliendo en la pantalla del perdedor que su oponente tenía 38 puntos, mientras que en la 
 pantalla de este aparecían 30. Las figuras representadas tampoco coincidían.
+24/11/25
+No se llega a crear siquiera la partida multijugador en la versión web.

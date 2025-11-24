@@ -4,14 +4,14 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 	
 	1) Ejecutar el archivo.
 	2) Comprobar que el personaje principal colisiona con los siguientes edificios.
-		* Probar colision con recursos.
-		* Probar colision con casa.
+		* Probar colisión con recursos.
+		* Probar colisión con casa.
 	3) Comprobar que la casa está correctamente dispuesta en el mapa, sin entrar en conflicto con el resto de elementos.
-	4) Comprobar lo anterior con los edificios estaticos del mapa y con los edificios que construye el personaje.
+	4) Comprobar lo anterior con los edificios estáticos del mapa y con los edificios que construye el personaje.
 
-Nota: definimos colision como
+Nota: definimos colisión como
 	1) el movimiento del personaje se vea interrumpido al intentar atravesar el objeto.
-	2) la animacion de movimiento del personaje no se ve afectada por la colision.
+	2) la animación de movimiento del personaje no se ve afectada por la colisión.
 	3) el personaje no "se desliza" al intentar atravesar el objeto.
 
 

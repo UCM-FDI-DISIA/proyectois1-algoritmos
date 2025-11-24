@@ -3,7 +3,7 @@ MECANICA A PROBAR: TEMPORIZADOR
 PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 	
 	1) Ejecutar el archivo.
-	2) Comprobar que el temporizador aparece en la esuina superior derecha.
+	2) Comprobar que el temporizador aparece en la esquina superior derecha.
 	3) Comprobar que el temporizador es fijo.
 	4) Comprobar que se inicia al tiempo inicial esperado.
 	5) Comprobar que la fuente es de color verde hasta hasta que empieza el segundo tiempo.

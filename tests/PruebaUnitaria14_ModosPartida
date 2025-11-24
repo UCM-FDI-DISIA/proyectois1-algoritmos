@@ -22,3 +22,5 @@ PRUEBAS REALIZADAS:
 22/11/25
 La selección del modo multijugador empareja y entra en partida. No obstante, al entrar con solo uno de los jugadores, lo
 esperado hubiera sido que al no tener con quien jugar ejecutara el modo automático. Sin embargo, así no ha ocurrido.
+24/11/25
+Aunque el modo multijugador no funcione, se comprueba que el PVE funciona correctamente.
