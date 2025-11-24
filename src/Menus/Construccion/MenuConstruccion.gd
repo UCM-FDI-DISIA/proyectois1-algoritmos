@@ -348,12 +348,23 @@ func _actualizar_tooltip() -> void:
 			resource_manager.get_casa_stone_cost(),
 			resource_manager.get_casa_gold_cost() ]
 		
-		# Asumiendo que has añadido las funciones de coste a ResourceManager para mineros
-		if resource_manager.has_method("get_mineros_wood_cost"):
-			btn_casa_mineros.tooltip_text = "Coste: Madera %d | Piedra %d | Oro %d" % [
-				resource_manager.get_mineros_wood_cost(),
-				resource_manager.get_mineros_stone_cost(),
-				resource_manager.get_mineros_gold_cost() ]
+		btn_casa_canteros.tooltip_text = "Coste: Madera %d | Piedra %d | Oro %d | Aldeanos %d" % [
+			resource_manager.get_canteros_wood_cost(),
+			resource_manager.get_canteros_stone_cost(),
+			resource_manager.get_canteros_gold_cost(),
+			resource_manager.get_canteros_villager_cost() ]
+		
+		btn_casa_lenadores.tooltip_text = "Coste: Madera %d | Piedra %d | Oro %d | Aldeanos %d" % [
+			resource_manager.get_lenadores_wood_cost(),
+			resource_manager.get_lenadores_stone_cost(),
+			resource_manager.get_lenadores_gold_cost(),
+			resource_manager.get_lenadores_villager_cost() ]
+		
+		btn_casa_mineros.tooltip_text = "Coste: Madera %d | Piedra %d | Oro %d | Aldeanos %d" % [
+			resource_manager.get_mineros_wood_cost(),
+			resource_manager.get_mineros_stone_cost(),
+			resource_manager.get_mineros_gold_cost(),
+			resource_manager.get_mineros_villager_cost() ]
 
 
 # =====================================================================
