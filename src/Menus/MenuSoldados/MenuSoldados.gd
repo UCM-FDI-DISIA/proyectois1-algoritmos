@@ -11,29 +11,29 @@ extends CanvasLayer
 # =====================================================================
 @onready var boton_s: TextureButton
 @onready var warrior_button: TextureButton = $Soldados/Warrior/ButtonW/ButtonWarrior
-@onready var archer_button: TextureButton  = $Soldados/Archer/ButtonA/ButtonArcher
-@onready var lancer_button: TextureButton  = $Soldados/Lancer/ButtonL/ButtonLancer
-@onready var monk_button: TextureButton    = $Soldados/Monk/ButtonM/ButtonMonk
+@onready var archer_button: TextureButton = $Soldados/Archer/ButtonA/ButtonArcher
+@onready var lancer_button: TextureButton = $Soldados/Lancer/ButtonL/ButtonLancer
+@onready var monk_button: TextureButton = $Soldados/Monk/ButtonM/ButtonMonk
 
 @onready var warrior_mas: Sprite2D = $Soldados/Warrior/ButtonW/Mas
-@onready var archer_mas: Sprite2D  = $Soldados/Archer/ButtonA/Mas
-@onready var lancer_mas: Sprite2D  = $Soldados/Lancer/ButtonL/Mas
-@onready var monk_mas: Sprite2D    = $Soldados/Monk/ButtonM/Mas
+@onready var archer_mas: Sprite2D = $Soldados/Archer/ButtonA/Mas
+@onready var lancer_mas: Sprite2D = $Soldados/Lancer/ButtonL/Mas
+@onready var monk_mas: Sprite2D = $Soldados/Monk/ButtonM/Mas
 
-@onready var boton_s_mas: Sprite2D   
+@onready var boton_s_mas: Sprite2D    
 @onready var boton_s_menos: Sprite2D
 
 @onready var tooltip_preview: Panel = Panel.new()
-@onready var tooltip_label: Label   = Label.new()
+@onready var tooltip_label: Label = Label.new()
 
 # =====================================================================
 # 📊 ESTADO LOCAL
 # =====================================================================
 var labels: Dictionary = {
 	"Warrior": null,
-	"Archer":  null,
-	"Lancer":  null,
-	"Monk":    null
+	"Archer": null,
+	"Lancer": null,
+	"Monk": null
 }
 var resource_manager: ResourceManager
 var hide_timer: Timer
@@ -44,29 +44,60 @@ var hide_timer: Timer
 func _ready() -> void:
 	# --- Quadrant ---
 	var quadrant: int = MultiplayerManager.get_my_quadrant()
-	print(GDSync.get_client_id(), " ", quadrant)
-	if (quadrant == 0) : boton_s = get_node("../ElementosPantalla/BotonS1")
-	else : if (quadrant == 1) : boton_s = get_node("../ElementosPantalla/BotonS2")
-	else : if (quadrant == 2) : boton_s = get_node("../ElementosPantalla/BotonS3")
-	else : if (quadrant == 3) : boton_s = get_node("../ElementosPantalla/BotonS4")
-	boton_s_mas = boton_s.get_node("Mas")
-	boton_s_menos = boton_s.get_node("Menos")
+
+	if GameState.is_pve:
+		quadrant = 0
+		print("Modo PVE detectado. Cuadrante forzado a 0 para UI.")
+	else:
+		print(GDSync.get_client_id(), " Cuadrante PVP: ", quadrant)
 	
+	# ------------------------------------------------------------------
+	# --- Asignación del nodo de botón S según el cuadrante ---
+	var boton_s_path = ""
+	match quadrant:
+		0: boton_s_path = "../ElementosPantalla/BotonS1"
+		1: boton_s_path = "../ElementosPantalla/BotonS2"
+		2: boton_s_path = "../ElementosPantalla/BotonS3"
+		3: boton_s_path = "../ElementosPantalla/BotonS4"
+		_:
+			push_error("❌ Cuadrante inválido para asignar BotonS. Saliendo de _ready.")
+			return
+
+	boton_s = get_node_or_null(boton_s_path)
+	
+	if boton_s == null:
+		push_error("❌ BotonS no encontrado en la ruta: " + boton_s_path + ". Verifica si el nodo existe en ElementosPantalla.")
+		return # Detener ejecución si el nodo principal no se encuentra.
+
+	# ⚠️ NECESARIO: Esperar un frame para asegurar que los hijos instanciados se carguen
+	await get_tree().process_frame
+
+	# Usamos los nombres 'Mas' y 'Menos' de tu versión anterior, y get_node_or_null()
+	boton_s_mas = boton_s.get_node_or_null("Mas") # <--- AQUI ESTA LA CORRECCIÓN
+	boton_s_menos = boton_s.get_node_or_null("Menos") 
+	
+	# Añadir una verificación de seguridad:
+	if boton_s_mas == null or boton_s_menos == null:
+		push_error("❌ Nodos 'Mas' o 'Menos' NO ENCONTRADOS dentro de " + boton_s.name + ". Revisa la jerarquía interna de BotonS1.")
+		# NO usamos 'return' aquí para intentar conectar el botón principal (boton_s)
+
 	# --- Labels ---
 	labels["Warrior"] = $Soldados/Warrior/WarriorLabel
-	labels["Archer"]  = $Soldados/Archer/ArcherLabel
-	labels["Lancer"]  = $Soldados/Lancer/LancerLabel
-	labels["Monk"]    = $Soldados/Monk/MonkLabel
+	labels["Archer"] = $Soldados/Archer/ArcherLabel
+	labels["Lancer"] = $Soldados/Lancer/LancerLabel
+	labels["Monk"] = $Soldados/Monk/MonkLabel
 
-	# --- ResourceManager ---
-	resource_manager = get_node_or_null("../ResourceManager")
+	# ------------------------------------------------------------------
+	resource_manager = get_node_or_null("/root/Main/ResourceManager")
+	
 	if resource_manager:
 		resource_manager.ResourceUpdated.connect(_on_resource_updated)
 		resource_manager.SoldierUpdated.connect(_on_soldier_updated)
 	else:
-		push_error("[MenuSoldados] ResourceManager no encontrado")
-
-	# --- Tooltip ---
+		push_error("❌ [MenuSoldados] ResourceManager no encontrado en /root/Main/ResourceManager. La compra de soldados fallará.")
+	# ------------------------------------------------------------------
+	
+	# --- Tooltip (Resto de la inicialización) ---
 	tooltip_preview.modulate = Color(1, 1, 1, 0.8)
 	tooltip_preview.visible = false
 	add_child(tooltip_preview)
@@ -82,17 +113,22 @@ func _ready() -> void:
 
 	# --- Botón S ---
 	boton_s.pressed.connect(_on_boton_s_pressed)
-	boton_s_menos.visible = false
+	# Solo intenta cambiar la visibilidad si el nodo existe
+	if boton_s_menos:
+		boton_s_menos.visible = false
 
 	# --- Botones de reclutamiento ---
 	_connect_button_events(warrior_button, "Warrior")
-	_connect_button_events(archer_button,  "Archer")
-	_connect_button_events(lancer_button,  "Lancer")
-	_connect_button_events(monk_button,    "Monk")
+	_connect_button_events(archer_button, "Archer")
+	_connect_button_events(lancer_button, "Lancer")
+	_connect_button_events(monk_button, "Monk")
 
-	update_all_labels()
+	# Estas llamadas fallarán si resource_manager es null (por eso la verificación es clave)
+	if resource_manager:
+		update_all_labels()
+		_update_button_states()
+		
 	visible = false
-	_update_button_states()
 
 # =====================================================================
 # 🔁 SEÑALES
