@@ -148,7 +148,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bqcf6"]
-radius = 22.804693
+radius = 17.864342
 
 [node name="Lenador" type="CharacterBody2D"]
 show_behind_parent = true
@@ -167,7 +167,7 @@ animation = &"Idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(1, 4)
+position = Vector2(0, 22)
 scale = Vector2(1.36, 1.44)
 shape = SubResource("CircleShape2D_bqcf6")
 
