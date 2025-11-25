@@ -24,23 +24,12 @@ class_name Puentes
 #  REFERENCIAS
 # ----------------------------------------------------------
 @export var tile_map_path: NodePath = NodePath("../Mapa/Decoracion")
-@onready var tilemap: TileMap = get_node("../Mapa/Decoracion")
-@onready var rm: ResourceManager = get_node(".../Main/ResourceManager")
+@onready var tilemap: TileMapLayer = get_node_or_null("/root/Main/Mapa/Decoracion")
+@onready var rm: ResourceManager = get_node("/root/Main/ResourceManager")
 
 const SOURCE_ID := 9  # Bridge_All.png
 
 func _ready() -> void:
-	
-	print("=== DEBUG TILEMAP ===")
-	print("tile_map_path: ", tile_map_path)
-	var n = get_node_or_null(tile_map_path)
-	print("nodo encontrado: ", n)
-	print("es TileMap? ", n is TileMap)
-	print("es TileMapLayer? ", n is TileMapLayer)
-	tilemap = n  # guardamos
-	print("tilemap asignado: ", tilemap)
-	# conexiones de botones...
-	
 	for i in range(1, 5):
 		var btn: TextureButton = get_node("Puente%d" % i)
 		if btn:
@@ -89,15 +78,21 @@ func _on_puente_pressed(id: int) -> void:
 	if id == 3:
 		# Puente 3 → primeras 3 celdas con (0,2)
 		for i in range(3):
-			tilemap.set_cell(0, cells[i], SOURCE_ID, Vector2i(0, 2))
+			tilemap.set_cell(cells[i], SOURCE_ID, Vector2i(0, 2))
 	elif id == 4:
 		# Puente 4 → últimas 3 celdas con (1,0)
 		for i in range(3, 6):
-			tilemap.set_cell(0, cells[i], SOURCE_ID, Vector2i(1, 0))
+			tilemap.set_cell(cells[i], SOURCE_ID, Vector2i(1, 0))
 	else:
 		# Puente 1 y 2 → todas sus celdas con su tile
 		for c in cells:
-			tilemap.set_cell(0, c, SOURCE_ID, atlas_coord)
+			print("=== ANTES DE SET_CELL ===")
+			print("tilemap: ", tilemap)
+			print("¿es null? ", tilemap == null)
+			print("¿es TileMapLayer? ", tilemap is TileMapLayer)
+			print("cells: ", cells)
+			print("SOURCE_ID: ", SOURCE_ID)
+			tilemap.set_cell(c, SOURCE_ID, atlas_coord)
 
 	# Oculta el botón pulsado
 	var btn: TextureButton = get_node("Puente%d" % id)
