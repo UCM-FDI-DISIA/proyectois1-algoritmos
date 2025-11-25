@@ -69,10 +69,9 @@ func _on_puente_pressed(id: int) -> void:
 		rm.remove_resource(res, cost[res])
 
 	# Coloca tiles
-	if id == 3:      # primeras 3 celdas → (0,2)
+	if id == 3 || id == 4:      # primeras 3 celdas → (0,2)
 		for i in range(3):
 			tilemap.set_cell(cells[i], source_id, Vector2i(1, 0))
-	elif id == 4:    # últimas 3 celdas → (1,0)
 		for i in range(3, 6):
 			tilemap.set_cell(cells[i], source_id, Vector2i(0, 2))
 	else:            # puente 1 ó 2
