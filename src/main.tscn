@@ -1,4 +1,4 @@
-[gd_scene load_steps=79 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=80 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://c6vg12603g8ol" path="res://src/Player.gd" id="10_c2usk"]
 [ext_resource type="PackedScene" uid="uid://cpby34c2ngbwr" path="res://src/Edificios/CasaMineros/CasaMineros.tscn" id="10_d7bab"]
 [ext_resource type="PackedScene" uid="uid://die6kbpl1cpp2" path="res://src/Edificios/Cuartel/CuartelAnimado.tscn" id="10_uewes"]
+[ext_resource type="PackedScene" uid="uid://dct77qix8nhy0" path="res://src/BotonElementos/texture_button.tscn" id="12_43aqp"]
 [ext_resource type="PackedScene" uid="uid://bg6kvrfqm2lc6" path="res://src/ElementosPantalla/boton_batalla.tscn" id="21_jitvu"]
 [ext_resource type="Script" uid="uid://j5u3eni8i8em" path="res://src/matchmaking_recursos.gd" id="22_ib8ht"]
 [ext_resource type="PackedScene" uid="uid://bbo05kp3bjw4u" path="res://src/BotonElementos/boton_s.tscn" id="22_ocmcv"]
@@ -487,6 +488,10 @@ tile_set = ExtResource("1_1bvp3")
 [node name="Objetos" type="Node2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
+
+[node name="Boton_puente" type="Node2D" parent="Objetos"]
+
+[node name="Puente1" parent="Objetos/Boton_puente" instance=ExtResource("12_43aqp")]
 
 [node name="Casas" type="Node2D" parent="Objetos"]
 z_as_relative = false
