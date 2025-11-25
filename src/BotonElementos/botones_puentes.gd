@@ -6,35 +6,41 @@ class_name Puentes
 # ==========================================================
 @export_group("Puente 1")
 @export var p1_cells: Array[Vector2i] = [Vector2i(13, 5), Vector2i(13, -4)]
-@export var p1_source_id: int = 0
-@export var p1_atlas_coord: Vector2i = Vector2i(4, 2)
-@export var p1_cost_id: String = "puente1"
+@export var p1_atlas_coord: Vector2i = Vector2i(0, 2)
 
 @export_group("Puente 2")
 @export var p2_cells: Array[Vector2i] = [
 	Vector2i(22, -14), Vector2i(23, -14), Vector2i(24, -14)
 ]
-@export var p2_source_id: int = 0
-@export var p2_atlas_coord: Vector2i = Vector2i(4, 2)
-@export var p2_cost_id: String = "puente2"
+@export var p2_atlas_coord: Vector2i = Vector2i(1, 0)
 
-@export_group("Puente 3+4 (mismo puente)")
+@export_group("Puente 3+4 (mismo puente, 6 celdas)")
 @export var p34_cells: Array[Vector2i] = [
-	Vector2i(-18, -3), Vector2i(-19, -3), Vector2i(-20, -3),
-	Vector2i(-34, 7), Vector2i(-34, 8), Vector2i(-34, 9)
+	Vector2i(-18, -3), Vector2i(-19, -3), Vector2i(-20, -3),  # ← 3 primeras
+	Vector2i(-34, 7), Vector2i(-34, 8), Vector2i(-34, 9)     # ← 3 últimas
 ]
-@export var p34_source_id: int = 0
-@export var p34_atlas_coord: Vector2i = Vector2i(4, 2)
-@export var p34_cost_id: String = "puente3"  # mismo coste para ambos botones
 
 # ----------------------------------------------------------
 #  REFERENCIAS
 # ----------------------------------------------------------
-@export var tile_map_path: NodePath = NodePath("../Mapa/Decoración")
-@onready var tilemap: TileMap = get_node(tile_map_path)
-@onready var rm: ResourceManager = get_node("/root/Main/ResourceManager")
+@export var tile_map_path: NodePath = NodePath("../Mapa/Decoracion")
+@onready var tilemap: TileMap = get_node("../Mapa/Decoracion")
+@onready var rm: ResourceManager = get_node(".../Main/ResourceManager")
+
+const SOURCE_ID := 9  # Bridge_All.png
 
 func _ready() -> void:
+	
+	print("=== DEBUG TILEMAP ===")
+	print("tile_map_path: ", tile_map_path)
+	var n = get_node_or_null(tile_map_path)
+	print("nodo encontrado: ", n)
+	print("es TileMap? ", n is TileMap)
+	print("es TileMapLayer? ", n is TileMapLayer)
+	tilemap = n  # guardamos
+	print("tilemap asignado: ", tilemap)
+	# conexiones de botones...
+	
 	for i in range(1, 5):
 		var btn: TextureButton = get_node("Puente%d" % i)
 		if btn:
@@ -52,26 +58,21 @@ func _build_tooltip(cost: Dictionary) -> String:
 
 func _on_puente_pressed(id: int) -> void:
 	var cells: Array[Vector2i]
-	var source_id: int
 	var atlas_coord: Vector2i
 	var cost_id: String
 
 	match id:
 		1:
 			cells = p1_cells
-			source_id = p1_source_id
-			atlas_coord = p1_atlas_coord
-			cost_id = p1_cost_id
+			atlas_coord = Vector2i(0, 2)
+			cost_id = "puente1"
 		2:
 			cells = p2_cells
-			source_id = p2_source_id
-			atlas_coord = p2_atlas_coord
-			cost_id = p2_cost_id
+			atlas_coord = Vector2i(1, 0)
+			cost_id = "puente2"
 		3, 4:
 			cells = p34_cells
-			source_id = p34_source_id
-			atlas_coord = p34_atlas_coord
-			cost_id = p34_cost_id
+			cost_id = "puente3"
 		_:
 			return
 
@@ -84,8 +85,19 @@ func _on_puente_pressed(id: int) -> void:
 	for res in cost:
 		rm.remove_resource(res, cost[res])
 
-	for c in cells:
-		tilemap.set_cell(0, c, source_id, atlas_coord)
+	# Aplicamos tiles según botón
+	if id == 3:
+		# Puente 3 → primeras 3 celdas con (0,2)
+		for i in range(3):
+			tilemap.set_cell(0, cells[i], SOURCE_ID, Vector2i(0, 2))
+	elif id == 4:
+		# Puente 4 → últimas 3 celdas con (1,0)
+		for i in range(3, 6):
+			tilemap.set_cell(0, cells[i], SOURCE_ID, Vector2i(1, 0))
+	else:
+		# Puente 1 y 2 → todas sus celdas con su tile
+		for c in cells:
+			tilemap.set_cell(0, c, SOURCE_ID, atlas_coord)
 
 	# Oculta el botón pulsado
 	var btn: TextureButton = get_node("Puente%d" % id)
