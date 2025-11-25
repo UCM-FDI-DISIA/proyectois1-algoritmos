@@ -53,6 +53,5 @@ texture_pressed = ExtResource("4_dhc7y")
 texture_hover = ExtResource("5_3pk7p")
 
 [node name="Mas" type="Sprite2D" parent="UI/ComprarMinero"]
-visible = false
 position = Vector2(31.507215, 31.81822)
 texture = ExtResource("6_lvplb")
