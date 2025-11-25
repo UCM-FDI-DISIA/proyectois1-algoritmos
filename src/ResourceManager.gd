@@ -33,6 +33,10 @@ const MINEROS_GOLD_COST := 0
 const MINEROS_STONE_COST := 0
 const MINEROS_VILLAGER_COST := 1; 
 
+# PUENTES
+const PUENTES_WOOD_COST := 5
+const PUENTES_GOLD_COST := 1;
+
 const SOLDIER_COSTS := {
 	"Warrior": { "villager": 1, "gold": 1, "wood": 0, "stone": 0 },
 	"Archer": { "villager": 1, "gold": 2, "wood": 0, "stone": 0 },
@@ -70,6 +74,12 @@ func _ready() -> void:
 	actualizar_timer.one_shot = false
 	actualizar_timer.timeout.connect(_on_actualizar_timeout)
 	add_child(actualizar_timer)
+# -----------------------------------------------------
+# PUENTES
+# -----------------------------------------------------
+func get_puentes_wood_cost() -> int: return PUENTES_WOOD_COST
+
+func get_puentes_gold_cost() -> int: return PUENTES_GOLD_COST
 
 ## 🏡 Lógica de Casas
 # -----------------------------------------------------
