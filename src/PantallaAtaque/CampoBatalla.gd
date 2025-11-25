@@ -34,7 +34,7 @@ var total_tweens := 0
 # =====================================================================
 func _ready() -> void:
 	if game_state == null:
-		push_error("❌ No se encontró GameState")
+		push_error("No se encontró GameState")
 		return
 
 	# --- Spawn jugador ---
@@ -44,10 +44,10 @@ func _ready() -> void:
 	var enemy_troops_dict: Dictionary
 
 	if GameState.is_pve:
-		print("🤖 Modo PVE → usando IA local")
+		print("Modo PVE → usando IA local")
 		enemy_troops_dict = _generate_ai_troops()
 	else:
-		print("👥 Modo PVP → leyendo tropas del enemigo real")
+		print("Modo PVP → leyendo tropas del enemigo real")
 		var my_id: int = GDSync.get_client_id()
 		var enemy_id: int = MultiplayerManager.get_enemy_id(my_id)
 		enemy_troops_dict = GDSync.player_get_data(enemy_id, "troops_by_client", {
@@ -56,7 +56,7 @@ func _ready() -> void:
 			"Monk": 0,
 			"Warrior": 0
 		})
-		print("👥 Enemigo PVP:", enemy_troops_dict)
+		print("Enemigo PVP:", enemy_troops_dict)
 
 	# --- Spawn enemigo ---
 	_spawn_enemy_troops(enemy_troops_dict)
@@ -109,7 +109,7 @@ func _spawn_player_troops() -> void:
 			player_troops.append(troop)
 
 		index += 1
-	print("✅ Tropas del jugador centradas")
+	print("Tropas del jugador centradas")
 
 
 # =====================================================================
@@ -141,7 +141,7 @@ func _spawn_enemy_troops(enemy_data: Dictionary) -> void:
 			enemy_troops.append(troop)
 
 		index += 1
-	print("🟥 Tropas enemigas centradas")
+	print("Tropas enemigas centradas")
 
 
 # =====================================================================
@@ -161,7 +161,7 @@ func _generate_ai_troops() -> Dictionary:
 # ⏱️ CUENTA ATRÁS
 # =====================================================================
 func _start_battle_countdown() -> void:
-	print("⏱️ Cuenta atrás iniciada...")
+	print("Cuenta atrás iniciada...")
 
 	var canvas := CanvasLayer.new()
 	add_child(canvas)
@@ -217,7 +217,7 @@ func _check_forced_battle_result() -> bool:
 
 
 func _show_battle_result_forced(winner: String) -> void:
-	var text := ("🏆 ¡Gana el Jugador!" if winner == "player" else "💀 ¡Gana el Enemigo!")
+	var text := ("¡Gana el Jugador!" if winner == "player" else "¡Gana el Enemigo!")
 	_show_result_ui(text, enemy_counts)
 
 
@@ -305,9 +305,9 @@ func _show_battle_result() -> void:
 	var e_power := _calculate_power(enemy_counts)
 
 	var result_text := (
-		"🏆 ¡Gana el Jugador!" if p_power > e_power 
-		else "💀 ¡Gana el Enemigo!" if p_power < e_power
-		else "⚖️ ¡Empate!"
+		"¡Gana el Jugador!" if p_power > e_power 
+		else "¡Gana el Enemigo!" if p_power < e_power
+		else "¡Empate!"
 	)
 
 	_show_result_ui(result_text, enemy_counts)
@@ -362,7 +362,7 @@ func _show_result_ui(result_text: String, _enemy_counts: Dictionary) -> void:
 		color, result_text, "\n".join(lines)
 	]
 
-	text += "[center]⚔️ Poder Jugador: [b]%d[/b]   💀 Poder Enemigo: [b]%d[/b][/center]" % [
+	text += "[center] Poder Jugador: [b]%d[/b]   Poder Enemigo: [b]%d[/b][/center]" % [
 		p_power, e_power
 	]
 
@@ -404,7 +404,7 @@ func _update_label_font(label: RichTextLabel) -> void:
 # 🧾 TROOP INFO
 # =====================================================================
 func _format_troop_info(troop_dict: Dictionary, title: String) -> String:
-	var lines := ["👑 %s:" % title]
+	var lines := ["%s:" % title]
 	for name in troop_dict.keys():
 		lines.append("    • %s × %d" % [name, troop_dict[name]])
 	return "\n".join(lines)

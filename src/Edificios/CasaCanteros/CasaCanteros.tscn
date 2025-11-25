@@ -31,7 +31,6 @@ offset = Vector2(0, -50)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(1, 2)
 shape = SubResource("RectangleShape2D_r1qpu")
 
 [node name="interaccion" type="Area2D" parent="."]
