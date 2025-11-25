@@ -20,6 +20,6 @@ texture_hover = ExtResource("3_ee0g3")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(31.000004, 28.000002)
-scale = Vector2(0.4765625, 0.359375)
+position = Vector2(31.000002, 27)
+scale = Vector2(0.3476562, 0.3125)
 texture = ExtResource("4_5av4i")

@@ -11,15 +11,15 @@ config_version=5
 [GD-Sync]
 
 version="0.13"
-publicKey="435cb7b74bf3b495"
-privateKey="3310412047a5ad45"
+publicKey="39084c6949cc8e9f"
+privateKey="19c245da4c5d817f"
 useSenderID=true
 
 [application]
 
 config/name="Feudalia"
 run/main_scene="uid://dud42l0lmmsh2"
-config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
+config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://src/icon.svg"
 
 [autoload]

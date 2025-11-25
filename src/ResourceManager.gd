@@ -64,6 +64,14 @@ var actualizar_timer: Timer
 var resources: Dictionary = { "wood": 0, "stone": 0, "gold": 0, "villager": 0 }
 var soldiers: Dictionary = { "Warrior": 0, "Archer": 0, "Lancer": 0, "Monk": 0 }
 
+# -------------------- PUENTES -------------------------
+const PUENTE_COSTS := {
+	"puente1": { "wood": 1, "stone": 0, "gold": 0, "villager": 0 },
+	"puente2": { "wood": 2, "stone": 0, "gold": 0, "villager": 0 },
+	"puente3": { "wood": 3, "stone": 0, "gold": 0, "villager": 0 },
+	"puente4": { "wood": 4, "stone": 0, "gold": 0, "villager": 0 },
+}
+
 # =====================================================================
 # ⚙️ INICIALIZACIÓN (READY)
 # =====================================================================
@@ -344,3 +352,9 @@ func pagar_casa_mineros() -> bool:
 	add_mineros_house()
 
 	return true
+# -----------------------------------------------------
+#  CONSTRUCCIÓN DE PUENTES
+# -----------------------------------------------------
+
+func get_puente_costs(id: String) -> Dictionary:
+	return PUENTE_COSTS.get(id, {})
