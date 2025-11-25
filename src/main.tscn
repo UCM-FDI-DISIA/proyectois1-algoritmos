@@ -1,4 +1,4 @@
-[gd_scene load_steps=81 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=84 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -19,6 +19,9 @@
 [ext_resource type="PackedScene" uid="uid://die6kbpl1cpp2" path="res://src/Edificios/Cuartel/CuartelAnimado.tscn" id="10_uewes"]
 [ext_resource type="PackedScene" uid="uid://dct77qix8nhy0" path="res://src/BotonElementos/texture_button.tscn" id="12_43aqp"]
 [ext_resource type="Script" uid="uid://bkgp3vtc46h12" path="res://src/boton_puente.gd" id="12_ocmcv"]
+[ext_resource type="Script" uid="uid://vdhr05b8lc7x" path="res://src/boton_puente_2.gd" id="14_lovvn"]
+[ext_resource type="Script" uid="uid://dvm26i7cgou8x" path="res://src/boton_puente_3.gd" id="15_jitvu"]
+[ext_resource type="Script" uid="uid://diitsg44d0ay6" path="res://src/boton_puente_4.gd" id="16_jitvu"]
 [ext_resource type="PackedScene" uid="uid://bg6kvrfqm2lc6" path="res://src/ElementosPantalla/boton_batalla.tscn" id="21_jitvu"]
 [ext_resource type="Script" uid="uid://j5u3eni8i8em" path="res://src/matchmaking_recursos.gd" id="22_ib8ht"]
 [ext_resource type="PackedScene" uid="uid://bbo05kp3bjw4u" path="res://src/BotonElementos/boton_s.tscn" id="22_ocmcv"]
@@ -490,14 +493,43 @@ tile_set = ExtResource("1_1bvp3")
 z_as_relative = false
 y_sort_enabled = true
 
-[node name="Boton_puente" type="Node2D" parent="Objetos"]
+[node name="BotoensPuentes" type="Node2D" parent="Objetos"]
+
+[node name="Boton_puente" type="Node2D" parent="Objetos/BotoensPuentes"]
 script = ExtResource("12_ocmcv")
 
-[node name="Puente1" parent="Objetos/Boton_puente" instance=ExtResource("12_43aqp")]
+[node name="Puente1" parent="Objetos/BotoensPuentes/Boton_puente" instance=ExtResource("12_43aqp")]
 offset_left = 829.0
 offset_top = -286.0
 offset_right = 893.0
 offset_bottom = -222.0
+
+[node name="Boton_puente2" type="Node2D" parent="Objetos/BotoensPuentes"]
+script = ExtResource("14_lovvn")
+
+[node name="Puente2" parent="Objetos/BotoensPuentes/Boton_puente2" instance=ExtResource("12_43aqp")]
+offset_left = 7296.0
+offset_top = -280.0
+offset_right = 7360.0
+offset_bottom = -216.0
+
+[node name="Boton_puente3" type="Node2D" parent="Objetos/BotoensPuentes"]
+script = ExtResource("15_jitvu")
+
+[node name="Puente3" parent="Objetos/BotoensPuentes/Boton_puente3" instance=ExtResource("12_43aqp")]
+offset_left = 831.0
+offset_top = 6759.0
+offset_right = 895.0
+offset_bottom = 6823.0
+
+[node name="Boton_puente4" type="Node2D" parent="Objetos/BotoensPuentes"]
+script = ExtResource("16_jitvu")
+
+[node name="Puente4" parent="Objetos/BotoensPuentes/Boton_puente4" instance=ExtResource("12_43aqp")]
+offset_left = 7297.0
+offset_top = 6757.0
+offset_right = 7361.0
+offset_bottom = 6821.0
 
 [node name="Casas" type="Node2D" parent="Objetos"]
 z_as_relative = false
