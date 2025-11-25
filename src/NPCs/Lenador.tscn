@@ -148,10 +148,14 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bqcf6"]
+radius = 22.804693
 
 [node name="Lenador" type="CharacterBody2D"]
+show_behind_parent = true
 z_as_relative = false
 y_sort_enabled = true
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_26hqc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -159,12 +163,11 @@ z_as_relative = false
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_pnp14")
 animation = &"Idle"
-frame_progress = 0.6330314
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(0, 22)
+position = Vector2(1, 4)
 scale = Vector2(1.36, 1.44)
 shape = SubResource("CircleShape2D_bqcf6")
 

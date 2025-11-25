@@ -1,5 +1,7 @@
 extends Node
 
+# Main.gd
+@onready var casas_parent := $Casas
 @onready var player: Node2D = $"Objetos/Player"
 
 var quadrant_spawn_positions := {
@@ -31,3 +33,15 @@ func _place_player_by_quadrant() -> void:
 		print("Jugador local en cuadrante", q, "posición", player.global_position)
 	else:
 		push_error("Cuadrante inválido: %s" % str(q))
+
+func place_casa(casa_scene: PackedScene, position: Vector2):
+	var casa_instance = casa_scene.instantiate()
+	casa_instance.global_position = position
+	casas_parent.add_child(casa_instance)
+	
+	# Ajustamos z_index del sprite base si la casa es grande
+	if casa_instance.has_node("Base"):
+		var base_sprite = casa_instance.get_node("Base")
+		base_sprite.z_index = int(casa_instance.global_position.y)
+	
+	return casa_instance

@@ -1,4 +1,5 @@
-extends Node2D
+# CasaLenadores.gd
+extends StaticBody2D
 class_name CasaLenadores
 
 # ============================================================
@@ -59,6 +60,8 @@ func _ready() -> void:
 	boton_lenador.visible = false
 
 	print("[Casa] Inicializado correctamente.\n")
+	z_as_relative = false
+	
 
 # ============================================================
 # 🔍 CHEQUEO DE COLISIÓN REAL (CircleShape2D)
@@ -126,14 +129,29 @@ func _get_random_spawn_position() -> Vector2:
 # 🧱 SPAWNEAR LEÑADOR
 # ============================================================
 func _spawn_lenador() -> void:
-	print("[Casa] Intentando crear leñador")
-
 	var npc = lenador_scene.instantiate()
 	npc.global_position = _get_random_spawn_position()
+	
+	# Lo instanciamos dentro del nodo global de NPCs del Main
+	var npcs_parent = get_node("/root/Main/Objetos/NPCs")
+	npcs_parent.add_child(npc)
+	
+	# Ajuste del z_index dinámico para ordenar visualmente según Y
+	npc.z_index = int(npc.global_position.y)
+	
+	# Si tiene AnimatedSprite2D, asegurarse de que pivot esté en los pies
+	if npc.has_node("AnimatedSprite2D"):
+		var sprite = npc.get_node("AnimatedSprite2D") as AnimatedSprite2D
+		# Opción 1: si pivot en editor ya está en pies → no hacer nada
+		# Opción 2: mover sprite hacia abajo para simular pivot en pies
+		# sprite.position.y = sprite.frames.get_frame(sprite.animation, sprite.frame).get_height() / 2
+		# Nota: usualmente no hace falta si el pivot se ajusta en el editor
+	
+	# Debug opcional
+	if debug:
+		print("[Casa] Lenador creado en ", npc.global_position, " | z_index=", npc.z_index)
 
-	get_parent().add_child(npc)
 
-	print("[Casa] Leñador creado en ", npc.global_position)
 
 func spawn_initial_lenadores_on_build() -> void:
 	if initial_spawn_complete:

@@ -55,7 +55,7 @@ func _ready():
 	
 	if debug:
 		print("[Lenador] Creado. Estado: IDLE")
-
+	z_as_relative = false
 # ============================================================
 # ⏳ PROCESS
 # ============================================================
@@ -71,7 +71,7 @@ func _process(delta: float):
 			_find_nearest_tree()
 
 	search_cooldown = 0.3
-
+	z_index = int(global_position.y)
 # ============================================================
 # 🧱 PHYSICS PROCESS
 # ============================================================

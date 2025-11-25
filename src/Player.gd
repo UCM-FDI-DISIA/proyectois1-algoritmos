@@ -31,12 +31,17 @@ func _ready() -> void:
 # =====================================================================
 # 🔁 FÍSICA Y ENTRADA
 # =====================================================================
+func _process(delta):
+	z_index = int(global_position.y)
+
 func _physics_process(_delta: float) -> void:
+	# Actualiza el z_index según posición vertical
+	z_index = int(position.y)
+
 	# Bloqueo mientras ataca
 	if is_attacking:
 		velocity = Vector2.ZERO
 		move_and_slide()
-		z_index = int(position.y)
 		return
 
 	# Lectura de entrada
@@ -55,7 +60,7 @@ func _physics_process(_delta: float) -> void:
 
 	# Animaciones
 	if input_dir != Vector2.ZERO:
-		if not animated_sprite.is_playing() or animated_sprite.animation != "Andar":
+		if animated_sprite.animation != "Andar":
 			animated_sprite.play("Andar")
 		animated_sprite.flip_h = input_dir.x < 0
 	elif animated_sprite.animation != "Idle":
@@ -65,7 +70,7 @@ func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ataque"):  start_attack(1)
 	if Input.is_action_just_pressed("ataque2"): start_attack(2)
 
-	z_index = int(position.y)
+	z_index = int(global_position.y)
 
 # =====================================================================
 # ⚔️ ATAQUES
