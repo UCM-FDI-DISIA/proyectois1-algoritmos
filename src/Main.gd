@@ -1,7 +1,7 @@
 extends Node
 
 # Main.gd
-@onready var casas_parent := $"Casas"
+@onready var casas_parent := $"Objetos/Casas"
 @onready var player: Node2D = $"Objetos/Player"
 
 var quadrant_spawn_positions := {

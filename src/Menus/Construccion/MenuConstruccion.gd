@@ -252,40 +252,48 @@ func _process(_delta: float) -> void:
 					construccion_exitosa = true
 				else:
 					print("[BuildHUD] Materiales insuficientes para casa normal")
+	
 			"casa_canteros":
 				if resource_manager.puedo_comprar_casa_canteros():
 					real = resource_manager.casa_canteros_scene.instantiate() as Node2D
-					real.global_position = camera.get_global_mouse_position()
-					get_tree().get_root().add_child(real)
-					real.spawn_initial_canteros_on_build() 
+			# NO añadir a la escena todavía, solo instanciar
 					resource_manager.pagar_casa_canteros()
 					construccion_exitosa = true
 				else:
 					print("[BuildHUD] Materiales insuficientes para CasaCanteros")
+	
 			"casa_lenadores":
 				if resource_manager.puedo_comprar_casa_lenadores():
 					real = resource_manager.casa_lenadores_scene.instantiate() as Node2D
-					real.global_position = camera.get_global_mouse_position()
-					get_tree().get_root().add_child(real)
-					real.spawn_initial_lenadores_on_build() 
+			# NO añadir a la escena todavía, solo instanciar
 					resource_manager.pagar_casa_lenadores()
 					construccion_exitosa = true
 				else:
 					print("[BuildHUD] Materiales insuficientes para CasaLeñadores")
+	
 			"casa_mineros":
-				if resource_manager.puedo_comprar_casa_mineros(): 
+				if resource_manager.puedo_comprar_casa_mineros():
 					real = resource_manager.casa_mineros_scene.instantiate() as Node2D
-					real.global_position = camera.get_global_mouse_position()
-					get_tree().get_root().add_child(real)
-					real.spawn_initial_mineros_on_build() 
+			# NO añadir a la escena todavía, solo instanciar
 					resource_manager.pagar_casa_mineros()
 					construccion_exitosa = true
 				else:
 					print("[BuildHUD] Materiales insuficientes para CasaMineros")
-		
+
+# Ahora sí añadimos el nodo UNA SOLA VEZ al árbol de escenas
 		if construccion_exitosa and real != null:
 			real.global_position = pos
 			resource_manager.contenedor_casas.add_child(real)
+	
+	# Llamar a los métodos de spawn DESPUÉS de que el nodo esté en el árbol
+			match casa_seleccionada:
+				"casa_canteros":
+					real.spawn_initial_canteros_on_build()
+				"casa_lenadores":
+					real.spawn_initial_lenadores_on_build()
+				"casa_mineros":
+					real.spawn_initial_mineros_on_build()
+	
 			print("[BuildHUD] Construcción realizada: %s" % casa_seleccionada)
 			_cancelar_construccion()
 		elif not construccion_exitosa:
