@@ -31,7 +31,9 @@ func _ready() -> void:
 
 	# Solo el servidor inicia la lógica de “host”
 	if multiplayer.is_server():
-		GDSync.start_multiplayer()
+		GDSync._manual_connect("64.225.79.138")
+		# Workaround obtenido de: https://www.gd-sync.com/docs/general-information
+		# GDSync.start_multiplayer() # Esto no funciona en web.
 
 
 # ============================================================
@@ -107,7 +109,7 @@ func _on_lobby_join_failed(lobby_name: String, error: int):
 # LOBBY JOINED → esperar al segundo jugador o pasar a PVE
 # ============================================================
 func _on_lobby_joined(lobby_name: String):
-	print("Unido al lobby:", lobby_name)
+	print("Unido al lobby: ", lobby_name)
 
 	players_in_lobby = 1  # tú mismo
 	print("Esperando segundo jugador durante %s segundos..." % PVP_TIMEOUT)
