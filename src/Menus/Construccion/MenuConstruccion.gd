@@ -213,7 +213,7 @@ func _process(_delta: float) -> void:
 	)
 
 	# 🔍 Verificar si se puede construir
-	var sobre_terreno = _es_sobre_terreno_valido(casa_preview.global_position)
+	var sobre_terreno = await _es_sobre_terreno_valido(casa_preview.global_position)
 	
 	# Verificamos si el área está libre de obstáculos/jugador
 	var cuerpos_superpuestos = 0
@@ -371,11 +371,51 @@ func _actualizar_tooltip() -> void:
 # 🛠️ VERIFICAR TERRENO VÁLIDO (Sin cambios)
 # =====================================================================
 func _es_sobre_terreno_valido(pos: Vector2) -> bool:
-	var mapa = get_node("/root/Main/Mapa")
+	# 1. Comprobación de colisiones con otros objetos (edificios, árboles, etc.)
+	if not await _esta_libre_de_colisiones(pos):
+		return false
+
+	# 2. Comprobación del terreno (tilemaps)
+	if not _esta_sobre_terreno_valido(pos):
+		return false
+
+	# Si pasa ambas comprobaciones, la posición es válida.
+	return true
+
+
+# --- FUNCIÓN AUXILIAR 1: COMPROBACIÓN DE COLISIONES ---
+# Mueve el área de prueba y comprueba si solapa con algo.
+func _esta_libre_de_colisiones(pos: Vector2) -> bool:
+	if area_preview == null:
+		push_error("Error: 'area_preview' no ha sido creado.")
+		return false
+
+	# Colocamos el preview en la posición a testear
+	# Importante: usamos la posición global para asegurar que coincide con el mundo del juego.
+	casa_preview.global_position = pos
+
+	# Forzamos una actualización inmediata de la física para este área.
+	# Esto es crucial para que get_overlapping_bodies() funcione en el mismo frame.
+	area_preview.force_update_transform()
+	await get_tree().physics_frame
+
+	# Obtenemos la lista de cuerpos con los que colisiona.
+	# Si la lista no está vacía, significa que hay un obstáculo.
+	var cuerpos_solapados = area_preview.get_overlapping_bodies()
+	
+	# Devolvemos 'true' si no hay colisiones (la lista está vacía).
+	return cuerpos_solapados.is_empty()
+
+
+# --- FUNCIÓN AUXILIAR 2: COMPROBACIÓN DE TERRENO ---
+# Verifica si la construcción se sitúa sobre un tilemap válido y no sobre uno inválido.
+func _esta_sobre_terreno_valido(pos: Vector2) -> bool:
+	var mapa = get_node_or_null("/root/Main/Mapa")
 	if mapa == null:
 		push_error("[BuildHUD] No se encontró /root/Main/Mapa")
 		return false
 
+	# Definimos los puntos de las esquinas del edificio para dar un margen.
 	var margen = 8
 	var puntos = [
 		pos + Vector2(margen, margen),
@@ -384,15 +424,10 @@ func _es_sobre_terreno_valido(pos: Vector2) -> bool:
 		pos + Vector2(-margen, -margen)
 	]
 
-	# Primero bloquear agua/subsuelo
-	var subsuelo = mapa.get_node_or_null("Subsuelo")
-	if subsuelo:
-		for p in puntos:
-			var cell_subsuelo = subsuelo.local_to_map(subsuelo.to_local(p))
-			if subsuelo.get_cell_source_id(cell_subsuelo) != -1:
-				return false
-
-	# Comprobar tilemaps válidos (Suelo/Niveles)
+	# Lista de tilemaps que son terreno NO construible (ej. agua).
+	var tilemaps_invalidos = [mapa.get_node_or_null("Subsuelo")]
+	
+	# Lista de tilemaps que SÍ son construibles.
 	var tilemaps_validos = [
 		mapa.get_node_or_null("Suelo"),
 		mapa.get_node_or_null("Nivel1"),
@@ -401,16 +436,30 @@ func _es_sobre_terreno_valido(pos: Vector2) -> bool:
 		mapa.get_node_or_null("Nivel4"),
 	]
 
-	for p in puntos:
-		var valido = false
-		for tm in tilemaps_validos:
-			if tm == null:
-				continue
-			var cell = tm.local_to_map(tm.to_local(p))
-			if tm.get_cell_source_id(cell) != -1:
-				valido = true
-				break
-		if not valido:
+	# Comprobamos cada esquina del edificio.
+	for punto_esquina in puntos:
+		var esta_en_terreno_valido = false
+
+		# 1. Primero, descartamos que esté en un terreno inválido.
+		for tm_invalido in tilemaps_invalidos:
+			if tm_invalido == null: continue
+			var celda = tm_invalido.local_to_map(tm_invalido.to_local(punto_esquina))
+			# Si la celda no está vacía (-1), es un terreno inválido.
+			if tm_invalido.get_cell_source_id(celda) != -1:
+				return false # Terminamos aquí, no es válido.
+
+		# 2. Luego, verificamos que esté en AL MENOS UN terreno válido.
+		for tm_valido in tilemaps_validos:
+			if tm_valido == null: continue
+			var celda = tm_valido.local_to_map(tm_valido.to_local(punto_esquina))
+			# Si la celda no está vacía (-1), hemos encontrado un terreno válido.
+			if tm_valido.get_cell_source_id(celda) != -1:
+				esta_en_terreno_valido = true
+				break # No hace falta seguir buscando para esta esquina.
+		
+		# Si tras recorrer todos los terrenos válidos, no encontramos ninguno, la posición es inválida.
+		if not esta_en_terreno_valido:
 			return false
 
+	# Si todas las esquinas pasaron las pruebas, el terreno es válido.
 	return true

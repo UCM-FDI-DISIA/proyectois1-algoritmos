@@ -436,6 +436,10 @@ script = ExtResource("1_adv81")
 [node name="ResourcesHUD" parent="." instance=ExtResource("2_5mrjc")]
 
 [node name="menuConstruccion" parent="." instance=ExtResource("2_okx7f")]
+PREVIEW_ALPHA = null
+PREVIEW_BLOCK_COLOR = null
+PREVIEW_OK_COLOR = null
+GRID_SIZE = null
 
 [node name="MenuSoldados" parent="." instance=ExtResource("3_d3u4l")]
 offset = Vector2(0, 120)
