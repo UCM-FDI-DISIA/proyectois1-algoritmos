@@ -11,8 +11,8 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e0jvj"]
 size = Vector2(192, 64)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_0i0py"]
-radius = 58.553394
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0i0py"]
+size = Vector2(133, 111.53833)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xrkcp"]
 atlas = ExtResource("5_dh0kw")
@@ -73,9 +73,9 @@ y_sort_enabled = true
 shape = SubResource("RectangleShape2D_e0jvj")
 
 [node name="CollisionShapeSmall" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, 0.5)
+position = Vector2(-0.5, 1.4901161e-06)
 scale = Vector2(1, 0.52000064)
-shape = SubResource("CircleShape2D_0i0py")
+shape = SubResource("RectangleShape2D_0i0py")
 
 [node name="AnimacionExplosion" type="AnimatedSprite2D" parent="."]
 visible = false

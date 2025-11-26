@@ -4,6 +4,7 @@ extends Control
 @onready var play_pve_button: Button = $PVEButton
 
 const LOBBY_NAME := "Feudalia_MainLobby"
+var num_Lobby := 1
 const PVP_TIMEOUT := 30.0
 
 var game_mode := ""
@@ -69,9 +70,10 @@ func _on_pvp_pressed() -> void:
 	print("Conectado con ID: ", GDSync.get_client_id())
 	GDSync.player_set_username(username)
 	print("Nombre asignado: ", username)
-
-	print("Intentando unirse al lobby: ", LOBBY_NAME)
-	GDSync.lobby_join(LOBBY_NAME, "")
+	
+	var current_lobby = LOBBY_NAME + str(num_Lobby)
+	print("Intentando unirse al lobby: ", current_lobby)
+	GDSync.lobby_join(current_lobby, "")
 
 
 # ============================================================
@@ -86,7 +88,9 @@ func _on_connection_failed(err):
 
 
 func _on_lobby_creation_failed(lobby_name: String, error: int):
-	push_error("Error creando lobby %s: %s" % [lobby_name, str(error)])
+	print("No se pudo crear el lobby:", lobby_name, " error: ", error)
+	num_Lobby += 1
+	GDSync.lobby_join(LOBBY_NAME + str(num_Lobby)) 
 
 
 func _on_lobby_created(lobby_name: String):
@@ -95,7 +99,7 @@ func _on_lobby_created(lobby_name: String):
 
 
 func _on_lobby_join_failed(lobby_name: String, error: int):
-	print("No se pudo unir al lobby, lo creamos:", lobby_name, " error:", error)
+	print("No se pudo unir al lobby, lo creamos:", lobby_name, " error: ", error)
 	GDSync.lobby_create(lobby_name, "", true, 2, {}) # máx 2 jugadores
 
 
