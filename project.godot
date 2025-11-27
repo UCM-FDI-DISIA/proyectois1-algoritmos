@@ -19,7 +19,7 @@ useSenderID=true
 
 config/name="Feudalia"
 run/main_scene="uid://dud42l0lmmsh2"
-config/features=PackedStringArray("4.5", "GL Compatibility")
+config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
 config/icon="res://src/icon.svg"
 
 [autoload]

@@ -312,8 +312,6 @@ func pagar_casa() -> bool:
 	remove_resource("wood", CASA_WOOD_COST)
 	remove_resource("stone", CASA_STONE_COST)
 	remove_resource("gold", CASA_GOLD_COST)
-	
-	add_house()
 
 	return true
 

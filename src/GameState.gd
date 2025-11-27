@@ -27,6 +27,22 @@ func _ready() -> void:
 
 	print("✅ GameState listo y accesible como singleton. Modo:", game_mode)
 
+func reset() -> void:
+	is_pve = false          # true = PVE local, false = PVP online
+	game_mode = "PVP"     # solo por claridad / debug
+	collected_seconds = 0
+	troop_counts = {
+		"Archer": 0,
+		"Lancer": 0,
+		"Monk": 0,
+		"Warrior": 0
+	}
+	GDSync.player_set_data("troops_by_client", {
+			"Archer": 0,
+			"Lancer": 0,
+			"Monk": 0,
+			"Warrior": 0
+		})
 
 func start_timer() -> void:
 	var timer = Timer.new()

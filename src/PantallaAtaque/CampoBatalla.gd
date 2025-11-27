@@ -386,6 +386,13 @@ func _show_result_ui(result_text: String, _enemy_counts: Dictionary) -> void:
 # =====================================================================
 func _on_MainMenuButton_pressed() -> void:
 	if main_scene_path != "":
+		# Reseteo archivos singleton.
+		GameState.reset()
+		MultiplayerManager.reset()
+		# Avandono el lobby en el que estuviera
+		if GDSync.is_active() : GDSync.lobby_leave()
+		
+		# Cambio de escena
 		get_tree().change_scene_to_file(main_scene_path)
 	else:
 		push_error("❌ main_scene_path no está configurado")

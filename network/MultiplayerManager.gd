@@ -15,6 +15,11 @@ func _ready() -> void:
 
 	GDSync.expose_func(_receive_quadrant_assignment)
 
+func reset() -> void:
+	players = []            # IDs conectados
+	quadrants_by_client = {} # client_id -> cuadrante
+	my_quadrant_id = -1
+	game_started = false
 
 # ------------------------------------------------
 # 🔹 Eventos de GD-Sync
