@@ -19,7 +19,7 @@ useSenderID=true
 
 config/name="Feudalia"
 run/main_scene="uid://dud42l0lmmsh2"
-config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
+config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://src/icon.svg"
 
 [autoload]
@@ -27,6 +27,7 @@ config/icon="res://src/icon.svg"
 GameState="*res://src/GameState.gd"
 GDSync="*res://addons/GD-Sync/MultiplayerClient.gd"
 MultiplayerManager="*res://network/MultiplayerManager.gd"
+SceneManager="*res://addons/scene_manager/SceneManager.tscn"
 
 [dotnet]
 
@@ -38,7 +39,7 @@ version_control/autoload_on_startup=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GD-Sync/plugin.cfg")
+enabled=PackedStringArray("res://addons/GD-Sync/plugin.cfg", "res://addons/scene_manager/plugin.cfg")
 
 [global_group]
 

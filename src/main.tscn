@@ -690,8 +690,10 @@ metadata/_edit_group_ = true
 script = ExtResource("22_ib8ht")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+visible = false
 navigation_polygon = SubResource("NavigationPolygon_ocmcv")
 
 [node name="NavigationRegion2D2" type="NavigationRegion2D" parent="."]
+visible = false
 position = Vector2(4, -2)
 navigation_polygon = SubResource("NavigationPolygon_ocmcv")

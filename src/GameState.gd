@@ -96,11 +96,19 @@ func add_troops(type: String, amount: int) -> void:
 func attack_other() -> void:
 	if is_pve:
 		print("Iniciando ataque PVE local → cambio solo mi escena.")
-		get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
+		SceneManager.change_scene("res://src/PantallaAtaque/campoBatalla.tscn", {
+			"pattern": "squares",
+			"speed": 2.0,
+			"wait_time": 0.3
+		})
 	else:
 		print("Iniciando ataque PVP. Notificando a todos los jugadores para cambiar de escena.")
 		GDSync.player_set_data("cambio_campo_batalla", true)
-		get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
+		SceneManager.change_scene("res://src/PantallaAtaque/campoBatalla.tscn", {
+			"pattern": "squares",
+			"speed": 2.0,
+			"wait_time": 0.3
+		})
 
 
 func _on_player_data_changed(client_id: int, key: String, value) -> void:
