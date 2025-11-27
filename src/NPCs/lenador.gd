@@ -54,16 +54,22 @@ func _ready():
 		print("[Lenador] Creado. Estado: IDLE")
 
 # ============================================================
-# 🌳 BÚSQUEDA DE ÁRBOLES
+# 🌲 Obtiene todos los árboles ya instanciados en el mapa
 # ============================================================
-func get_all_tree_positions() -> Array[Vector2]:
-	var positions: Array[Vector2] = []
+func get_all_tree_nodes() -> Array:
+	var result: Array = []
+	
+	# Recorremos todos los hijos del mapa
+	for child in mapa.get_children():
+		# Solo TileMaps que tengan tiles de árbol
+		if child is TileMap:
+			# Iteramos todos los nodos hijos de este TileMap
+			for node in child.get_children():
+				if node.is_in_group("arbol") and node.has_method("gather_resource"):
+					result.append(node)
+					
+	return result
 
-	for tree in get_tree().get_nodes_in_group("arbol"):
-		if is_instance_valid(tree):
-			positions.append(tree.global_position)
-
-	return positions
 
 func _find_nearest_tree():
 	var trees = get_tree().get_nodes_in_group("arbol")
@@ -102,18 +108,16 @@ func _start_navigation():
 		_change_state(State.IDLE)
 		return
 
-	var target_pos = target_tree.global_position + target_offset
+	# Ajuste de posición para evitar colisión
+	var tree_radius := 16.0
+	var target_pos = target_tree.global_position + Vector2(0, -tree_radius - 4)
 	nav_agent.set_target_position(target_pos)
-	nav_agent.target_desired_distance = 30.0  # ¡clave!
-	
-	if collision_shape and collision_shape.shape:
-		if collision_shape.shape is RectangleShape2D:
-			nav_agent.radius = collision_shape.shape.extents.length() * 0.8
-		elif collision_shape.shape is CircleShape2D:
-			nav_agent.radius = collision_shape.shape.radius * 0.8
-
+	nav_agent.radius = 6.0
+	nav_agent.target_desired_distance = 4.0
 	nav_agent.avoidance_enabled = true
+
 	_change_state(State.MOVING_TO_TREE)
+
 
 
 # ============================================================
@@ -126,20 +130,23 @@ func _physics_process(delta: float):
 				_change_state(State.IDLE)
 				return
 
-			# Si el NavigationAgent considera que llegó al objetivo
+			# Si el Lenador llegó al objetivo
 			if nav_agent.is_navigation_finished():
+				var distance_to_tree = global_position.distance_to(target_tree.global_position)
+				if debug:
+					print("[Lenador] Llegó a árbol. Distancia al árbol: ", distance_to_tree)
 				_change_state(State.GATHERING)
 				velocity = Vector2.ZERO
 				return
 
-			# Si el árbol no es reachable, lo ignoramos
+			# Si el objetivo no es reachable
 			if not nav_agent.is_target_reachable():
 				if debug:
 					print("[Lenador] Árbol no reachable → IDLE")
 				_on_tree_depleted()
 				return
 
-			# Movimiento hacia siguiente punto del path
+			# Mover hacia siguiente punto del path
 			var next_point = nav_agent.get_next_path_position()
 			var direction = global_position.direction_to(next_point)
 			var velocity_to_point = direction * speed
@@ -152,6 +159,7 @@ func _physics_process(delta: float):
 		_:
 			velocity = Vector2.ZERO
 			move_and_slide()
+
 
 
 func _on_velocity_computed(safe_velocity: Vector2) -> void:
