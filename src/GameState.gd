@@ -44,6 +44,10 @@ func reset() -> void:
 			"Warrior": 0
 		})
 
+func set_PVE() -> void:
+	game_mode = "PVE"
+	is_pve = true
+
 func start_timer() -> void:
 	var timer = Timer.new()
 	timer.wait_time = 1.0

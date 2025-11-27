@@ -90,8 +90,9 @@ func _on_connection_failed(err):
 
 
 func _on_lobby_creation_failed(lobby_name: String, error: int):
-	print("No se pudo crear el lobby:", lobby_name, " error: ", error)
+	print("No se pudo crear el lobby: ", lobby_name, " error: ", error)
 	num_Lobby += 1
+	print("Intento unirme al lobby ", LOBBY_NAME + str(num_Lobby))
 	GDSync.lobby_join(LOBBY_NAME + str(num_Lobby)) 
 
 
@@ -101,7 +102,7 @@ func _on_lobby_created(lobby_name: String):
 
 
 func _on_lobby_join_failed(lobby_name: String, error: int):
-	print("No se pudo unir al lobby, lo creamos:", lobby_name, " error: ", error)
+	print("No se pudo unir al lobby, lo creamos: ", lobby_name, " error: ", error)
 	GDSync.lobby_create(lobby_name, "", true, 2, {}) # máx 2 jugadores
 
 
@@ -126,6 +127,7 @@ func _on_lobby_joined(lobby_name: String):
 		print("⏳ Timeout sin segundo jugador → entrando en PVE automático")
 		GameState.is_pve = true
 		GameState.game_mode = "PVE"
+		GDSync.lobby_leave() # Dejo vacío el lobby en el que estaba
 		get_tree().change_scene_to_file("res://src/main.tscn")
 		# En caso contrario, el host ya habrá lanzado la partida desde MultiplayerManager
 
@@ -135,10 +137,10 @@ func _on_lobby_joined(lobby_name: String):
 # ============================================================
 func _on_client_joined(client_id: int):
 	players_in_lobby += 1
-	print("Jugador conectado:", client_id, " → total:", players_in_lobby)
+	print("Jugador conectado: ", client_id, " → total: ", players_in_lobby)
 	# El host lanzará la partida cuando haya 2 desde MultiplayerManager._check_start_condition()
 
 
 func _on_client_left(client_id: int):
 	players_in_lobby -= 1
-	print("Jugador salió:", client_id, " → total:", players_in_lobby)
+	print("Jugador salió: ", client_id, " → total: ", players_in_lobby)

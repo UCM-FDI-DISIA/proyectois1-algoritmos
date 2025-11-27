@@ -88,6 +88,7 @@ func _ready() -> void:
 	labels["Monk"] = $Soldados/Monk/MonkLabel
 
 	# ------------------------------------------------------------------
+	await get_tree().process_frame
 	resource_manager = get_node_or_null("/root/Main/ResourceManager")
 	
 	if resource_manager:

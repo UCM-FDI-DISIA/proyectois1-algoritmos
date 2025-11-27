@@ -17,7 +17,8 @@ var es_preview: bool = false
 func _ready() -> void:
 	if es_preview:
 		return
-
+	
+	await get_tree().process_frame
 	var manager := get_node("/root/Main/ResourceManager") as ResourceManager
 	if manager == null:
 		push_error("[CasaAnimada] ResourceManager no encontrado")

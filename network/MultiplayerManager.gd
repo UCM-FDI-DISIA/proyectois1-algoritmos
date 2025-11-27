@@ -45,6 +45,9 @@ func _on_client_joined(client_id: int) -> void:
 
 func _on_client_left(client_id: int) -> void:
 	print("Cliente salió: ", client_id)
+	GameState.set_PVE()
+	GDSync.lobby_leave()
+	print("Mi enemigo abandonó la partida, ahora juego en PVE.")
 	# players.erase(client_id)
 	# quadrants_by_client.erase(client_id)
 
