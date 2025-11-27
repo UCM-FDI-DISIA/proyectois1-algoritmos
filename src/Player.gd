@@ -1,64 +1,55 @@
 extends CharacterBody2D
+class_name Player
 
-# =====================================================================
-# 🔧 VARIABLES EDITABLES
-# =====================================================================
 @export var speed: float = 300.0
 
-# =====================================================================
-# 🎬 NODOS
-# =====================================================================
 @onready var animated_sprite: AnimatedSprite2D = $Animacion
 @onready var attack_area: Area2D = $AttackArea
+@onready var ui: CanvasLayer = get_node("/root/Main/UI")
+@onready var joystick_move: VirtualJoystick = get_node("/root/Main/UI/Virtual Joystick")
+@onready var joystick_attack: VirtualJoystick = get_node("/root/Main/UI/Virtual Joystick2")
 
-# =====================================================================
-# 🎮 ESTADO
-# =====================================================================
 var is_attacking := false
 var last_direction := Vector2.RIGHT
+var is_mobile := false
 
-# =====================================================================
-# 🚀 INICIALIZACIÓN
-# =====================================================================
 func _ready() -> void:
 	add_to_group("jugador")
 	attack_area.monitoring = true
-	animated_sprite.play("Idle") 
-	# Centro de la pantalla como punto de partida
+	animated_sprite.play("Idle")
+
+	is_mobile = OS.get_name() == "Android" or OS.get_name() == "iOS"
+	joystick_move.visible = is_mobile
+	joystick_attack.visible = is_mobile
+
 	position = get_viewport().get_visible_rect().size / 2
 	z_index = int(position.y)
 
-# =====================================================================
-# 🔁 FÍSICA Y ENTRADA
-# =====================================================================
-func _process(delta):
+func _process(_delta):
 	z_index = int(global_position.y)
 
 func _physics_process(_delta: float) -> void:
-	# Actualiza el z_index según posición vertical
 	z_index = int(position.y)
 
-	# Bloqueo mientras ataca
 	if is_attacking:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
-	# Lectura de entrada
 	var input_dir := Vector2.ZERO
-	if Input.is_action_pressed("ui_right"): input_dir.x += 1
-	if Input.is_action_pressed("ui_left"):  input_dir.x -= 1
-	if Input.is_action_pressed("ui_down"):  input_dir.y += 1
-	if Input.is_action_pressed("ui_up"):    input_dir.y -= 1
-	input_dir = input_dir.normalized()
 
-	# Movimiento
+	if is_mobile and joystick_move and joystick_move.is_pressed:
+		input_dir = joystick_move.output
+	else:
+		input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+
+	input_dir = input_dir.normalized()
 	velocity = input_dir * speed
 	move_and_slide()
+
 	if input_dir != Vector2.ZERO:
 		last_direction = input_dir
 
-	# Animaciones
 	if input_dir != Vector2.ZERO:
 		if animated_sprite.animation != "Andar":
 			animated_sprite.play("Andar")
@@ -66,33 +57,29 @@ func _physics_process(_delta: float) -> void:
 	elif animated_sprite.animation != "Idle":
 		animated_sprite.play("Idle")
 
-	# Ataques
-	if Input.is_action_just_pressed("ataque"):  start_attack(1)
-	if Input.is_action_just_pressed("ataque2"): start_attack(2)
+	if Input.is_action_just_pressed("ataque") or (is_mobile and joystick_attack and joystick_attack.is_pressed):
+		start_attack(1)
 
-	z_index = int(global_position.y)
-
-# =====================================================================
-# ⚔️ ATAQUES
-# =====================================================================
 func start_attack(attack_number: int) -> void:
-	if is_attacking: return
+	if is_attacking:
+		return
 	is_attacking = true
-	animated_sprite.play("Ataque%d_%s" % [attack_number, get_direction_suffix(last_direction)])
+	var anim_name = "Ataque%d_%s" % [attack_number, get_direction_suffix(last_direction)]
+	animated_sprite.play(anim_name)
 	animated_sprite.animation_finished.connect(on_animation_finished)
 	check_attack_hits()
 
 func check_attack_hits() -> void:
-	if attack_area == null: return
+	if attack_area == null:
+		return
 	for obj in attack_area.get_overlapping_bodies():
-		if obj is ArbolAnimado:        obj.hit()
-		elif obj is MinaOroAnimado:    obj.hit()
-		elif obj is MinaPiedraAnimado: obj.hit()
-		# Añadir más objetos si se desea
+		if obj is ArbolAnimado:
+			obj.hit()
+		elif obj is MinaOroAnimado:
+			obj.hit()
+		elif obj is MinaPiedraAnimado:
+			obj.hit()
 
-# =====================================================================
-# 🛠️ MÉTODOS AUXILIARES
-# =====================================================================
 func get_direction_suffix(dir: Vector2) -> String:
 	return "W" if dir.y < 0 else "S" if dir.y > 0 else "H"
 
