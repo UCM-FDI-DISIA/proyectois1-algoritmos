@@ -24,3 +24,6 @@ La selección del modo multijugador empareja y entra en partida. No obstante, al
 esperado hubiera sido que al no tener con quien jugar ejecutara el modo automático. Sin embargo, así no ha ocurrido.
 24/11/25
 Aunque el modo multijugador no funcione, se comprueba que el PVE funciona correctamente.
+27/11/25
+Por lo menos en godot entra en modo automático si no encuentra con quien jugar. En online no, porque como comentado el
+multijugador aún da problemas.
