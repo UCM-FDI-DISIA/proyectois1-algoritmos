@@ -1,9 +1,14 @@
 extends CharacterBody2D
 class_name Player
 
+# =====================================================================
+# 🔧 VARIABLES EDITABLES
+# =====================================================================
 @export var speed: float = 300.0
 
-# Nodos
+# =====================================================================
+# 🎬 NODOS
+# =====================================================================
 @onready var animated_sprite: AnimatedSprite2D = $Animacion
 @onready var attack_area: Area2D = $AttackArea
 @onready var foot_player: AudioStreamPlayer = $FootstepsPlayer
@@ -12,30 +17,40 @@ class_name Player
 @onready var joystick_move: VirtualJoystick = ui.get_node("VirtualJoystick1")
 @onready var joystick_attack: VirtualJoystick = ui.get_node("VirtualJoystick2")
 
-# Estado
+# =====================================================================
+# 🎮 ESTADO
+# =====================================================================
 var is_attacking := false
 var last_direction := Vector2.RIGHT
 var is_mobile := false
 var _last_anim := ""
 
+# =====================================================================
+# ⚙️ INICIALIZACIÓN
+# =====================================================================
 func _ready() -> void:
 	add_to_group("jugador")
 	attack_area.monitoring = true
 	animated_sprite.play("Idle")
 
-	# Detecta móvil o web táctil
 	is_mobile = OS.get_name() in ["Android", "iOS"]
 	if not is_mobile:
-		set_process_input(true)  # esperará primer toque en web
+		set_process_input(true)
 	else:
 		_show_sticks(true)
 
 	position = get_viewport().get_visible_rect().size / 2
 	z_index = int(position.y)
 
+# =====================================================================
+# 🔄 CICLO PRINCIPAL (VISUAL)
+# =====================================================================
 func _process(_delta):
 	z_index = int(global_position.y)
 
+# =====================================================================
+# 🏃 MOVIMIENTO Y FÍSICA
+# =====================================================================
 func _physics_process(_delta: float) -> void:
 	z_index = int(position.y)
 
@@ -44,7 +59,6 @@ func _physics_process(_delta: float) -> void:
 		move_and_slide()
 		return
 
-	# Movimiento
 	var input_dir := Vector2.ZERO
 	if is_mobile and joystick_move and joystick_move.is_pressed:
 		input_dir = joystick_move.output
@@ -58,6 +72,9 @@ func _physics_process(_delta: float) -> void:
 	if input_dir != Vector2.ZERO:
 		last_direction = input_dir
 
+# =====================================================================
+# 🎬 ANIMACIONES Y SONIDOS
+# =====================================================================
 	# Animaciones
 	var current_anim := ""
 	if input_dir != Vector2.ZERO:
@@ -81,7 +98,9 @@ func _physics_process(_delta: float) -> void:
 
 	_last_anim = current_anim
 
-	# Ataque
+# =====================================================================
+# ⚔️ ATAQUE
+# =====================================================================
 	if Input.is_action_just_pressed("ataque") or (is_mobile and joystick_attack and joystick_attack.is_pressed):
 		start_attack(1)
 
@@ -92,7 +111,6 @@ func start_attack(attack_number: int) -> void:
 	var anim_name = "Ataque%d_%s" % [attack_number, get_direction_suffix(last_direction)]
 	animated_sprite.play(anim_name)
 	animated_sprite.animation_finished.connect(on_animation_finished)
-	# Sonido ATAQUE (una vez por animación)
 	atk_player.stop()
 	atk_player.play()
 	check_attack_hits()
@@ -117,6 +135,9 @@ func on_animation_finished() -> void:
 		animated_sprite.play("Idle")
 		animated_sprite.animation_finished.disconnect(on_animation_finished)
 
+# =====================================================================
+# 📱 DETECCIÓN TÁCTIL (WEB)
+# =====================================================================
 func _input(event):
 	if not is_mobile and (event is InputEventScreenTouch or event is InputEventScreenDrag):
 		is_mobile = true
