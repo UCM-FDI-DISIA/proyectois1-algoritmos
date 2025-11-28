@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=87 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -22,6 +22,8 @@
 [ext_resource type="Script" uid="uid://benr8y8kcf5p0" path="res://src/mapa.gd" id="11_adv81"]
 [ext_resource type="PackedScene" uid="uid://dct77qix8nhy0" path="res://src/BotonElementos/boton_puentes.tscn" id="12_43aqp"]
 [ext_resource type="Script" uid="uid://cmjday06ax2pk" path="res://src/BotonElementos/botones_puentes.gd" id="12_ocmcv"]
+[ext_resource type="AudioStream" uid="uid://p3sa68cpub5m" path="res://sfx/andar.wav" id="19_tovjm"]
+[ext_resource type="AudioStream" uid="uid://becy70d2mowdm" path="res://sfx/ataque.wav" id="20_hxsd3"]
 [ext_resource type="PackedScene" uid="uid://bg6kvrfqm2lc6" path="res://src/ElementosPantalla/boton_batalla.tscn" id="21_jitvu"]
 [ext_resource type="Script" uid="uid://j5u3eni8i8em" path="res://src/matchmaking_recursos.gd" id="22_ib8ht"]
 [ext_resource type="PackedScene" uid="uid://bbo05kp3bjw4u" path="res://src/BotonElementos/boton_s.tscn" id="22_ocmcv"]
@@ -443,6 +445,7 @@ parsed_collision_mask = 4294967041
 script = ExtResource("1_adv81")
 
 [node name="UI" type="CanvasLayer" parent="."]
+visible = false
 script = ExtResource("2_jitvu")
 
 [node name="Virtual Joystick" parent="UI" instance=ExtResource("3_c2usk")]
@@ -576,6 +579,13 @@ position = Vector2(-514, -281)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Objetos/Player/AttackArea"]
 position = Vector2(0, -20)
 shape = SubResource("CircleShape2D_mgm53")
+
+[node name="FootstepsPlayer" type="AudioStreamPlayer" parent="Objetos/Player"]
+stream = ExtResource("19_tovjm")
+volume_db = -5.0
+
+[node name="AttackPlayer" type="AudioStreamPlayer" parent="Objetos/Player"]
+stream = ExtResource("20_hxsd3")
 
 [node name="Recursos" type="TileMapLayer" parent="Objetos"]
 z_as_relative = false
