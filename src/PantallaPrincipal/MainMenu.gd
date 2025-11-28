@@ -46,8 +46,12 @@ func _on_pve_pressed() -> void:
 
 	print("🎮 Modo PVE seleccionado → partida local.")
 	print("🌍 Cargando mapa principal en modo PVE...")
-	get_tree().change_scene_to_file("res://src/main.tscn")
-
+	
+	SceneManager.change_scene("res://src/main.tscn", {
+			"pattern": "squares",
+			"speed": 2.0,
+			"wait_time": 0.3
+	})
 
 # ============================================================
 # PVP MATCHMAKING
@@ -128,6 +132,11 @@ func _on_lobby_joined(lobby_name: String):
 		GameState.is_pve = true
 		GameState.game_mode = "PVE"
 		GDSync.lobby_leave() # Dejo vacío el lobby en el que estaba
+		SceneManager.change_scene("res://src/main.tscn", {
+			"pattern": "squares",
+			"speed": 2.0,
+			"wait_time": 0.3
+		})
 		get_tree().change_scene_to_file("res://src/main.tscn")
 		# En caso contrario, el host ya habrá lanzado la partida desde MultiplayerManager
 
