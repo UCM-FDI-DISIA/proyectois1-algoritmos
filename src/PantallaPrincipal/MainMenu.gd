@@ -31,7 +31,7 @@ func _ready() -> void:
 
 	# Solo el servidor inicia la lógica de “host”
 	if multiplayer.is_server() && !GDSync.is_active():
-		GDSync._manual_connect("64.225.79.138")
+		GDSync._manual_connect("137.184.191.148")
 		# Workaround obtenido de: https://www.gd-sync.com/docs/general-information
 		# GDSync.start_multiplayer() # Esto no funciona en web.
 

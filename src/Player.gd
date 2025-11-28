@@ -6,6 +6,7 @@ class_name Player
 # =====================================================================
 @export var speed: float = 300.0
 
+
 # =====================================================================
 # 🎬 NODOS
 # =====================================================================
@@ -24,14 +25,17 @@ var is_attacking := false
 var last_direction := Vector2.RIGHT
 var is_mobile := false
 var _last_anim := ""
+var color := "B"
 
 # =====================================================================
 # ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
 	add_to_group("jugador")
+	if (!GameState.is_pve && MultiplayerManager.get_my_quadrant() == 1) :
+		color = "R"
 	attack_area.monitoring = true
-	animated_sprite.play("Idle")
+	animated_sprite.play("Idle" + color)
 
 	is_mobile = OS.get_name() in ["Android", "iOS"]
 	if not is_mobile:
@@ -78,22 +82,22 @@ func _physics_process(_delta: float) -> void:
 	# Animaciones
 	var current_anim := ""
 	if input_dir != Vector2.ZERO:
-		current_anim = "Andar"
+		current_anim = "Andar" + color
 		animated_sprite.flip_h = input_dir.x < 0
 	elif not is_attacking:
-		current_anim = "Idle"
+		current_anim = "Idle" + color
 
 	if current_anim != "" and animated_sprite.animation != current_anim:
 		animated_sprite.play(current_anim)
 
 	# Sonido PASOS (mientras la animación sea "Andar")
-	if current_anim == "Andar":
-		if _last_anim != "Andar":
+	if current_anim == "Andar" + color:
+		if _last_anim != "Andar" + color:
 			foot_player.play()
 		if not foot_player.playing:
 			foot_player.play()
 	else:
-		if _last_anim == "Andar":
+		if _last_anim == "Andar" + color:
 			foot_player.stop()
 
 	_last_anim = current_anim
@@ -108,7 +112,7 @@ func start_attack(attack_number: int) -> void:
 	if is_attacking:
 		return
 	is_attacking = true
-	var anim_name = "Ataque%d_%s" % [attack_number, get_direction_suffix(last_direction)]
+	var anim_name = "Ataque%d_%s%s" % [attack_number, get_direction_suffix(last_direction), color]
 	animated_sprite.play(anim_name)
 	animated_sprite.animation_finished.connect(on_animation_finished)
 	atk_player.stop()
@@ -132,7 +136,7 @@ func get_direction_suffix(dir: Vector2) -> String:
 func on_animation_finished() -> void:
 	if animated_sprite.animation.begins_with("Ataque"):
 		is_attacking = false
-		animated_sprite.play("Idle")
+		animated_sprite.play("Idle" + color)
 		animated_sprite.animation_finished.disconnect(on_animation_finished)
 
 # =====================================================================
