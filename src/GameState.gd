@@ -3,8 +3,8 @@ extends Node
 # ----------------------------------------------------
 #  MODO DE JUEGO
 # ----------------------------------------------------
-var is_pve: bool = false          # true = PVE local, false = PVP online
-var game_mode: String = "PVP"     # solo por claridad / debug
+var is_pve: bool = false       # true = PVE local, false = PVP online
+var game_mode: String = "PVP"      # solo por claridad / debug
 
 # ----------------------------------------------------
 #  TIEMPO Y TROPAS
@@ -18,7 +18,8 @@ var troop_counts : Dictionary = {
 }
 
 signal collected_time_changed(seconds: float)
-
+# Esta señal se emite para que el Countdown.gd (Timeroot) inicie la animación y las etiquetas.
+signal start_battle_countdown(is_attacker: bool) 
 
 func _ready() -> void:
 	# Sigue escuchando cambios de datos de jugadores (solo útil en PVP)
@@ -28,8 +29,8 @@ func _ready() -> void:
 	print("✅ GameState listo y accesible como singleton. Modo:", game_mode)
 
 func reset() -> void:
-	is_pve = false           # true = PVE local, false = PVP online
-	game_mode = "PVP"      # solo por claridad / debug
+	is_pve = false             # true = PVE local, false = PVP online
+	game_mode = "PVP"          # solo por claridad / debug
 	collected_seconds = 0
 	troop_counts = {
 		"Archer": 0,
@@ -64,22 +65,19 @@ func _on_timer_timeout() -> void:
 
 
 # ===========================
-#   TROPAS
+#    TROPAS (Sin cambios)
 # ===========================
 func set_troop_count(type: String, count: int) -> void:
 	if troop_counts.has(type):
 		troop_counts[type] = max(0, count)
-
 
 func get_troop_count(type: String) -> int:
 	if troop_counts.has(type):
 		return troop_counts[type]
 	return 0
 
-
 func get_all_troop_counts() -> Dictionary:
 	return troop_counts.duplicate()
-
 
 func add_troops(type: String, amount: int) -> void:
 	if troop_counts.has(type):
@@ -91,7 +89,7 @@ func add_troops(type: String, amount: int) -> void:
 
 
 # ===========================
-#   ATAQUE
+#    ATAQUE (Lógica de Delay para el ATACANTE)
 # ===========================
 func attack_other() -> void:
 	if is_pve:
@@ -102,8 +100,18 @@ func attack_other() -> void:
 			"wait_time": 0.3
 		})
 	else:
-		print("Iniciando ataque PVP. Notificando a todos los jugadores para cambiar de escena.")
+		print("Atacante: Notificando a todos los jugadores e iniciando 3s de retraso.")
+		
+		# 1. Notificar a la red (esto hace que el DEFENSOR active su lógica de delay)
 		GDSync.player_set_data("cambio_campo_batalla", true)
+		
+		# 2. Notificar al Countdown local (Timeroot) para la UI/Animación (Yo soy el ATACANTE)
+		emit_signal("start_battle_countdown", true) 
+		
+		# 3. Esperar 3 segundos (implementación del delay)
+		await get_tree().create_timer(3.0).timeout
+		
+		# 4. Cambiar de escena tras el delay
 		SceneManager.change_scene("res://src/PantallaAtaque/campoBatalla.tscn", {
 			"pattern": "squares",
 			"speed": 2.0,
@@ -120,5 +128,12 @@ func _on_player_data_changed(client_id: int, key: String, value) -> void:
 		print("Recibido de %d: %s = %s" % [client_id, key, str(value)])
 
 		if key == "cambio_campo_batalla":
-			print("Cambiando a la escena de Batalla: campoBatalla.tscn")
+			# 1. Notificar al Countdown local (Timeroot) para la UI/Animación (Yo soy el DEFENSOR)
+			emit_signal("start_battle_countdown", false) 
+
+			# 2. Esperar 3 segundos (implementación del delay)
+			await get_tree().create_timer(3.0).timeout
+			
+			# 3. Cambiar de escena tras el delay
+			print("Defensor: Cambiando a la escena de Batalla: campoBatalla.tscn")
 			get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")

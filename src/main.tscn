@@ -1128,22 +1128,22 @@ scale = Vector2(1.053398, 1)
 sprite_frames = SubResource("SpriteFrames_16cua")
 animation = &"Contador"
 
-[node name="RibbonMessage" type="Sprite2D" parent="ElementosPantalla/Timer/Panel/TimerRoot/CuentaAtrasCanvasLayer"]
-position = Vector2(612, 338.00003)
+[node name="NotificacionAtaqueCanvasLayer" type="CanvasLayer" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
+
+[node name="RibbonMessage" type="Sprite2D" parent="ElementosPantalla/Timer/Panel/TimerRoot/NotificacionAtaqueCanvasLayer"]
+position = Vector2(608, 230.00003)
 scale = Vector2(1.75, 1.625)
 texture = ExtResource("31_n36qx")
 
-[node name="GraceLabel" type="Label" parent="ElementosPantalla/Timer/Panel/TimerRoot/CuentaAtrasCanvasLayer"]
-offset_left = 517.0
-offset_top = 302.0
-offset_right = 772.0
-offset_bottom = 351.0
+[node name="GraceLabel" type="Label" parent="ElementosPantalla/Timer/Panel/TimerRoot/NotificacionAtaqueCanvasLayer"]
+offset_left = 518.0
+offset_top = 195.0
+offset_right = 773.0
+offset_bottom = 244.0
 scale = Vector2(0.7321333, 0.88)
 size_flags_horizontal = 4
 text = "Te han declarado batalla.
 ¡Termina de construir tu ejército!"
-
-[node name="GraceTimer" type="Timer" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
 
 [node name="Matchmaker" type="Node2D" parent="."]
 script = ExtResource("22_ib8ht")
