@@ -8,8 +8,8 @@ signal tiempo_especifico_alcanzado
 @export var START_TIME := 120.0          # duración total (segundos)
 @export var SIGNAL_AT   := 90.0          # segundo en el que se emite la señal
 @export var FINAL_WARN  := 15.0          # últimos segundos con advertencia roja
-@export var POST_DELAY  := 3.0           # segundos extra antes de cambiar de escena
-@export var GRACE_PERIOD := 10.0         # Periodo de cortesía en segundos
+@export var POST_DELAY  := 3.0           # Tiempo que dura el mensaje ANTES del cambio de escena.
+@export var GRACE_PERIOD := 0.0          # No se usa.
 
 # =====================================================================
 # 🧾 NODOS PRINCIPALES DEL TIMER
@@ -19,18 +19,16 @@ signal tiempo_especifico_alcanzado
 @onready var main_timer: Timer    = $CountdownTimer
 
 # =====================================================================
-# 🚨 NODOS COUNTDOWN Y GRACE PERIOD (RUTAS CORREGIDAS)
+# 🚨 NODOS COUNTDOWN Y GRACE PERIOD (CRÍTICO: REVISAR RUTAS)
 # =====================================================================
-# El script está en TimerRoot. Las rutas deben ser relativas a él.
-
-# Hijos directos de TimerRoot (o CanvasLayer hijo directo)
 @onready var countdown_layer: CanvasLayer = $CuentaAtrasCanvasLayer
-@onready var grace_timer: Timer = $GraceTimer
+@onready var grace_timer: Timer = $GraceTimer 
 
 # Hijos de CuentaAtrasCanvasLayer
 @onready var countdown_sprite: AnimatedSprite2D = $CuentaAtrasCanvasLayer/Countdown
 @onready var ribbon_message: Sprite2D = $CuentaAtrasCanvasLayer/RibbonMessage 
 @onready var grace_label: Label = $CuentaAtrasCanvasLayer/GraceLabel 
+
 
 # =====================================================================
 # 🎮 ESTADO
@@ -39,7 +37,6 @@ var remaining_time: float
 var post_timer: Timer
 var signal_fired := false
 var time_over    := false
-var countdown_started := false
 var battle_declared_to_me := false 
 
 
@@ -47,38 +44,17 @@ var battle_declared_to_me := false
 # ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
+	
 	# --- Inicialización y Ocultamiento de la UI de Aviso ---
-	
-	# 1. Countdown Sprite
 	if is_instance_valid(countdown_sprite):
-		countdown_sprite.play("Contador") 
-		countdown_sprite.stop()
-		countdown_sprite.set_frame(0)
-		countdown_sprite.hide()
+		countdown_sprite.hide() # Ocultamos la animación de 3, 2, 1.
 	
-	# 2. Ribbon (Cinta)
 	if is_instance_valid(ribbon_message):
-		ribbon_message.hide() # Ocultar la cinta
-	else:
-		push_error("Error: Nodo RibbonMessage no encontrado. Revisar ruta en @onready.")
+		ribbon_message.hide()
 	
-	# 3. Grace Label (Texto)
 	if is_instance_valid(grace_label):
-		grace_label.hide() # Ocultar el texto
-	else:
-		push_error("Error: Nodo GraceLabel no encontrado. Revisar ruta en @onready.")
+		grace_label.hide()
 	
-	# --- Conexiones de Timers ---
-	if is_instance_valid(grace_timer):
-		grace_timer.timeout.connect(_on_grace_timer_timeout)
-	else:
-		push_error("Error: Nodo GraceTimer no encontrado.")
-		# Se añade dinámicamente si no existe para asegurar la funcionalidad del timer
-		grace_timer = Timer.new()
-		grace_timer.one_shot = true
-		grace_timer.timeout.connect(_on_grace_timer_timeout)
-		add_child(grace_timer)
-
 	# --- Conexión al GameState (el singleton) ---
 	if Engine.has_singleton("GameState") and GameState.has_signal("battle_declared_against_player"):
 		GameState.battle_declared_against_player.connect(_on_battle_declared_against_player)
@@ -90,7 +66,7 @@ func _ready() -> void:
 	main_timer.start()
 	_update_label()
 
-	# Timer post-finalización
+	# Timer post-finalización (espera los 3 segundos)
 	post_timer = Timer.new()
 	post_timer.one_shot = true
 	post_timer.timeout.connect(_on_post_timer_timeout)
@@ -98,46 +74,23 @@ func _ready() -> void:
 
 
 # =====================================================================
-# 🆕 FUNCIÓN DE RECEPCIÓN DE BATALLA (Punto de entrada)
+# 🆕 FUNCIÓN DE RECEPCIÓN DE BATALLA (Punto de entrada: DEFENSOR)
 # =====================================================================
 func _on_battle_declared_against_player():
 	if battle_declared_to_me: return 
 	
 	battle_declared_to_me = true
-	main_timer.stop() 
+	main_timer.stop() # Congela el reloj de tiempo recolectado
 	
-	print("🚨 Batalla declarada: Iniciando periodo de cortesía de %d segundos." % GRACE_PERIOD)
+	print("🚨 DEFENSOR: ¡Batalla declarada! Mostrando aviso por %d segundos." % POST_DELAY)
 	
-	# 1. Mostrar mensaje de cortesía (Ribbon y Label)
-	if is_instance_valid(ribbon_message):
+	# 1. Mostrar mensaje de aviso (Ribbon y Label)
+	if is_instance_valid(ribbon_message) and is_instance_valid(grace_label):
+		grace_label.text = "¡ALERTA! ¡ESTÁS SIENDO ATACADO!"
 		ribbon_message.show()
-	
-	if is_instance_valid(grace_label):
-		grace_label.text = "¡BATALLA DECLARADA!\nTermina de construir tu ejercito."
 		grace_label.show()
-		
-	# 2. Iniciar el timer de cortesía
-	if is_instance_valid(grace_timer):
-		grace_timer.start(GRACE_PERIOD)
-	else:
-		# En caso de que el timer falle, saltamos al countdown
-		push_error("GraceTimer no es válido, saltando a countdown final.")
-		_start_final_countdown()
-
-
-# =====================================================================
-# ⏰ FIN DEL PERIODO DE CORTESÍA (10s)
-# =====================================================================
-func _on_grace_timer_timeout():
-	# 1. Ocultar la UI de cortesía
-	if is_instance_valid(ribbon_message):
-		ribbon_message.hide()
-	if is_instance_valid(grace_label):
-		grace_label.hide()
-		
-	print("⏳ Periodo de cortesía terminado. Iniciando countdown final...")
 	
-	# 2. Iniciar el Countdown de 3, 2, 1
+	# 2. Iniciar la espera de 3 segundos
 	_start_final_countdown()
 
 
@@ -153,55 +106,57 @@ func _on_timer_timeout() -> void:
 		main_timer.stop()
 		time_over = true
 		
-		# Cuando el tiempo general termina (no por declaración), iniciamos el countdown
+		# Si el tiempo se acaba, también vamos a la batalla (3 segundos de aviso visual)
 		_start_final_countdown()
 
 	_update_label()
 
-	# Señal configurable
 	if not signal_fired and remaining_time <= SIGNAL_AT:
-		print("TimerRoot: llegamos a %d s — emitiendo señal" % SIGNAL_AT)
 		tiempo_especifico_alcanzado.emit()
 		signal_fired = true
 
+
 # =====================================================================
-# ⚔️ COUNTDOWN Y SALTO DE ESCENA (UNIFICADO)
+# ⚔️ AVISO DE 3s Y SALTO DE ESCENA (UNIFICADO)
 # =====================================================================
 func _start_final_countdown():
-	# 1. Iniciar el countdown animado (3, 2, 1)
-	if POST_DELAY >= 3.0 and is_instance_valid(countdown_sprite): 
-		_start_countdown_animation()
-	
-	# 2. Iniciar el timer que realmente espera los 3 segundos y cambia de escena
+	# Ocultar la UI de aviso si no está siendo usada por la declaración de batalla
+	if not battle_declared_to_me: 
+		if is_instance_valid(ribbon_message):
+			ribbon_message.hide()
+		if is_instance_valid(grace_label):
+			grace_label.hide()
+		
+	# Aseguramos que el sprite de countdown no se vea
+	if is_instance_valid(countdown_sprite): 
+		countdown_sprite.hide()
+		
+	# Iniciar el timer que realmente espera los 3 segundos y cambia de escena
 	post_timer.start(POST_DELAY)
-	print("Esperando %d s antes de la batalla..." % POST_DELAY)
+	print("Esperando %d s antes de la batalla (POST_DELAY)..." % POST_DELAY)
 
-
-func _start_countdown_animation() -> void:
-	if countdown_started: return 
-	
-	countdown_started = true
-	
-	# Asegurar posición central (fija en la pantalla)
-	countdown_sprite.global_position = get_viewport().size / 2
-	
-	# Configurar y mostrar el sprite
-	countdown_sprite.set_frame(0) 
-	countdown_sprite.show()
-	
-	# Reproducir la animación (Asumimos que "Contador" es 1 FPS y no hace loop)
-	countdown_sprite.play("Contador") 
 
 # =====================================================================
-# 🚪 CAMBIO DE ESCENA
+# 🚪 CAMBIO DE ESCENA (FIN DEL JUEGO PARA EL DEFENSOR)
 # =====================================================================
 func _on_post_timer_timeout() -> void:
-	# Ocultamos el countdown antes de cambiar de escena
+	# Ocultamos todos los elementos de aviso antes de saltar
 	if is_instance_valid(countdown_sprite):
 		countdown_sprite.hide()
+	if is_instance_valid(ribbon_message):
+		ribbon_message.hide()
+	if is_instance_valid(grace_label):
+		grace_label.hide()
 	
 	print("⚔️ Iniciando batalla automáticamente...")
-	get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
+	
+	# 🚨 CORRECCIÓN: Usamos el gestor de escenas personalizado (SceneManager) si está disponible, 
+	# ya que es la forma recomendada cuando tienes transiciones.
+	if Engine.has_singleton("SceneManager"):
+		SceneManager.change_scene("res://src/PantallaAtaque/campoBatalla.tscn")
+	else:
+		# Fallback al método nativo
+		get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
 
 # =====================================================================
 # 🖥️ ACTUALIZACIÓN UI Y MULTIJUGADOR
@@ -216,7 +171,7 @@ func _update_label() -> void:
 		if remaining_time <= FINAL_WARN:
 			timer_label.modulate    = Color.RED
 			warning_label.modulate = Color.RED
-			warning_label.text      = "¡Llega la última batalla!"
+			warning_label.text     = "¡Llega la última batalla!"
 			warning_label.visible  = true
 			if (remaining_time == FINAL_WARN):
 				GDSync.player_set_data("set_to_FINAL_WARN", true)
@@ -225,18 +180,13 @@ func _update_label() -> void:
 			warning_label.visible  = false
 		else:
 			timer_label.modulate    = Color.WHITE
-			warning_label.text      = "No puedes atacar."
+			warning_label.text     = "No puedes atacar."
 			warning_label.visible  = true
 	else:
 		# Cuando la batalla ha sido declarada, ocultamos la advertencia normal
 		warning_label.visible = false 
 
-func _on_player_data_changed(client_id : int, key : String, value):
+func _on_player_data_changed(client_id : int, key : String, _value):
 	if client_id != GDSync.get_client_id() : 
-		print("Recibido de %d: %s = %s" % [client_id, key, str(value)])
-		print("Sincronizando timers.")
 		if key == "set_to_FINAL_WARN" :
 			remaining_time = min(remaining_time, FINAL_WARN)
-			
-		# Nota: La recepción real de la señal de ataque se maneja en GameState.gd
-		# y luego se propaga a este script a través de GameState.battle_declared_against_player.
