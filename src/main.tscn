@@ -1,4 +1,4 @@
-[gd_scene load_steps=141 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=142 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -31,6 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://knoivg0aqqle" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="24_ocmcv"]
 [ext_resource type="Script" uid="uid://dx4mnernx43c7" path="res://src/TimerRoot.gd" id="27_c2usk"]
 [ext_resource type="Texture2D" uid="uid://bmimr31whsu5c" path="res://src/AssetsUsados/800_3546623_h3ehrju2thrrg6u3yreli37vwe91wisv3takmp0w-removebg-preview.png" id="30_tovjm"]
+[ext_resource type="Texture2D" uid="uid://deycw5jvdykb1" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Red_3Slides.png" id="31_n36qx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1bvp3"]
 atlas = ExtResource("3_lquwl")
@@ -1126,6 +1127,23 @@ position = Vector2(612, 339)
 scale = Vector2(1.053398, 1)
 sprite_frames = SubResource("SpriteFrames_16cua")
 animation = &"Contador"
+
+[node name="RibbonMessage" type="Sprite2D" parent="ElementosPantalla/Timer/Panel/TimerRoot/CuentaAtrasCanvasLayer"]
+position = Vector2(612, 338.00003)
+scale = Vector2(1.75, 1.625)
+texture = ExtResource("31_n36qx")
+
+[node name="GraceLabel" type="Label" parent="ElementosPantalla/Timer/Panel/TimerRoot/CuentaAtrasCanvasLayer"]
+offset_left = 517.0
+offset_top = 302.0
+offset_right = 772.0
+offset_bottom = 351.0
+scale = Vector2(0.7321333, 0.88)
+size_flags_horizontal = 4
+text = "Te han declarado batalla.
+¡Termina de construir tu ejército!"
+
+[node name="GraceTimer" type="Timer" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
 
 [node name="Matchmaker" type="Node2D" parent="."]
 script = ExtResource("22_ib8ht")
