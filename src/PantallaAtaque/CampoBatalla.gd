@@ -56,7 +56,7 @@ func _ready() -> void:
 			"Monk": 0,
 			"Warrior": 0
 		})
-		print("Enemigo PVP:", enemy_troops_dict)
+		print("Enemigo PVP: ", enemy_troops_dict)
 
 	# --- Spawn enemigo ---
 	_spawn_enemy_troops(enemy_troops_dict)
@@ -74,13 +74,28 @@ func _ready() -> void:
 # =====================================================================
 func _spawn_player_troops() -> void:
 	var troop_counts: Dictionary = game_state.get_all_troop_counts()
-	var troop_scenes := {
-		"Archer": preload("res://src/NPCs/Archer.tscn"),
-		"Lancer": preload("res://src/NPCs/Lancer.tscn"),
-		"Monk": preload("res://src/NPCs/Monk.tscn"),
-		"Warrior": preload("res://src/NPCs/Warrior.tscn")
-	}
-
+	var troop_scenes
+	
+	# Elijo el color. Sin numero es azul, con 1 es rojo.
+	print("Mi cuadrante es ", MultiplayerManager.get_my_quadrant(), " así que sol azul/rojo")
+	if (MultiplayerManager.get_my_quadrant() == 1) :
+		print("Mis tropas son rojas")
+		troop_scenes = {
+			"Archer": preload("res://src/NPCs/Archer_red.tscn"),
+			"Lancer": preload("res://src/NPCs/Lancer_red.tscn"),
+			"Monk": preload("res://src/NPCs/Monk_red.tscn"),
+			"Warrior": preload("res://src/NPCs/Warrior_red.tscn")
+		}
+	else :
+		print("Mis tropas son azules")
+		troop_scenes = {
+			"Archer": preload("res://src/NPCs/Archer.tscn"),
+			"Lancer": preload("res://src/NPCs/Lancer.tscn"),
+			"Monk": preload("res://src/NPCs/Monk.tscn"),
+			"Warrior": preload("res://src/NPCs/Warrior.tscn")
+		}
+	
+	
 	print("Soy el jugador: ", GDSync.get_client_id(), " y voy a actualizar mis tropas.")
 
 	var battlefield_size := battlefield_tiles * tile_size
@@ -116,12 +131,25 @@ func _spawn_player_troops() -> void:
 # 🪖 SPAWN ENEMIGO (PVP o PVE)
 # =====================================================================
 func _spawn_enemy_troops(enemy_data: Dictionary) -> void:
-	var troop_scenes := {
-		"Archer": preload("res://src/NPCs/Archer.tscn"),
-		"Lancer": preload("res://src/NPCs/Lancer.tscn"),
-		"Monk": preload("res://src/NPCs/Monk.tscn"),
-		"Warrior": preload("res://src/NPCs/Warrior.tscn")
-	}
+	var troop_scenes
+	
+	# Elijo el color. Sin numero es azul, con 1 es rojo.
+	if (MultiplayerManager.get_my_quadrant() != 1) :
+		print("Mi enemigo es rojo")
+		troop_scenes = {
+			"Archer": preload("res://src/NPCs/Archer_red.tscn"),
+			"Lancer": preload("res://src/NPCs/Lancer_red.tscn"),
+			"Monk": preload("res://src/NPCs/Monk_red.tscn"),
+			"Warrior": preload("res://src/NPCs/Warrior_red.tscn")
+		}
+	else :
+		print("Mi enemido es azul")
+		troop_scenes = {
+			"Archer": preload("res://src/NPCs/Archer.tscn"),
+			"Lancer": preload("res://src/NPCs/Lancer.tscn"),
+			"Monk": preload("res://src/NPCs/Monk.tscn"),
+			"Warrior": preload("res://src/NPCs/Warrior.tscn")
+		}
 
 	enemy_counts = enemy_data
 	var index := 0
