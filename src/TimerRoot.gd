@@ -5,17 +5,17 @@ signal tiempo_especifico_alcanzado
 # =====================================================================
 # 🔧 VARIABLES EDITABLES
 # =====================================================================
-@export var START_TIME := 120.0        # duración total (segundos)
-@export var SIGNAL_AT  := 90.0        # segundo en el que se emite la señal
-@export var FINAL_WARN := 15.0        # últimos segundos con advertencia roja
-@export var POST_DELAY := 3.0          # Tiempo que dura la animación (3s)
+@export var START_TIME := 120.0		 # duración total (segundos)
+@export var SIGNAL_AT	:= 90.0		 # segundo en el que se emite la señal
+@export var FINAL_WARN := 15.0		 # últimos segundos con advertencia roja
+@export var POST_DELAY := 3.0		 # Tiempo que dura la animación (3s)
 
 # =====================================================================
 # 🧾 NODOS PRINCIPALES DEL TIMER
 # =====================================================================
-@onready var timer_label: Label     = $TimerLabel
+@onready var timer_label: Label	 = $TimerLabel
 @onready var warning_label: Label = $WarningLabel
-@onready var main_timer: Timer      = $CountdownTimer
+@onready var main_timer: Timer	 = $CountdownTimer
 
 # =====================================================================
 # 🚨 NODOS COUNTDOWN Y GRACE PERIOD
@@ -32,8 +32,9 @@ signal tiempo_especifico_alcanzado
 # =====================================================================
 var remaining_time: float
 var signal_fired := false
-var time_over    := false
+var time_over	 := false
 var battle_declared_to_me := false # True si el ataque es contra mí o yo he atacado
+var game_state_ref: Node = null # Referencia al Autoload GameState
 
 
 # =====================================================================
@@ -59,10 +60,12 @@ func _ready() -> void:
 		notification_layer.hide()
 	
 	# --- Conexión al GameState (el singleton) ---
-	# CORRECCIÓN: Accedemos directamente al nodo Autoload a través de la raíz del árbol.
+	# CORRECCIÓN: Accedemos directamente al nodo Autoload a través de la raíz del árbol
+	# y almacenamos la referencia para el caso PVE.
 	var gs_node = get_tree().root.get_node_or_null("GameState")
 	
 	if gs_node != null:
+		game_state_ref = gs_node # <--- MODIFICADO: Almacenar la referencia
 		print("DEBUG: 2. Singleton GameState encontrado (vía get_node).") # DEBUG
 		
 		# Usamos la referencia del nodo para la conexión.
@@ -72,13 +75,8 @@ func _ready() -> void:
 		else:
 			print("ERROR: La señal 'start_battle_countdown' NO existe en GameState (verificar la definición en GameState.gd).") # DEBUG
 	else:
-		# Mantenemos el mensaje de error para que verifique el Autoload
-		print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 		print("ERROR CRÍTICO: El nodo 'GameState' NO se ha encontrado en la raíz del árbol.")
-		print("ACCIÓN REQUERIDA: Vuelve a verificar la configuración de 'Autoload' para:")
-		print("1. RUTA: Que apunte a 'GameState.gd'.")
-		print("2. NOMBRE: Que el nombre sea exactamente 'GameState' (distingue mayúsculas).")
-		print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	
 		
 	
 	GDSync.player_data_changed.connect(_on_player_data_changed)
@@ -95,9 +93,9 @@ func _ready() -> void:
 # =====================================================================
 func _on_battle_countdown_started(is_attacker: bool):
 	print("DEBUG: 4. Función _on_battle_countdown_started llamada. (¡Se recibió la señal!)") # DEBUG
-	if battle_declared_to_me: 
+	if battle_declared_to_me:	
 		print("DEBUG: Batalla ya declarada, ignorando llamada repetida.") # DEBUG
-		return  
+		return	
 	
 	battle_declared_to_me = true
 	main_timer.stop() # Congela el reloj
@@ -120,22 +118,28 @@ func _on_battle_countdown_started(is_attacker: bool):
 	
 	# 2. Iniciar la animación de la cuenta atrás
 	_start_final_countdown()
+	
+	# 3. NOTA: El cambio de escena debe ocurrir después del POST_DELAY (3.0s),
+	# lo cual debe estar gestionado por el GameState o el nodo que emitió la señal.
 
 
 # =====================================================================
 # 🔁 BUCLE PRINCIPAL (Solo para el contador principal)
 # =====================================================================
 func _on_timer_timeout() -> void:
-	if time_over or battle_declared_to_me: return  
+	if time_over or battle_declared_to_me: return	
 
 	remaining_time -= 1.0
 	if remaining_time <= 0:
 		remaining_time = 0
 		main_timer.stop()
 		time_over = true
+		if is_instance_valid(game_state_ref) and GameState.is_pve and not battle_declared_to_me:
+			print("🚨 PVE: Tiempo agotado. Forzando inicio de batalla final (vía señal).")
+			game_state_ref.start_battle_countdown.emit(true)
+			await get_tree().create_timer(3.0).timeout
+			get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
 		
-		# NOTA: En este caso, si el tiempo se acaba, el GameState debería forzar
-		# la señal de cambio y el delay, si es que el tiempo agotado fuerza la batalla.
 		
 	_update_label()
 
@@ -153,14 +157,14 @@ func _start_final_countdown():
 	if is_instance_valid(countdown_layer):
 		countdown_layer.show()
 		
-	# Asegurar que los elementos de aviso sean visibles 
+	# Asegurar que los elementos de aviso sean visibles	
 	if is_instance_valid(ribbon_message):
 		ribbon_message.show()
 	if is_instance_valid(grace_label):
 		grace_label.show()
 	
 	# Mostrar y reproducir el sprite de la cuenta atrás
-	if is_instance_valid(countdown_sprite): 
+	if is_instance_valid(countdown_sprite):	
 		countdown_sprite.show()
 		countdown_sprite.play("Contador") # Inicia la animación 3, 2, 1
 		print("DEBUG: 6. Sprite de cuenta atrás mostrado y 'Contador' animado iniciado.") # DEBUG
@@ -182,24 +186,24 @@ func _update_label() -> void:
 	# Colores y advertencias
 	if not battle_declared_to_me: # Solo actualizamos si la batalla NO ha sido declarada
 		if remaining_time <= FINAL_WARN:
-			timer_label.modulate    = Color.RED
+			timer_label.modulate	= Color.RED
 			warning_label.modulate = Color.RED
-			warning_label.text     = "¡Llega la última batalla!"
-			warning_label.visible  = true
+			warning_label.text	 = "¡Llega la última batalla!"
+			warning_label.visible	 = true
 			if (remaining_time == FINAL_WARN):
 				GDSync.player_set_data("set_to_FINAL_WARN", true)
 		elif remaining_time <= SIGNAL_AT:
-			timer_label.modulate    = Color.GREEN
-			warning_label.visible  = false
+			timer_label.modulate	= Color.GREEN
+			warning_label.visible	 = false
 		else:
-			timer_label.modulate    = Color.WHITE
-			warning_label.text     = "No puedes atacar."
-			warning_label.visible  = true
+			timer_label.modulate	= Color.WHITE
+			warning_label.text	 = "No puedes atacar."
+			warning_label.visible	 = true
 	else:
 		# Cuando la batalla ha sido declarada, ocultamos la advertencia normal
-		warning_label.visible = false 
+		warning_label.visible = false	
 
 func _on_player_data_changed(client_id : int, key : String, value):
-	if client_id != GDSync.get_client_id() : 
+	if client_id != GDSync.get_client_id() :	
 		if key == "set_to_FINAL_WARN" :
 			remaining_time = min(remaining_time, FINAL_WARN)
