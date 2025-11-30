@@ -50,6 +50,9 @@ Visita nuestra [Wiki](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wi
 ### Estado del proyecto:
 - Sprint 1: Definición del alcance, mecánicas y organización inicial.
 - Sprint 2: Prototipo ejecutable básico.
+- Sprint 3: Mecánicas de recolección de recursos, construcción de casas y reclutamiento de soldados.
+- Sprint 4: Multijugador, ataque y refinamiento de la construcción de casas.
+- Sprint 5: Refinamiento de multijugador, NPCs (recolectores automáticos) y bot para 1 jugador.
   
 ### Proyecto
 
@@ -59,7 +62,12 @@ Feudalia se plantea como un videojuego de desarrollo independiente con todo su c
 **Visualización**
 
 Capturas:
-<img width="1149" height="646" alt="Captura de pantalla 2025-10-11 121954" src="https://github.com/user-attachments/assets/e7ae3ea2-d047-4f52-a60c-65d4131aca61" />
+<img width="1141" height="645" alt="Captura de Pantalla 2025-11-30 a las 14 28 13" src="https://github.com/user-attachments/assets/69da9bf0-dab5-4557-b28c-9bdac0e0235e" />
+<img width="1141" height="645" alt="Captura de Pantalla 2025-11-30 a las 14 28 42" src="https://github.com/user-attachments/assets/f4e7161e-3e87-4e89-8809-32b7e2dd1908" />
+<img width="1141" height="645" alt="Captura de Pantalla 2025-11-30 a las 14 29 01" src="https://github.com/user-attachments/assets/91b251fd-a158-4086-88d3-7145685cc738" />
+<img width="1097" height="645" alt="Captura de Pantalla 2025-11-30 a las 14 29 26" src="https://github.com/user-attachments/assets/466101a6-c9ad-4585-85e1-f868134b1234" />
+
+
 
 ### Arquitectura
 **Herramientas**
@@ -68,6 +76,7 @@ Capturas:
 - Repositorio: GitHub
 
 **Assets**
+
 
 Recursos prediseñados para la inspiración del Diseño Gráfico de Feudalia. Las siguientes son todas [librerías de assets de uso libre](https://itch.io/game-assets/free/tag-pixel-art) seleccionadas dentro del enlace:
 - [Tiny Swords](https://pixelfrog-assets.itch.io/tiny-swords) - Pack general de edificios y personajes + UI + terreno
@@ -109,13 +118,18 @@ Las siguientes son [librerías de uso libre](https://opengameart.org/) de varias
 **Visual**
 - Paleta de colores
   
-	- Menú de inicio: 
-		
-  <img width="200" height="400" alt="Captura de pantalla 2025-10-11 121954-colorpalette" src="https://github.com/user-attachments/assets/1ce4bd8f-fc18-4968-92fe-4252d2bb348c" />
+	- Menú de inicio:
+ 
+   <img width="300"  alt="Captura de Pantalla 2025-11-30 a las 14 28 13-colorpalette" src="https://github.com/user-attachments/assets/0ff50bc8-b1f7-4472-8e0f-ba202b8e21e6" />
+ 
 
    - Pantalla principal:
-  
-  <img width="200" height="400" alt="Captura de pantalla 2025-10-11 122014-colorpalette" src="https://github.com/user-attachments/assets/bdef18e7-ea73-4bd3-8549-1e24ec256408" />
+     
+	<img width="300" alt="Captura de Pantalla 2025-11-30 a las 14 29 01-colorpalette" src="https://github.com/user-attachments/assets/59fa2a58-4ba5-409a-ab2d-67e824543fd8" />
+
+	- Campo de batalla:
+	<img width="300" alt="Captura de Pantalla 2025-11-30 a las 14 29 26-colorpalette" src="https://github.com/user-attachments/assets/511b63de-b7dc-451c-8962-7150860a42b6" />
+
 
 - Referencias
 <img width="643" height="673" alt="refes" src="https://github.com/user-attachments/assets/8ad00280-b59f-4aec-a862-502e4459fb39" />
@@ -147,6 +161,15 @@ Las siguientes son [librerías de uso libre](https://opengameart.org/) de varias
 - Claudia Villodre Pérez.
 
 ## FAQ
+1. ¿Cómo comienzo a recolectar recursos?
+
+- Al inicio del juego, recibirás un mapa con zonas de recolección básicas.
+- Haz clic en las áreas marcadas para recolectar materiales como madera, piedra y hierbas.
+- Cada recurso tiene un tiempo de recarga, así que revisa regularmente los puntos de recolección.
+
+
+2. ¿Puedo jugar con amigos?
+Sí, puedes competir en arenas PvP para ver quién tiene la mejor estrategia.
 
 
 ## Trabajos previos a la creación del repositorio:
