@@ -47,29 +47,22 @@ func _ready():
 
 	if is_instance_valid(nav_agent):
 		nav_agent.avoidance_enabled = true
-		# Conexión correcta del signal
 		nav_agent.velocity_computed.connect(self._on_velocity_computed)
 
 	if debug:
 		print("[Lenador] Creado. Estado: IDLE")
 
 # ============================================================
-# 🌲 Obtiene todos los árboles ya instanciados en el mapa
+# 🌲 Obtener todos los árboles del mapa
 # ============================================================
 func get_all_tree_nodes() -> Array:
 	var result: Array = []
-	
-	# Recorremos todos los hijos del mapa
 	for child in mapa.get_children():
-		# Solo TileMaps que tengan tiles de árbol
 		if child is TileMap:
-			# Iteramos todos los nodos hijos de este TileMap
 			for node in child.get_children():
 				if node.is_in_group("arbol") and node.has_method("gather_resource"):
 					result.append(node)
-					
 	return result
-
 
 func _find_nearest_tree():
 	var trees = get_tree().get_nodes_in_group("arbol")
@@ -101,27 +94,23 @@ func _find_nearest_tree():
 		_change_state(State.IDLE)
 
 # ============================================================
-# 🚶 NAVEGACIÓN MEJORADA
+# 🚶 Navegación mejorada
 # ============================================================
 func _start_navigation():
 	if not is_instance_valid(target_tree) or not is_instance_valid(nav_agent):
 		_change_state(State.IDLE)
 		return
 
-	# Ajuste de posición para evitar colisión
 	var tree_radius := 16.0
 	var target_pos = target_tree.global_position + Vector2(0, -tree_radius - 4)
 	nav_agent.set_target_position(target_pos)
 	nav_agent.radius = 6.0
 	nav_agent.target_desired_distance = 4.0
-	nav_agent.avoidance_enabled = true
 
 	_change_state(State.MOVING_TO_TREE)
 
-
-
 # ============================================================
-# ⏳ PHYSICS_PROCESS MEJORADO
+# ⏳ Physics process con avoidance dinámico
 # ============================================================
 func _physics_process(delta: float):
 	match current_state:
@@ -130,28 +119,22 @@ func _physics_process(delta: float):
 				_change_state(State.IDLE)
 				return
 
-			# Si el Lenador llegó al objetivo
 			if nav_agent.is_navigation_finished():
-				var distance_to_tree = global_position.distance_to(target_tree.global_position)
-				if debug:
-					print("[Lenador] Llegó a árbol. Distancia al árbol: ", distance_to_tree)
 				_change_state(State.GATHERING)
 				velocity = Vector2.ZERO
 				return
 
-			# Si el objetivo no es reachable
 			if not nav_agent.is_target_reachable():
-				if debug:
-					print("[Lenador] Árbol no reachable → IDLE")
 				_on_tree_depleted()
 				return
 
 			# Mover hacia siguiente punto del path
 			var next_point = nav_agent.get_next_path_position()
 			var direction = global_position.direction_to(next_point)
-			var velocity_to_point = direction * speed
-			_animate_movement(direction)
-			nav_agent.set_velocity(velocity_to_point)
+			var desired_velocity = direction * speed
+			desired_velocity = _avoid_dynamic_collisions(desired_velocity, delta)
+			_animate_movement(desired_velocity.normalized())
+			nav_agent.set_velocity(desired_velocity)
 
 		State.GATHERING:
 			_gather(delta)
@@ -160,14 +143,12 @@ func _physics_process(delta: float):
 			velocity = Vector2.ZERO
 			move_and_slide()
 
-
-
 func _on_velocity_computed(safe_velocity: Vector2) -> void:
 	velocity = safe_velocity
 	move_and_slide()
 
 # ============================================================
-# ⛏️ RECOLECCIÓN DE RECURSOS
+# ⛏️ Recolección de recursos
 # ============================================================
 func _gather(delta: float):
 	if not is_instance_valid(target_tree):
@@ -194,7 +175,7 @@ func _on_tree_depleted():
 	_change_state(State.IDLE)
 
 # ============================================================
-# 🔄 ESTADOS Y ANIMACIONES
+# 🔄 Estados y animaciones
 # ============================================================
 func _change_state(new_state: State):
 	if current_state == new_state:
@@ -236,3 +217,23 @@ func _process(delta: float):
 
 	search_cooldown = 0.3
 	z_index = int(global_position.y)
+
+# ============================================================
+# 🛡️ Evitar colisiones dinámicas con raycast
+# ============================================================
+func _avoid_dynamic_collisions(desired_velocity: Vector2, delta: float) -> Vector2:
+	var space_state = get_world_2d().direct_space_state
+	var cast_from = global_position
+	var cast_to = global_position + desired_velocity * delta
+
+	var query = PhysicsRayQueryParameters2D.new()
+	query.from = cast_from
+	query.to = cast_to
+	query.exclude = [self]
+	query.collision_mask = collision_mask
+
+	var result = space_state.intersect_ray(query)
+	if result:
+		var normal = result.normal
+		return desired_velocity.slide(normal)
+	return desired_velocity
