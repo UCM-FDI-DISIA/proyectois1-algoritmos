@@ -1,7 +1,7 @@
 extends CanvasLayer
 
-@onready var joystick_move : VirtualJoystick = get_node("Virtual Joystick1")
-@onready var joystick_attack : VirtualJoystick = get_node("Virtual Joystick2")
+@onready var joystick_move : VirtualJoystick = get_node("VirtualJoystick1")
+@onready var joystick_attack : VirtualJoystick = get_node("VirtualJoystick2")
 
 var is_mobile := false
 
