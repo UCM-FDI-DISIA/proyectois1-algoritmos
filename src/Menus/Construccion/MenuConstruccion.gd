@@ -409,6 +409,9 @@ func _esta_libre_de_colisiones(pos: Vector2) -> bool:
 
 	# Obtenemos la lista de cuerpos con los que colisiona.
 	# Si la lista no está vacía, significa que hay un obstáculo.
+	if area_preview == null:
+		push_error("❌ area_preview es NULL en MenuConstruccion.gd")
+		return false
 	var cuerpos_solapados = area_preview.get_overlapping_bodies()
 	
 	# Devolvemos 'true' si no hay colisiones (la lista está vacía).
