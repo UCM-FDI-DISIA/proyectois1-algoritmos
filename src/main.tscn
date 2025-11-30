@@ -871,10 +871,10 @@ script = ExtResource("1_adv81")
 visible = false
 script = ExtResource("2_jitvu")
 
-[node name="Virtual Joystick" parent="UI" instance=ExtResource("3_c2usk")]
+[node name="VirtualJoystick1" parent="UI" instance=ExtResource("3_c2usk")]
 visibility_mode = 1
 
-[node name="Virtual Joystick2" parent="UI" instance=ExtResource("3_c2usk")]
+[node name="VirtualJoystick2" parent="UI" instance=ExtResource("3_c2usk")]
 offset_left = 846.0
 offset_top = -298.0
 offset_right = 1146.0
