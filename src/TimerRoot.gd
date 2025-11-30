@@ -5,7 +5,7 @@ signal tiempo_especifico_alcanzado
 # =====================================================================
 # 🔧 VARIABLES EDITABLES
 # =====================================================================
-@export var START_TIME := 120.0		 # duración total (segundos)
+@export var START_TIME := 3.0		 # duración total (segundos)
 @export var SIGNAL_AT	:= 90.0		 # segundo en el que se emite la señal
 @export var FINAL_WARN := 15.0		 # últimos segundos con advertencia roja
 @export var POST_DELAY := 3.0		 # Tiempo que dura la animación (3s)
@@ -91,7 +91,7 @@ func _ready() -> void:
 # =====================================================================
 # 🆕 FUNCIÓN DE RECEPCIÓN DE BATALLA (Inicia la UI de 3s)
 # =====================================================================
-func _on_battle_countdown_started(is_attacker: bool):
+func _on_battle_countdown_started(is_attacker: bool, is_automatic: bool = false):
 	print("DEBUG: 4. Función _on_battle_countdown_started llamada. (¡Se recibió la señal!)") # DEBUG
 	if battle_declared_to_me:	
 		print("DEBUG: Batalla ya declarada, ignorando llamada repetida.") # DEBUG
@@ -108,7 +108,9 @@ func _on_battle_countdown_started(is_attacker: bool):
 	
 	# 1. Mostrar mensaje y Ribbon
 	if is_instance_valid(ribbon_message) and is_instance_valid(grace_label):
-		if is_attacker:
+		if is_automatic:
+			grace_label.text = "Llega la batalla final"
+		else: if is_attacker:
 			grace_label.text = "ATACANDO..."
 		else:
 			grace_label.text = "¡ALERTA! SIENDO ATACADO..."
@@ -136,7 +138,7 @@ func _on_timer_timeout() -> void:
 		time_over = true
 		if is_instance_valid(game_state_ref) and GameState.is_pve and not battle_declared_to_me:
 			print("🚨 PVE: Tiempo agotado. Forzando inicio de batalla final (vía señal).")
-			game_state_ref.start_battle_countdown.emit(true)
+			game_state_ref.start_battle_countdown.emit(true, true)
 			await get_tree().create_timer(3.0).timeout
 			get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
 		

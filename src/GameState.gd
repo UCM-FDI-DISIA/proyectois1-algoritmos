@@ -92,14 +92,6 @@ func add_troops(type: String, amount: int) -> void:
 #    ATAQUE (Lógica de Delay para el ATACANTE)
 # ===========================
 func attack_other() -> void:
-	if is_pve:
-		print("Iniciando ataque PVE local → cambio solo mi escena.")
-		SceneManager.change_scene("res://src/PantallaAtaque/campoBatalla.tscn", {
-			"pattern": "squares",
-			"speed": 2.0,
-			"wait_time": 0.3
-		})
-	else:
 		print("Atacante: Notificando a todos los jugadores e iniciando 3s de retraso.")
 		
 		# 1. Notificar a la red (esto hace que el DEFENSOR active su lógica de delay)
