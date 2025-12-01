@@ -101,8 +101,8 @@ Las siguientes son [librerías de uso libre](https://opengameart.org/) de varias
 
 ### Ciclos de juego
 
-**Objetivo a largo plazo**: ganar puntuación para subir en el ranking.
-**Objetivo a corto plazo**: conquistar territorios enemigos para ganar la partida.
+**Objetivo a largo plazo**: conquistar territorios enemigos para ganar la partida.
+**Objetivo a corto plazo**: crecer el ejercito para vencer en las batallas contra otros feudos.
 **Descripción de los ciclos**
 - Recolección: obtener recursos que permitan expandir el ejército y aumentar capacidades de defensa y ataque.
 - Combate: declaración de una batalla para la que se accede al círculo de combate donde se determina el resultado y quién expande su territorio.
