@@ -61,6 +61,20 @@ func _on_pvp_pressed() -> void:
 	GameState.is_pve = false
 	GameState.game_mode = "PVP"
 
+	# -------------------------------------
+	# MOSTRAR PANTALLA DE CARGA (Rueda + texto)
+	# -------------------------------------
+	var loading_scene := load("res://src/PantallaCarga/PantallaCarga.tscn")
+	if loading_scene:
+		var loading_instance = loading_scene.instantiate()
+		get_tree().get_root().add_child(loading_instance)
+	else:
+		push_error("ERROR: No se pudo cargar PantallaCarga.tscn")
+		return
+
+	# -------------------------------------
+	# INICIAR MATCHMAKING
+	# -------------------------------------
 	var username = "Jugador_" + str(randi() % 1000)
 	print("PVP → intentando conectar...")
 
@@ -80,6 +94,7 @@ func _on_pvp_pressed() -> void:
 	var current_lobby = LOBBY_NAME + str(num_Lobby)
 	print("Intentando unirse al lobby: ", current_lobby)
 	GDSync.lobby_join(current_lobby, "")
+
 
 
 # ============================================================

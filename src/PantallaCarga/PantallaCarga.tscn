@@ -1,0 +1,69 @@
+[gd_scene load_steps=7 format=3 uid="uid://dh72ycg3i4emo"]
+
+[ext_resource type="Texture2D" uid="uid://bplgdapkbr4yg" path="res://src/AssetsUsados/PantallaCarga/fondoPantalla.jpg" id="1_1wec2"]
+[ext_resource type="Script" uid="uid://c7pnpq05u0l6s" path="res://src/PantallaCarga/pantalla_carga.gd" id="1_v6oja"]
+[ext_resource type="Texture2D" uid="uid://cqou86tim766m" path="res://src/AssetsUsados/PantallaCarga/RuedaCarga.png" id="2_v6oja"]
+
+[sub_resource type="Animation" id="Animation_n2mqc"]
+resource_name = "girar_rueda"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rueda:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.2831855]
+}
+
+[sub_resource type="Animation" id="Animation_kxf84"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Rueda:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qniaa"]
+_data = {
+&"RESET": SubResource("Animation_kxf84"),
+&"girar_rueda": SubResource("Animation_n2mqc")
+}
+
+[node name="PantallaCarga" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_v6oja")
+
+[node name="Fondo" type="TextureRect" parent="." groups=["scene_manager_entity_nodes"]]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_1wec2")
+
+[node name="TextoEstado" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+horizontal_alignment = 1
+
+[node name="Rueda" type="Sprite2D" parent="."]
+position = Vector2(174.99994, 170.99994)
+scale = Vector2(0.3, 0.31)
+texture = ExtResource("2_v6oja")
+
+[node name="Anim" type="AnimationPlayer" parent="Rueda"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_qniaa")
+}
