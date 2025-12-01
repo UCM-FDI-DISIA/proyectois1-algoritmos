@@ -11,14 +11,21 @@ var game_started: bool = false
 var pantalla_carga_ref = null
 
 
-func _ready() -> void:
+func _ready():
 	print("✅ MultiplayerManager iniciado.")
 
+	# Reconectar siempre las señales
 	GDSync.client_joined.connect(_on_client_joined)
 	GDSync.client_left.connect(_on_client_left)
 	GDSync.lobby_joined.connect(_on_lobby_joined)
 
+	GDSync.lobby_join_failed.connect(_on_lobby_join_failed)
+	GDSync.lobby_created.connect(_on_lobby_created)
+	GDSync.lobby_creation_failed.connect(_on_lobby_creation_failed)
+
+
 	GDSync.expose_func(_receive_quadrant_assignment)
+
 
 
 # ------------------------------------------------
@@ -28,10 +35,15 @@ func iniciar_busqueda_partida(pantalla_carga):
 	pantalla_carga_ref = pantalla_carga
 	connect("estado_matchmaking", Callable(pantalla_carga, "_on_estado_matchmaking"))
 
-	emit_signal("estado_matchmaking", "Conectando con servidor...")
+	emit_signal("estado_matchmaking", "Conectando...")
 
 	await get_tree().create_timer(0.5).timeout
-	GDSync.lobby_join("FeudaliaLobby") # Si ya lo haces en otro sitio, quítalo
+
+	# Paso 1: Intentar unirse
+	var lobby := "FeudaliaLobby"
+	emit_signal("estado_matchmaking", "Uniéndose al lobby...")
+	GDSync.lobby_join(lobby)
+
 
 
 # ------------------------------------------------
@@ -151,3 +163,19 @@ func get_enemy_id(client_id: int) -> int:
 		enemy_id = players[1]
 	print(players, " mi enemigo es ", enemy_id)
 	return enemy_id
+
+func _on_lobby_join_failed(lobby_name: String, error: int) -> void:
+	print("[MM] Falló lobby_join:", lobby_name, " error:", error)
+	emit_signal("estado_matchmaking", "Lobby no existe. Creándolo...")
+	GDSync.lobby_create(lobby_name, "", true, 2)
+
+func _on_lobby_created(lobby_name: String) -> void:
+	print("[MM] Lobby creado:", lobby_name)
+	emit_signal("estado_matchmaking", "Lobby creado. Entrando...")
+	GDSync.lobby_join(lobby_name)
+
+func _on_lobby_creation_failed(lobby_name: String, error: int) -> void:
+	print("[MM] No se pudo crear el lobby:", error)
+	emit_signal("estado_matchmaking", "Error creando lobby (%s). Reintentando..." % error)
+	await get_tree().create_timer(1.0).timeout
+	GDSync.lobby_join(lobby_name)

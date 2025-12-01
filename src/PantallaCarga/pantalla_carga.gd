@@ -6,6 +6,7 @@ extends Control
 func _ready():
 	texto.text = "Inicializando..."
 	anim.play("girar_rueda")
+	print("[PantallaCarga] _ready → iniciando búsqueda de partida")
 
 	# Pedir al MultiplayerManager que empiece a buscar partida
 	MultiplayerManager.iniciar_busqueda_partida(self)
@@ -13,3 +14,4 @@ func _ready():
 
 func _on_estado_matchmaking(msg: String):
 	texto.text = msg
+	print("[PantallaCarga] estado_matchmaking:", msg)
