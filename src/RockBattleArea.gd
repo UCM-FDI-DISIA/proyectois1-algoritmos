@@ -57,8 +57,11 @@ func _ready() -> void:
 		push_error("❌ Asigna el nodo jugador al export var 'player' en el editor")
 	
 	# Botón oculto/deshabilitado por defecto
-	battle_button.visible  = true
+	battle_button.visible = false
 	battle_button.disabled = true
+	
+	if battle_icon:
+		battle_icon.visible = false
 	battle_button.tooltip_text = "Aún no puedes atacar ⚔️"
 
 	# Conexiones UI
@@ -67,8 +70,8 @@ func _ready() -> void:
 	battle_button.pressed.connect(_on_battle_button_pressed)
 
 	# Señales del área
-	body_entered.connect(_on_body_entered)
-	body_exited.connect(_on_body_exited)
+	#body_entered.connect(_on_body_entered)
+	#body_exited.connect(_on_body_exited)
 
 	# Timer opcional para habilitar el botón
 	var timer_node = get_node_or_null("/root/Main/ElementosPantalla/Timer/Panel/TimerRoot")
@@ -84,6 +87,7 @@ func _ready() -> void:
 func _on_tiempo_especifico_alcanzado() -> void:
 	print("✅ Señal recibida — ¡Botón habilitado!")
 	battle_button.disabled = false
+	battle_button.visible = true
 	# Verificación de null adicional para seguridad
 	if battle_icon:
 		battle_icon.visible    = true
@@ -92,22 +96,21 @@ func _on_tiempo_especifico_alcanzado() -> void:
 # =====================================================================
 # 🚪 EVENTOS DE ÁREA
 # =====================================================================
-func _on_body_entered(body: Node) -> void:
-	if body == player:
-		player_in_area = true
-		battle_button.visible = true
-		if not battle_button.disabled:
-			if battle_icon:
-				battle_icon.visible = true
-		print("⚔️ Jugador '%s' entró al área -> botón visible" % player.name)
-
-func _on_body_exited(body: Node) -> void:
-	if body == player:
-		player_in_area = false
-		battle_button.visible = false
-		if battle_icon:
-			battle_icon.visible    = false
-		print("🏃 Jugador '%s' salió del área -> botón oculto" % player.name)
+#func _on_body_entered(body: Node) -> void:
+#	if body == player:
+#		player_in_area = true
+#		battle_button.visible = true
+#		if battle_icon:
+#			battle_icon.visible = true
+#		print("⚔️ Jugador '%s' entró al área -> botón visible" % player.name)
+#
+#func _on_body_exited(body: Node) -> void:
+#	if body == player:
+#		player_in_area = false
+#		battle_button.visible = false
+#		if battle_icon:
+#			battle_icon.visible    = false
+#		print("🏃 Jugador '%s' salió del área -> botón oculto" % player.name)
 
 # =====================================================================
 # 🖱️ EVENTOS DE INTERFAZ
