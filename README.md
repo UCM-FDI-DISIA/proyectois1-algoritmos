@@ -72,7 +72,7 @@ Capturas:
 ### Arquitectura
 **Herramientas**
 - Motor de desarrollo: Godot
-- Lenguaje: C# Sharp
+- Lenguaje: GDScript
 - Repositorio: GitHub
 
 **Assets**
