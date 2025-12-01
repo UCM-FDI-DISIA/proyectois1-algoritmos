@@ -1162,6 +1162,8 @@ scale = Vector2(0.7321333, 0.88)
 size_flags_horizontal = 4
 text = "Te han declarado batalla.
 ¡Termina de construir tu ejército!"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Matchmaker" type="Node2D" parent="."]
 script = ExtResource("22_ib8ht")
