@@ -45,7 +45,7 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_v6oja")
 
-[node name="Fondo" type="TextureRect" parent="." groups=["scene_manager_entity_nodes"]]
+[node name="Fondo" type="TextureRect" parent="."]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -62,8 +62,7 @@ position = Vector2(174.99994, 170.99994)
 scale = Vector2(0.3, 0.31)
 texture = ExtResource("2_v6oja")
 
-[node name="Anim" type="AnimationPlayer" parent="Rueda"]
-root_node = NodePath("../..")
+[node name="Anim" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_qniaa")
 }

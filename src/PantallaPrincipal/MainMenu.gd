@@ -61,28 +61,12 @@ func _on_pvp_pressed() -> void:
 	GameState.is_pve = false
 	GameState.game_mode = "PVP"
 
-	# -------------------------------------
-	# MOSTRAR PANTALLA DE CARGA (Rueda + texto)
-	# -------------------------------------
-	var loading_scene := load("res://src/PantallaCarga/PantallaCarga.tscn")
-	if loading_scene:
-		var loading_instance = loading_scene.instantiate()
-		get_tree().get_root().add_child(loading_instance)
-	else:
-		push_error("ERROR: No se pudo cargar PantallaCarga.tscn")
-		return
-
-	# -------------------------------------
-	# INICIAR MATCHMAKING
-	# -------------------------------------
 	var username = "Jugador_" + str(randi() % 1000)
 	print("PVP → intentando conectar...")
 
-	# Esperar inicialización de GDSync
 	while not GDSync.has_method("lobby_join"):
 		await get_tree().create_timer(0.5).timeout
 
-	# Esperar client ID
 	while GDSync.get_client_id() <= 0:
 		print("Esperando ID de cliente...")
 		await get_tree().create_timer(0.2).timeout
@@ -90,10 +74,16 @@ func _on_pvp_pressed() -> void:
 	print("Conectado con ID: ", GDSync.get_client_id())
 	GDSync.player_set_username(username)
 	print("Nombre asignado: ", username)
-	
+
+	# 🔥 CARGAR PANTALLA DE CARGA
+	var scene := load("res://src/PantallaCarga/PantallaCarga.tscn")
+	get_tree().change_scene_to_packed(scene)
+
+	# 🔥 EMPEZAR MATCHMAKING
 	var current_lobby = LOBBY_NAME + str(num_Lobby)
 	print("Intentando unirse al lobby: ", current_lobby)
 	GDSync.lobby_join(current_lobby, "")
+
 
 
 
