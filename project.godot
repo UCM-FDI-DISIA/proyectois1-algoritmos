@@ -19,12 +19,12 @@ useSenderID=true
 
 config/name="Feudalia"
 run/main_scene="uid://dud42l0lmmsh2"
-config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
+config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://src/icon.svg"
 
 [autoload]
 
-GameState="*res://src/GameState.gd"
+GameState="*res://src/PantallaPrincipal/GameState.gd"
 GDSync="*res://addons/GD-Sync/MultiplayerClient.gd"
 MultiplayerManager="*res://network/MultiplayerManager.gd"
 SceneManager="*res://addons/scene_manager/SceneManager.tscn"

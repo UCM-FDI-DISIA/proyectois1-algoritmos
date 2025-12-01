@@ -155,10 +155,10 @@ func _load_troop_scenes(is_red: bool) -> Dictionary:
 	var color_suffix := "_red" if is_red else ""
 	return {
 		# Usar load() en lugar de preload() para rutas dinámicas
-		"Archer": load("res://src/NPCs/Archer" + color_suffix + ".tscn"),
-		"Lancer": load("res://src/NPCs/Lancer" + color_suffix + ".tscn"),
-		"Monk": load("res://src/NPCs/Monk" + color_suffix + ".tscn"),
-		"Warrior": load("res://src/NPCs/Warrior" + color_suffix + ".tscn")
+		"Archer": load("res://src/NPCs/TropasCampoBatalla/Archer" + color_suffix + ".tscn"),
+		"Lancer": load("res://src/NPCs/TropasCampoBatalla/Lancer" + color_suffix + ".tscn"),
+		"Monk": load("res://src/NPCs/TropasCampoBatalla/Monk" + color_suffix + ".tscn"),
+		"Warrior": load("res://src/NPCs/TropasCampoBatalla/Warrior" + color_suffix + ".tscn")
 	}
 
 

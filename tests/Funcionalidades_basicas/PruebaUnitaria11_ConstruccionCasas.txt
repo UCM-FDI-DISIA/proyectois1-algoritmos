@@ -1,0 +1,23 @@
+CUESTIÓN A PROBAR: Color de los personajes
+
+OBJETIVO DE LA PRUEBA:
+	Comprobar que el color de los personajes es correcto y coherente.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	1) Ejecutar el archivo
+	2) Fijarse en el cuadrante en el que aparece el personaje.
+		0) En el cuadrante cero el personaje debe ser de color azul.
+		1) En el cuadrante azul el personaje debe ser de color rojo.
+	3) Color de las tropas en el Campo de Batalla.
+		Los personajes a la izquierda de tu pantalla deben ser del color de tu personaje principal.
+		Los personajes enemigos a la derecha de la pantalla deben ser del otro color.
+
+RESULTADO ESPERADO:
+	Hay dos colores diferenciados para los personajes.
+
+PRUEBAS REALIZADAS:
+	30/11/25
+		Al implementar la mecánica de cambio de color se pierden las animaciones de movimiento del personaje.
+		Se arregla.
+	01/12/25
+		Resultado esperado.
