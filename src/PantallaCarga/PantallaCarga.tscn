@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bplgdapkbr4yg" path="res://src/AssetsUsados/PantallaCarga/fondoPantalla.jpg" id="1_1wec2"]
 [ext_resource type="Script" uid="uid://c7pnpq05u0l6s" path="res://src/PantallaCarga/pantalla_carga.gd" id="1_v6oja"]
-[ext_resource type="Texture2D" uid="uid://cqou86tim766m" path="res://src/AssetsUsados/PantallaCarga/RuedaCarga.png" id="2_v6oja"]
+[ext_resource type="Texture2D" uid="uid://cwbgmumfvwelf" path="res://src/AssetsUsados/PantallaCarga/RuedaCarga.png" id="2_v6oja"]
 
 [sub_resource type="Animation" id="Animation_n2mqc"]
 resource_name = "girar_rueda"

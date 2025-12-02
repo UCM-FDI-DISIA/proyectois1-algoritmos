@@ -103,11 +103,15 @@ texture = ExtResource("7_03fmc")
 [node name="Lancer" type="VBoxContainer" parent="Soldados"]
 layout_mode = 2
 
+[node name="Lancer" type="Sprite2D" parent="Soldados/Lancer"]
+position = Vector2(32, 21)
+scale = Vector2(0.64499986, 0.60499996)
+texture = ExtResource("4_pmiql")
+
 [node name="TextureRect" type="TextureRect" parent="Soldados/Lancer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-texture = ExtResource("4_pmiql")
-expand_mode = 1
+expand_mode = 3
 
 [node name="LancerLabel" type="Label" parent="Soldados/Lancer"]
 layout_mode = 2
