@@ -9,7 +9,7 @@ class_name Lenador
 @export var gather_amount := 5
 @export var search_radius := 2000.0
 @export var search_fuzziness := 50.0
-@export var target_offset := Vector2(0, -16)
+@export var target_offset := Vector2(-46, -46)
 
 # ============================================================
 # ⚙️ ESTADOS Y NODOS
