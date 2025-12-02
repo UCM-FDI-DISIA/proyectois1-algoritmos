@@ -15,7 +15,7 @@ func _scan_map():
 		push_error("[Mapa.gd] ❌ No se encontró Main/Mapa")
 		return
 
-	_add_obstacles_recursively(mapa)
+	#_add_obstacles_recursively(mapa)
 
 
 

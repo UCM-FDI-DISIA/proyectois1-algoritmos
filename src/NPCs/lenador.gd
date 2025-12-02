@@ -49,91 +49,157 @@ func _ready():
 		nav_agent.avoidance_enabled = true
 		nav_agent.velocity_computed.connect(self._on_velocity_computed)
 
+		# === Debug: mostrar todos los navmeshes del padre ===
+		print("NavAgent map:", nav_agent.get_navigation_map())
+		for child in get_parent().get_children():
+			if child is NavigationRegion2D:
+				print("NavRegion:", child, "RID:", child.get_navigation_map())
+	debug_tree_accessibility()
+
 	if debug:
 		print("[Lenador] Creado. Estado: IDLE")
 
-# ============================================================
-# 🌲 Obtener todos los árboles del mapa
-# ============================================================
-func get_all_tree_nodes() -> Array:
-	var result: Array = []
-	for child in mapa.get_children():
-		if child is TileMap:
-			for node in child.get_children():
-				if node.is_in_group("arbol") and node.has_method("gather_resource"):
-					result.append(node)
-	return result
+func debug_tree_accessibility():
+	if not is_instance_valid(nav_agent):
+		print("❌ No hay NavigationAgent2D válido")
+		return
 
-func _find_nearest_tree():
+	var map_rid = nav_agent.get_navigation_map()
+	if not map_rid.is_valid():
+		print("❌ NavigationMap no válido")
+		return
+
+
 	var trees = get_tree().get_nodes_in_group("arbol")
-	var nearest_tree = null
-	var min_distance = INF
-
 	for tree in trees:
 		if not is_instance_valid(tree):
 			continue
-		if tree.has_meta("is_dead") and tree.get_meta("is_dead"):
-			continue
-		if not tree.has_method("gather_resource"):
+
+		var tree_pos = tree.global_position
+		var closest_point = NavigationServer2D.map_get_closest_point(map_rid, tree_pos)
+
+		if closest_point == Vector2.ZERO:
+			print("[ALERTA] Árbol en", tree_pos, "NO tiene punto de navegación cercano")
 			continue
 
-		var dist = global_position.distance_to(tree.global_position)
-		var dist_var = dist + randf_range(0.0, search_fuzziness)
+		# Intentamos generar ruta desde el Lenador hasta el árbol
+		var path = NavigationServer2D.map_get_path(map_rid, global_position, closest_point, false)
+
+		if path.size() == 0:
+			print("[NO ALCANZABLE] Árbol en", tree_pos)
+		else:
+			print("[ALCANZABLE] Árbol en", tree_pos, "→ ruta con", path.size(), "puntos")
+
+# ============================================================
+# 🌲 Encontrar árbol más cercano
+# ============================================================
+func _find_nearest_tree():
+	# Obtener todos los nodos en el grupo "arbol"
+	var trees = get_tree().get_nodes_in_group("arbol")
+	var nearest_tree = null
+	var min_distance = INF
+	var map_rid = nav_agent.get_navigation_map()
+
+	for tree in trees:
+		if not is_instance_valid(tree): 
+			continue
+		if tree.has_meta("is_dead") and tree.get_meta("is_dead"): 
+			continue
+		if not tree.has_method("gather_resource"): 
+			continue
+
+		# PUNTO SEGURO: cerca del árbol, pero fuera del obstacle
+		var raw_target = tree.global_position
+		var corrected_target = NavigationServer2D.map_get_closest_point(map_rid, raw_target)
+
+		# Si está demasiado lejos del NavMesh, descartamos
+		if corrected_target.distance_to(raw_target) > 8: # 8px margen
+			continue
+
+		# Offset para no chocar con el obstacle
+		var direction = (corrected_target - global_position).normalized()
+		var safe_target = corrected_target - direction * nav_agent.radius
+
+		var dist_var = global_position.distance_to(safe_target) + randf_range(0.0, search_fuzziness)
+
 		if dist_var < min_distance:
 			min_distance = dist_var
 			nearest_tree = tree
 
 	if nearest_tree:
 		target_tree = nearest_tree
-		if not target_tree.is_connected("depleted", _on_tree_depleted):
-			target_tree.connect("depleted", _on_tree_depleted)
+		# Conectar señal solo si no estaba conectada
+		var callback = Callable(self, "_on_tree_depleted")
+		if not target_tree.is_connected("depleted", callback):
+			target_tree.connect("depleted", callback)
 		_start_navigation()
 	else:
 		if debug:
-			print("[Lenador] No se encontraron árboles en el mapa")
+			print("[Lenador] No se encontraron árboles alcanzables")
 		_change_state(State.IDLE)
 
+
+
 # ============================================================
-# 🚶 Navegación mejorada
+# 🚶 Navegación robusta y corregida
 # ============================================================
 func _start_navigation():
 	if not is_instance_valid(target_tree) or not is_instance_valid(nav_agent):
 		_change_state(State.IDLE)
 		return
 
-	var tree_radius := 16.0
-	var target_pos = target_tree.global_position + Vector2(0, -tree_radius - 4)
-	nav_agent.set_target_position(target_pos)
-	nav_agent.radius = 6.0
-	nav_agent.target_desired_distance = 4.0
+	var map_rid = nav_agent.get_navigation_map()
+	var raw_target: Vector2 = target_tree.global_position
 
+	# → Corregir target al punto más cercano dentro del navmesh
+	var corrected_target = NavigationServer2D.map_get_closest_point(map_rid, raw_target)
+
+	# → Aplicar pequeño offset para no quedar dentro del obstacle
+	var direction_from_agent = (corrected_target - global_position).normalized()
+	var safe_target = corrected_target - direction_from_agent * nav_agent.radius
+
+	if debug:
+		print("[Lenador] Raw target:%s → Corrected:%s → Safe target:%s" % [raw_target, corrected_target, safe_target])
+
+	# Asignar target corregido y seguro al NavigationAgent
+	nav_agent.set_target_position(safe_target)
+	_change_state(State.MOVING_TO_TREE)
+
+	# Asignar target corregido al NavigationAgent
+	nav_agent.set_target_position(corrected_target)
 	_change_state(State.MOVING_TO_TREE)
 
 # ============================================================
-# ⏳ Physics process con avoidance dinámico
+# ⏳ Movimiento + avoidance
 # ============================================================
 func _physics_process(delta: float):
 	match current_state:
+
 		State.MOVING_TO_TREE:
-			if not is_instance_valid(nav_agent) or not is_instance_valid(target_tree):
+
+			if not is_instance_valid(target_tree):
 				_change_state(State.IDLE)
 				return
 
 			if nav_agent.is_navigation_finished():
+				if debug: print(">>> Navigation finished")
 				_change_state(State.GATHERING)
 				velocity = Vector2.ZERO
 				return
 
 			if not nav_agent.is_target_reachable():
-				_on_tree_depleted()
+				if debug: print(">>> Target no reachable, buscando otro...")
+				target_tree = null
+				_change_state(State.IDLE)
 				return
 
-			# Mover hacia siguiente punto del path
 			var next_point = nav_agent.get_next_path_position()
 			var direction = global_position.direction_to(next_point)
+
 			var desired_velocity = direction * speed
 			desired_velocity = _avoid_dynamic_collisions(desired_velocity, delta)
-			_animate_movement(desired_velocity.normalized())
+
+			_animate_movement(direction)
 			nav_agent.set_velocity(desired_velocity)
 
 		State.GATHERING:
@@ -148,29 +214,31 @@ func _on_velocity_computed(safe_velocity: Vector2) -> void:
 	move_and_slide()
 
 # ============================================================
-# ⛏️ Recolección de recursos
+# ⛏️ Recolección
 # ============================================================
 func _gather(delta: float):
 	if not is_instance_valid(target_tree):
 		_on_tree_depleted()
 		return
 
-	anim_sprite.play("Recolectar")
 	gather_timer += delta
-
 	if gather_timer >= gather_rate:
 		gather_timer = 0.0
 		var wood_gained = target_tree.gather_resource(gather_amount)
+
 		if is_instance_valid(resource_manager):
 			resource_manager.add_resource("wood", wood_gained)
+
 		if debug:
-			print("[Lenador] Recolectando %d de madera" % wood_gained)
+			print("[Lenador] Recolectando:", wood_gained)
+
 		if wood_gained == 0:
 			_on_tree_depleted()
 
 func _on_tree_depleted():
 	if is_instance_valid(target_tree) and target_tree.is_connected("depleted", _on_tree_depleted):
 		target_tree.disconnect("depleted", _on_tree_depleted)
+
 	target_tree = null
 	_change_state(State.IDLE)
 
@@ -182,28 +250,25 @@ func _change_state(new_state: State):
 		return
 
 	if debug:
-		print("[Lenador] Cambio de estado → %d" % new_state)
+		print("[Lenador] Cambio de estado →", new_state)
 
 	current_state = new_state
-
-	if not is_instance_valid(anim_sprite):
-		return
 
 	match new_state:
 		State.IDLE:
 			anim_sprite.play("Idle")
-		State.FINDING_TREE:
-			pass
 		State.MOVING_TO_TREE:
 			anim_sprite.play("Caminar")
 		State.GATHERING:
 			anim_sprite.play("Recolectar")
 
 func _animate_movement(direction: Vector2):
-	anim_sprite.play("Caminar")
 	if abs(direction.x) > 0.1:
 		anim_sprite.flip_h = direction.x < 0
 
+# ============================================================
+# 🔍 AI básico de búsqueda
+# ============================================================
 func _process(delta: float):
 	if search_cooldown > 0:
 		search_cooldown -= delta
@@ -212,6 +277,7 @@ func _process(delta: float):
 	match current_state:
 		State.IDLE:
 			_change_state(State.FINDING_TREE)
+
 		State.FINDING_TREE:
 			_find_nearest_tree()
 
@@ -230,10 +296,9 @@ func _avoid_dynamic_collisions(desired_velocity: Vector2, delta: float) -> Vecto
 	query.from = cast_from
 	query.to = cast_to
 	query.exclude = [self]
-	query.collision_mask = collision_mask
 
 	var result = space_state.intersect_ray(query)
 	if result:
-		var normal = result.normal
-		return desired_velocity.slide(normal)
+		return desired_velocity.slide(result.normal)
+
 	return desired_velocity
