@@ -170,6 +170,7 @@ y_sort_enabled = true
 position = Vector2(0, 22)
 scale = Vector2(1.36, 1.44)
 shape = SubResource("CircleShape2D_bqcf6")
+disabled = true
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 avoidance_enabled = true
