@@ -67,10 +67,6 @@ func _on_lobby_joined(lobby_name: String) -> void:
 	wait_timer = get_tree().create_timer(PVP_TIMEOUT)
 	await wait_timer.timeout
 	
-	
-	# Si mientras tanto hemos cambiado de modo, no hacemos nada
-	if GDSync.is_host():
-		_check_start_condition()
 		
 	if players_in_lobby < 2:
 		print("⏳ Timeout sin segundo jugador → entrando en PVE automático")
@@ -86,6 +82,7 @@ func _on_lobby_joined(lobby_name: String) -> void:
 
 
 func _on_client_joined(client_id: int) -> void:
+	players_in_lobby += 1
 	print("Cliente unido:", client_id)
 	emit_signal("estado_matchmaking", "Jugador conectado: %s" % client_id)
 
