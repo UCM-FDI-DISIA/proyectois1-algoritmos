@@ -12,13 +12,6 @@ func _ready() -> void:
 	GDSync.connected.connect(_on_connected)
 	GDSync.connection_failed.connect(_on_connection_failed)
 	
-
-	# Solo el servidor inicia la lógica de “host”
-	if multiplayer.is_server() && !GDSync.is_active():
-		GDSync._manual_connect("64.225.79.138")
-		# Workaround obtenido de: https://www.gd-sync.com/docs/general-information
-		# GDSync.start_multiplayer() # Esto no funciona en web.
-		
 	print (multiplayer.is_server())
 	print("GDSync autoload: ", GDSync)
 	print("Tiene método start_multiplayer?: ", GDSync.has_method("start_multiplayer"))
@@ -46,6 +39,12 @@ func _on_pve_pressed() -> void:
 # PVP MATCHMAKING
 # ============================================================
 func _on_pvp_pressed() -> void:
+	# Solo el servidor inicia la lógica de “host”
+	if multiplayer.is_server() && !GDSync.is_active():
+		GDSync._manual_connect("64.225.79.138")
+		# Workaround obtenido de: https://www.gd-sync.com/docs/general-information
+		# GDSync.start_multiplayer() # Esto no funciona en web.
+	
 	GameState.is_pve = false
 	GameState.game_mode = "PVP"
 	

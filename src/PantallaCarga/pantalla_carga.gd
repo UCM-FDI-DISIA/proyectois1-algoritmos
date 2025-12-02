@@ -1,6 +1,7 @@
 extends Control
 
 @onready var texto = $TextoEstado
+@onready var lobby = $LobbyUnido
 @onready var anim = $Anim   # AnimationPlayer
 
 func _ready():
@@ -8,10 +9,13 @@ func _ready():
 	anim.play("girar_rueda")
 	print("[PantallaCarga] _ready → iniciando búsqueda de partida")
 
-	# Pedir al MultiplayerManager que empiece a buscar partida
+	# Pedir al MultiplayerManager que empiece a mostrar mensajes sobre la búsqueda de partida
 	MultiplayerManager.iniciar_busqueda_partida(self)
 
 
 func _on_estado_matchmaking(msg: String):
 	texto.text = msg
 	print("[PantallaCarga] estado_matchmaking:", msg)
+	
+func _on_lobby_unido(num: int):
+	lobby.text = "Unido al lobby: " + str(num)

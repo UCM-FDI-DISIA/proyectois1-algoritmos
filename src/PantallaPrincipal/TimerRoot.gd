@@ -77,8 +77,6 @@ func _ready() -> void:
 	else:
 		print("ERROR CRÍTICO: El nodo 'GameState' NO se ha encontrado en la raíz del árbol.")
 	
-		
-	
 	GDSync.player_data_changed.connect(_on_player_data_changed)
 	
 	remaining_time = START_TIME
@@ -136,12 +134,11 @@ func _on_timer_timeout() -> void:
 		remaining_time = 0
 		main_timer.stop()
 		time_over = true
-		if is_instance_valid(game_state_ref) and GameState.is_pve and not battle_declared_to_me:
-			print("🚨 PVE: Tiempo agotado. Forzando inicio de batalla final (vía señal).")
-			game_state_ref.start_battle_countdown.emit(true, true)
-			await get_tree().create_timer(3.0).timeout
-			get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
 		
+		print("🚨 Tiempo agotado. Forzando inicio de batalla final (vía señal).")
+		game_state_ref.start_battle_countdown.emit(true, true)
+		await get_tree().create_timer(3.0).timeout
+		get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
 		
 	_update_label()
 
