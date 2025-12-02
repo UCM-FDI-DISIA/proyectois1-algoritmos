@@ -60,9 +60,29 @@ func _on_lobby_joined(lobby_name: String) -> void:
 	var my_id := GDSync.get_client_id()
 	if my_id > 0 and my_id not in players:
 		players.append(my_id)
+	
+	players_in_lobby = 1  # tú mismo
+	print("Esperando segundo jugador durante %s segundos..." % PVP_TIMEOUT)
 
+	wait_timer = get_tree().create_timer(PVP_TIMEOUT)
+	await wait_timer.timeout
+	
+	
+	# Si mientras tanto hemos cambiado de modo, no hacemos nada
 	if GDSync.is_host():
 		_check_start_condition()
+		
+	if players_in_lobby < 2:
+		print("⏳ Timeout sin segundo jugador → entrando en PVE automático")
+		GameState.is_pve = true
+		GameState.game_mode = "PVE"
+		GDSync.lobby_leave() # Dejo vacío el lobby en el que estaba
+		SceneManager.change_scene("res://src/main.tscn", {
+			"pattern": "squares",
+			"speed": 2.0,
+			"wait_time": 0.3
+		})
+		get_tree().change_scene_to_file("res://src/main.tscn")
 
 
 func _on_client_joined(client_id: int) -> void:
@@ -71,15 +91,8 @@ func _on_client_joined(client_id: int) -> void:
 
 	if client_id not in players:
 		players.append(client_id)
-	
-	players_in_lobby = 1  # tú mismo
-	print("Esperando segundo jugador durante %s segundos..." % PVP_TIMEOUT)
-
-	wait_timer = get_tree().create_timer(PVP_TIMEOUT)
-	await wait_timer.timeout
-
-	# Si mientras tanto hemos cambiado de modo, no hacemos nada
-	if GameState.game_mode == "PVP":
+		
+	if GDSync.is_host():
 		_check_start_condition()
 
 
@@ -118,16 +131,6 @@ func _check_start_condition() -> void:
 	else:
 		emit_signal("estado_matchmaking", "Esperando jugador adicional...")
 		
-		print("⏳ Timeout sin segundo jugador → entrando en PVE automático")
-		GameState.is_pve = true
-		GameState.game_mode = "PVE"
-		GDSync.lobby_leave() # Dejo vacío el lobby en el que estaba
-		SceneManager.change_scene("res://src/main.tscn", {
-			"pattern": "squares",
-			"speed": 2.0,
-			"wait_time": 0.3
-		})
-		get_tree().change_scene_to_file("res://src/main.tscn")
 
 # ------------------------------------------------
 # 🔹 Asignar cuadrantes

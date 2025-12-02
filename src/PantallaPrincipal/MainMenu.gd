@@ -23,7 +23,6 @@ func _ready() -> void:
 
 	if multiplayer.is_server() && !GDSync.is_active():
 		GDSync._manual_connect("64.225.79.138")
-		GDSync.start_multiplayer()
 		# Workaround obtenido de: https://www.gd-sync.com/docs/general-information
 		# GDSync.start_multiplayer() # Esto no funciona en web.
 
