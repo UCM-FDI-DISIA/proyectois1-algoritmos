@@ -14,17 +14,16 @@ func _ready() -> void:
 	
 
 	# Solo el servidor inicia la lógica de “host”
-	print (multiplayer.is_server())
-	print("GDSync autoload:", GDSync)
-	print("Tiene método start_multiplayer?: ", GDSync.has_method("start_multiplayer"))
-	print("Tiene método manual_connect?: ", GDSync.has_method("_manual_connect"))
-	print("is_active(): ", GDSync.is_active())
-
-
 	if multiplayer.is_server() && !GDSync.is_active():
 		GDSync._manual_connect("64.225.79.138")
 		# Workaround obtenido de: https://www.gd-sync.com/docs/general-information
 		# GDSync.start_multiplayer() # Esto no funciona en web.
+		
+	print (multiplayer.is_server())
+	print("GDSync autoload: ", GDSync)
+	print("Tiene método start_multiplayer?: ", GDSync.has_method("start_multiplayer"))
+	print("Tiene método manual_connect?: ", GDSync.has_method("_manual_connect"))
+	print("is_active(): ", GDSync.is_active())
 
 
 # ============================================================
@@ -34,7 +33,7 @@ func _on_pve_pressed() -> void:
 	GameState.is_pve = true
 	GameState.game_mode = "PVE"
 
-	print("🎮 Modo PVE seleccionado → partida local.")
+	print("🎮 Modo %s seleccionado → partida local." % GameState.game_mode)
 	print("🌍 Cargando mapa principal en modo PVE...")
 	
 	SceneManager.change_scene("res://src/main.tscn", {
@@ -59,7 +58,7 @@ func _on_pvp_pressed() -> void:
 
 	# Esperar client ID
 	while GDSync.get_client_id() <= 0:
-		print("Esperando ID de cliente...", GDSync.get_client_id())
+		print("Esperando ID de cliente... ", GDSync.get_client_id())
 		await get_tree().create_timer(0.2).timeout
 
 	print("Conectado con ID: ", GDSync.get_client_id())

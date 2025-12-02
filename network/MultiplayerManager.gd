@@ -13,7 +13,6 @@ const LOBBY_NAME := "Feudalia_MainLobby"
 var num_Lobby := 1
 var players_in_lobby := 0
 const PVP_TIMEOUT := 30.0
-var wait_timer: SceneTreeTimer
 
 func _ready():
 	print("✅ MultiplayerManager iniciado.")
@@ -46,7 +45,7 @@ func iniciar_busqueda_partida(pantalla_carga):
 	var current_lobby = LOBBY_NAME + str(num_Lobby)
 	emit_signal("estado_matchmaking", "Uniéndose al lobby " + current_lobby)
 	print("Intentando unirse al lobby: ", current_lobby)
-	GDSync.lobby_join(current_lobby, "")
+	GDSync.lobby_join(current_lobby)
 
 
 
@@ -54,7 +53,7 @@ func iniciar_busqueda_partida(pantalla_carga):
 # 🔹 Eventos de GD-Sync
 # ------------------------------------------------
 func _on_lobby_joined(lobby_name: String) -> void:
-	print("MultiplayerManager: entré al lobby:", lobby_name)
+	print("MultiplayerManager: entré al lobby: ", lobby_name)
 	emit_signal("estado_matchmaking", "Conectado. Esperando jugadores...")
 
 	var my_id := GDSync.get_client_id()
@@ -63,13 +62,12 @@ func _on_lobby_joined(lobby_name: String) -> void:
 	
 	players_in_lobby = 1  # tú mismo
 	print("Esperando segundo jugador durante %s segundos..." % PVP_TIMEOUT)
-
-	wait_timer = get_tree().create_timer(PVP_TIMEOUT)
-	await wait_timer.timeout
 	
-		
+	await get_tree().create_timer(PVP_TIMEOUT).timeout
+	
 	if players_in_lobby < 2:
 		print("⏳ Timeout sin segundo jugador → entrando en PVE automático")
+		emit_signal("estado_matchmaking", "No se encontró otro jugador. Entrando en modo PVE")
 		GameState.is_pve = true
 		GameState.game_mode = "PVE"
 		GDSync.lobby_leave() # Dejo vacío el lobby en el que estaba
@@ -94,9 +92,10 @@ func _on_client_joined(client_id: int) -> void:
 
 
 func _on_client_left(client_id: int) -> void:
-	print("Cliente salió:", client_id)
-	emit_signal("estado_matchmaking", "Un jugador abandonó la sala. Volviendo a menú...")
-
+	players_in_lobby -= 1
+	print("Cliente salió: ", client_id)
+	
+	# Gestión de caídas: si un jugador se cae, el otro sigue en PVE.
 	GameState.set_PVE()
 	GDSync.lobby_leave()
 
@@ -108,7 +107,7 @@ func _check_start_condition() -> void:
 	if not GDSync.is_host() or game_started:
 		return
 
-	print("Jugadores actuales en lobby:", players)
+	print("Jugadores actuales en lobby: ", players)
 	
 	if players.size() >= 2:
 		print("✅ Dos jugadores detectados. Asignando cuadrantes...")
@@ -127,7 +126,15 @@ func _check_start_condition() -> void:
 		emit_signal("partida_lista")
 	else:
 		emit_signal("estado_matchmaking", "Esperando jugador adicional...")
-		
+
+# ------------------------------------------------
+# 🔹 Inicio de partida (solo no-host)
+# ------------------------------------------------
+func _set_players_for_no_host(getplayers: Array[int]) -> void:
+	if not GDSync.is_host() : 
+		players = getplayers
+		players_in_lobby = 2
+
 
 # ------------------------------------------------
 # 🔹 Asignar cuadrantes
@@ -149,15 +156,19 @@ func _assign_quadrants() -> void:
 		print(" -> Jugador ", client_id, " tiene cuadrante ", q)
 		emit_signal("estado_matchmaking", "Jugador %s asignado a cuadrante %s" % [client_id, q])
 
-		GDSync.call_func_on(client_id, _receive_quadrant_assignment, [q])
+		GDSync.call_func_on(client_id, _receive_quadrant_assignment, [q, players])
 
 
 # ------------------------------------------------
 # 🔹 Recepción del cuadrante
 # ------------------------------------------------
-func _receive_quadrant_assignment(q_id: int) -> void:
+func _receive_quadrant_assignment(q_id: int, p: Array[int]) -> void:
+	# IMPORTANTE: Doy esta información también al no-host
 	my_quadrant_id = q_id
-	print("Me asignaron el cuadrante:", my_quadrant_id)
+	players = p 
+	players_in_lobby = 2
+	
+	print("Me asignaron el cuadrante: ", my_quadrant_id)
 	emit_signal("estado_matchmaking", "Te asignaron el cuadrante %s" % q_id)
 
 	GDSync.player_set_data("quadrant_id", q_id)
@@ -186,20 +197,19 @@ func get_enemy_id(client_id: int) -> int:
 	return enemy_id
 
 func _on_lobby_join_failed(lobby_name: String, error: int) -> void:
-	print("[MM] Falló lobby_join:", lobby_name, " error:", error)
+	print("[MM] Falló lobby_join: ", lobby_name, " error:", error)
 	emit_signal("estado_matchmaking", "Lobby no existe. Creándolo...")
 	GDSync.lobby_create(lobby_name, "", true, 2)
 	
 
 func _on_lobby_created(lobby_name: String) -> void:
-	print("[MM] Lobby creado:", lobby_name)
+	print("[MM] Lobby creado: ", lobby_name)
 	emit_signal("estado_matchmaking", "Lobby creado. Entrando...")
 	GDSync.lobby_join(lobby_name)
 
 func _on_lobby_creation_failed(lobby_name: String, error: int) -> void:
-	print("[MM] No se pudo crear el lobby:", lobby_name, " error: ", error)
-	emit_signal("estado_matchmaking", "Error creando lobby (%s). Reintentando..." % error)
+	print("[MM] No se pudo crear el lobby: ", lobby_name, " error: ", error)
+	emit_signal("estado_matchmaking", "Error creando lobby (%s). Reintentando..." % num_Lobby)
 	num_Lobby += 1
 	print("Intento unirme al lobby ", LOBBY_NAME + str(num_Lobby))
 	GDSync.lobby_join(LOBBY_NAME + str(num_Lobby))
-	
