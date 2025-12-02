@@ -9,7 +9,11 @@ var my_quadrant_id: int = -1
 var game_started: bool = false
 
 var pantalla_carga_ref = null
-
+const LOBBY_NAME := "Feudalia_MainLobby"
+var num_Lobby := 1
+var players_in_lobby := 0
+const PVP_TIMEOUT := 30.0
+var wait_timer: SceneTreeTimer
 
 func _ready():
 	print("✅ MultiplayerManager iniciado.")
@@ -22,7 +26,6 @@ func _ready():
 	GDSync.lobby_join_failed.connect(_on_lobby_join_failed)
 	GDSync.lobby_created.connect(_on_lobby_created)
 	GDSync.lobby_creation_failed.connect(_on_lobby_creation_failed)
-
 
 	GDSync.expose_func(_receive_quadrant_assignment)
 
@@ -40,9 +43,10 @@ func iniciar_busqueda_partida(pantalla_carga):
 	await get_tree().create_timer(0.5).timeout
 
 	# Paso 1: Intentar unirse
-	var lobby := "FeudaliaLobby"
-	emit_signal("estado_matchmaking", "Uniéndose al lobby...")
-	GDSync.lobby_join(lobby)
+	var current_lobby = LOBBY_NAME + str(num_Lobby)
+	emit_signal("estado_matchmaking", "Uniéndose al lobby " + current_lobby)
+	print("Intentando unirse al lobby: ", current_lobby)
+	GDSync.lobby_join(current_lobby, "")
 
 
 
@@ -67,8 +71,15 @@ func _on_client_joined(client_id: int) -> void:
 
 	if client_id not in players:
 		players.append(client_id)
+	
+	players_in_lobby = 1  # tú mismo
+	print("Esperando segundo jugador durante %s segundos..." % PVP_TIMEOUT)
 
-	if GDSync.is_host():
+	wait_timer = get_tree().create_timer(PVP_TIMEOUT)
+	await wait_timer.timeout
+
+	# Si mientras tanto hemos cambiado de modo, no hacemos nada
+	if GameState.game_mode == "PVP":
 		_check_start_condition()
 
 
@@ -88,7 +99,7 @@ func _check_start_condition() -> void:
 		return
 
 	print("Jugadores actuales en lobby:", players)
-
+	
 	if players.size() >= 2:
 		print("✅ Dos jugadores detectados. Asignando cuadrantes...")
 		emit_signal("estado_matchmaking", "Dos jugadores detectados. Preparando partida...")
@@ -106,7 +117,17 @@ func _check_start_condition() -> void:
 		emit_signal("partida_lista")
 	else:
 		emit_signal("estado_matchmaking", "Esperando jugador adicional...")
-
+		
+		print("⏳ Timeout sin segundo jugador → entrando en PVE automático")
+		GameState.is_pve = true
+		GameState.game_mode = "PVE"
+		GDSync.lobby_leave() # Dejo vacío el lobby en el que estaba
+		SceneManager.change_scene("res://src/main.tscn", {
+			"pattern": "squares",
+			"speed": 2.0,
+			"wait_time": 0.3
+		})
+		get_tree().change_scene_to_file("res://src/main.tscn")
 
 # ------------------------------------------------
 # 🔹 Asignar cuadrantes
@@ -168,6 +189,7 @@ func _on_lobby_join_failed(lobby_name: String, error: int) -> void:
 	print("[MM] Falló lobby_join:", lobby_name, " error:", error)
 	emit_signal("estado_matchmaking", "Lobby no existe. Creándolo...")
 	GDSync.lobby_create(lobby_name, "", true, 2)
+	
 
 func _on_lobby_created(lobby_name: String) -> void:
 	print("[MM] Lobby creado:", lobby_name)
@@ -175,7 +197,9 @@ func _on_lobby_created(lobby_name: String) -> void:
 	GDSync.lobby_join(lobby_name)
 
 func _on_lobby_creation_failed(lobby_name: String, error: int) -> void:
-	print("[MM] No se pudo crear el lobby:", error)
+	print("[MM] No se pudo crear el lobby:", lobby_name, " error: ", error)
 	emit_signal("estado_matchmaking", "Error creando lobby (%s). Reintentando..." % error)
-	await get_tree().create_timer(1.0).timeout
-	GDSync.lobby_join(lobby_name)
+	num_Lobby += 1
+	print("Intento unirme al lobby ", LOBBY_NAME + str(num_Lobby))
+	GDSync.lobby_join(LOBBY_NAME + str(num_Lobby))
+	

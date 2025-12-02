@@ -3,15 +3,6 @@ extends Control
 @onready var play_pvp_button: Button = $PVPButton
 @onready var play_pve_button: Button = $PVEButton
 
-const LOBBY_NAME := "Feudalia_MainLobby"
-var num_Lobby := 1
-const PVP_TIMEOUT := 30.0
-
-var game_mode := ""
-var wait_timer: SceneTreeTimer
-var players_in_lobby := 0
-
-
 func _ready() -> void:
 	# Botones
 	play_pvp_button.pressed.connect(_on_pvp_pressed)
@@ -20,11 +11,19 @@ func _ready() -> void:
 	# Señales de GD-Sync
 	GDSync.connected.connect(_on_connected)
 	GDSync.connection_failed.connect(_on_connection_failed)
-
+	
 
 	# Solo el servidor inicia la lógica de “host”
+	print (multiplayer.is_server())
+	print("GDSync autoload:", GDSync)
+	print("Tiene método start_multiplayer?: ", GDSync.has_method("start_multiplayer"))
+	print("Tiene método manual_connect?: ", GDSync.has_method("_manual_connect"))
+	print("is_active(): ", GDSync.is_active())
+
+
 	if multiplayer.is_server() && !GDSync.is_active():
 		GDSync._manual_connect("64.225.79.138")
+		GDSync.start_multiplayer()
 		# Workaround obtenido de: https://www.gd-sync.com/docs/general-information
 		# GDSync.start_multiplayer() # Esto no funciona en web.
 
@@ -33,7 +32,6 @@ func _ready() -> void:
 # PVE DIRECTO
 # ============================================================
 func _on_pve_pressed() -> void:
-	game_mode = "PVE"
 	GameState.is_pve = true
 	GameState.game_mode = "PVE"
 
@@ -52,7 +50,23 @@ func _on_pve_pressed() -> void:
 func _on_pvp_pressed() -> void:
 	GameState.is_pve = false
 	GameState.game_mode = "PVP"
+	
+	var username = "Jugador_" + str(randi() % 1000)
+	print("PVP → intentando conectar...")
 
+	# Esperar inicialización de GDSync
+	while not GDSync.has_method("lobby_join"):
+		await get_tree().create_timer(0.5).timeout
+
+	# Esperar client ID
+	while GDSync.get_client_id() <= 0:
+		print("Esperando ID de cliente...", GDSync.get_client_id())
+		await get_tree().create_timer(0.2).timeout
+
+	print("Conectado con ID: ", GDSync.get_client_id())
+	GDSync.player_set_username(username)
+	print("Nombre asignado: ", username)
+	
 	print("PVP → cambiando a PantallaCarga...")
 
 	# Solo cambiamos de escena; PantallaCarga se encargará del matchmaking
