@@ -2,6 +2,7 @@ extends Node
 
 signal estado_matchmaking(msg: String)
 signal lobby_unido(p: int)
+signal avisar_Player
 
 var players: Array[int] = []             # IDs conectados
 var quadrants_by_client: Dictionary = {} # client_id -> cuadrante
@@ -83,7 +84,6 @@ func _on_lobby_joined(lobby_name: String) -> void:
 			"speed": 2.0,
 			"wait_time": 0.3
 		})
-		
 
 
 func _on_client_joined(client_id: int) -> void:
@@ -105,7 +105,11 @@ func _on_client_left(client_id: int) -> void:
 	# Gestión de caídas: si un jugador se cae, el otro sigue en PVE.
 	GameState.set_PVE()
 	GDSync.lobby_leave()
+	
+	emit_signal("avisar_Player")
 
+func conectar_con_label_avisos(pantalla_main):
+	connect("avisar_Player", Callable(pantalla_main, "_on_avisando_jugador"))
 
 # ------------------------------------------------
 # 🔹 Inicio de partida (solo host)
