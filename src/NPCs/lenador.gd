@@ -32,6 +32,8 @@ var gather_timer := 0.0
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+# NODO AÑADIDO: Área para detectar la posición de recolección final
+@onready var gather_area: Area2D = $GatherArea2D 
 @onready var resource_manager = get_node("/root/Main/ResourceManager")
 @onready var mapa = get_node("/root/Main/Mapa")
 
@@ -50,10 +52,11 @@ func _ready():
 		nav_agent.velocity_computed.connect(self._on_velocity_computed)
 
 		# === Debug: mostrar todos los navmeshes del padre ===
-		print("NavAgent map:", nav_agent.get_navigation_map())
-		for child in get_parent().get_children():
-			if child is NavigationRegion2D:
-				print("NavRegion:", child, "RID:", child.get_navigation_map())
+		if debug:
+			print("NavAgent map:", nav_agent.get_navigation_map())
+			for child in get_parent().get_children():
+				if child is NavigationRegion2D:
+					print("NavRegion:", child, "RID:", child.get_navigation_map())
 	debug_tree_accessibility()
 
 	if debug:
@@ -101,14 +104,14 @@ func _find_nearest_tree():
 	var map_rid = nav_agent.get_navigation_map()
 
 	for tree in trees:
-		if not is_instance_valid(tree): 
+		if not is_instance_valid(tree):	
 			continue
-		if tree.has_meta("is_dead") and tree.get_meta("is_dead"): 
+		if tree.has_meta("is_dead") and tree.get_meta("is_dead"):	
 			continue
-		if not tree.has_method("gather_resource"): 
+		if not tree.has_method("gather_resource"):	
 			continue
 
-		# PUNTO SEGURO: cerca del árbol, pero fuera del obstacle
+		# PUNTO SEGURO: cerca del árbol, pero dentro del NavMesh
 		var raw_target = tree.global_position
 		var corrected_target = NavigationServer2D.map_get_closest_point(map_rid, raw_target)
 
@@ -116,11 +119,8 @@ func _find_nearest_tree():
 		if corrected_target.distance_to(raw_target) > 8: # 8px margen
 			continue
 
-		# Offset para no chocar con el obstacle
-		var direction = (corrected_target - global_position).normalized()
-		var safe_target = corrected_target - direction * nav_agent.radius
-
-		var dist_var = global_position.distance_to(safe_target) + randf_range(0.0, search_fuzziness)
+		# La navegación se dirige al punto corregido. La GatherArea detendrá al leñador.
+		var dist_var = global_position.distance_to(corrected_target) + randf_range(0.0, search_fuzziness)
 
 		if dist_var < min_distance:
 			min_distance = dist_var
@@ -139,7 +139,6 @@ func _find_nearest_tree():
 		_change_state(State.IDLE)
 
 
-
 # ============================================================
 # 🚶 Navegación robusta y corregida
 # ============================================================
@@ -151,23 +150,34 @@ func _start_navigation():
 	var map_rid = nav_agent.get_navigation_map()
 	var raw_target: Vector2 = target_tree.global_position
 
-	# → Corregir target al punto más cercano dentro del navmesh
+	# → Corregir target al punto más cercano dentro del navmesh (el punto de ataque/recolección)
 	var corrected_target = NavigationServer2D.map_get_closest_point(map_rid, raw_target)
-
-	# → Aplicar pequeño offset para no quedar dentro del obstacle
-	var direction_from_agent = (corrected_target - global_position).normalized()
-	var safe_target = corrected_target - direction_from_agent * nav_agent.radius
-
-	if debug:
-		print("[Lenador] Raw target:%s → Corrected:%s → Safe target:%s" % [raw_target, corrected_target, safe_target])
-
-	# Asignar target corregido y seguro al NavigationAgent
-	nav_agent.set_target_position(safe_target)
-	_change_state(State.MOVING_TO_TREE)
 
 	# Asignar target corregido al NavigationAgent
 	nav_agent.set_target_position(corrected_target)
 	_change_state(State.MOVING_TO_TREE)
+
+# ============================================================
+# ℹ️ Detección de Recolección
+# ============================================================
+# Función auxiliar para ver si el árbol está en rango.
+# Detecta si el árbol objetivo está físicamente dentro del área de detección (GatherArea2D).
+func _is_target_in_gather_range() -> bool:
+	if not is_instance_valid(target_tree):
+		return false
+	
+	# Usamos el área para comprobar si algún cuerpo o área superpuesta
+	# es el árbol que estamos buscando.
+	for body in gather_area.get_overlapping_bodies():
+		if body == target_tree:
+			return true
+	
+	# Si el árbol es un Area2D, comprobamos las áreas superpuestas también.
+	for area in gather_area.get_overlapping_areas():
+		if area == target_tree:
+			return true
+			
+	return false
 
 # ============================================================
 # ⏳ Movimiento + avoidance
@@ -180,11 +190,19 @@ func _physics_process(delta: float):
 			if not is_instance_valid(target_tree):
 				_change_state(State.IDLE)
 				return
-
-			if nav_agent.is_navigation_finished():
-				if debug: print(">>> Navigation finished")
+			
+			# LÓGICA CORREGIDA: Detectar la colisión con el área de recolección
+			if _is_target_in_gather_range():
+				if debug: print(">>> Target tree reached. Starting gather animation.")
 				_change_state(State.GATHERING)
-				velocity = Vector2.ZERO
+				velocity = Vector2.ZERO # Asegura que se detiene en el frame del cambio de estado
+				return
+			
+			# Si la navegación ha terminado, pero el árbol no está en rango (error de navmesh/radio)
+			if nav_agent.is_navigation_finished():
+				if debug: print(">>> Navigation finished, but tree not in range. Resetting.")
+				target_tree = null
+				_change_state(State.IDLE)
 				return
 
 			if not nav_agent.is_target_reachable():
@@ -203,9 +221,15 @@ func _physics_process(delta: float):
 			nav_agent.set_velocity(desired_velocity)
 
 		State.GATHERING:
+			# CORRECCIÓN: Asegurar que el leñador se detiene mientras recolecta.
+			velocity = Vector2.ZERO
+			move_and_slide()
+			
 			_gather(delta)
+			# La animación "Recolectar" ya está en marcha gracias a _change_state
 
 		_:
+			# IDLE y FINDING_TREE (también debe estar quieto)
 			velocity = Vector2.ZERO
 			move_and_slide()
 
@@ -224,6 +248,7 @@ func _gather(delta: float):
 	gather_timer += delta
 	if gather_timer >= gather_rate:
 		gather_timer = 0.0
+		
 		var wood_gained = target_tree.gather_resource(gather_amount)
 
 		if is_instance_valid(resource_manager):
@@ -232,14 +257,19 @@ func _gather(delta: float):
 		if debug:
 			print("[Lenador] Recolectando:", wood_gained)
 
+		# Cuando wood_gained es 0, el árbol está agotado.
+		# Se espera que el árbol haya cambiado su sprite a "depleted" 
+		# y haya emitido la señal "depleted" antes o durante este paso.
 		if wood_gained == 0:
 			_on_tree_depleted()
 
 func _on_tree_depleted():
-	if is_instance_valid(target_tree) and target_tree.is_connected("depleted", _on_tree_depleted):
-		target_tree.disconnect("depleted", _on_tree_depleted)
+	# Desconectar para evitar errores si el árbol se destruye más tarde
+	if is_instance_valid(target_tree) and target_tree.is_connected("depleted", Callable(self, "_on_tree_depleted")):
+		target_tree.disconnect("depleted", Callable(self, "_on_tree_depleted"))
 
 	target_tree = null
+	# Cambia a IDLE para forzar la búsqueda de un nuevo árbol en el siguiente _process
 	_change_state(State.IDLE)
 
 # ============================================================
@@ -260,7 +290,8 @@ func _change_state(new_state: State):
 		State.MOVING_TO_TREE:
 			anim_sprite.play("Caminar")
 		State.GATHERING:
-			anim_sprite.play("Recolectar")
+			# Aquí se inicia la animación de recolección (debe ser un loop o un ciclo de chop)
+			anim_sprite.play("Recolectar") 
 
 func _animate_movement(direction: Vector2):
 	if abs(direction.x) > 0.1:
@@ -270,19 +301,24 @@ func _animate_movement(direction: Vector2):
 # 🔍 AI básico de búsqueda
 # ============================================================
 func _process(delta: float):
+	# Ajustamos la z_index para el orden de dibujado (isométrico)
+	z_index = int(global_position.y) 
+	
 	if search_cooldown > 0:
 		search_cooldown -= delta
 		return
 
 	match current_state:
 		State.IDLE:
-			_change_state(State.FINDING_TREE)
+			# Solo buscamos si no tenemos un objetivo (lo cual ocurre tras la depletion).
+			if target_tree == null:
+				_change_state(State.FINDING_TREE)
 
 		State.FINDING_TREE:
 			_find_nearest_tree()
 
 	search_cooldown = 0.3
-	z_index = int(global_position.y)
+	
 
 # ============================================================
 # 🛡️ Evitar colisiones dinámicas con raycast
@@ -296,6 +332,8 @@ func _avoid_dynamic_collisions(desired_velocity: Vector2, delta: float) -> Vecto
 	query.from = cast_from
 	query.to = cast_to
 	query.exclude = [self]
+	# Añadimos máscaras de colisión para evitar colisionar con todos los nodos
+	# query.collision_mask = ... 
 
 	var result = space_state.intersect_ray(query)
 	if result:

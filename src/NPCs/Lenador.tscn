@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://c8poe0hltxepy"]
+[gd_scene load_steps=24 format=3 uid="uid://c8poe0hltxepy"]
 
 [ext_resource type="Texture2D" uid="uid://baoo8j02osvor" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Pawn/Red/Pawn_Red.png" id="1_4vglx"]
 [ext_resource type="Script" uid="uid://k3ocbkk7xf04" path="res://src/NPCs/lenador.gd" id="1_26hqc"]
@@ -150,6 +150,8 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_bqcf6"]
 radius = 17.864342
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_26hqc"]
+
 [node name="Lenador" type="CharacterBody2D"]
 show_behind_parent = true
 z_as_relative = false
@@ -174,3 +176,9 @@ disabled = true
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 avoidance_enabled = true
+
+[node name="GatherArea2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GatherArea2D"]
+scale = Vector2(7.2533336, -7.044572)
+shape = SubResource("CircleShape2D_26hqc")
