@@ -6,17 +6,18 @@ class_name Player
 # =====================================================================
 @export var speed: float = 300.0
 
-
 # =====================================================================
 # 🎬 NODOS
 # =====================================================================
 @onready var animated_sprite: AnimatedSprite2D = $Animacion
 @onready var attack_area: Area2D = $AttackArea
 @onready var foot_player: AudioStreamPlayer = $FootstepsPlayer
+@onready var foot_player_wood: AudioStreamPlayer = $FootstepsWood
 @onready var atk_player: AudioStreamPlayer = $AttackPlayer
 @onready var ui: CanvasLayer = get_node("/root/Main/UI")
 @onready var joystick_move: VirtualJoystick = ui.get_node("VirtualJoystick1")
 @onready var joystick_attack: VirtualJoystick = ui.get_node("VirtualJoystick2")
+@onready var wood_tilemap: TileMap = get_node("/root/Main/Mapa/Wood") # TileMap invisible para puentes
 
 # =====================================================================
 # 🎮 ESTADO
@@ -32,7 +33,7 @@ var color := "B"
 # =====================================================================
 func _ready() -> void:
 	add_to_group("jugador")
-	if (!GameState.is_pve && MultiplayerManager.get_my_quadrant() == 1) :
+	if (!GameState.is_pve and MultiplayerManager.get_my_quadrant() == 1):
 		color = "R"
 	attack_area.monitoring = true
 	animated_sprite.play("Idle" + color)
@@ -76,10 +77,9 @@ func _physics_process(_delta: float) -> void:
 	if input_dir != Vector2.ZERO:
 		last_direction = input_dir
 
-# =====================================================================
-# 🎬 ANIMACIONES Y SONIDOS
-# =====================================================================
-	# Animaciones
+	# =====================================================================
+	# 🎬 ANIMACIONES Y SONIDOS
+	# =====================================================================
 	var current_anim := ""
 	if input_dir != Vector2.ZERO:
 		current_anim = "Andar" + color
@@ -90,21 +90,25 @@ func _physics_process(_delta: float) -> void:
 	if current_anim != "" and animated_sprite.animation != current_anim:
 		animated_sprite.play(current_anim)
 
-	# Sonido PASOS (mientras la animación sea "Andar")
+	# Sonido PASOS
 	if current_anim == "Andar" + color:
-		if _last_anim != "Andar" + color:
-			foot_player.play()
-		if not foot_player.playing:
-			foot_player.play()
-	else:
-		if _last_anim == "Andar" + color:
+		if _is_on_bridge():
+			if not foot_player_wood.playing:
+				foot_player_wood.play()
 			foot_player.stop()
+		else:
+			if not foot_player.playing:
+				foot_player.play()
+			foot_player_wood.stop()
+	else:
+		foot_player.stop()
+		foot_player_wood.stop()
 
 	_last_anim = current_anim
 
-# =====================================================================
-# ⚔️ ATAQUE
-# =====================================================================
+	# =====================================================================
+	# ⚔️ ATAQUE
+	# =====================================================================
 	if Input.is_action_just_pressed("ataque") or (is_mobile and joystick_attack and joystick_attack.is_pressed):
 		start_attack(1)
 
@@ -153,3 +157,21 @@ func _show_sticks(visible: bool):
 		joystick_move.visible = visible
 	if joystick_attack:
 		joystick_attack.visible = visible
+
+# =====================================================================
+# 🪵 DETECCIÓN DE PUENTE USANDO TILEMAP INVISIBLE (GODOT 4.1+)
+# =====================================================================
+func _is_on_bridge() -> bool:
+	if not wood_tilemap:
+		return false
+
+	# Convertir global_position a coordenadas locales del TileMap
+	var local_pos: Vector2 = wood_tilemap.to_local(global_position)
+	var cell: Vector2i = wood_tilemap.local_to_map(local_pos)
+
+	# Obtener source_id del tile en esa celda, capa 0
+	var source_id: int = wood_tilemap.get_cell_source_id(0, cell)
+
+	print("Cell:", cell, "Source ID:", source_id) # Debug
+
+	return source_id != -1
