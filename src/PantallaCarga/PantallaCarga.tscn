@@ -1026,11 +1026,11 @@ position = Vector2(567, 360)
 scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_foafp")
 autoplay = "default"
-frame_progress = 0.15602994
+frame_progress = 0.28065386
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(570, 363)
 scale = Vector2(0.3, 0.31)
 sprite_frames = SubResource("SpriteFrames_sbyuh")
 autoplay = "default"
-frame_progress = 0.49619815
+frame_progress = 0.37031978

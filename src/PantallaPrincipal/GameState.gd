@@ -7,6 +7,13 @@ var is_pve: bool = false       # true = PVE local, false = PVP online
 var game_mode: String = "PVP"      # solo por claridad / debug
 
 # ----------------------------------------------------
+#  VARIABLES DE PARTIDAS GANADAS
+# ----------------------------------------------------
+var partidas_win: int = 0
+var partidas_tie: int = 0
+var partidas_loose: int = 0
+
+# ----------------------------------------------------
 #  TIEMPO Y TROPAS
 # ----------------------------------------------------
 var collected_seconds: float = 0
