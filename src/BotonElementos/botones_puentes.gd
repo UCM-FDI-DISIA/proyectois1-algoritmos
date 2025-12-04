@@ -13,15 +13,18 @@ class_name Puentes
 @export var p3_start: Vector2i = Vector2i(-15, -3)
 @export var p3_end:   Vector2i = Vector2i(-23, -3)
 
-@export var p4_start: Vector2i = Vector2i(-34, -11)
-@export var p4_end:   Vector2i = Vector2i(-34, -5)
+@export var p4_start: Vector2i = Vector2i(-34, 11)
+@export var p4_end:   Vector2i = Vector2i(-34, 5)
 
 # ==========================================================
 #   REFERENCIAS
 # ==========================================================
 @export var tile_map_path: NodePath = NodePath("/root/Main/Mapa/Decoracion")
+@export var suelo_map_path: NodePath = NodePath("/root/Main/Mapa/Suelo")
 @export var source_id: int = 9
+@export var source_suelo_id: int = 10
 @onready var tilemap: TileMapLayer = get_node(tile_map_path)
+@onready var suelo_map: TileMapLayer = get_node(suelo_map_path)
 @onready var rm: ResourceManager = get_node("/root/Main/ResourceManager")
 
 # ==========================================================
@@ -41,35 +44,39 @@ func _ready() -> void:
 #   AL PULSAR UN BOTÓN
 # ==========================================================
 func _on_puente_pressed(id: int) -> void:
-	# Ocultar botón primero 🔥
-	var btn: TextureButton = get_node("Puente%d" % id)
-	btn.visible = false
-	if id in [3,4]:
-		get_node("Puente3").visible = false
-		get_node("Puente4").visible = false
+	# Ocultar el botón pulsado
+	get_node("Puente%d" % id).visible = false
 
-	# Obtener posiciones inicio y final
-	var start: Vector2i
-	var end:   Vector2i
-	var cost_id: String
-
+	# Construcción según puente
 	match id:
-		1: start = p1_start; end = p1_end; cost_id = "puente1"
-		2: start = p2_start; end = p2_end; cost_id = "puente2"
-		3: start = p3_start; end = p3_end; cost_id = "puente3"
-		4: start = p4_start; end = p4_end; cost_id = "puente3"
-		_: return
+		1:
+			await _build_single(1, p1_start, p1_end)
+		2:
+			await _build_single(2, p2_start, p2_end)
+		3:
+			await _build_single(3, p3_start, p3_end)
+		4:
+			await _build_single(4, p4_start, p4_end)
+		_:
+			return
+
+# ==========================================================
+#   CONSTRUIR UN PUENTE INDIVIDUAL
+# ==========================================================
+func _build_single(id: int, start: Vector2i, end: Vector2i) -> void:
+	var cost_id := "puente1" if id == 1 else "puente2" if id == 2 else "puente3"
 
 	# Comprobar recursos
 	var cost := rm.get_puente_costs(cost_id)
 	for res in cost:
 		if rm.get_resource(res) < cost[res]:
-			print("Faltan recursos para %s" % cost_id)
+			print("Faltan recursos para", cost_id)
 			return
+
 	for res in cost:
 		rm.remove_resource(res, cost[res])
 
-	# Construir progresivamente
+	# Construcción visual
 	await _construir_puente(id, start, end)
 
 # ==========================================================
@@ -78,7 +85,7 @@ func _on_puente_pressed(id: int) -> void:
 func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 	var delay := 0.5
 
-	# Atlas según tu lógica:
+	# Atlas según tu lógica
 	var atlas_inicio: Vector2i
 	var atlas_medio: Vector2i
 	var atlas_final: Vector2i
@@ -88,28 +95,29 @@ func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 			atlas_inicio = Vector2i(0,3)
 			atlas_medio  = Vector2i(0,2)
 			atlas_final  = Vector2i(0,1)
-
 		2:
 			atlas_inicio = Vector2i(0,0)
 			atlas_medio  = Vector2i(1,0)
 			atlas_final  = Vector2i(2,0)
-
 		3:
-			atlas_inicio = Vector2i(0,3)
-			atlas_medio  = Vector2i(1,0)
-			atlas_final  = Vector2i(0,1)
-
-		4:
 			atlas_inicio = Vector2i(2,0)
-			atlas_medio  = Vector2i(0,2)
+			atlas_medio  = Vector2i(1,0)
 			atlas_final  = Vector2i(0,0)
+		4:
+			atlas_inicio = Vector2i(0,3)
+			atlas_medio  = Vector2i(0,2)
+			atlas_final  = Vector2i(0,1)
 
 	# Construir inicio
 	tilemap.set_cell(start, source_id, atlas_inicio)
 	await get_tree().create_timer(delay).timeout
 
 	# Construir partes intermedias
-	var dir := (end - start).sign()
+	var delta := end - start
+	var dir := Vector2i(
+		0 if delta.x == 0 else 1 if delta.x > 0 else -1,
+		0 if delta.y == 0 else 1 if delta.y > 0 else -1
+	)
 
 	var pos := start + dir
 	while pos != end:
@@ -119,6 +127,10 @@ func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 
 	# Construir final
 	tilemap.set_cell(end, source_id, atlas_final)
+
+	# Cambiar inicio y final en TileMap "Suelo"
+	suelo_map.set_cell(start, source_suelo_id, Vector2i(1,1))
+	suelo_map.set_cell(end, source_suelo_id, Vector2i(1,1))
 
 # ==========================================================
 #   UTILS
