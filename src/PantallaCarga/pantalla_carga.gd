@@ -2,11 +2,9 @@ extends Control
 
 @onready var texto = $TextoEstado
 @onready var lobby = $LobbyUnido
-@onready var anim = $Anim   # AnimationPlayer
 
 func _ready():
 	texto.text = "Inicializando..."
-	anim.play("girar_rueda")
 	print("[PantallaCarga] _ready → iniciando búsqueda de partida")
 
 	# Pedir al MultiplayerManager que empiece a mostrar mensajes sobre la búsqueda de partida
