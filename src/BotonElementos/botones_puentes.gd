@@ -38,45 +38,68 @@ func _ready() -> void:
 
 		var cost_id := "puente3" if i >= 3 else "puente%d" % i
 		btn.tooltip_text = _tooltip(rm.get_puente_costs(cost_id))
+
+		# Estado inicial según recursos
+		btn.disabled = not _hay_recursos(cost_id)
+
 		btn.pressed.connect(_on_puente_pressed.bind(i))
+
+# ==========================================================
+#   ACTUALIZACIÓN DINÁMICA DE BOTONES
+# ==========================================================
+func _process(_delta: float) -> void:
+	for i in range(1, 5):
+		var btn: TextureButton = get_node("Puente%d" % i)
+		if not btn or not btn.visible:
+			continue
+		var cost_id := "puente3" if i >= 3 else "puente%d" % i
+		btn.disabled = not _hay_recursos(cost_id)
+
+# ==========================================================
+#   UTIL PARA COMPROBAR RECURSOS
+# ==========================================================
+func _hay_recursos(cost_id: String) -> bool:
+	var cost := rm.get_puente_costs(cost_id)
+	for res in cost:
+		if rm.get_resource(res) < cost[res]:
+			return false
+	return true
 
 # ==========================================================
 #   AL PULSAR UN BOTÓN
 # ==========================================================
 func _on_puente_pressed(id: int) -> void:
-	# Ocultar el botón pulsado
-	get_node("Puente%d" % id).visible = false
+	var start: Vector2i
+	var end: Vector2i
+	var cost_id: String
 
-	# Construcción según puente
+	# Definir posiciones y cost_id
 	match id:
 		1:
-			await _build_single(1, p1_start, p1_end)
+			start = p1_start; end = p1_end; cost_id = "puente1"
 		2:
-			await _build_single(2, p2_start, p2_end)
+			start = p2_start; end = p2_end; cost_id = "puente2"
 		3:
-			await _build_single(3, p3_start, p3_end)
+			start = p3_start; end = p3_end; cost_id = "puente3"
 		4:
-			await _build_single(4, p4_start, p4_end)
+			start = p4_start; end = p4_end; cost_id = "puente3"
 		_:
 			return
 
-# ==========================================================
-#   CONSTRUIR UN PUENTE INDIVIDUAL
-# ==========================================================
-func _build_single(id: int, start: Vector2i, end: Vector2i) -> void:
-	var cost_id := "puente1" if id == 1 else "puente2" if id == 2 else "puente3"
+	# Comprobar recursos antes de hacer cualquier acción
+	if not _hay_recursos(cost_id):
+		print("Faltan recursos para", cost_id)
+		return  # No hace nada si faltan recursos
 
-	# Comprobar recursos
+	# Eliminar recursos
 	var cost := rm.get_puente_costs(cost_id)
-	for res in cost:
-		if rm.get_resource(res) < cost[res]:
-			print("Faltan recursos para", cost_id)
-			return
-
 	for res in cost:
 		rm.remove_resource(res, cost[res])
 
-	# Construcción visual
+	# Ocultar el botón solo si hay recursos
+	get_node("Puente%d" % id).visible = false
+
+	# Construcción progresiva del puente
 	await _construir_puente(id, start, end)
 
 # ==========================================================
