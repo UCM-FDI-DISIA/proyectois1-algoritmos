@@ -124,8 +124,12 @@ func fade_in_place(setted_options: Dictionary = {}) -> void:
 	await change_scene(null, setted_options)
 
 func _replace_scene(path: Variant, options: Dictionary) -> void:
-	_current_scene.queue_free()
-	scene_unloaded.emit()
+	if _current_scene:
+		if _current_scene.get_parent():
+			_current_scene.get_parent().remove_child(_current_scene)
+		_current_scene.queue_free()
+		scene_unloaded.emit()
+
 	var following_scene: PackedScene = _load_scene_resource(path)
 	_current_scene = following_scene.instantiate()
 	_current_scene.tree_entered.connect(options["on_tree_enter"].bind(_current_scene))
