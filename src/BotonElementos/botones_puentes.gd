@@ -7,7 +7,7 @@ class_name Puentes
 @export_group("Puente 1 (2 celdas)")
 @export var p1_cells: Array[Vector2i] = [
 	Vector2i(13, -5),
-	Vector2i(13, -4)   # ← la de encima
+	Vector2i(13, -4)
 ]
 @export var p1_atlas: Vector2i = Vector2i(0, 2)
 
@@ -19,8 +19,8 @@ class_name Puentes
 
 @export_group("Puente 3+4 (6 celdas)")
 @export var p34_cells: Array[Vector2i] = [
-	Vector2i(-18, -3), Vector2i(-19, -3), Vector2i(-20, -3),  # ← 3 primeras
-	Vector2i(-34, 7),  Vector2i(-34, 8),  Vector2i(-34, 9)     # ← 3 últimas
+	Vector2i(-18, -3), Vector2i(-19, -3), Vector2i(-20, -3),
+	Vector2i(-34, 7),  Vector2i(-34, 8),  Vector2i(-34, 9)
 ]
 
 # ----------------------------------------------------------
@@ -37,7 +37,8 @@ class_name Puentes
 func _ready() -> void:
 	for i in range(1, 5):
 		var btn: TextureButton = get_node("Puente%d" % i)
-		if not btn: continue
+		if not btn:
+			continue
 		var cost_id := "puente3" if i >= 3 else "puente%d" % i
 		btn.tooltip_text = _tooltip(rm.get_puente_costs(cost_id))
 		btn.pressed.connect(_on_puente_pressed.bind(i))
@@ -51,15 +52,27 @@ func _on_puente_pressed(id: int) -> void:
 	var cost_id: String
 
 	match id:
-		1: 
+		1:
 			cells = p1_cells; atlas = p1_atlas; cost_id = "puente1"
-		2: 
+		2:
 			cells = p2_cells; atlas = p2_atlas; cost_id = "puente2"
-		3, 4: 
+		3, 4:
 			cells = p34_cells; cost_id = "puente3"
-		_: 
+		_:
 			return
 
+	# ------------------------------------------------------
+	# ⭐ OCULTAR BOTONES ANTES DE EMPEZAR LA ANIMACIÓN
+	# ------------------------------------------------------
+	var btn: TextureButton = get_node("Puente%d" % id)
+	btn.visible = false
+	if id in [3, 4]:
+		for i in [3, 4]:
+			get_node("Puente%d" % i).visible = false
+
+	# ------------------------------------------------------
+	# RECURSOS
+	# ------------------------------------------------------
 	var cost := rm.get_puente_costs(cost_id)
 	for res in cost:
 		if rm.get_resource(res) < cost[res]:
@@ -68,22 +81,28 @@ func _on_puente_pressed(id: int) -> void:
 	for res in cost:
 		rm.remove_resource(res, cost[res])
 
-	# Coloca tiles
-	if id == 3 || id == 4:      # primeras 3 celdas → (0,2)
+	# Construcción progresiva
+	await _colocar_puente_con_delay(id, cells, atlas)
+
+# ----------------------------------------------------------
+#  APARICIÓN PROGRESIVA (0.5 s entre tiles)
+# ----------------------------------------------------------
+func _colocar_puente_con_delay(id: int, cells: Array[Vector2i], atlas: Vector2i) -> void:
+	var delay := 0.5
+
+	if id == 3 or id == 4:
 		for i in range(3):
 			tilemap.set_cell(cells[i], source_id, Vector2i(1, 0))
+			await get_tree().create_timer(delay).timeout
+
 		for i in range(3, 6):
 			tilemap.set_cell(cells[i], source_id, Vector2i(0, 2))
-	else:            # puente 1 ó 2
+			await get_tree().create_timer(delay).timeout
+
+	else:
 		for c in cells:
 			tilemap.set_cell(c, source_id, atlas)
-
-	# Oculta botones
-	var btn: TextureButton = get_node("Puente%d" % id)
-	btn.visible = false
-	if id in [3, 4]:
-		for i in [3, 4]:
-			get_node("Puente%d" % i).visible = false
+			await get_tree().create_timer(delay).timeout
 
 # ----------------------------------------------------------
 #  UTILS

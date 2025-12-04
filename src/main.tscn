@@ -931,12 +931,15 @@ tile_map_data = PackedByteArray("AAAsACEACQACAAAAAAArACEACQABAAAAAAAqACEACQABAAA
 tile_set = ExtResource("1_1bvp3")
 
 [node name="NavigationRegion2D3" type="NavigationRegion2D" parent="Mapa"]
+visible = false
 navigation_polygon = SubResource("NavigationPolygon_16cua")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="Mapa"]
+visible = false
 navigation_polygon = SubResource("NavigationPolygon_n36qx")
 
 [node name="NavigationRegion2D2" type="NavigationRegion2D" parent="Mapa"]
+visible = false
 navigation_polygon = SubResource("NavigationPolygon_nnhyx")
 
 [node name="Objetos" type="Node2D" parent="."]
@@ -945,6 +948,13 @@ y_sort_enabled = true
 
 [node name="BotonesPuentes" type="Node2D" parent="Objetos"]
 script = ExtResource("12_ocmcv")
+p1_cells = null
+p1_atlas = null
+p2_cells = null
+p2_atlas = null
+p34_cells = null
+tile_map_path = null
+source_id = null
 
 [node name="Puente1" parent="Objetos/BotonesPuentes" instance=ExtResource("12_43aqp")]
 offset_left = 829.0
