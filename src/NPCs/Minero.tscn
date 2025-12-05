@@ -1,5 +1,6 @@
-[gd_scene load_steps=22 format=3 uid="uid://pgaqw4ivysq1"]
+[gd_scene load_steps=24 format=3 uid="uid://pgaqw4ivysq1"]
 
+[ext_resource type="Script" uid="uid://bnbnt33684xqf" path="res://src/NPCs/minero.gd" id="1_1djbl"]
 [ext_resource type="Texture2D" uid="uid://bsen051ngs25a" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Pawn/Yellow/Pawn_Yellow.png" id="1_3yj1i"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1djbl"]
@@ -148,7 +149,11 @@ animations = [{
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_we2l8"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_3yj1i"]
+radius = 14.692983
+
 [node name="Minero" type="CharacterBody2D"]
+script = ExtResource("1_1djbl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_66hj5")
@@ -159,3 +164,12 @@ frame_progress = 0.8594856
 position = Vector2(0, 22)
 scale = Vector2(1.325, 1.24001)
 shape = SubResource("CircleShape2D_we2l8")
+disabled = true
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="GatherArea2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GatherArea2D"]
+scale = Vector2(5.04, 4.7599998)
+shape = SubResource("CircleShape2D_3yj1i")
