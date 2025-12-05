@@ -1,13 +1,27 @@
 extends StaticBody2D
 class_name ArbolAnimado
 
-# ============================================================
-# ⚙️ SEÑALES NUEVAS
-# ============================================================
 signal depleted
 
 # ============================================================
-# 🧩 NODOS (Sin cambios)
+# 🔧 Estados de ocupación (para evitar 2 leñadores en un árbol)
+# ============================================================
+var is_occupied: bool = false
+var occupying_lenador: Node = null
+
+func occupy(worker):
+	if is_occupied:
+		return false
+	is_occupied = true
+	occupying_lenador = worker
+	return true
+
+func release():
+	is_occupied = false
+	occupying_lenador = null
+
+# ============================================================
+# 🧩 NODOS
 # ============================================================
 @onready var anim: AnimatedSprite2D = $AnimacionArbol
 @onready var anim_tronco: AnimatedSprite2D = $AnimacionTronco
@@ -16,129 +30,108 @@ signal depleted
 @onready var collision_stump: CollisionShape2D = $CollisionShapeChop
 
 # ============================================================
-# 🔧 VARIABLES EXPORTADAS (Sin cambios)
+# 🔧 VARIABLES EXPORTADAS
 # ============================================================
-@export var cell_size: Vector2 = Vector2(64, 64)
-@export var MADERA_INICIAL: int = 3
+@export var MADERA_INICIAL: int = 15
 @export var MADERA_POR_GOLPE: int = 5
 @export var TIEMPO_REGENERACION: float = 30.0
-@export var TIEMPO_MORIR: float = 0.01
+@export var TIEMPO_MORIR: float = 0.1
 
 var is_dead: bool = false
 var madera_queda: int = MADERA_INICIAL
 
 # ============================================================
-# 🚀 READY (Añadido: Grupo)
+# 🚀 READY
 # ============================================================
 func _ready() -> void:
-	# 💡 NECESARIO PARA QUE EL LEÑADOR LO ENCUENTRE
 	add_to_group("arbol") 
-	
-	# activar colisión completa, desactivar colisión del tronco
+
 	collision_full.disabled = false
 	collision_stump.disabled = true
 
 	anim.play("Idle")
 
-
 # ============================================================
-# ⚔️ RECOLECCIÓN (Funciones originales para interacción con el jugador/mouse)
+# ⚔️ Golpe de JUGADOR (clic con el ratón)
 # ============================================================
 func hit() -> void:
 	if is_dead:
 		return
 
 	madera_queda -= 1
-	print("Árbol golpeado. Madera restante: %d" % madera_queda)
-
 	anim.play("chop")
 	anim_tronco.play("tronquito")
-	anim.animation_finished.connect(_on_anim_finished)
+	anim.animation_finished.connect(_on_player_anim_finished, CONNECT_ONE_SHOT)
 
-
-func _on_anim_finished() -> void:
-	if anim.animation != "chop":
-		return
-
-	var manager := get_node("/root/Main/ResourceManager") as ResourceManager
+func _on_player_anim_finished():
+	var manager := get_node("/root/Main/ResourceManager")
 	if manager:
 		manager.add_resource("wood", MADERA_POR_GOLPE)
 
-	anim.animation_finished.disconnect(_on_anim_finished)
-
 	if madera_queda <= 0:
 		is_dead = true
-		# 💡 EMITIR SEÑAL DE AGOTAMIENTO AQUÍ PARA QUE EL JUGADOR SE DÉ CUENTA INMEDIATAMENTE
 		emit_signal("depleted")
 		get_tree().create_timer(TIEMPO_MORIR).timeout.connect(_on_death_delay_timeout)
 	else:
 		anim.play("Idle")
 
-
 # ============================================================
-# ⛏️ RECOLECCIÓN (Función para la lógica del NPC Lenador)
+# ⛏️ Golpe de NPC (Lenador)
 # ============================================================
-# Función llamada por el Lenador para extraer recursos.
 func gather_resource(amount: int) -> int:
 	if is_dead:
 		return 0
 
-	# 1. Calcular la madera a recolectar realmente
-	var actual_gathered = min(amount, madera_queda)
-	
-	if actual_gathered > 0:
-		madera_queda -= actual_gathered
-		print("Árbol siendo talado por NPC. Madera restante: %d" % madera_queda)
-		
-		# 2. Iniciar animación de "chop" (asumimos que la animación es corta o se cicla en el NPC)
-		# Nota: Podrías querer una animación de 'chop' que no interrumpa al NPC o solo sea visual.
+	var gathered: int = min(amount, madera_queda)   # ← CORREGIDO
+
+	if gathered > 0:
+		madera_queda -= gathered
 		anim.play("chop")
 		anim.animation_finished.connect(_on_npc_chop_finished, CONNECT_ONE_SHOT)
-		
-		# 3. Verificar agotamiento
-		if madera_queda <= 0:
-			is_dead = true
-			# 💡 CRÍTICO: Emitir señal de agotamiento para que el leñador busque otro árbol
-			emit_signal("depleted") 
-			get_tree().create_timer(TIEMPO_MORIR).timeout.connect(_on_death_delay_timeout)
-			
-		return actual_gathered
-	
-	return 0
 
-# Se desconecta la animación del NPC después de cada golpe.
+	return gathered
+
+
 func _on_npc_chop_finished():
 	if not is_dead:
 		anim.play("Idle")
 
+# ============================================================
+# 💀 Talado FINAL por el leñador
+# ============================================================
+func fell():
+	if is_dead:
+		return
 
-# ============================================================
-# 💀 ÁRBOL TALADO (Sin cambios)
-# ============================================================
-func _on_death_delay_timeout() -> void:
+	is_dead = true
+	emit_signal("depleted")
+
 	anim.play("Die")
 
-	# desactivar colisión grande
 	collision_full.set_deferred("disabled", true)
-	# activar colisión pequeña del tronco
 	collision_stump.set_deferred("disabled", false)
 
-	print("Árbol caído. Regenerando en %.1f seg..." % TIEMPO_REGENERACION)
+	# Liberar ocupación al morir por si no lo hace el leñador aún
+	release()
 
 	get_tree().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
 
+# ============================================================
+# 💀 Muerte + regeneración
+# ============================================================
+func _on_death_delay_timeout():
+	anim.play("Die")
 
-# ============================================================
-# 🌱 REGENERACIÓN (Sin cambios)
-# ============================================================
-func _on_regen_timer_timeout() -> void:
-	print("Árbol regenerado.")
+	collision_full.set_deferred("disabled", true)
+	collision_stump.set_deferred("disabled", false)
+
+	get_tree().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
+
+func _on_regen_timer_timeout():
 	is_dead = false
 	madera_queda = MADERA_INICIAL
 
 	anim.play("Idle")
 
-	# recuperar colisión completa
 	collision_full.set_deferred("disabled", false)
-	# desactivar colisión pequeña
 	collision_stump.set_deferred("disabled", true)
