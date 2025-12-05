@@ -70,7 +70,7 @@ func _on_player_anim_finished():
 
 	if madera_queda <= 0:
 		is_dead = true
-		emit_signal("depleted")
+		emit_signal("depleted") # El jugador agota completamente el recurso
 		get_tree().create_timer(TIEMPO_MORIR).timeout.connect(_on_death_delay_timeout)
 	else:
 		anim.play("Idle")
@@ -82,36 +82,47 @@ func gather_resource(amount: int) -> int:
 	if is_dead:
 		return 0
 
-	var gathered: int = min(amount, madera_queda)   # ← CORREGIDO
+	var gathered: int = min(amount, madera_queda) 
 
 	if gathered > 0:
 		madera_queda -= gathered
 		anim.play("chop")
 		anim.animation_finished.connect(_on_npc_chop_finished, CONNECT_ONE_SHOT)
 
+	# ⬅️ CORRECCIÓN: Si la madera se agota, emitir 'depleted' y marcar como muerto AHORA
+	# El leñador lo detectará y se irá, deteniendo el golpe visual
+	if madera_queda <= 0:
+		is_dead = true
+		emit_signal("depleted") 
+		# NOTA: Esto hará que el leñador se resetee, pero no matará visualmente el árbol. 
+		# La función 'fell()' se encarga de la muerte visual final al completar los golpes.
+
 	return gathered
 
 
 func _on_npc_chop_finished():
+	# Si el árbol ya está muerto por el golpe, no volvemos a Idle, esperamos a 'fell'
 	if not is_dead:
 		anim.play("Idle")
+	# Si está muerto, la animación de chop se quedará hasta que el leñador llame a 'fell()'
 
 # ============================================================
 # 💀 Talado FINAL por el leñador
 # ============================================================
 func fell():
-	if is_dead:
-		return
+	if not is_dead:
+		is_dead = true # Asegurar que esté muerto
 
-	is_dead = true
-	emit_signal("depleted")
+	# Aunque ya se pudo haber emitido en gather_resource, lo emitimos de nuevo 
+	# para asegurar que si hay otro escuchando, se entere de la muerte final.
+	emit_signal("depleted") 
 
 	anim.play("Die")
 
 	collision_full.set_deferred("disabled", true)
 	collision_stump.set_deferred("disabled", false)
 
-	# Liberar ocupación al morir por si no lo hace el leñador aún
+	# Liberar ocupación al morir
 	release()
 
 	get_tree().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
