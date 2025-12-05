@@ -1,7 +1,7 @@
 [gd_scene load_steps=145 format=3 uid="uid://dh72ycg3i4emo"]
 
-[ext_resource type="Texture2D" uid="uid://bplgdapkbr4yg" path="res://src/AssetsUsados/PantallaCarga/fondoPantalla.jpg" id="1_1wec2"]
 [ext_resource type="Script" uid="uid://c7pnpq05u0l6s" path="res://src/PantallaCarga/pantalla_carga.gd" id="1_v6oja"]
+[ext_resource type="Texture2D" uid="uid://cb45tb74jbjuu" path="res://src/AssetsUsados/Fondos/ChatGPT Image 5 dic 2025, 10_29_53.png" id="2_n2mqc"]
 [ext_resource type="Texture2D" uid="uid://b6ud1nj5qygao" path="res://src/AssetsUsados/PantallaCarga/RelojFrames/Loading_teal.png" id="3_n2mqc"]
 [ext_resource type="Texture2D" uid="uid://mnvkn04s0a41" path="res://src/AssetsUsados/PantallaCarga/RelojFrames/Reloj.png" id="4_kxf84"]
 
@@ -994,7 +994,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_1wec2")
+texture = ExtResource("2_n2mqc")
 
 [node name="TextoEstado" type="Label" parent="."]
 layout_mode = 1
