@@ -47,9 +47,6 @@ func _ready() -> void:
 
 	anim.play("Idle")
 	z_index = int(position.y)
-
-	# ⬅️ CORRECCIÓN: Configurar los Timers (ASUMIENDO que los Timers fueron creados
-	# en el editor como nodos hijos llamados "RegenTimer" y "DepletionDelayTimer")
 	
 	# 1. Timer Regeneración
 	if is_instance_valid(regen_timer):

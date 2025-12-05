@@ -172,6 +172,7 @@ y_sort_enabled = true
 scale = Vector2(2.72, 2.4160013)
 shape = SubResource("CircleShape2D_bqcf6")
 disabled = true
+one_way_collision_margin = 3.5
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 avoidance_enabled = true

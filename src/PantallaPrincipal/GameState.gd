@@ -36,8 +36,8 @@ func _ready() -> void:
 	print("✅ GameState listo y accesible como singleton. Modo:", game_mode)
 
 func reset() -> void:
-	is_pve = false             # true = PVE local, false = PVP online
-	game_mode = "PVP"          # solo por claridad / debug
+	is_pve = false              # true = PVE local, false = PVP online
+	game_mode = "PVP"           # solo por claridad / debug
 	collected_seconds = 0
 	troop_counts = {
 		"Archer": 0,
@@ -136,3 +136,21 @@ func _on_player_data_changed(client_id: int, key: String, value) -> void:
 			# 3. Cambiar de escena tras el delay
 			print("Defensor: Cambiando a la escena de Batalla: campoBatalla.tscn")
 			get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
+
+
+# =====================================================================
+# 📊 RESULTADOS DE BATALLA (AÑADIDOS)
+# =====================================================================
+# Variable para almacenar los resultados detallados de la última batalla.
+var battle_results: Dictionary = {}
+
+## Guarda los resultados de la batalla para que la pantalla de resultados los use.
+## @param data: Diccionario con la estructura de resultados.
+func set_battle_results(data: Dictionary) -> void:
+	battle_results = data
+	print("✅ Resultados de batalla guardados en GameState.")
+
+## Obtiene los resultados de la última batalla.
+## @return Diccionario con los resultados.
+func get_battle_results() -> Dictionary:
+	return battle_results

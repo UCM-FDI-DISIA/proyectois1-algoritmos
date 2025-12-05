@@ -3,12 +3,12 @@ extends Node2D
 # =====================================================================
 # 🔧 VARIABLES EDITABLES
 # =====================================================================
-@export var spacing: float = 96.0                 # Espaciado entre tropas
+@export var spacing: float = 96.0
 @export var troop_scale: Vector2 = Vector2(3.0, 3.0)
-@export var smoke_scene: PackedScene              # Escena de la explosión central
+@export var smoke_scene: PackedScene
 @export var main_scene_path: String = "res://src/UI/Main.tscn" # Ruta para volver al menú
-@export var tween_duration: float = 3.0           # Duración del movimiento de las tropas
-@onready var main_menu_button: TextureButton = $MainMenuButton
+@export var results_scene_path: String = "res://src/PantallaResultadosBatalla/PantallaResultados.tscn"
+@export var tween_duration: float = 3.0
 
 # =====================================================================
 # 🧾 NODOS
@@ -44,12 +44,10 @@ func _ready() -> void:
 	var enemy_troops_data: Dictionary = _get_enemy_troop_data()
 	_spawn_enemy_troops(enemy_troops_data)
 
-	# 3. Configurar UI y Botón
-	main_menu_button.visible = false
-	main_menu_button.pressed.connect(_on_MainMenuButton_pressed)
-	
+	# 3. La UI del resultado ya NO se configura aquí.
+
 	# 4. Iniciar la batalla después del delay
-	_start_battle_countdown()
+	call_deferred("_start_battle_countdown")
 
 
 # =====================================================================
@@ -58,6 +56,7 @@ func _ready() -> void:
 func _get_enemy_troop_data() -> Dictionary:
 	var default_troops := { "Archer": 0, "Lancer": 0, "Monk": 0, "Warrior": 0 }
 	
+	# Se asume que GameState, GDSync y MultiplayerManager existen como Autoloads.
 	if GameState.is_pve:
 		print("Modo PVE → generando tropas de IA local.")
 		return _generate_ai_troops()
@@ -77,11 +76,9 @@ func _get_enemy_troop_data() -> Dictionary:
 func _spawn_player_troops() -> void:
 	var troop_counts: Dictionary = game_state.get_all_troop_counts()
 	
-	# Determinar color basado en el cuadrante (MultiplayerManager debe estar configurado)
 	var is_red_color := MultiplayerManager.get_my_quadrant() == 1
 	print("Mi cuadrante es ", MultiplayerManager.get_my_quadrant(), " - Color rojo: ", is_red_color)
 	
-	# *** CORRECCIÓN: Usa load() en lugar de preload() ***
 	var troop_scenes: Dictionary = _load_troop_scenes(is_red_color)
 
 	var battlefield_size := battlefield_tiles * tile_size
@@ -105,7 +102,6 @@ func _spawn_player_troops() -> void:
 		for i in range(count):
 			var troop: Node2D = scene.instantiate()
 			troop.scale = troop_scale
-			# Posición de inicio (lado izquierdo)
 			troop.position = Vector2(100 + i * spacing, row_y)
 			tropas_node.add_child(troop)
 			player_troops.append(troop)
@@ -120,11 +116,9 @@ func _spawn_player_troops() -> void:
 func _spawn_enemy_troops(enemy_data: Dictionary) -> void:
 	enemy_counts = enemy_data
 	
-	# Determinar color (opuesto al jugador)
 	var is_red_color := MultiplayerManager.get_my_quadrant() != 1
 	print("El enemigo tiene color rojo: ", is_red_color)
 	
-	# *** CORRECCIÓN: Usa load() en lugar de preload() ***
 	var troop_scenes: Dictionary = _load_troop_scenes(is_red_color)
 
 	var index := 0
@@ -134,12 +128,11 @@ func _spawn_enemy_troops(enemy_data: Dictionary) -> void:
 			continue
 
 		var scene: PackedScene = troop_scenes[troop_name]
-		var row_y := _row_y_for_index(index) # Usamos la función auxiliar para centrado
+		var row_y := _row_y_for_index(index)
 
 		for i in range(count):
 			var troop: Node2D = scene.instantiate()
-			troop.scale = Vector2(-troop_scale.x, troop_scale.y) # Mirar hacia el jugador
-			# Posición de inicio (lado derecho)
+			troop.scale = Vector2(-troop_scale.x, troop_scale.y)
 			troop.position = Vector2(battlefield_tiles.x * tile_size.x - 100 - i * spacing, row_y)
 			tropas_node.add_child(troop)
 			enemy_troops.append(troop)
@@ -154,7 +147,6 @@ func _spawn_enemy_troops(enemy_data: Dictionary) -> void:
 func _load_troop_scenes(is_red: bool) -> Dictionary:
 	var color_suffix := "_red" if is_red else ""
 	return {
-		# Usar load() en lugar de preload() para rutas dinámicas
 		"Archer": load("res://src/NPCs/TropasCampoBatalla/Archer" + color_suffix + ".tscn"),
 		"Lancer": load("res://src/NPCs/TropasCampoBatalla/Lancer" + color_suffix + ".tscn"),
 		"Monk": load("res://src/NPCs/TropasCampoBatalla/Monk" + color_suffix + ".tscn"),
@@ -166,7 +158,6 @@ func _load_troop_scenes(is_red: bool) -> Dictionary:
 # 🤖 AUXILIAR: Generar tropas AI PVE
 # =====================================================================
 func _generate_ai_troops() -> Dictionary:
-	# Genera un mínimo de 1 y un máximo de 5 de cada tipo
 	var troops := {
 		"Archer": randi_range(1, 5),
 		"Lancer": randi_range(1, 5),
@@ -198,7 +189,7 @@ func _start_battle_countdown() -> void:
 	label.text = "¡BATALLA!"
 	await get_tree().create_timer(1.0).timeout
 	label.queue_free()
-	canvas.queue_free() # Limpiamos la capa de cuenta atrás
+	canvas.queue_free()
 
 	_start_battle()
 
@@ -207,18 +198,15 @@ func _start_battle_countdown() -> void:
 # 🏃 MOVIMIENTO AL CENTRO
 # =====================================================================
 func _start_battle() -> void:
-	# 1. Comprobar si hay un resultado forzado (ej. un ejército vacío)
 	if not _check_forced_battle_result():
-		return # Batalla terminada antes de empezar
+		return
 
-	# 2. Configurar el movimiento
 	var center_x := (battlefield_tiles.x * tile_size.x) / 2.0
 	var attack_margin := 120.0
 
 	total_tweens = player_troops.size() + enemy_troops.size()
 	tweens_completed = 0
 
-	# 3. Mover tropas
 	for troop in player_troops:
 		_tween_troop(troop, center_x - attack_margin)
 
@@ -231,30 +219,16 @@ func _start_battle() -> void:
 # =====================================================================
 func _check_forced_battle_result() -> bool:
 	if player_troops.is_empty() and enemy_troops.is_empty():
-		# Caso extremo de doble cero (un empate forzado a cero tropas)
-		_show_battle_result_forced("draw")
+		_save_results_and_transition("¡Empate!")
 		return false
 	elif player_troops.is_empty():
-		_show_battle_result_forced("enemy")
+		_save_results_and_transition("¡Gana el Enemigo!")
 		return false
 	elif enemy_troops.is_empty():
-		_show_battle_result_forced("player")
+		_save_results_and_transition("¡Gana el Jugador!")
 		return false
 	
-	# Si ambos tienen tropas, continuamos la batalla.
 	return true
-
-
-func _show_battle_result_forced(winner: String) -> void:
-	var text := ""
-	if winner == "player":
-		text = "¡Gana el Jugador por abandono!"
-	elif winner == "enemy":
-		text = "¡Gana el Enemigo por abandono!"
-	elif winner == "draw":
-		text = "¡Empate!"
-		
-	_show_result_ui(text, enemy_counts)
 
 
 # =====================================================================
@@ -313,130 +287,64 @@ func _show_battle_result() -> void:
 	var p_power := _calculate_power(game_state.get_all_troop_counts())
 	var e_power := _calculate_power(enemy_counts)
 
-	# --- LÓGICA DE EMPATE ---
 	var result_text := ""
 	if p_power > e_power:
 		result_text = "¡Gana el Jugador!" 
 	elif p_power < e_power:
 		result_text = "¡Gana el Enemigo!"
 	else:
-		result_text = "¡Empate!" # ¡Empate!
+		result_text = "¡Empate!"
 
-	_show_result_ui(result_text, enemy_counts)
-
-
-# =====================================================================
-# 🖥️ PANTALLA DE RESULTADO (Incluye Empate)
-# =====================================================================
-func _show_result_ui(result_text: String, _enemy_counts: Dictionary) -> void:
-	var canvas := CanvasLayer.new()
-	add_child(canvas)
-
-	var bg := ColorRect.new()
-	bg.color = Color(0,0,0,0.7)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	canvas.add_child(bg)
-
-	var center_container := CenterContainer.new()
-	center_container.set_anchors_preset(Control.PRESET_FULL_RECT)
-	canvas.add_child(center_container)
-
-	var label := RichTextLabel.new()
-	label.bbcode_enabled = true
-	label.scroll_active = false
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	center_container.add_child(label)
-
-	var p_info := _format_troop_info(game_state.get_all_troop_counts(), "Jugador").split("\n")
-	var e_info := _format_troop_info(_enemy_counts, "Enemigo").split("\n")
-
-	var p_power := _calculate_power(game_state.get_all_troop_counts())
-	var e_power := _calculate_power(_enemy_counts)
-
-	var color := "yellow" # Color por defecto para Empate
-	if result_text.find("Jugador") != -1 and result_text.find("Gana") != -1:
-		color = "green"
-	elif result_text.find("Enemigo") != -1 and result_text.find("Gana") != -1:
-		color = "red"
-	# Si es empate, queda en amarillo.
-
-	var lines := []
-	var max_lines: int = max(p_info.size(), e_info.size())
-
-	# Formato de línea central para las tropas
-	for i in range(max_lines):
-		var p := p_info[i] if i < p_info.size() else ""
-		var e := e_info[i] if i < e_info.size() else ""
-		lines.append("[center]%s        %s[/center]" % [pad_right(p, 25), e])
-
-	# Montar el texto final
-	var text := "\n[center][color=%s][b]%s[/b][/color][/center]\n\n%s\n\n" % [
-		color, result_text, "\n".join(lines)
-	]
-
-	text += "[center] Poder Jugador: [b]%d[/b]   Poder Enemigo: [b]%d[/b][/center]" % [
-		p_power, e_power
-	]
-
-	label.bbcode_text = text
-	_update_label_font(label)
-
-	# Botón menú
-	var button_container := CenterContainer.new()
-	canvas.add_child(button_container)
-	button_container.anchor_top = 0.70
-	button_container.anchor_bottom = 1.0
-
-	# Reubicar el botón en la nueva UI
-	if is_instance_valid(main_menu_button) and main_menu_button.get_parent() != button_container:
-		main_menu_button.get_parent().remove_child(main_menu_button)
-		button_container.add_child(main_menu_button)
-		main_menu_button.scale = Vector2(1.75, 1.75)
-		main_menu_button.visible = true
+	_save_results_and_transition(result_text)
 
 
 # =====================================================================
-# 🔙 VOLVER AL MENÚ
+# ➡️ GUARDAR Y TRANSICIONAR A PANTALLA DE RESULTADOS
 # =====================================================================
-func _on_MainMenuButton_pressed() -> void:
-	if main_scene_path != "":
-		# Reseteo de Singletons
-		if game_state: game_state.reset()
-		if MultiplayerManager: MultiplayerManager.reset()
+func _save_results_and_transition(result_text: String) -> void:
+	if game_state == null:
+		push_error("GameState not found.")
+		return
+
+	# 1. Obtener datos finales
+	var player_troop_data = game_state.get_all_troop_counts()
+	var enemy_troop_data = enemy_counts
+	var p_power = _calculate_power(player_troop_data)
+	var e_power = _calculate_power(enemy_troop_data)
+	
+	# 2. Guardar los resultados en GameState
+	if not game_state.has_method("set_battle_results"):
+		push_error("GameState debe tener un método 'set_battle_results'.")
+		return
 		
-		# Abandono del lobby si está activo
-		if GDSync.is_active(): GDSync.lobby_leave()
-		
-		# Cambio de escena
-		get_tree().change_scene_to_file(main_scene_path)
+	game_state.set_battle_results({
+		"result_text": result_text,
+		"player_troops_data": player_troop_data,
+		"enemy_troops_data": enemy_troop_data,
+		"player_power": p_power,
+		"enemy_power": e_power
+	})
+
+	# 3. Limpiar la escena actual (opcional)
+	for t in player_troops + enemy_troops:
+		if is_instance_valid(t):
+			t.queue_free()
+
+	# 4. Cambiar de escena de forma diferida (¡CORRECCIÓN CLAVE!)
+	if results_scene_path != "":
+		print("Batalla terminada. Cambiando a escena de resultados.")
+		# El uso de call_deferred() asegura que el cambio de escena
+		# se ejecute después de que se completen todas las operaciones
+		# pendientes del frame actual, como la destrucción de nodos.
+		get_tree().call_deferred("change_scene_to_file", results_scene_path)
 	else:
-		push_error("❌ main_scene_path no está configurado")
-
-
-# =====================================================================
-# ✒️ AUXILIAR: FUENTES
-# =====================================================================
-func _update_label_font(label: RichTextLabel) -> void:
-	var size := int(get_viewport().get_visible_rect().size.y * 0.06)
-	label.add_theme_font_size_override("font_size", size)
-	label.custom_minimum_size = get_viewport().get_visible_rect().size * 0.9
-
-
-# =====================================================================
-# 🧾 AUXILIAR: Formato de Información de Tropas
-# =====================================================================
-func _format_troop_info(troop_dict: Dictionary, title: String) -> String:
-	var lines := ["%s:" % title]
-	for name in troop_dict.keys():
-		lines.append("    • %s × %d" % [name, troop_dict.get(name, 0)])
-	return "\n".join(lines)
+		push_error("❌ results_scene_path no está configurado.")
 
 
 # =====================================================================
 # 🧮 AUXILIAR: Cálculo de Poder Total
 # =====================================================================
 func _calculate_power(troop_dict: Dictionary) -> int:
-	# Pesos definidos por tipo de tropa
 	var weights = { "Archer": 2, "Lancer": 3, "Monk": 4, "Warrior": 1 }
 	var total := 0
 	for t in troop_dict.keys():
@@ -446,7 +354,7 @@ func _calculate_power(troop_dict: Dictionary) -> int:
 
 
 # =====================================================================
-# 🔧 AUXILIAR: Posición Y de la Fila Enemiga (Centrado)
+# 🔧 AUXILIARES RESTANTES
 # =====================================================================
 func _row_y_for_index(index: int) -> float:
 	var num_enemy_types := enemy_counts.keys().size()
@@ -459,26 +367,17 @@ func _row_y_for_index(index: int) -> float:
 	
 	return start_y + index * spacing * 2.0
 
-
-# =====================================================================
-# 🔍 AUXILIAR: Buscar Sprite Animado Anidado
-# =====================================================================
 func _find_sprite(node: Node) -> AnimatedSprite2D:
 	for child in node.get_children():
 		if child is AnimatedSprite2D:
 			return child
-		# Buscar recursivamente
 		var nested := _find_sprite(child)
 		if nested:
 			return nested
 	return null
 
-
-# =====================================================================
-# 🎞️ AUXILIAR: Reproducir Animaciones de Ataque
-# =====================================================================
 func _play_all_attack_animations() -> void:
-	var anim_length := 1.1 # Duración aproximada de la animación "Attack"
+	var anim_length := 1.1
 	var waits := []
 
 	for troop in player_troops + enemy_troops:
@@ -490,12 +389,3 @@ func _play_all_attack_animations() -> void:
 
 	for w in waits:
 		await w
-
-
-# =====================================================================
-# UTILIDADES
-# =====================================================================
-func pad_right(text: String, width: int) -> String:
-	var n := width - text.length()
-	if n > 0: text += " ".repeat(n)
-	return text

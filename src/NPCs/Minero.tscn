@@ -1,6 +1,6 @@
 [gd_scene load_steps=24 format=3 uid="uid://pgaqw4ivysq1"]
 
-[ext_resource type="Script" path="res://src/NPCs/minero.gd" id="1_1djbl"]
+[ext_resource type="Script" uid="uid://bnbnt33684xqf" path="res://src/NPCs/minero.gd" id="1_1djbl"]
 [ext_resource type="Texture2D" uid="uid://bsen051ngs25a" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Pawn/Yellow/Pawn_Yellow.png" id="1_3yj1i"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1djbl"]
@@ -165,6 +165,7 @@ position = Vector2(0, 22)
 scale = Vector2(1.325, 1.24001)
 shape = SubResource("CircleShape2D_we2l8")
 disabled = true
+one_way_collision_margin = 6.0
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 

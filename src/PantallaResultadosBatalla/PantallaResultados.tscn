@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=3 uid="uid://q18axu8tvw12"]
+
+[ext_resource type="Script" uid="uid://bmfluvshw72sl" path="res://src/PantallaResultadosBatalla/pantalla_resultados.gd" id="1_3dfhd"]
+[ext_resource type="Texture2D" uid="uid://b8vk176et6m84" path="res://src/AssetsUsados/Fondos/ChatGPT Image 5 dic 2025, 15_36_38.png" id="2_um8pp"]
+[ext_resource type="Texture2D" uid="uid://dlq3jbg126h5p" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_3Slides.png" id="3_jd1jf"]
+[ext_resource type="Texture2D" uid="uid://b8wu3vcfdac6y" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="4_ap3ij"]
+[ext_resource type="Texture2D" uid="uid://dhomycmtlnciv" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover_3Slides.png" id="5_8fafa"]
+
+[node name="PantallaResultados" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3dfhd")
+
+[node name="Fondo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -179.99997
+offset_top = -124.0
+offset_right = 204.0
+offset_bottom = 252.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.97973114, 0.8927565)
+texture = ExtResource("2_um8pp")
+stretch_mode = 5
+
+[node name="ResetButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.39236107
+anchor_top = 0.771605
+anchor_right = 0.59805924
+anchor_bottom = 0.92178315
+offset_left = 3.0517578e-05
+offset_right = -44.964233
+offset_bottom = -33.31549
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1.2341889, 1.5205545)
+texture_normal = ExtResource("3_jd1jf")
+texture_pressed = ExtResource("4_ap3ij")
+texture_hover = ExtResource("5_8fafa")
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="ResetButton"]
+layout_mode = 0
+offset_left = 71.4976
+offset_top = 12.496661
+offset_right = 120.4976
+offset_bottom = 35.496662
+theme_override_colors/font_color = Color(0.02745098, 0.13333334, 0.28627452, 1)
+text = "Volver"
+
+[node name="TextoResultados" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_right = 0.5
+grow_horizontal = 2
+grow_vertical = 2
