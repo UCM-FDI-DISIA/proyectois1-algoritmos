@@ -3,7 +3,7 @@
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
 [ext_resource type="PackedScene" uid="uid://dtox61xw2rp3e" path="res://src/Menus/InventarioRecursos/resources_hud.tscn" id="2_5mrjc"]
-[ext_resource type="Script" path="res://src/UI/ui.gd" id="2_jitvu"]
+[ext_resource type="Script" uid="uid://c3y0tt8bmp5aw" path="res://src/UI/ui.gd" id="2_jitvu"]
 [ext_resource type="PackedScene" uid="uid://iah8x7at2l31" path="res://src/Menus/Construccion/menu_construccion.tscn" id="2_okx7f"]
 [ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="3_c2usk"]
 [ext_resource type="PackedScene" uid="uid://fsq1fp7g6o7n" path="res://src/Menus/MenuSoldados/menuSoldados.tscn" id="3_d3u4l"]
@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Edificios/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="Script" uid="uid://d2e8dy1mo1k7w" path="res://src/Menus/MenuSoldados/MenuSoldados.gd" id="6_jitvu"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
-[ext_resource type="Script" path="res://src/Recursos/ResourceManager.gd" id="6_lovvn"]
+[ext_resource type="Script" uid="uid://dut20ponmt82k" path="res://src/Recursos/ResourceManager.gd" id="6_lovvn"]
 [ext_resource type="PackedScene" uid="uid://c677m228bca8p" path="res://src/Recursos/MinaPiedra/minaPiedraAnimado.tscn" id="7_rlaii"]
 [ext_resource type="PackedScene" uid="uid://di4vbru44oxk6" path="res://src/Edificios/CasaCanteros/CasaCanteros.tscn" id="8_sta5p"]
 [ext_resource type="PackedScene" uid="uid://c6wex4pd4eg7t" path="res://src/Edificios/Casa/CasaAnimada.tscn" id="9_mgm53"]
@@ -27,7 +27,7 @@
 [ext_resource type="AudioStream" uid="uid://vs3ah6ms8317" path="res://sfx/Minecraft/step/stone2.ogg" id="20_nnhyx"]
 [ext_resource type="PackedScene" uid="uid://bg6kvrfqm2lc6" path="res://src/BotonElementos/boton_batalla.tscn" id="21_jitvu"]
 [ext_resource type="AudioStream" uid="uid://kjiq8mq5mrt3" path="res://sfx/Minecraft/step/wood1.ogg" id="22_16cua"]
-[ext_resource type="Script" path="res://src/PantallaPrincipal/matchmaking_recursos.gd" id="22_ib8ht"]
+[ext_resource type="Script" uid="uid://j5u3eni8i8em" path="res://src/PantallaPrincipal/matchmaking_recursos.gd" id="22_ib8ht"]
 [ext_resource type="PackedScene" uid="uid://bbo05kp3bjw4u" path="res://src/BotonElementos/boton_s.tscn" id="22_ocmcv"]
 [ext_resource type="Texture2D" uid="uid://knoivg0aqqle" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="24_ocmcv"]
 [ext_resource type="Script" uid="uid://dx4mnernx43c7" path="res://src/PantallaPrincipal/TimerRoot.gd" id="27_c2usk"]
@@ -1049,10 +1049,10 @@ z_as_relative = false
 y_sort_enabled = true
 
 [node name="BotonBatalla1" parent="Objetos" instance=ExtResource("21_jitvu")]
-offset_left = 3045.0
-offset_top = 2162.0
-offset_right = 3109.0
-offset_bottom = 2226.0
+offset_left = 3002.0
+offset_top = 2121.0
+offset_right = 3066.0
+offset_bottom = 2185.0
 
 [node name="BotonBatalla2" parent="Objetos" instance=ExtResource("21_jitvu")]
 offset_left = 5139.0
