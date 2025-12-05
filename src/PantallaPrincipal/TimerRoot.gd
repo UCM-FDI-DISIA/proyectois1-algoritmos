@@ -5,7 +5,7 @@ signal tiempo_especifico_alcanzado
 # =====================================================================
 # 🔧 VARIABLES EDITABLES
 # =====================================================================
-@export var START_TIME := 3.0		 # duración total (segundos)
+@export var START_TIME := 120.0		 # duración total (segundos)
 @export var SIGNAL_AT	:= 90.0		 # segundo en el que se emite la señal
 @export var FINAL_WARN := 15.0		 # últimos segundos con advertencia roja
 @export var POST_DELAY := 3.0		 # Tiempo que dura la animación (3s)
