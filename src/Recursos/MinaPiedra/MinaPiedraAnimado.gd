@@ -78,9 +78,7 @@ func hit() -> void:
 		manager.add_resource("stone", PIEDRA_POR_GOLPE)
 
 	if roca_queda <= 0:
-		is_depleted = true
-		emit_signal("depleted")
-		get_tree().create_timer(TIEMPO_AGOTARSE).timeout.connect(_on_depletion_delay_timeout)
+		fell() # Usar el mismo método que el NPC para agotar
 
 # ============================================================
 # ⚔️ RECOLECCIÓN NPC (Cantero)
@@ -96,18 +94,30 @@ func gather_resource(amount: int) -> int:
 		anim_explosion.visible = true
 		anim_explosion.play("Collect")
 
-	# NO se emite depleted ni se marca is_depleted aquí, el NPC completa sus golpes primero
+	# No se emite depleted ni se marca is_depleted aquí; el NPC completa sus golpes primero
 	return gathered
 
 # ============================================================
-# 💀 MINA AGOTADA
+# 💀 Método para agotar la mina (igual que Arbol.fell)
 # ============================================================
-func _on_depletion_delay_timeout() -> void:
-	print("Mina agotada.")
+func fell() -> void:
+	if is_depleted:
+		return
+
+	is_depleted = true
+	emit_signal("depleted")
+
+	# Activar animaciones y colisiones de mina agotada
 	set_rocas_visibles(rocas_grandes, false)
 	set_rocas_visibles(rocas_pequenas, true)
 	_set_collision_state(false)
+
+	# Liberar ocupación
+	release()
+
+	# Iniciar regeneración
 	regeneration_timer.start(TIEMPO_REGENERACION)
+	print("Mina regenerándose. Tiempo: ", TIEMPO_REGENERACION, " segundos.")
 
 # ============================================================
 # 🌱 REGENERACIÓN

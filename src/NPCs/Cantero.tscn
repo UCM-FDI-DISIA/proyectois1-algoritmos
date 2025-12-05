@@ -153,12 +153,6 @@ animations = [{
 
 [node name="Cantero" type="CharacterBody2D"]
 script = ExtResource("1_lfxaq")
-speed = null
-gather_rate = null
-gather_amount = null
-search_radius = null
-stop_distance = null
-chop_needed = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_kx867")
@@ -169,6 +163,7 @@ frame_progress = 0.37364087
 position = Vector2(0, 22)
 scale = Vector2(1.4171427, 1.4331429)
 shape = SubResource("CircleShape2D_u48sf")
+disabled = true
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 avoidance_enabled = true
