@@ -89,13 +89,10 @@ func gather_resource(amount: int) -> int:
 		anim.play("chop")
 		anim.animation_finished.connect(_on_npc_chop_finished, CONNECT_ONE_SHOT)
 
-	# ⬅️ CORRECCIÓN: Si la madera se agota, emitir 'depleted' y marcar como muerto AHORA
-	# El leñador lo detectará y se irá, deteniendo el golpe visual
+	# Si la madera se agota, emitir 'depleted' y marcar como muerto AHORA
 	if madera_queda <= 0:
 		is_dead = true
 		emit_signal("depleted") 
-		# NOTA: Esto hará que el leñador se resetee, pero no matará visualmente el árbol. 
-		# La función 'fell()' se encarga de la muerte visual final al completar los golpes.
 
 	return gathered
 
@@ -114,7 +111,6 @@ func fell():
 		is_dead = true # Asegurar que esté muerto
 
 	# Aunque ya se pudo haber emitido en gather_resource, lo emitimos de nuevo 
-	# para asegurar que si hay otro escuchando, se entere de la muerte final.
 	emit_signal("depleted") 
 
 	anim.play("Die")

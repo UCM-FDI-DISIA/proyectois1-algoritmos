@@ -7,11 +7,11 @@ signal tree_felled(tree)
 # 🔧 VARIABLES EXPORTADAS
 # ============================================================
 @export var speed := 100.0
-@export var gather_rate := 1.0   # tiempo entre golpes
+@export var gather_rate := 1.0     # tiempo entre golpes
 @export var gather_amount := 5
 @export var search_radius := 2000.0
 @export var search_fuzziness := 50.0
-@export var stop_distance := 32.0  # distancia real para talar
+@export var stop_distance := 32.0   # distancia real para talar
 @export var target_offset := Vector2(-46, -46)
 
 # ============================================================
@@ -112,7 +112,7 @@ func _physics_process(delta: float):
 
 		State.MOVING_TO_TREE:
 			if !is_instance_valid(target_tree):
-				_change_state(State.IDLE)
+				_on_tree_depleted()
 				return
 
 			# Si ya llegó → detener y talar
@@ -127,8 +127,7 @@ func _physics_process(delta: float):
 			# Navegación problemática
 			if nav_agent.is_navigation_finished():
 				if debug: print(">>> La ruta terminó pero no alcanzó el árbol")
-				target_tree = null
-				_change_state(State.IDLE)
+				_on_tree_depleted()
 				return
 
 			var next_point = nav_agent.get_next_path_position()
@@ -169,17 +168,25 @@ func _gather(delta: float):
 	if debug:
 		print("[Lenador] Golpe", chop_count, "de", chop_needed)
 
-	# Daño por golpe
+	# Daño por golpe (El árbol registra el daño)
 	target_tree.gather_resource(gather_amount)
+
+	# ⬅️ CORRECCIÓN: Sumar 1 de madera al ResourceManager por cada golpe
+	if is_instance_valid(resource_manager):
+		# Independientemente de gather_amount, sumamos 1 unidad al recurso "wood"
+		resource_manager.add_resource("wood", 1)
+		if debug:
+			print("[Lenador] Añadida 1 de madera al Resource Manager por el golpe.")
 
 	# Si ya dio todos los golpes → talar árbol
 	if chop_count >= chop_needed:
 		if debug: print("[Lenador] Árbol talado completamente.")
 
-		emit_signal("tree_felled", target_tree)
+		if is_instance_valid(target_tree):
+			emit_signal("tree_felled", target_tree)
 
-		if target_tree.has_method("fell"):
-			target_tree.fell()
+			if target_tree.has_method("fell"):
+				target_tree.fell()
 
 		_on_tree_depleted()
 
