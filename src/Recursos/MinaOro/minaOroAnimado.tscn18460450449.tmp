@@ -1,0 +1,151 @@
+[gd_scene load_steps=20 format=3 uid="uid://b16fkyrsi8o7y"]
+
+[ext_resource type="Script" uid="uid://b7s076gpi14ip" path="res://src/Recursos/MinaOro/MinaOroAnimado.gd" id="1_188qd"]
+[ext_resource type="Texture2D" uid="uid://bt11g46ev4u3d" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/GoldMine_Active.png" id="1_w6psx"]
+[ext_resource type="Texture2D" uid="uid://c427whupsje8b" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/GoldMine_Inactive.png" id="3_4727j"]
+[ext_resource type="Texture2D" uid="uid://dti2fl7yrpm64" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Gold Mine/GoldMine_Destroyed.png" id="4_4727j"]
+[ext_resource type="Texture2D" uid="uid://dfgpjfyod5ww0" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/G_Spawn.png" id="5_188qd"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_188qd"]
+atlas = ExtResource("1_w6psx")
+region = Rect2(0, 0, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vglmd"]
+atlas = ExtResource("3_4727j")
+region = Rect2(0, 0, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a8eic"]
+atlas = ExtResource("1_w6psx")
+region = Rect2(0, 0, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ui526"]
+atlas = ExtResource("4_4727j")
+region = Rect2(0, 0, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6nuxl"]
+atlas = ExtResource("1_w6psx")
+region = Rect2(0, 0, 192, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ui526"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_188qd")
+}, {
+"duration": 1.11,
+"texture": SubResource("AtlasTexture_vglmd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a8eic")
+}],
+"loop": false,
+"name": &"Collect",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ui526")
+}],
+"loop": true,
+"name": &"Depleted",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6nuxl")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27y5l"]
+atlas = ExtResource("5_188qd")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xjn73"]
+atlas = ExtResource("5_188qd")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sgq51"]
+atlas = ExtResource("5_188qd")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8wpcg"]
+atlas = ExtResource("5_188qd")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s58pr"]
+atlas = ExtResource("5_188qd")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a5o7x"]
+atlas = ExtResource("5_188qd")
+region = Rect2(768, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cggiv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27y5l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xjn73")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sgq51")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8wpcg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s58pr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a5o7x")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"bolsita",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_188qd"]
+size = Vector2(192, 64)
+
+[node name="MinaOroAnimado" type="StaticBody2D" groups=["mina_oro", "objeto_bloqueante"]]
+z_as_relative = false
+y_sort_enabled = true
+script = ExtResource("1_188qd")
+
+[node name="AnimacionMina" type="AnimatedSprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+sprite_frames = SubResource("SpriteFrames_ui526")
+animation = &"Depleted"
+offset = Vector2(0, -21)
+
+[node name="AnimacionOro" type="AnimatedSprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(43, 17)
+sprite_frames = SubResource("SpriteFrames_cggiv")
+animation = &"bolsita"
+frame = 7
+frame_progress = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+shape = SubResource("RectangleShape2D_188qd")
+one_way_collision_margin = 4.0
+
+[node name="regenTimer" type="Timer" parent="."]
+
+[node name="deathDelayTimer" type="Timer" parent="."]
+wait_time = 0.1

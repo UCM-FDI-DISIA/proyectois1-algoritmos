@@ -4,48 +4,64 @@ class_name MinaOroAnimado
 signal depleted
 
 # =====================================================================
-# 🧩 NODOS
+# 🧾 NODOS
 # =====================================================================
 @onready var anim: AnimatedSprite2D = $AnimacionMina
 @onready var anim_oro: AnimatedSprite2D = $AnimacionOro
-@onready var collision_full: CollisionShape2D = $CollisionShape2D
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
+
+# ⬅️ CORRECCIÓN: Referencias seguras a los Timers creados en el editor
+@onready var regen_timer: Timer = $regenTimer
+@onready var depletion_delay_timer: Timer = $deathDelayTimer
 
 # =====================================================================
 # 🔧 VARIABLES EDITABLES
 # =====================================================================
+@export var cell_size: Vector2 = Vector2(168, 58)
 @export var ORO_INICIAL: int = 3
-@export var ORO_POR_GOLPE: int = 1
+@export var ORO_POR_GOLPE: int = 3
 @export var TIEMPO_REGENERACION: float = 30.0
 @export var TIEMPO_AGOTARSE: float = 0.3
-@export var stop_distance: float = 32.0
-@export var target_offset: Vector2 = Vector2(0, -32)
 
-@export var capacity: int = 1
-var resource_type: String = "gold"
+@export var capacity := 1
+var resource_type := "gold"
 
 # =====================================================================
 # 🎮 ESTADO
 # =====================================================================
 var is_depleted: bool = false
 var oro_queda: int = ORO_INICIAL
+
 var is_occupied: bool = false
 var occupying_miner: Node = null
-var regeneration_timer: Timer
+
 
 # =====================================================================
-# ⚙️ READY
+# ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
-	add_to_group("mina_oro")
+	add_to_group("mina_oro") 
 
-	# Timer regeneración
-	regeneration_timer = Timer.new()
-	regeneration_timer.one_shot = true
-	regeneration_timer.timeout.connect(_on_regen_timer_timeout)
-	add_child(regeneration_timer)
+	if collision_shape.shape is RectangleShape2D:
+		collision_shape.shape.size = cell_size
 
 	anim.play("Idle")
-	z_index = int(global_position.y)
+	z_index = int(position.y)
+
+	# ⬅️ CORRECCIÓN: Configurar los Timers (ASUMIENDO que los Timers fueron creados
+	# en el editor como nodos hijos llamados "RegenTimer" y "DepletionDelayTimer")
+	
+	# 1. Timer Regeneración
+	if is_instance_valid(regen_timer):
+		regen_timer.wait_time = TIEMPO_REGENERACION
+		regen_timer.one_shot = true
+		regen_timer.timeout.connect(_on_regen_timer_finished)
+
+	# 2. Timer Retraso Agotamiento
+	if is_instance_valid(depletion_delay_timer):
+		depletion_delay_timer.wait_time = TIEMPO_AGOTARSE
+		depletion_delay_timer.one_shot = true
+		depletion_delay_timer.timeout.connect(_on_depletion_delay_timeout)
 
 # =====================================================================
 # ⚔️ RECOLECCIÓN JUGADOR
@@ -54,61 +70,90 @@ func hit() -> void:
 	if is_depleted:
 		return
 
-	oro_queda -= ORO_POR_GOLPE
-	anim.play("Collect")
-	anim_oro.play("Collect") 
+	oro_queda -= 1 
+	print("Mina golpeada por jugador. Oro restante: %d" % oro_queda)
 
-	var manager: ResourceManager = get_node("/root/Main/ResourceManager") as ResourceManager
-	if manager != null:
-		manager.add_resource(resource_type, ORO_POR_GOLPE)
+	anim.play("Collect")
+	anim_oro.play("bolsita")
+	
+	anim.animation_finished.connect(_on_anim_finished, CONNECT_ONE_SHOT) 
+
+func _on_anim_finished() -> void:
+	if anim.animation != "Collect":
+		return
+
+	var manager := get_node("/root/Main/ResourceManager") as ResourceManager
+	if manager:
+		manager.add_resource("gold", ORO_POR_GOLPE)
+		print("Oro añadido (Jugador): +%d" % ORO_POR_GOLPE)
 
 	if oro_queda <= 0:
-		# Mina agotada por jugador
 		is_depleted = true
-		emit_signal("depleted")
-		_on_depletion_delay_timeout()
+		# ⬅️ CORRECCIÓN: Llamada segura al Timer de agotamiento
+		if is_instance_valid(depletion_delay_timer):
+			depletion_delay_timer.start() 
 	else:
 		anim.play("Idle")
 
 # =====================================================================
-# ⚔️ RECOLECCIÓN NPC
+# ⛏️ RECOLECCIÓN NPC (Minero)
 # =====================================================================
 func gather_resource(amount: int) -> int:
 	if is_depleted:
 		return 0
 
-	var gathered: int = min(amount, oro_queda)
-	if gathered > 0:
-		oro_queda -= gathered
-		anim.play("Collect")
-		anim_oro.play("Collect") 
-
-	return gathered
-
-func fell() -> void:
-	if is_depleted:
-		return
-
-	is_depleted = true
-	emit_signal("depleted")
-
-	anim.play("Depleted")
+	var gathered: int = 1
 	
+	if oro_queda > 0:
+		oro_queda -= 1
+		
+		anim.play("Collect")
+		anim_oro.play("bolsita") 
 
-	regeneration_timer.start(TIEMPO_REGENERACION)
-	print("Mina de oro agotada, regenerando en %.1f seg..." % TIEMPO_REGENERACION)
+		anim.animation_finished.connect(_on_npc_anim_finished, CONNECT_ONE_SHOT)
+		
+		print("Mina golpeada por NPC. Oro restante: %d" % oro_queda)
+		
+		if oro_queda <= 0:
+			is_depleted = true
+			emit_signal("depleted") 
+			
+			# ⬅️ CORRECCIÓN: Llamada segura al Timer de agotamiento
+			if is_instance_valid(depletion_delay_timer):
+				depletion_delay_timer.start() 
+		
+		return gathered
+	else:
+		is_depleted = true
+		emit_signal("depleted")
+		return 0
+
+func _on_npc_anim_finished() -> void:
+	if anim.animation != "Collect":
+		return
+	
+	if not is_depleted:
+		anim.play("Idle")
+
 
 # =====================================================================
-# 🔄 REGENERACIÓN
+# 🔄 LÓGICA DE AGOTAMIENTO Y REGENERACIÓN
 # =====================================================================
 func _on_depletion_delay_timeout() -> void:
-	fell()  # reutilizamos el método para jugador/NPC
+	
+	is_depleted = true 
+	
+	anim.play("Depleted")
+	print("Mina agotada. Regenerando en %.1f seg..." % TIEMPO_REGENERACION)
+	
+	# ⬅️ CORRECCIÓN: Llamada segura al Timer de regeneración
+	if is_instance_valid(regen_timer):
+		regen_timer.start() 
 
-func _on_regen_timer_timeout() -> void:
-	print("Mina de oro regenerada.")
+func _on_regen_timer_finished() -> void:
+	print("Mina regenerada.")
 	is_depleted = false
 	oro_queda = ORO_INICIAL
-
 	anim.play("Idle")
 
 
