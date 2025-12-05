@@ -148,7 +148,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bqcf6"]
-radius = 17.864342
+radius = 11.697564
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_26hqc"]
 
@@ -169,8 +169,8 @@ animation = &"Idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(0, 22)
-scale = Vector2(1.36, 1.44)
+position = Vector2(0, 16)
+scale = Vector2(1.36, 0.72)
 shape = SubResource("CircleShape2D_bqcf6")
 disabled = true
 

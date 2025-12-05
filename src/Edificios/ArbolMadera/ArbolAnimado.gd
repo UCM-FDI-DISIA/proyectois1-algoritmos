@@ -4,11 +4,11 @@ class_name ArbolAnimado
 signal depleted
 
 # ============================================================
-# 🔧 Estados de ocupación (para evitar 2 leñadores en un árbol)
+# 🔧 Estados de ocupación
 # ============================================================
 var is_occupied: bool = false
 var occupying_lenador: Node = null
-var regeneration_timer: Timer # Nodo para el temporizador de 30s
+var regeneration_timer: Timer 
 
 func occupy(worker):
 	if is_occupied:
@@ -47,7 +47,7 @@ var madera_queda: int = MADERA_INICIAL
 func _ready() -> void:
 	add_to_group("arbol") 
 	
-	# Inicializar el temporizador de regeneración
+	# Inicializar el temporizador de regeneración para el NPC
 	regeneration_timer = Timer.new()
 	add_child(regeneration_timer)
 	regeneration_timer.one_shot = true
@@ -67,7 +67,7 @@ func hit() -> void:
 
 	madera_queda -= 1
 	anim.play("chop")
-	anim_tronco.play("tronquito")
+	anim_tronco.play("tronquito") 
 	anim.animation_finished.connect(_on_player_anim_finished, CONNECT_ONE_SHOT)
 
 func _on_player_anim_finished():
@@ -93,19 +93,20 @@ func gather_resource(amount: int) -> int:
 
 	if gathered > 0:
 		madera_queda -= gathered
+		
+		# ⬅️ CORRECCIÓN: Mostrar el tocón con el golpe del NPC
+		anim_tronco.play("tronquito") 
+
 		anim.play("chop")
 		anim.animation_finished.connect(_on_npc_chop_finished, CONNECT_ONE_SHOT)
 
-	# **CORRECCIÓN CLAVE:** NO emitimos 'depleted' ni marcamos is_dead aquí 
-	# para el NPC, porque queremos que termine los 3 golpes antes de morir.
-	# La disminución de madera se registra, pero la muerte la decide fell().
+	# NO se emite 'depleted' ni se marca is_dead aquí. 
+	# Queremos que el leñador complete sus 3 golpes antes de que muera (fell()).
 
 	return gathered
 
 
 func _on_npc_chop_finished():
-	# Si la madera se agotó, la animación se quedará en el último golpe (chop)
-	# hasta que 'fell' active la animación "Die".
 	if not is_dead:
 		anim.play("Idle")
 
@@ -131,7 +132,7 @@ func fell():
 	# 4. Liberar ocupación
 	release()
 
-	# 5. **CORRECCIÓN CLAVE:** Iniciar el temporizador de 30 segundos
+	# 5. ⬅️ CORRECCIÓN: Iniciar el temporizador de 30 segundos
 	regeneration_timer.start(TIEMPO_REGENERACION)
 	print("Árbol regenerándose. Tiempo: ", TIEMPO_REGENERACION, " segundos.")
 
@@ -139,20 +140,24 @@ func fell():
 # 💀 Muerte + regeneración
 # ============================================================
 func _on_death_delay_timeout():
-	# Lógica del jugador, que sigue usando el temporizador simple
+	# Lógica del jugador (usa un temporizador diferente al NPC)
 	anim.play("Die")
 
 	collision_full.set_deferred("disabled", true)
 	collision_stump.set_deferred("disabled", false)
 
-	get_tree().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
+	# Usar el temporizador interno del nodo para no depender del get_tree()
+	regeneration_timer.start(TIEMPO_REGENERACION)
+
 
 func _on_regen_timer_timeout():
+	# Esta función se llama tras los 30 segundos (TIEMPO_REGENERACION)
+	
 	# 1. Regenerar el árbol
 	is_dead = false
 	madera_queda = MADERA_INICIAL
 
-	# 2. Volver al estado Idle (esto es lo que el leñador busca al buscar un árbol no 'is_dead')
+	# 2. Volver al estado Idle
 	anim.play("Idle")
 
 	# 3. Restaurar colisiones
