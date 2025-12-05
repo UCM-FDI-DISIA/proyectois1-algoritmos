@@ -8,6 +8,7 @@ signal depleted
 # ============================================================
 var is_occupied: bool = false
 var occupying_lenador: Node = null
+var regeneration_timer: Timer # Nodo para el temporizador de 30s
 
 func occupy(worker):
 	if is_occupied:
@@ -34,7 +35,7 @@ func release():
 # ============================================================
 @export var MADERA_INICIAL: int = 15
 @export var MADERA_POR_GOLPE: int = 5
-@export var TIEMPO_REGENERACION: float = 30.0
+@export var TIEMPO_REGENERACION: float = 30.0 # 30 segundos de espera
 @export var TIEMPO_MORIR: float = 0.1
 
 var is_dead: bool = false
@@ -45,6 +46,12 @@ var madera_queda: int = MADERA_INICIAL
 # ============================================================
 func _ready() -> void:
 	add_to_group("arbol") 
+	
+	# Inicializar el temporizador de regeneración
+	regeneration_timer = Timer.new()
+	add_child(regeneration_timer)
+	regeneration_timer.one_shot = true
+	regeneration_timer.timeout.connect(_on_regen_timer_timeout)
 
 	collision_full.disabled = false
 	collision_stump.disabled = true
@@ -70,7 +77,7 @@ func _on_player_anim_finished():
 
 	if madera_queda <= 0:
 		is_dead = true
-		emit_signal("depleted") # El jugador agota completamente el recurso
+		emit_signal("depleted") 
 		get_tree().create_timer(TIEMPO_MORIR).timeout.connect(_on_death_delay_timeout)
 	else:
 		anim.play("Idle")
@@ -89,44 +96,50 @@ func gather_resource(amount: int) -> int:
 		anim.play("chop")
 		anim.animation_finished.connect(_on_npc_chop_finished, CONNECT_ONE_SHOT)
 
-	# Si la madera se agota, emitir 'depleted' y marcar como muerto AHORA
-	if madera_queda <= 0:
-		is_dead = true
-		emit_signal("depleted") 
+	# **CORRECCIÓN CLAVE:** NO emitimos 'depleted' ni marcamos is_dead aquí 
+	# para el NPC, porque queremos que termine los 3 golpes antes de morir.
+	# La disminución de madera se registra, pero la muerte la decide fell().
 
 	return gathered
 
 
 func _on_npc_chop_finished():
-	# Si el árbol ya está muerto por el golpe, no volvemos a Idle, esperamos a 'fell'
+	# Si la madera se agotó, la animación se quedará en el último golpe (chop)
+	# hasta que 'fell' active la animación "Die".
 	if not is_dead:
 		anim.play("Idle")
-	# Si está muerto, la animación de chop se quedará hasta que el leñador llame a 'fell()'
 
 # ============================================================
 # 💀 Talado FINAL por el leñador
 # ============================================================
 func fell():
-	if not is_dead:
-		is_dead = true # Asegurar que esté muerto
+	if is_dead:
+		return
 
-	# Aunque ya se pudo haber emitido en gather_resource, lo emitimos de nuevo 
+	is_dead = true
+	
+	# 1. Señal para detener inmediatamente al leñador
 	emit_signal("depleted") 
 
+	# 2. Animación de muerte
 	anim.play("Die")
 
+	# 3. Colisiones de tocón
 	collision_full.set_deferred("disabled", true)
 	collision_stump.set_deferred("disabled", false)
 
-	# Liberar ocupación al morir
+	# 4. Liberar ocupación
 	release()
 
-	get_tree().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
+	# 5. **CORRECCIÓN CLAVE:** Iniciar el temporizador de 30 segundos
+	regeneration_timer.start(TIEMPO_REGENERACION)
+	print("Árbol regenerándose. Tiempo: ", TIEMPO_REGENERACION, " segundos.")
 
 # ============================================================
 # 💀 Muerte + regeneración
 # ============================================================
 func _on_death_delay_timeout():
+	# Lógica del jugador, que sigue usando el temporizador simple
 	anim.play("Die")
 
 	collision_full.set_deferred("disabled", true)
@@ -135,10 +148,15 @@ func _on_death_delay_timeout():
 	get_tree().create_timer(TIEMPO_REGENERACION).timeout.connect(_on_regen_timer_timeout)
 
 func _on_regen_timer_timeout():
+	# 1. Regenerar el árbol
 	is_dead = false
 	madera_queda = MADERA_INICIAL
 
+	# 2. Volver al estado Idle (esto es lo que el leñador busca al buscar un árbol no 'is_dead')
 	anim.play("Idle")
 
+	# 3. Restaurar colisiones
 	collision_full.set_deferred("disabled", false)
 	collision_stump.set_deferred("disabled", true)
+	
+	print("Árbol regenerado, listo para ser talado de nuevo.")

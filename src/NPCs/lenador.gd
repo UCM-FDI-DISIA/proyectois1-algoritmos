@@ -29,7 +29,7 @@ var gather_timer := 0.0
 
 # 🔨 Golpes necesarios para talar
 var chop_count := 0
-var chop_needed := 3
+var chop_needed := 3 # Ya estaba en 3, perfecto para el requerimiento
 
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -65,7 +65,8 @@ func _find_nearest_tree():
 
 	for tree in trees:
 		if not is_instance_valid(tree): continue
-		if tree.has_meta("is_dead") and tree.get_meta("is_dead"): continue
+		# Solo busca árboles no muertos y no ocupados
+		if tree.is_dead or tree.is_occupied: continue
 		if not tree.has_method("gather_resource"): continue
 
 		var raw = tree.global_position
@@ -92,6 +93,15 @@ func _start_navigation():
 		_change_state(State.IDLE)
 		return
 
+	# Ocupar y conectar señal
+	if !target_tree.occupy(self):
+		target_tree = null
+		_change_state(State.IDLE)
+		return
+		
+	if !target_tree.depleted.is_connected(self._on_tree_depleted):
+		target_tree.depleted.connect(self._on_tree_depleted)
+
 	var raw = target_tree.global_position
 	var corrected = NavigationServer2D.map_get_closest_point(nav_agent.get_navigation_map(), raw)
 	nav_agent.target_position = corrected
@@ -115,18 +125,14 @@ func _physics_process(delta: float):
 				_on_tree_depleted()
 				return
 
-			# Si ya llegó → detener y talar
 			if _is_target_in_gather_range():
-				if debug: print(">>> Árbol alcanzado, comenzando tala")
 				velocity = Vector2.ZERO
 				nav_agent.set_velocity(Vector2.ZERO)
 				nav_agent.target_position = global_position
 				_change_state(State.GATHERING)
 				return
 
-			# Navegación problemática
 			if nav_agent.is_navigation_finished():
-				if debug: print(">>> La ruta terminó pero no alcanzó el árbol")
 				_on_tree_depleted()
 				return
 
@@ -151,10 +157,16 @@ func _on_velocity_computed(v):
 	move_and_slide()
 
 # ============================================================
-# 🪓 RECOLECCIÓN CON 3 GOLPES
+# 🪓 RECOLECCIÓN (3 GOLPES)
 # ============================================================
 func _gather(delta: float):
 	if !is_instance_valid(target_tree):
+		_on_tree_depleted()
+		return
+
+	# El leñador se detiene si el árbol está marcado como muerto (por la señal 'depleted')
+	if target_tree.is_dead:
+		if debug: print("[Lenador] Árbol inactivo/muerto, deteniendo tala.")
 		_on_tree_depleted()
 		return
 
@@ -168,27 +180,25 @@ func _gather(delta: float):
 	if debug:
 		print("[Lenador] Golpe", chop_count, "de", chop_needed)
 
-	# Daño por golpe (El árbol registra el daño)
+	# 1. Aplicar daño al árbol
 	target_tree.gather_resource(gather_amount)
 
-	# ⬅️ CORRECCIÓN: Sumar 1 de madera al ResourceManager por cada golpe
+	# 2. Sumar 1 de madera al Resource Manager por golpe
 	if is_instance_valid(resource_manager):
-		# Independientemente de gather_amount, sumamos 1 unidad al recurso "wood"
 		resource_manager.add_resource("wood", 1)
-		if debug:
-			print("[Lenador] Añadida 1 de madera al Resource Manager por el golpe.")
-
-	# Si ya dio todos los golpes → talar árbol
+	
+	# 3. Si se completaron los golpes, talar el árbol
 	if chop_count >= chop_needed:
-		if debug: print("[Lenador] Árbol talado completamente.")
+		if debug: print("[Lenador] Árbol talado completamente (3 golpes).")
 
 		if is_instance_valid(target_tree):
 			emit_signal("tree_felled", target_tree)
-
+			
+			# **CORRECCIÓN CLAVE:** El leñador llama a fell() para activar la muerte y el temporizador
 			if target_tree.has_method("fell"):
 				target_tree.fell()
-
-		_on_tree_depleted()
+		
+		# El árbol emitirá 'depleted', lo que llama a _on_tree_depleted
 
 # ============================================================
 # 🔄 Estados y animaciones
@@ -237,5 +247,11 @@ func _process(delta: float):
 # 🧹 RESET AL ACABAR
 # ============================================================
 func _on_tree_depleted():
-	target_tree = null
+	# Desconectar la señal y liberar ocupación
+	if is_instance_valid(target_tree):
+		if target_tree.depleted.is_connected(self._on_tree_depleted):
+			target_tree.depleted.disconnect(self._on_tree_depleted)
+		target_tree.release()
+		target_tree = null
+		
 	_change_state(State.IDLE)
