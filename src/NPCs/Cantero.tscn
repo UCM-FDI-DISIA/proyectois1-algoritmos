@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bkb0u5qqbitvg"]
+[gd_scene load_steps=24 format=3 uid="uid://bkb0u5qqbitvg"]
 
 [ext_resource type="Texture2D" uid="uid://c2qfc2juxwbqo" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Pawn/Blue/Pawn_Blue.png" id="1_e2vw6"]
 [ext_resource type="Script" uid="uid://p555goek6nw2" path="res://src/NPCs/cantero.gd" id="1_lfxaq"]
@@ -149,8 +149,16 @@ animations = [{
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_u48sf"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_lfxaq"]
+
 [node name="Cantero" type="CharacterBody2D"]
 script = ExtResource("1_lfxaq")
+speed = null
+gather_rate = null
+gather_amount = null
+search_radius = null
+stop_distance = null
+chop_needed = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_kx867")
@@ -161,3 +169,12 @@ frame_progress = 0.37364087
 position = Vector2(0, 22)
 scale = Vector2(1.4171427, 1.4331429)
 shape = SubResource("CircleShape2D_u48sf")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+
+[node name="GatherArea2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GatherArea2D"]
+scale = Vector2(7.2533336, -7.044572)
+shape = SubResource("CircleShape2D_lfxaq")
