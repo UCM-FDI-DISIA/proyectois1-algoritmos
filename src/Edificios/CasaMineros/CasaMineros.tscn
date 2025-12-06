@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cpby34c2ngbwr"]
+[gd_scene load_steps=11 format=3 uid="uid://cpby34c2ngbwr"]
 
 [ext_resource type="Script" uid="uid://dffyxkm3bh8hf" path="res://src/Edificios/CasaMineros/CasaMineros.gd" id="1_kjfbj"]
 [ext_resource type="Texture2D" uid="uid://ds2y2tw0kpaln" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Buildings/House/House_Yellow.png" id="2_kjfbj"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="4_dhc7y"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="5_3pk7p"]
 [ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="6_lvplb"]
+[ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="7_5t7mc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r1qpu"]
 size = Vector2(163, 90)
@@ -51,6 +52,7 @@ scale = Vector2(1.4282445, 1.3199995)
 texture_normal = ExtResource("3_v6cf3")
 texture_pressed = ExtResource("4_dhc7y")
 texture_hover = ExtResource("5_3pk7p")
+texture_disabled = ExtResource("7_5t7mc")
 
 [node name="Mas" type="Sprite2D" parent="UI/ComprarMinero"]
 position = Vector2(31.507215, 31.81822)

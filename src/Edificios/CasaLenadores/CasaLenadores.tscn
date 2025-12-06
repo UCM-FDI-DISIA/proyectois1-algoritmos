@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cqhydyyoc76vl"]
+[gd_scene load_steps=11 format=3 uid="uid://cqhydyyoc76vl"]
 
 [ext_resource type="Script" uid="uid://bbxytg8kaeb0b" path="res://src/Edificios/CasaLenadores/CasaLenadores.gd" id="1_32eub"]
 [ext_resource type="Texture2D" uid="uid://cmbpk3drpqdpj" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Buildings/Wood_House/Goblin_House.png" id="2_32eub"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="4_5hp2e"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="5_dou3f"]
 [ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="6_4jc68"]
+[ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="7_8h72t"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nhwq6"]
 radius = 67.18631
@@ -52,7 +53,14 @@ scale = Vector2(1.4282445, 1.3199995)
 texture_normal = ExtResource("3_eu8lv")
 texture_pressed = ExtResource("4_5hp2e")
 texture_hover = ExtResource("5_dou3f")
+texture_disabled = ExtResource("7_8h72t")
 
 [node name="Mas" type="Sprite2D" parent="UI/ComprarLenador"]
 position = Vector2(31.507215, 31.81822)
 texture = ExtResource("6_4jc68")
+
+[node name="MaxLenadores" type="Label" parent="."]
+offset_left = 1.0
+offset_top = -256.0
+offset_right = 41.0
+offset_bottom = -233.0

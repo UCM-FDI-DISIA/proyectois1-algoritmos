@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://di4vbru44oxk6"]
+[gd_scene load_steps=11 format=3 uid="uid://di4vbru44oxk6"]
 
 [ext_resource type="Script" uid="uid://cq6simietmjfi" path="res://src/Edificios/CasaCanteros/CasaCanteros.gd" id="1_babg1"]
 [ext_resource type="Texture2D" uid="uid://dwsmtjigoiq26" path="res://src/AssetPacks/Tiny Swords (Free Pack)/Buildings/Black Buildings/House1.png" id="2_p2kc1"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bgd7c46xd2tuc" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_Pressed.png" id="4_u4a8y"]
 [ext_resource type="Texture2D" uid="uid://bqqsrxpmr50f7" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover.png" id="5_3dfje"]
 [ext_resource type="Texture2D" uid="uid://ckuv0ll14m5ab" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Icons/Regular_08.png" id="6_sjpll"]
+[ext_resource type="Texture2D" uid="uid://nexrhpx3yf7n" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Red.png" id="7_3dfje"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_r1qpu"]
 size = Vector2(194, 68)
@@ -50,6 +51,7 @@ scale = Vector2(1.4282445, 1.3199995)
 texture_normal = ExtResource("3_babg1")
 texture_pressed = ExtResource("4_u4a8y")
 texture_hover = ExtResource("5_3dfje")
+texture_disabled = ExtResource("7_3dfje")
 
 [node name="Mas" type="Sprite2D" parent="UI/ComprarCantero"]
 position = Vector2(31.507215, 31.81822)
