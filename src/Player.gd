@@ -15,8 +15,6 @@ class_name Player
 @onready var foot_player_wood: AudioStreamPlayer = $FootstepsWood
 @onready var atk_player: AudioStreamPlayer = $AttackPlayer
 @onready var ui: CanvasLayer = get_node("/root/Main/UI")
-@onready var joystick_move: VirtualJoystick = ui.get_node("VirtualJoystick1")
-@onready var joystick_attack: VirtualJoystick = ui.get_node("VirtualJoystick2")
 @onready var wood_tilemap: TileMap = get_node("/root/Main/Mapa/Wood") # TileMap invisible para puentes
 
 # =====================================================================
@@ -41,8 +39,7 @@ func _ready() -> void:
 	is_mobile = OS.get_name() in ["Android", "iOS"]
 	if not is_mobile:
 		set_process_input(true)
-	else:
-		_show_sticks(true)
+	
 
 	position = get_viewport().get_visible_rect().size / 2
 	z_index = int(position.y)
@@ -65,10 +62,9 @@ func _physics_process(_delta: float) -> void:
 		return
 
 	var input_dir := Vector2.ZERO
-	if is_mobile and joystick_move and joystick_move.is_pressed:
-		input_dir = joystick_move.output
-	else:
-		input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+
+
+	input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 
 	input_dir = input_dir.normalized()
 	velocity = input_dir * speed
@@ -109,7 +105,7 @@ func _physics_process(_delta: float) -> void:
 	# =====================================================================
 	# ⚔️ ATAQUE
 	# =====================================================================
-	if Input.is_action_just_pressed("ataque") or (is_mobile and joystick_attack and joystick_attack.is_pressed):
+	if Input.is_action_just_pressed("ataque"):
 		start_attack(1)
 
 func start_attack(attack_number: int) -> void:
@@ -142,21 +138,6 @@ func on_animation_finished() -> void:
 		is_attacking = false
 		animated_sprite.play("Idle" + color)
 		animated_sprite.animation_finished.disconnect(on_animation_finished)
-
-# =====================================================================
-# 📱 DETECCIÓN TÁCTIL (WEB)
-# =====================================================================
-func _input(event):
-	if not is_mobile and (event is InputEventScreenTouch or event is InputEventScreenDrag):
-		is_mobile = true
-		_show_sticks(true)
-		set_process_input(false)
-
-func _show_sticks(visible: bool):
-	if joystick_move:
-		joystick_move.visible = visible
-	if joystick_attack:
-		joystick_attack.visible = visible
 
 # =====================================================================
 # 🪵 DETECCIÓN DE PUENTE USANDO TILEMAP INVISIBLE (GODOT 4.1+)

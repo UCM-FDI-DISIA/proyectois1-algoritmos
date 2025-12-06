@@ -1,11 +1,9 @@
-[gd_scene load_steps=147 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=145 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
 [ext_resource type="PackedScene" uid="uid://dtox61xw2rp3e" path="res://src/Menus/InventarioRecursos/resources_hud.tscn" id="2_5mrjc"]
-[ext_resource type="Script" uid="uid://c3y0tt8bmp5aw" path="res://src/UI/ui.gd" id="2_jitvu"]
 [ext_resource type="PackedScene" uid="uid://iah8x7at2l31" path="res://src/Menus/Construccion/menu_construccion.tscn" id="2_okx7f"]
-[ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://addons/virtual_joystick/virtual_joystick_scene.tscn" id="3_c2usk"]
 [ext_resource type="PackedScene" uid="uid://fsq1fp7g6o7n" path="res://src/Menus/MenuSoldados/menuSoldados.tscn" id="3_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Edificios/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
@@ -868,20 +866,6 @@ animations = [{
 [node name="Main" type="Node2D"]
 script = ExtResource("1_adv81")
 
-[node name="UI" type="CanvasLayer" parent="."]
-visible = false
-script = ExtResource("2_jitvu")
-
-[node name="VirtualJoystick1" parent="UI" instance=ExtResource("3_c2usk")]
-visibility_mode = 1
-
-[node name="VirtualJoystick2" parent="UI" instance=ExtResource("3_c2usk")]
-offset_left = 846.0
-offset_top = -298.0
-offset_right = 1146.0
-offset_bottom = 2.0
-visibility_mode = 1
-
 [node name="ResourcesHUD" parent="." instance=ExtResource("2_5mrjc")]
 
 [node name="menuConstruccion" parent="." instance=ExtResource("2_okx7f")]
@@ -994,7 +978,6 @@ y_sort_enabled = true
 position = Vector2(1126, 619)
 collision_mask = 7
 script = ExtResource("10_c2usk")
-speed = null
 
 [node name="Animacion" type="AnimatedSprite2D" parent="Objetos/Player"]
 z_as_relative = false
