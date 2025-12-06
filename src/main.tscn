@@ -1110,6 +1110,7 @@ scale = Vector2(7.7240624, 2.3999999)
 theme_override_styles/panel = SubResource("StyleBoxFlat_adv81")
 
 [node name="TimerRoot" type="Control" parent="ElementosPantalla/Timer/Panel"]
+layout_mode = 1
 anchors_preset = 0
 offset_left = -98.2733
 offset_top = -8.593748
@@ -1145,25 +1146,33 @@ text = "No puedes atacar"
 horizontal_alignment = 1
 metadata/_edit_group_ = true
 
-[node name="CountdownTimer" type="Timer" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
+[node name="Countdown" type="Control" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 399.73578
+offset_top = 177.1697
+offset_right = 754.6358
+offset_bottom = 406.76324
 
-[node name="CuentaAtrasCanvasLayer" type="CanvasLayer" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
+[node name="CountdownTimer" type="Timer" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown"]
 
-[node name="Countdown" type="AnimatedSprite2D" parent="ElementosPantalla/Timer/Panel/TimerRoot/CuentaAtrasCanvasLayer"]
+[node name="CuentaAtrasCanvasLayer" type="CanvasLayer" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown"]
+
+[node name="Countdown" type="AnimatedSprite2D" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown/CuentaAtrasCanvasLayer"]
 top_level = true
 position = Vector2(612, 339)
 scale = Vector2(1.053398, 1)
 sprite_frames = SubResource("SpriteFrames_16cua")
 animation = &"Contador"
 
-[node name="NotificacionAtaqueCanvasLayer" type="CanvasLayer" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
+[node name="NotificacionAtaqueCanvasLayer" type="CanvasLayer" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown"]
 
-[node name="RibbonMessage" type="Sprite2D" parent="ElementosPantalla/Timer/Panel/TimerRoot/NotificacionAtaqueCanvasLayer"]
+[node name="RibbonMessage" type="Sprite2D" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown/NotificacionAtaqueCanvasLayer"]
 position = Vector2(608, 230.00003)
 scale = Vector2(1.75, 1.625)
 texture = ExtResource("31_n36qx")
 
-[node name="GraceLabel" type="Label" parent="ElementosPantalla/Timer/Panel/TimerRoot/NotificacionAtaqueCanvasLayer"]
+[node name="GraceLabel" type="Label" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown/NotificacionAtaqueCanvasLayer"]
 offset_left = 518.0
 offset_top = 195.0
 offset_right = 773.0
