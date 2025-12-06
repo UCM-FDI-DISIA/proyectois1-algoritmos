@@ -60,7 +60,7 @@ func _ready() -> void:
 
 	# Centrar texto ATACANDO... (Label)
 	if is_instance_valid(grace_label):
-		grace_label.global_position = screen_center + Vector2(-80, -120)
+		grace_label.global_position = screen_center + Vector2(-80, -140)
 
 
 
