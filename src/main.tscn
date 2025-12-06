@@ -1148,15 +1148,25 @@ metadata/_edit_group_ = true
 
 [node name="Countdown" type="Control" parent="ElementosPantalla/Timer/Panel/TimerRoot"]
 layout_mode = 1
-anchors_preset = 0
-offset_left = 399.73578
-offset_top = 177.1697
-offset_right = 754.6358
-offset_bottom = 406.76324
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="CountdownTimer" type="Timer" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown"]
 
-[node name="CuentaAtrasCanvasLayer" type="CanvasLayer" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown"]
+[node name="CuentaAtrasCanvasLayer" type="Control" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Countdown" type="AnimatedSprite2D" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown/CuentaAtrasCanvasLayer"]
 top_level = true
@@ -1165,7 +1175,15 @@ scale = Vector2(1.053398, 1)
 sprite_frames = SubResource("SpriteFrames_16cua")
 animation = &"Contador"
 
-[node name="NotificacionAtaqueCanvasLayer" type="CanvasLayer" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown"]
+[node name="NotificacionAtaqueCanvasLayer" type="Control" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="RibbonMessage" type="Sprite2D" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown/NotificacionAtaqueCanvasLayer"]
 position = Vector2(608, 230.00003)
@@ -1173,10 +1191,18 @@ scale = Vector2(1.75, 1.625)
 texture = ExtResource("31_n36qx")
 
 [node name="GraceLabel" type="Label" parent="ElementosPantalla/Timer/Panel/TimerRoot/Countdown/NotificacionAtaqueCanvasLayer"]
-offset_left = 518.0
-offset_top = 195.0
-offset_right = 773.0
-offset_bottom = 244.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -127.5
+offset_top = -24.5
+offset_right = 127.5
+offset_bottom = 24.5
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(0.7321333, 0.88)
 size_flags_horizontal = 4
 text = "Te han declarado batalla.

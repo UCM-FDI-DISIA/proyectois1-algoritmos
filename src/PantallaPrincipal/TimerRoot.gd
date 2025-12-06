@@ -20,8 +20,8 @@ signal tiempo_especifico_alcanzado
 # =====================================================================
 # 🚨 NODOS COUNTDOWN Y GRACE PERIOD
 # =====================================================================
-@onready var countdown_layer: CanvasLayer = $Countdown/CuentaAtrasCanvasLayer
-@onready var notification_layer: CanvasLayer = $Countdown/NotificacionAtaqueCanvasLayer # Referencia a la capa padre de las etiquetas
+@onready var countdown_layer: Control = $Countdown/CuentaAtrasCanvasLayer
+@onready var notification_layer: Control = $Countdown/NotificacionAtaqueCanvasLayer # Referencia a la capa padre de las etiquetas
 @onready var ribbon_message: Sprite2D = $Countdown/NotificacionAtaqueCanvasLayer/RibbonMessage
 @onready var grace_label: Label = $Countdown/NotificacionAtaqueCanvasLayer/GraceLabel
 @onready var countdown_sprite: AnimatedSprite2D = $Countdown/CuentaAtrasCanvasLayer/Countdown
@@ -41,50 +41,70 @@ var game_state_ref: Node = null # Referencia al Autoload GameState
 # ⚙️ INICIALIZACIÓN
 # =====================================================================
 func _ready() -> void:
-	print("DEBUG: 1. Countdown.gd _ready() iniciado.") # DEBUG
-	
-	# --- Inicialización y Ocultamiento de la UI de Aviso ---
+	print("DEBUG: 1. Countdown.gd _ready() iniciado.")
+
+	# ============================================================
+	# 🔵 CENTRAR LOS CONTROLES EN PANTALLA
+	# ============================================================
+	await get_tree().process_frame  # aseguramos tamaños y layout
+
+	var screen_center := get_viewport().get_visible_rect().size * 0.5
+
+	# Centrar sprite de cuenta atrás (AnimatedSprite2D)
+	if is_instance_valid(countdown_sprite):
+		countdown_sprite.global_position = screen_center
+
+	# Centrar banner rojo (Sprite2D)
+	if is_instance_valid(ribbon_message):
+		ribbon_message.global_position = screen_center + Vector2(0, -120)
+
+	# Centrar texto ATACANDO... (Label)
+	if is_instance_valid(grace_label):
+		grace_label.global_position = screen_center + Vector2(-80, -120)
+
+
+
+	# ============================================================
+	# 🔒 Ocultamientos iniciales
+	# ============================================================
 	if is_instance_valid(countdown_sprite):
 		countdown_sprite.hide()
-	
+
 	if is_instance_valid(ribbon_message):
 		ribbon_message.hide()
-	
+
 	if is_instance_valid(grace_label):
 		grace_label.hide()
-	
-	# Asegurarse de que las capas CanvasLayer están ocultas al inicio.
+
 	if is_instance_valid(countdown_layer):
 		countdown_layer.hide()
 	if is_instance_valid(notification_layer):
 		notification_layer.hide()
-	
-	# --- Conexión al GameState (el singleton) ---
-	# CORRECCIÓN: Accedemos directamente al nodo Autoload a través de la raíz del árbol
-	# y almacenamos la referencia para el caso PVE.
+
+	# ============================================================
+	# Conexión al GameState
+	# ============================================================
 	var gs_node = get_tree().root.get_node_or_null("GameState")
-	
+
 	if gs_node != null:
-		game_state_ref = gs_node # <--- MODIFICADO: Almacenar la referencia
-		print("DEBUG: 2. Singleton GameState encontrado (vía get_node).") # DEBUG
-		
-		# Usamos la referencia del nodo para la conexión.
+		game_state_ref = gs_node
+		print("DEBUG: 2. Singleton GameState encontrado (vía get_node).")
+
 		if gs_node.has_signal("start_battle_countdown"):
 			gs_node.start_battle_countdown.connect(_on_battle_countdown_started)
-			print("DEBUG: 3. Señal 'start_battle_countdown' conectada correctamente.") # DEBUG
+			print("DEBUG: 3. Señal 'start_battle_countdown' conectada correctamente.")
 		else:
-			print("ERROR: La señal 'start_battle_countdown' NO existe en GameState (verificar la definición en GameState.gd).") # DEBUG
+			print("ERROR: La señal 'start_battle_countdown' NO existe en GameState.")
 	else:
-		print("ERROR CRÍTICO: El nodo 'GameState' NO se ha encontrado en la raíz del árbol.")
-	
+		print("ERROR CRÍTICO: El nodo 'GameState' NO se ha encontrado.")
+
 	GDSync.player_data_changed.connect(_on_player_data_changed)
-	
+
 	remaining_time = START_TIME
 
 	main_timer.timeout.connect(_on_timer_timeout)
 	main_timer.start()
 	_update_label()
-
 
 # =====================================================================
 # 🆕 FUNCIÓN DE RECEPCIÓN DE BATALLA (Inicia la UI de 3s)
