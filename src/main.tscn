@@ -1046,10 +1046,10 @@ offset_right = 3066.0
 offset_bottom = 2185.0
 
 [node name="BotonBatalla2" parent="Objetos" instance=ExtResource("21_jitvu")]
-offset_left = 5139.0
-offset_top = 2146.0
-offset_right = 5203.0
-offset_bottom = 2210.0
+offset_left = 5139.0005
+offset_top = 2130.0
+offset_right = 5203.0005
+offset_bottom = 2194.0
 
 [node name="BotonBatalla3" parent="Objetos" instance=ExtResource("21_jitvu")]
 offset_left = 2992.0002

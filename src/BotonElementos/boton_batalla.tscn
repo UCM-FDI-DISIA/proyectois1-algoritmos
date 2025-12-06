@@ -11,7 +11,7 @@
 size = Vector2(142.5286, 101.407616)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tny1c"]
-size = Vector2(120.000046, 175)
+size = Vector2(120.000046, 267.1875)
 
 [node name="BattleButton" type="TextureButton"]
 top_level = true
@@ -53,7 +53,7 @@ scale = Vector2(0.57306767, 0.58139974)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 z_as_relative = false
 y_sort_enabled = true
-position = Vector2(3023.9084, 2175.0925)
+position = Vector2(3023.9084, 2204.5925)
 scale = Vector2(1, 0.64)
 shape = SubResource("RectangleShape2D_tny1c")
 debug_color = Color(0.63070875, 0.5267407, 0.1583556, 0.41960785)
