@@ -15,16 +15,16 @@ signal tiempo_especifico_alcanzado
 # =====================================================================
 @onready var timer_label: Label	 = $TimerLabel
 @onready var warning_label: Label = $WarningLabel
-@onready var main_timer: Timer	 = $CountdownTimer
+@onready var main_timer: Timer	 = $Countdown/CountdownTimer
 
 # =====================================================================
 # 🚨 NODOS COUNTDOWN Y GRACE PERIOD
 # =====================================================================
-@onready var countdown_layer: CanvasLayer = $CuentaAtrasCanvasLayer
-@onready var notification_layer: CanvasLayer = $NotificacionAtaqueCanvasLayer # Referencia a la capa padre de las etiquetas
-@onready var ribbon_message: Sprite2D = $NotificacionAtaqueCanvasLayer/RibbonMessage
-@onready var grace_label: Label = $NotificacionAtaqueCanvasLayer/GraceLabel
-@onready var countdown_sprite: AnimatedSprite2D = $CuentaAtrasCanvasLayer/Countdown
+@onready var countdown_layer: CanvasLayer = $Countdown/CuentaAtrasCanvasLayer
+@onready var notification_layer: CanvasLayer = $Countdown/NotificacionAtaqueCanvasLayer # Referencia a la capa padre de las etiquetas
+@onready var ribbon_message: Sprite2D = $Countdown/NotificacionAtaqueCanvasLayer/RibbonMessage
+@onready var grace_label: Label = $Countdown/NotificacionAtaqueCanvasLayer/GraceLabel
+@onready var countdown_sprite: AnimatedSprite2D = $Countdown/CuentaAtrasCanvasLayer/Countdown
 
 
 # =====================================================================
