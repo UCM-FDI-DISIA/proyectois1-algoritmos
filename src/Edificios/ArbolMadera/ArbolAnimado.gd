@@ -35,11 +35,13 @@ func release():
 # ============================================================
 @export var MADERA_INICIAL: int = 15
 @export var MADERA_POR_GOLPE: int = 5
+@export var GOLPES_PARA_TALAR: int = 3 # NUEVA: Golpes necesarios del jugador
 @export var TIEMPO_REGENERACION: float = 30.0 # 30 segundos de espera
 @export var TIEMPO_MORIR: float = 0.1
 
 var is_dead: bool = false
 var madera_queda: int = MADERA_INICIAL
+var player_hits_count: int = 0 # NUEVA: Contador de golpes del jugador
 
 # ============================================================
 # 🚀 READY
@@ -65,21 +67,29 @@ func hit() -> void:
 	if is_dead:
 		return
 
-	madera_queda -= 1
+	player_hits_count += 1
 	anim.play("chop")
 	anim_tronco.play("tronquito") 
 	anim.animation_finished.connect(_on_player_anim_finished, CONNECT_ONE_SHOT)
 
 func _on_player_anim_finished():
 	var manager := get_node("/root/Main/ResourceManager")
-	if manager:
-		manager.add_resource("wood", MADERA_POR_GOLPE)
 
-	if madera_queda <= 0:
+	if player_hits_count >= GOLPES_PARA_TALAR:
+		# Muerte del árbol causada por el jugador
 		is_dead = true
 		emit_signal("depleted") 
+		
+		# Añadir la madera total del árbol por el golpe final
+		if manager:
+			manager.add_resource("wood", MADERA_INICIAL) # Asume que el jugador obtiene toda la madera restante.
+			
 		get_tree().create_timer(TIEMPO_MORIR).timeout.connect(_on_death_delay_timeout)
 	else:
+		# Añadir la madera parcial por el golpe
+		if manager:
+			manager.add_resource("wood", MADERA_POR_GOLPE)
+
 		anim.play("Idle")
 
 # ============================================================
@@ -94,15 +104,12 @@ func gather_resource(amount: int) -> int:
 	if gathered > 0:
 		madera_queda -= gathered
 		
-		# ⬅️ CORRECCIÓN: Mostrar el tocón con el golpe del NPC
 		anim_tronco.play("tronquito") 
 
 		anim.play("chop")
 		anim.animation_finished.connect(_on_npc_chop_finished, CONNECT_ONE_SHOT)
 
-	# NO se emite 'depleted' ni se marca is_dead aquí. 
-	# Queremos que el leñador complete sus 3 golpes antes de que muera (fell()).
-
+	# El NPC no marca el árbol como muerto, solo lo agota gradualmente.
 	return gathered
 
 
@@ -132,7 +139,7 @@ func fell():
 	# 4. Liberar ocupación
 	release()
 
-	# 5. ⬅️ CORRECCIÓN: Iniciar el temporizador de 30 segundos
+	# 5. Iniciar el temporizador de 30 segundos
 	regeneration_timer.start(TIEMPO_REGENERACION)
 	print("Árbol regenerándose. Tiempo: ", TIEMPO_REGENERACION, " segundos.")
 
@@ -156,6 +163,7 @@ func _on_regen_timer_timeout():
 	# 1. Regenerar el árbol
 	is_dead = false
 	madera_queda = MADERA_INICIAL
+	player_hits_count = 0 # Reiniciar el contador de golpes del jugador
 
 	# 2. Volver al estado Idle
 	anim.play("Idle")

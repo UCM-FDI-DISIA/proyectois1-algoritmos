@@ -153,6 +153,7 @@ animations = [{
 radius = 14.692983
 
 [node name="Minero" type="CharacterBody2D"]
+show_behind_parent = true
 script = ExtResource("1_1djbl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
