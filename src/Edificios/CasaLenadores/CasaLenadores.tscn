@@ -45,11 +45,17 @@ shape = SubResource("RectangleShape2D_p2kc1")
 [node name="UI" type="Node2D" parent="."]
 
 [node name="ComprarLenador" type="TextureButton" parent="UI"]
-offset_left = -46.000004
-offset_top = -301.00003
-offset_right = 17.999996
-offset_bottom = -237.00003
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.0
+offset_top = -278.0
+offset_right = 31.0
+offset_bottom = -214.0
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(1.4282445, 1.3199995)
+pivot_offset = Vector2(32.20737, 25)
 texture_normal = ExtResource("3_eu8lv")
 texture_pressed = ExtResource("4_5hp2e")
 texture_hover = ExtResource("5_dou3f")
@@ -59,8 +65,9 @@ texture_disabled = ExtResource("7_8h72t")
 position = Vector2(31.507215, 31.81822)
 texture = ExtResource("6_4jc68")
 
-[node name="MaxLenadores" type="Label" parent="."]
-offset_left = 1.0
-offset_top = -256.0
-offset_right = 41.0
-offset_bottom = -233.0
+[node name="MaxLenadoresButton" type="Button" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

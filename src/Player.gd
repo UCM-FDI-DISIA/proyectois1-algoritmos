@@ -14,7 +14,7 @@ class_name Player
 @onready var foot_player: AudioStreamPlayer = $FootstepsPlayer
 @onready var foot_player_wood: AudioStreamPlayer = $FootstepsWood
 @onready var atk_player: AudioStreamPlayer = $AttackPlayer
-@onready var ui: CanvasLayer = get_node("/root/Main/UI")
+
 @onready var wood_tilemap: TileMap = get_node("/root/Main/Mapa/Wood") # TileMap invisible para puentes
 
 # =====================================================================

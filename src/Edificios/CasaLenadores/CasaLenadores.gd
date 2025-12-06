@@ -9,7 +9,8 @@ class_name CasaLenadores
 @export var coste_aldeano_lenador := 1 
 @export var max_lenadores := 5
 @export var lenadores_iniciales := 1 
-@export var UI_OFFSET := Vector2(-45, -292) 
+# ⬇️ UI_OFFSET: Ahora representa la posición VERTICAL desde el centro (X=0)
+@export var UI_OFFSET := Vector2(0, -292) 
 
 @export var SPAWN_RADIUS := 300.0 
 @export var MIN_DISTANCE := 190.0
@@ -19,7 +20,7 @@ class_name CasaLenadores
 @export var NPC_COLLISION_RADIUS := 12.0
 
 # ============================================================
-# 🎮 ESTADO 
+# 🎮 ESTADO
 # ============================================================
 var lenadores_actuales := 0
 var jugador_dentro := false
@@ -31,6 +32,7 @@ var initial_spawn_complete := false
 # 🧩 NODOS
 # ============================================================
 @onready var boton_lenador := $UI/ComprarLenador
+@onready var max_lenadores_button: Button = $UI/MaxLenadoresButton 
 @onready var area_interaccion := $interaccion
 @onready var resource_manager := get_node("/root/Main/ResourceManager")
 
@@ -54,45 +56,60 @@ func _ready() -> void:
 	area_interaccion.body_exited.connect(_on_player_exit)
 	boton_lenador.pressed.connect(_on_comprar_lenador)
 	
-	# ➡️ NUEVO: Conectar la actualización al evento mouse_entered del botón
 	boton_lenador.mouse_entered.connect(_on_boton_mouse_entered)
-	
-	# ➡️ NUEVO: Conectar a la actualización del botón al evento mouse_exited del botón
-	# para limpiar cualquier estado temporal si fuera necesario, aunque la visibilidad ya lo hace.
 	boton_lenador.mouse_exited.connect(_on_boton_mouse_exited)
 
-	boton_lenador.position = UI_OFFSET
-	boton_lenador.visible = false
+	# 🔄 CENTRADO: Reposicionar UI al cargar
+	_reposition_ui()
 	
-	# Se dejará el tooltip_text en blanco o con un valor inicial simple
+	boton_lenador.visible = false
 	boton_lenador.tooltip_text = ""
 	
+	# ➡️ CONFIGURACIÓN del botón de mensaje de límite
+	max_lenadores_button.visible = false
+	max_lenadores_button.disabled = true
+	max_lenadores_button.text = "¡Máximo de leñadores alcanzado: %d/%d!" % [max_lenadores, max_lenadores]
+	
+	# 🎨 CORRECCIÓN DE CONTRASTE: Forzar el color del texto a blanco
+	# Esto requiere un 'Theme Override' para 'Font Color' en el Inspector,
+	# pero lo forzamos por código para máxima compatibilidad:
+	var style_box = max_lenadores_button.get_theme_stylebox("disabled")
+	if style_box:
+		# Si no puedes modificar el StyleBox, usa un override de Color:
+		max_lenadores_button.add_theme_color_override("font_color", Color.WHITE)
+	else:
+		# Fallback para el color de fuente normal si el StyleBox no se aplica o no existe
+		max_lenadores_button.add_theme_color_override("font_color", Color.WHITE)
+
 	print("[Casa] Inicializado correctamente.\n")
 	z_as_relative = false
+
+# 📏 CÁLCULO DE POSICIONAMIENTO CENTRAL
+func _reposition_ui():
+	# Asume que el nodo de colisión (CollisionShape2D) está centrado en (0, 0).
+	# Si la casa tiene una textura, el centro es global_position.
 	
-# ============================================================
-# ⚙️ PROCESS (Para el Tooltip de la Casa cuando está al máximo)
-# ============================================================
+	# Calculamos el centro horizontal (X) de la UI.
+	# Si UI_OFFSET.x era -45, ahora lo movemos a 0 y centramos el botón.
+	var center_offset_x = 0
+	
+	# Ajustar la posición X del botón para que esté centrado
+	# (Se asume que la posición de los nodos UI es relativa al StaticBody2D)
+	
+	# 1. Botón de compra (ComprarLenador)
+	var final_pos_lenador = UI_OFFSET + Vector2(center_offset_x - boton_lenador.size.x / 2, 0)
+	boton_lenador.position = final_pos_lenador
+	
+	# 2. Botón de mensaje (MaxLenadoresButton)
+	var final_pos_max = UI_OFFSET + Vector2(center_offset_x - max_lenadores_button.size.x / 2, 0)
+	max_lenadores_button.position = final_pos_max
+
+
+# ⏱️ PROCESS
 func _process(delta: float) -> void:
-	# ➡️ NUEVO: Usar _process para actualizar el tooltip de la CASA (self) 
-	# si el jugador está cerca (jugador_dentro) y el máximo está alcanzado.
-	var max_alcanzado = lenadores_actuales >= max_lenadores
-	
-	# Solo si el ratón está sobre el StaticBody2D (requiere que el StaticBody2D
-	# tenga el input_pickable activado en Godot Editor).
-	if max_alcanzado:
-		# Asignamos el tooltip_text a self. Si StaticBody2D no lo soporta, 
-		# al menos lo tendrá listo en caso de que se use un Area2D o nodo Control.
-		# Ya que la propiedad falla, usaremos la solución más robusta:
-		# Si el máximo está alcanzado, ocultamos el botón y no hacemos nada más.
-		pass # Dejamos la gestión del tooltip de la casa fuera de este script para evitar el error.
+	pass
 
-
-# ============================================================
-# 🔍 CHEQUEO DE COLISIÓN REAL (CircleShape2D)
-# ... (Funciones de física y spawn se mantienen igual) ...
-# ============================================================
-
+# 🌳 CHEQUEO DE COLISIÓN REAL (CircleShape2D)
 func _is_position_free(pos: Vector2) -> bool:
 	var space_state = get_world_2d().direct_space_state
 
@@ -115,6 +132,7 @@ func _is_position_free(pos: Vector2) -> bool:
 
 	return result.is_empty()
 
+# 📍 NUEVA POSICIÓN ALEATORIA SEGURA
 func _get_random_spawn_position() -> Vector2:
 	var center := global_position
 	var attempts := 0
@@ -149,6 +167,7 @@ func _get_random_spawn_position() -> Vector2:
 	push_warning("[Casa] No se encontró posición válida → usando fallback")
 	return center + Vector2(0, SPAWN_RADIUS)
 
+# 🧱 SPAWNEAR LEÑADOR
 func _spawn_lenador() -> void:
 	var npc = lenador_scene.instantiate()
 	npc.global_position = _get_random_spawn_position()
@@ -186,9 +205,7 @@ func spawn_initial_lenadores_on_build() -> void:
 
 	initial_spawn_complete = true
 	
-# ============================================================
 # 💰 COMPRAR LEÑADOR
-# ============================================================
 func _on_comprar_lenador():
 	print("[Casa] Comprar leñador presionado")
 
@@ -210,23 +227,13 @@ func _on_comprar_lenador():
 	_spawn_lenador()
 	lenadores_actuales += 1
 
-	# ➡️ Importante: Actualizar el estado y tooltip inmediatamente después de la compra
 	_actualizar_boton()
 	
-# ============================================================
 # 🚪 DETECCIÓN DE JUGADOR
-# ============================================================
 func _on_player_enter(body):
 	if body.is_in_group("jugador"):
 		print("[Casa] Jugador entró en rango")
 		jugador_dentro = true
-		
-		# Solo hacemos visible el botón si no está al máximo.
-		var max_alcanzado = lenadores_actuales >= max_lenadores
-		if not max_alcanzado:
-			boton_lenador.visible = true
-		# ➡️ Si se requiere actualizar el estado de los recursos inmediatamente
-		# (aunque el mouse_entered lo gestiona mejor), se llama aquí.
 		_actualizar_boton() 
 			
 
@@ -235,26 +242,16 @@ func _on_player_exit(body):
 		print("[Casa] Jugador salió de rango")
 		jugador_dentro = false
 		boton_lenador.visible = false
+		max_lenadores_button.visible = false 
 
-# ============================================================
-# 🖱️ ACTUALIZACIÓN POR MOUSE HOVER (NUEVO)
-# ============================================================
-
-# ➡️ Esta función se llama cada vez que el ratón entra en el botón.
-# Es el punto ideal para chequear y actualizar el estado de los recursos.
+# 🖱️ ACTUALIZACIÓN POR MOUSE HOVER
 func _on_boton_mouse_entered():
 	_actualizar_estado_y_tooltip()
 
 func _on_boton_mouse_exited():
-	# Podrías ocultar el tooltip si estuvieras usando uno personalizado, 
-	# pero para el tooltip_text nativo de Godot no es necesario.
 	pass 
 
-# ============================================================
 # 🧰 BOTÓN (Lógica de Visibilidad y Estado)
-# ============================================================
-
-# ➡️ Función principal para chequear recursos y actualizar el botón/tooltip
 func _actualizar_estado_y_tooltip():
 	var wood = resource_manager.get_resource("wood")
 	var vil = resource_manager.get_resource("villager")
@@ -262,39 +259,39 @@ func _actualizar_estado_y_tooltip():
 	var max_alcanzado = lenadores_actuales >= max_lenadores
 	var recursos_suficientes = (wood >= coste_madera_lenador) and (vil >= coste_aldeano_lenador)
 
-	# Si no hay jugador dentro, salimos (la visibilidad la maneja _on_player_enter/exit)
-	if not jugador_dentro:
+	if not jugador_dentro or max_alcanzado:
 		return
 	
-	# 1. ESTADO (Deshabilitar si no hay recursos)
 	boton_lenador.disabled = not recursos_suficientes
 	
-	# 2. TOOLTIP del Botón: Mostrar precio, recursos y estado.
-	var tooltip_msg = "Comprar Leñador:\nMadera: %d (Tienes: %d)\nAldeanos: %d (Tienes: %d)" % [
+	var tooltip_msg = "Comprar Leñador:\n Madera: %d (Tienes: %d)\n Aldeanos: %d (Tienes: %d)" % [
 		coste_madera_lenador, wood,
 		coste_aldeano_lenador, vil
 	]
 	
 	if not recursos_suficientes:
-		tooltip_msg += "\n¡Recursos insuficientes!"
+		tooltip_msg += "\n🛑¡Recursos insuficientes!"
 		
 	boton_lenador.tooltip_text = tooltip_msg
 	
-# ➡️ Lógica de visibilidad general (llamada al entrar/salir del área y al comprar)
 func _actualizar_boton():
 	var max_alcanzado = lenadores_actuales >= max_lenadores
 	
-	# 1. VISIBILIDAD y LÍMITE: Ocultar si está al máximo
+	# 1. VISIBILIDAD y LÍMITE:
 	if max_alcanzado:
+		# Oculta el botón de compra
 		boton_lenador.visible = false
-		# Aquí puedes dejar la lógica del tooltip de la casa, pero recuerda 
-		# que StaticBody2D no la soporta y lanzará un error a menos que se use un nodo Control.
+		# Muestra el botón de mensaje de límite
+		max_lenadores_button.visible = jugador_dentro
 		return
 	
-	# Si no está al máximo, la visibilidad depende solo de si el jugador está dentro
+	# Si no está al máximo:
+	# Oculta el botón de mensaje de límite
+	max_lenadores_button.visible = false
+	
+	# La visibilidad del botón de compra depende solo de si el jugador está dentro
 	boton_lenador.visible = jugador_dentro
 	
-	# Actualizamos el estado de los recursos (deshabilitado/tooltip) inmediatamente.
-	# Esto asegura que el botón tenga el estado correcto si entramos en el área
-	# y que el estado sea correcto inmediatamente después de una compra.
-	_actualizar_estado_y_tooltip()
+	# Actualizamos el estado de los recursos (solo si el jugador está dentro)
+	if jugador_dentro:
+		_actualizar_estado_y_tooltip()
