@@ -44,11 +44,12 @@ shape = SubResource("RectangleShape2D_p2kc1")
 [node name="UI" type="Node2D" parent="."]
 
 [node name="ComprarMinero" type="TextureButton" parent="UI"]
-offset_left = -46.000004
-offset_top = -301.00003
-offset_right = 17.999996
-offset_bottom = -237.00003
+offset_left = -32.000004
+offset_top = -294.0
+offset_right = 31.999996
+offset_bottom = -230.0
 scale = Vector2(1.4282445, 1.3199995)
+pivot_offset = Vector2(31.507214, 23.484879)
 texture_normal = ExtResource("3_v6cf3")
 texture_pressed = ExtResource("4_dhc7y")
 texture_hover = ExtResource("5_3pk7p")
@@ -57,3 +58,10 @@ texture_disabled = ExtResource("7_5t7mc")
 [node name="Mas" type="Sprite2D" parent="UI/ComprarMinero"]
 position = Vector2(31.507215, 31.81822)
 texture = ExtResource("6_lvplb")
+
+[node name="MaxMinerosButton" type="Button" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

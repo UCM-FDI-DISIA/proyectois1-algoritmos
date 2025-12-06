@@ -155,6 +155,7 @@ animations = [{
 script = ExtResource("1_lfxaq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+show_behind_parent = true
 sprite_frames = SubResource("SpriteFrames_kx867")
 animation = &"Idle"
 frame_progress = 0.37364087
