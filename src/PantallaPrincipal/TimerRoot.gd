@@ -48,7 +48,7 @@ func _ready() -> void:
 	# ============================================================
 	await get_tree().process_frame  # aseguramos tamaños y layout
 
-	var screen_center := get_viewport().get_visible_rect().size * 0.5
+	var screen_center := get_window().size * 0.5
 
 	# Centrar sprite de cuenta atrás (AnimatedSprite2D)
 	if is_instance_valid(countdown_sprite):
