@@ -6,7 +6,7 @@ extends Node2D
 @export var spacing: float = 96.0
 @export var troop_scale: Vector2 = Vector2(3.0, 3.0)
 @export var smoke_scene: PackedScene
-@export var main_scene_path: String = "res://src/UI/Main.tscn" # Ruta para volver al menú
+@export var main_scene_path: String = "res://src/UI/main.tscn" # Ruta para volver al menú
 @export var results_scene_path: String = "res://src/PantallaResultadosBatalla/PantallaResultados.tscn"
 @export var tween_duration: float = 3.0
 

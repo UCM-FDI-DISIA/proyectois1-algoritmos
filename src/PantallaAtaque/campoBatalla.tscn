@@ -21,7 +21,7 @@ sources/0 = SubResource("TileSetScenesCollectionSource_hwple")
 
 [sub_resource type="SystemFont" id="SystemFont_wu8wx"]
 
-[node name="CampoBatalla" type="Node2D"]
+[node name="campoBatalla" type="Node2D"]
 script = ExtResource("1_oiqxd")
 smoke_scene = ExtResource("2_1xmi4")
 main_scene_path = "res://src/PantallaPrincipal/main_menu.tscn"
