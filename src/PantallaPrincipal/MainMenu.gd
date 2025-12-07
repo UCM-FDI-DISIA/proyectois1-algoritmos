@@ -11,12 +11,6 @@ func _ready() -> void:
 	# Señales de GD-Sync
 	GDSync.connected.connect(_on_connected)
 	GDSync.connection_failed.connect(_on_connection_failed)
-	
-	print (multiplayer.is_server())
-	print("GDSync autoload: ", GDSync)
-	print("Tiene método start_multiplayer?: ", GDSync.has_method("start_multiplayer"))
-	print("Tiene método manual_connect?: ", GDSync.has_method("_manual_connect"))
-	print("is_active(): ", GDSync.is_active())
 
 
 # ============================================================

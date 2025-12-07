@@ -75,7 +75,7 @@ func _on_lobby_joined(lobby_name: String) -> void:
 	emit_signal("lobby_unido", str(num_Lobby), true)
 	
 	var my_id
-	if GameState.is_pve :  my_id = GDSync.get_client_id()
+	if !GameState.is_pve :  my_id = GDSync.get_client_id()
 	else : my_id = -1
 	if my_id > 0 and my_id not in players:
 		players.append(my_id)

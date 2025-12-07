@@ -98,7 +98,7 @@ func _ready() -> void:
 	else:
 		print("ERROR CRÍTICO: El nodo 'GameState' NO se ha encontrado.")
 
-	GDSync.player_data_changed.connect(_on_player_data_changed)
+	if GDSync.is_active() && !GameState.is_pve : GDSync.player_data_changed.connect(_on_player_data_changed)
 
 	remaining_time = START_TIME
 
