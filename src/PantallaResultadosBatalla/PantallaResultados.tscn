@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://q18axu8tvw12"]
+[gd_scene load_steps=7 format=3 uid="uid://q18axu8tvw12"]
 
 [ext_resource type="Script" uid="uid://bmfluvshw72sl" path="res://src/PantallaResultadosBatalla/pantalla_resultados.gd" id="1_3dfhd"]
 [ext_resource type="Texture2D" uid="uid://b8vk176et6m84" path="res://src/AssetsUsados/Fondos/ChatGPT Image 5 dic 2025, 15_36_38.png" id="2_um8pp"]
 [ext_resource type="Texture2D" uid="uid://dlq3jbg126h5p" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_3Slides.png" id="3_jd1jf"]
 [ext_resource type="Texture2D" uid="uid://b8wu3vcfdac6y" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Blue_3Slides_Pressed.png" id="4_ap3ij"]
 [ext_resource type="Texture2D" uid="uid://dhomycmtlnciv" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Buttons/Button_Hover_3Slides.png" id="5_8fafa"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_3dfhd"]
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
 
 [node name="PantallaResultados" type="Control"]
 layout_mode = 3
@@ -20,15 +24,31 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -173.0
-offset_top = -180.0
-offset_right = 211.0
-offset_bottom = 196.0
+offset_left = -133.0
+offset_top = -194.0
+offset_right = 251.0
+offset_bottom = 182.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.97973114, 0.8927565)
 texture = ExtResource("2_um8pp")
 stretch_mode = 5
+
+[node name="LabelEstadisticas" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.20500001
+anchor_bottom = 0.24000001
+offset_left = 441.0
+offset_top = 411.0
+offset_right = 491.83997
+offset_bottom = 330.47998
+text = "PARTIDAS GANADAS: 
+PARTIDAS PERDIDAS:
+PARTIDAS EMPATADAS:"
+label_settings = SubResource("LabelSettings_3dfhd")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ResetButton" type="TextureButton" parent="."]
 custom_minimum_size = Vector2(0, -20)

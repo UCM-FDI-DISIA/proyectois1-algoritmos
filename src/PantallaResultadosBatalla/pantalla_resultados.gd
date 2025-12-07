@@ -5,6 +5,7 @@ extends Control
 # =====================================================================
 @onready var texto_resultados: RichTextLabel = $TextoResultados # Asume que es RichTextLabel
 @onready var reset_button: TextureButton = $ResetButton
+@onready var estadisticas = $LabelEstadisticas
 @onready var game_state: Node = get_node("/root/GameState") 
 @export var main_scene_path: String = "res://src/PantallaPrincipal/main_menu.tscn"
 
@@ -28,6 +29,7 @@ func _ready() -> void:
 		return
 	
 	texto_resultados.mouse_filter = Control.MOUSE_FILTER_IGNORE	
+	estadisticas.text = ""
 	_display_results(results)
 	reset_button.pressed.connect(_on_ResetButton_pressed)
 
@@ -75,6 +77,12 @@ func _display_results(results: Dictionary) -> void:
 	texto_resultados.bbcode_text = final_text
 	
 	_update_label_style(texto_resultados)
+	
+	# Estadísticas del jugador
+	var ganadas = "PARTIDAS GANADAS:  %d" % [GameState.partidas_win]
+	var perdidas = "PARTIDAS PERDIDAS:  %d" % [GameState.partidas_loose]
+	var empatadas = "PARTIDAS EMPATADAS:  %d" % [GameState.partidas_tie]
+	estadisticas.text = ganadas + "\n" + perdidas + "\n" + empatadas
 
 
 # =====================================================================

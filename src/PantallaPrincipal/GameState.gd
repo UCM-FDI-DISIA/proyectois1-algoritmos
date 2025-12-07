@@ -9,9 +9,9 @@ var game_mode: String = "PVP"      # solo por claridad / debug
 # ----------------------------------------------------
 #  VARIABLES DE PARTIDAS GANADAS
 # ----------------------------------------------------
-var partidas_win: int = 0
-var partidas_tie: int = 0
-var partidas_loose: int = 0
+@export var partidas_win: int = 0
+@export var partidas_tie: int = 0
+@export var partidas_loose: int = 0
 
 # ----------------------------------------------------
 #  TIEMPO Y TROPAS

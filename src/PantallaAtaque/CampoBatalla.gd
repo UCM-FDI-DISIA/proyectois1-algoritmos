@@ -219,12 +219,15 @@ func _start_battle() -> void:
 # =====================================================================
 func _check_forced_battle_result() -> bool:
 	if player_troops.is_empty() and enemy_troops.is_empty():
+		GameState.partidas_tie += 1
 		_save_results_and_transition("¡Empate!")
 		return false
 	elif player_troops.is_empty():
+		GameState.partidas_loose += 1
 		_save_results_and_transition("¡Gana el Enemigo!")
 		return false
 	elif enemy_troops.is_empty():
+		GameState.partidas_win += 1
 		_save_results_and_transition("¡Gana el Jugador!")
 		return false
 	
@@ -289,10 +292,13 @@ func _show_battle_result() -> void:
 
 	var result_text := ""
 	if p_power > e_power:
+		GameState.partidas_win += 1
 		result_text = "¡Gana el Jugador!" 
 	elif p_power < e_power:
+		GameState.partidas_loose += 1
 		result_text = "¡Gana el Enemigo!"
 	else:
+		GameState.partidas_tie += 1
 		result_text = "¡Empate!"
 
 	_save_results_and_transition(result_text)
