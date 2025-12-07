@@ -95,7 +95,7 @@ func _on_anim_finished() -> void:
 # =====================================================================
 # ⛏️ RECOLECCIÓN NPC (Minero)
 # =====================================================================
-func gather_resource(amount: int) -> int:
+func gather_resource(_amount: int) -> int:
 	if is_depleted:
 		return 0
 

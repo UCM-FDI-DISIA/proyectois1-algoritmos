@@ -152,10 +152,10 @@ func shake_rocas() -> void:
 			tween.tween_property(child, "position:x", original.x + randf() * 4.0 - 2.0, 0.05)
 			tween.tween_property(child, "position:x", original.x, 0.05)
 
-func set_rocas_visibles(grupo: Node2D, visible: bool) -> void:
+func set_rocas_visibles(grupo: Node2D, _visible: bool) -> void:
 	for child in grupo.get_children():
 		if child is Sprite2D:
-			child.visible = visible
+			child.visible = _visible
 
 func _on_explosion_finished() -> void:
 	anim_explosion.visible = false

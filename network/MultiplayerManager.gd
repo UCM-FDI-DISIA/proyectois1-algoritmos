@@ -1,7 +1,7 @@
 extends Node
 
 signal estado_matchmaking(msg: String)
-signal lobby_unido(p: int)
+signal lobby_unido(p: String, a: bool)
 signal avisar_Player
 
 var players: Array[int] = []             # IDs conectados
@@ -14,7 +14,7 @@ const LOBBY_NAME := "Feudalia_MainLobby"
 var num_Lobby := 1
 var players_in_lobby := 0
 const PVP_TIMEOUT := 30.0
-var timer_PVE : Timer
+var lobby_join_timeout_timer: Timer = Timer.new() # Para notificar si no recivo señal del servidor
 
 func _ready():
 	print("✅ MultiplayerManager iniciado.")
@@ -30,6 +30,11 @@ func _ready():
 
 	GDSync.expose_func(_receive_quadrant_assignment)
 	GDSync.expose_func(_on_partida_lista)
+	
+	# Para gestionar si no tienes conexión
+	add_child(lobby_join_timeout_timer)
+	lobby_join_timeout_timer.one_shot = true
+	lobby_join_timeout_timer.timeout.connect(_on_lobby_join_timeout)
 
 
 
@@ -42,16 +47,21 @@ func iniciar_busqueda_partida(pantalla_carga):
 	connect("lobby_unido", Callable(pantalla_carga, "_on_lobby_unido"))
 	
 	emit_signal("estado_matchmaking", "Conectando...")
-	emit_signal("lobby_unido", 0)
+	emit_signal("lobby_unido", "0", true)
 
 	await get_tree().create_timer(0.5).timeout
 
 	# Paso 1: Intentar unirse
 	var current_lobby = LOBBY_NAME + str(num_Lobby)
-	emit_signal("lobby_unido", num_Lobby)
-	emit_signal("estado_matchmaking", "Uniéndose al lobby " + current_lobby)
-	print("Intentando unirse al lobby: ", current_lobby)
-	GDSync.lobby_join(current_lobby)
+	if !GDSync.is_active() :
+		emit_signal("estado_matchmaking", "Oh oh... GDSync no se ha iniciado")
+		emit_signal("lobby_unido", "Revisa tu conexión a internet", false)
+	else :
+		print("Intentando unirse al lobby: ", current_lobby)
+		
+		lobby_join_timeout_timer.start(3.0) 
+		emit_signal("lobby_unido", str(num_Lobby), true)
+		if !game_started : GDSync.lobby_join(current_lobby)
 
 
 
@@ -59,9 +69,10 @@ func iniciar_busqueda_partida(pantalla_carga):
 # 🔹 Eventos de GD-Sync
 # ------------------------------------------------
 func _on_lobby_joined(lobby_name: String) -> void:
+	lobby_join_timeout_timer.stop() 
 	print("MultiplayerManager: entré al lobby: ", lobby_name)
 	emit_signal("estado_matchmaking", "Conectado. Esperando jugadores...")
-	emit_signal("lobby_unido", num_Lobby)
+	emit_signal("lobby_unido", str(num_Lobby), true)
 
 	var my_id := GDSync.get_client_id()
 	if my_id > 0 and my_id not in players:
@@ -220,6 +231,7 @@ func get_enemy_id(client_id: int) -> int:
 	return enemy_id
 
 func _on_lobby_join_failed(lobby_name: String, error: int) -> void:
+	lobby_join_timeout_timer.stop()
 	print("[MM] Falló lobby_join: ", lobby_name, " error:", error)
 	emit_signal("estado_matchmaking", "Lobby no existe. Creándolo...")
 	GDSync.lobby_create(lobby_name, "", true, 2)
@@ -228,13 +240,43 @@ func _on_lobby_join_failed(lobby_name: String, error: int) -> void:
 func _on_lobby_created(lobby_name: String) -> void:
 	print("[MM] Lobby creado: ", lobby_name)
 	emit_signal("estado_matchmaking", "Lobby creado. Entrando...")
-	emit_signal("lobby_unido", num_Lobby)
-	GDSync.lobby_join(lobby_name)
+	emit_signal("lobby_unido", str(num_Lobby), true)
+	
+	lobby_join_timeout_timer.start(2.0)
+	if !game_started : GDSync.lobby_join(lobby_name)
 
 func _on_lobby_creation_failed(lobby_name: String, error: int) -> void:
 	print("[MM] No se pudo crear el lobby: ", lobby_name, " error: ", error)
 	emit_signal("estado_matchmaking", "Error creando lobby (%s). Reintentando..." % num_Lobby)
 	num_Lobby += 1
 	print("Intento unirme al lobby ", LOBBY_NAME + str(num_Lobby))
-	emit_signal("lobby_unido", num_Lobby)
-	GDSync.lobby_join(LOBBY_NAME + str(num_Lobby))
+	emit_signal("lobby_unido", str(num_Lobby), true)
+	
+	lobby_join_timeout_timer.start(2.0)
+	if !game_started : GDSync.lobby_join(LOBBY_NAME + str(num_Lobby))
+
+
+func _on_lobby_join_timeout():
+	if !game_started :
+		lobby_join_timeout_timer.stop()
+		# Esta función se llama si pasan 5 segundos sin respuesta
+		print("TIMEOUT: No se recibió respuesta del servidor sobre el lobby.")
+		
+		# Muestra un mensaje de error claro sobre el posible problema de red
+		emit_signal("estado_matchmaking", "Oh oh... No puede funcionar el PVP")
+		emit_signal("lobby_unido", "Revisa la configuración de tu conexión a internet", false)
+		
+		await get_tree().create_timer(5).timeout
+		emit_signal("estado_matchmaking", "Iniciando PVE...")
+		emit_signal("lobby_unido", "Revisa la configuración de tu conexión a internet", false)
+		await get_tree().create_timer(4).timeout
+		GameState.set_PVE()
+		
+		game_started = true
+		GDSync.lobby_leave() # Dejo vacío el lobby en el que estaba
+		
+		SceneManager.change_scene("res://src/main.tscn", {
+			"pattern": "squares",
+			"speed": 2.0,
+			"wait_time": 0.3
+		})

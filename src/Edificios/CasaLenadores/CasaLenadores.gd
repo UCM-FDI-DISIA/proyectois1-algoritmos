@@ -106,7 +106,7 @@ func _reposition_ui():
 
 
 # ⏱️ PROCESS
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 # 🌳 CHEQUEO DE COLISIÓN REAL (CircleShape2D)
@@ -116,11 +116,11 @@ func _is_position_free(pos: Vector2) -> bool:
 	var shape := CircleShape2D.new()
 	shape.radius = NPC_COLLISION_RADIUS
 
-	var transform := Transform2D(0, pos)
+	var vartransform := Transform2D(0, pos)
 
 	var params := PhysicsShapeQueryParameters2D.new()
 	params.shape = shape
-	params.transform = transform
+	params.transform = vartransform
 	params.collide_with_areas = true
 	params.collide_with_bodies = true
 	params.exclude = [area_interaccion.get_rid()]
@@ -178,7 +178,7 @@ func _spawn_lenador() -> void:
 	npc.z_index = int(npc.global_position.y)
 	
 	if npc.has_node("AnimatedSprite2D"):
-		var sprite = npc.get_node("AnimatedSprite2D") as AnimatedSprite2D
+		var _sprite = npc.get_node("AnimatedSprite2D") as AnimatedSprite2D
 		pass
 	
 	if debug:

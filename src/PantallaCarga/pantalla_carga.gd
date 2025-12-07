@@ -15,5 +15,6 @@ func _on_estado_matchmaking(msg: String):
 	texto.text = msg
 	print("[PantallaCarga] estado_matchmaking:", msg)
 	
-func _on_lobby_unido(num: int):
-	lobby.text = "Unido al lobby: " + str(num)
+func _on_lobby_unido(num: String, ok: bool):
+	if ok: lobby.text = "Unido al lobby: " + num
+	else : lobby.text = num

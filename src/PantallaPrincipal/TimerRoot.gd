@@ -222,7 +222,7 @@ func _update_label() -> void:
 		# Cuando la batalla ha sido declarada, ocultamos la advertencia normal
 		warning_label.visible = false	
 
-func _on_player_data_changed(client_id : int, key : String, value):
+func _on_player_data_changed(client_id : int, key : String, _value):
 	if client_id != GDSync.get_client_id() :	
 		if key == "set_to_FINAL_WARN" :
 			remaining_time = min(remaining_time, FINAL_WARN)

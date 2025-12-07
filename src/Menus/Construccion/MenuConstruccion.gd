@@ -191,10 +191,10 @@ func _iniciar_construccion(tipo_casa: String) -> void:
 # 📡 HANDLERS DE COLISIÓN (Simplificados)
 # =====================================================================
 
-func _on_area_preview_body_entered(body: Node) -> void:
+func _on_area_preview_body_entered(_body: Node) -> void:
 	pass
 
-func _on_area_preview_body_exited(body: Node) -> void:
+func _on_area_preview_body_exited(_body: Node) -> void:
 	pass
 
 #=====================================================================
