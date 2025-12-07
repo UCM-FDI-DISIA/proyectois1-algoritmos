@@ -10,7 +10,6 @@ func _ready():
 	# Pedir al MultiplayerManager que empiece a mostrar mensajes sobre la búsqueda de partida
 	MultiplayerManager.iniciar_busqueda_partida(self)
 
-
 func _on_estado_matchmaking(msg: String):
 	texto.text = msg
 	print("[PantallaCarga] estado_matchmaking:", msg)

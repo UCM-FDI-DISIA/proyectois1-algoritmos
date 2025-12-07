@@ -43,6 +43,7 @@ func _ready():
 # ------------------------------------------------
 func iniciar_busqueda_partida(pantalla_carga):
 	pantalla_carga_ref = pantalla_carga
+	print(">>> Iniciando búsqueda de partida...")
 	connect("estado_matchmaking", Callable(pantalla_carga, "_on_estado_matchmaking"))
 	connect("lobby_unido", Callable(pantalla_carga, "_on_lobby_unido"))
 	
@@ -54,6 +55,7 @@ func iniciar_busqueda_partida(pantalla_carga):
 	# Paso 1: Intentar unirse
 	var current_lobby = LOBBY_NAME + str(num_Lobby)
 	if !GDSync.is_active() :
+		print(">>> GDSync no activo.")
 		emit_signal("estado_matchmaking", "Oh oh... GDSync no se ha iniciado")
 		emit_signal("lobby_unido", "Revisa tu conexión a internet", false)
 	else :
@@ -218,6 +220,14 @@ func reset() -> void:
 	quadrants_by_client = {}
 	my_quadrant_id = -1
 	game_started = false
+	
+	lobby_join_timeout_timer.stop()
+	lobby_join_timeout_timer = Timer.new()
+	add_child(lobby_join_timeout_timer)
+	lobby_join_timeout_timer.one_shot = true
+	lobby_join_timeout_timer.timeout.connect(_on_lobby_join_timeout)
+
+
 
 func get_my_quadrant() -> int:
 	return my_quadrant_id

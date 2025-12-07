@@ -93,7 +93,7 @@ func _on_ResetButton_pressed() -> void:
 		# Reseteo de Singletons
 		if game_state: game_state.reset()
 		if MultiplayerManager: MultiplayerManager.reset()
-		if GDSync.is_active() && GameState.is_pve: GDSync.lobby_leave()
+		if GDSync.is_active() && !GameState.is_pve: GDSync.lobby_leave()
 		
 		# Cambio de escena
 		SceneManager.change_scene(main_scene_path, {
