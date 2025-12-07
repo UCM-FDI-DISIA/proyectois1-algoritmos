@@ -85,7 +85,7 @@ func _on_ResetButton_pressed() -> void:
 		# Reseteo de Singletons
 		if game_state: game_state.reset()
 		if MultiplayerManager: MultiplayerManager.reset()
-		if GDSync.is_active(): GDSync.lobby_leave()
+		if GDSync.is_active() && GameState.is_pve: GDSync.lobby_leave()
 		
 		# Cambio de escena
 		get_tree().change_scene_to_file(main_scene_path)
@@ -99,8 +99,8 @@ func _on_ResetButton_pressed() -> void:
 
 func _format_troop_info(troop_dict: Dictionary, title: String) -> String:
 	var lines := ["%s:" % title]
-	for name in troop_dict.keys():
-		lines.append("    • %s × %d" % [name, troop_dict.get(name, 0)])
+	for _name in troop_dict.keys():
+		lines.append("    • %s × %d" % [_name, troop_dict.get(_name, 0)])
 	return "\n".join(lines)
 
 func _pad_right(text: String, width: int) -> String:
@@ -109,6 +109,6 @@ func _pad_right(text: String, width: int) -> String:
 	return text
 
 func _update_label_style(label: RichTextLabel) -> void:
-	var size := int(get_viewport().get_visible_rect().size.y * 0.06)
-	label.add_theme_font_size_override("font_size", size)
+	var _size := int(get_viewport().get_visible_rect().size.y * 0.06)
+	label.add_theme_font_size_override("font_size", _size)
 	label.custom_minimum_size = get_viewport().get_visible_rect().size * 0.9

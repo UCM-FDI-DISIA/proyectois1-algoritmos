@@ -91,7 +91,7 @@ func add_troops(type: String, amount: int) -> void:
 		troop_counts[type] += amount
 
 	# Solo tiene sentido en PVP, pero no pasa nada si se llama también en PVE
-	GDSync.player_set_data("troops_by_client", troop_counts)
+	if !GameState.is_pve : GDSync.player_set_data("troops_by_client", troop_counts)
 	print("Tropas actualizadas:", troop_counts)
 
 
@@ -102,7 +102,7 @@ func attack_other() -> void:
 		print("Atacante: Notificando a todos los jugadores e iniciando 3s de retraso.")
 		
 		# 1. Notificar a la red (esto hace que el DEFENSOR active su lógica de delay)
-		GDSync.player_set_data("cambio_campo_batalla", true)
+		if !GameState.is_pve : GDSync.player_set_data("cambio_campo_batalla", true)
 		
 		# 2. Notificar al Countdown local (Timeroot) para la UI/Animación (Yo soy el ATACANTE)
 		emit_signal("start_battle_countdown", true) 
@@ -135,7 +135,11 @@ func _on_player_data_changed(client_id: int, key: String, value) -> void:
 			
 			# 3. Cambiar de escena tras el delay
 			print("Defensor: Cambiando a la escena de Batalla: campoBatalla.tscn")
-			get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
+			SceneManager.change_scene("res://src/PantallaAtaque/campoBatalla.tscn", {
+				"pattern": "squares",
+				"speed": 2.0,
+				"wait_time": 0.3
+			})
 
 
 # =====================================================================

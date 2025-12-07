@@ -210,7 +210,7 @@ func _update_label() -> void:
 			warning_label.text	 = "¡Llega la última batalla!"
 			warning_label.visible	 = true
 			if (remaining_time == FINAL_WARN):
-				GDSync.player_set_data("set_to_FINAL_WARN", true)
+				if !GameState.is_pve : GDSync.player_set_data("set_to_FINAL_WARN", true)
 		elif remaining_time <= SIGNAL_AT:
 			timer_label.modulate	= Color.GREEN
 			warning_label.visible	 = false
@@ -223,6 +223,6 @@ func _update_label() -> void:
 		warning_label.visible = false	
 
 func _on_player_data_changed(client_id : int, key : String, _value):
-	if client_id != GDSync.get_client_id() :	
+	if !GameState.is_pve && client_id != GDSync.get_client_id() :	
 		if key == "set_to_FINAL_WARN" :
 			remaining_time = min(remaining_time, FINAL_WARN)

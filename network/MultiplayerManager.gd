@@ -73,8 +73,10 @@ func _on_lobby_joined(lobby_name: String) -> void:
 	print("MultiplayerManager: entré al lobby: ", lobby_name)
 	emit_signal("estado_matchmaking", "Conectado. Esperando jugadores...")
 	emit_signal("lobby_unido", str(num_Lobby), true)
-
-	var my_id := GDSync.get_client_id()
+	
+	var my_id
+	if GameState.is_pve :  my_id = GDSync.get_client_id()
+	else : my_id = -1
 	if my_id > 0 and my_id not in players:
 		players.append(my_id)
 	
@@ -185,7 +187,7 @@ func _assign_quadrants() -> void:
 		var q: int = available_quadrants[i]
 		quadrants_by_client[client_id] = q
 
-		GDSync.player_set_data("quadrants_by_client", quadrants_by_client)
+		if !GameState.is_pve : GDSync.player_set_data("quadrants_by_client", quadrants_by_client)
 
 		print(" -> Jugador ", client_id, " tiene cuadrante ", q)
 		emit_signal("estado_matchmaking", "Jugador %s asignado a cuadrante %s" % [client_id, q])
@@ -205,7 +207,7 @@ func _receive_quadrant_assignment(q_id: int, p: Array[int]) -> void:
 	print("Me asignaron el cuadrante: ", my_quadrant_id)
 	emit_signal("estado_matchmaking", "Te asignaron el cuadrante %s" % q_id)
 
-	GDSync.player_set_data("quadrant_id", q_id)
+	if !GameState.is_pve : GDSync.player_set_data("quadrant_id", q_id)
 
 
 # ------------------------------------------------
@@ -273,7 +275,6 @@ func _on_lobby_join_timeout():
 		GameState.set_PVE()
 		
 		game_started = true
-		GDSync.lobby_leave() # Dejo vacío el lobby en el que estaba
 		
 		SceneManager.change_scene("res://src/main.tscn", {
 			"pattern": "squares",

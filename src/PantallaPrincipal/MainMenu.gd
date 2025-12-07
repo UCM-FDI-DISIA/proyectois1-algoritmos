@@ -56,7 +56,7 @@ func _on_pvp_pressed() -> void:
 		await get_tree().create_timer(0.5).timeout
 
 	# Esperar client ID
-	while GDSync.get_client_id() <= 0:
+	while !GameState.is_pve && GDSync.get_client_id() <= 0:
 		print("Esperando ID de cliente... ", GDSync.get_client_id())
 		await get_tree().create_timer(0.2).timeout
 
