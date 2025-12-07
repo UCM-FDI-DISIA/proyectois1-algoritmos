@@ -88,7 +88,11 @@ func _on_ResetButton_pressed() -> void:
 		if GDSync.is_active() && GameState.is_pve: GDSync.lobby_leave()
 		
 		# Cambio de escena
-		get_tree().change_scene_to_file(main_scene_path)
+		SceneManager.change_scene(main_scene_path, {
+			"pattern": "squares",
+			"speed": 2.0,
+			"wait_time": 0.3
+		})
 	else:
 		push_error("❌ main_scene_path no está configurado")
 

@@ -30,9 +30,9 @@ func _on_pve_pressed() -> void:
 	print("🌍 Cargando mapa principal en modo PVE...")
 	
 	SceneManager.change_scene("res://src/main.tscn", {
-			"pattern": "squares",
-			"speed": 2.0,
-			"wait_time": 0.3
+		"pattern": "squares",
+		"speed": 2.0,
+		"wait_time": 0.3
 	})
 
 	# ============================================================
@@ -67,8 +67,7 @@ func _on_pvp_pressed() -> void:
 	print("PVP → cambiando a PantallaCarga...")
 
 	# Solo cambiamos de escena; PantallaCarga se encargará del matchmaking
-	var pantalla_carga_scene: PackedScene = load("res://src/PantallaCarga/PantallaCarga.tscn")
-	SceneManager.change_scene(pantalla_carga_scene, {
+	SceneManager.change_scene("res://src/PantallaCarga/PantallaCarga.tscn", {
 		"pattern": "squares",
 		"speed": 2.0,
 		"wait_time": 0.3

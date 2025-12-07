@@ -158,7 +158,11 @@ func _on_timer_timeout() -> void:
 		print("🚨 Tiempo agotado. Forzando inicio de batalla final (vía señal).")
 		game_state_ref.start_battle_countdown.emit(true, true)
 		await get_tree().create_timer(3.0).timeout
-		get_tree().change_scene_to_file("res://src/PantallaAtaque/campoBatalla.tscn")
+		SceneManager.change_scene("res://src/PantallaAtaque/campoBatalla.tscn", {
+			"pattern": "squares",
+			"speed": 2.0,
+			"wait_time": 0.3
+		})
 		
 	_update_label()
 
