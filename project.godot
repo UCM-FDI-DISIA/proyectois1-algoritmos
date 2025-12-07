@@ -29,6 +29,11 @@ GDSync="*res://addons/GD-Sync/MultiplayerClient.gd"
 MultiplayerManager="*res://network/MultiplayerManager.gd"
 SceneManager="*res://addons/scene_manager/SceneManager.tscn"
 
+[display]
+
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
+
 [dotnet]
 
 project/assembly_name="Feudalia"

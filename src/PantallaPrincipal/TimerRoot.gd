@@ -46,21 +46,21 @@ func _ready() -> void:
 	# ============================================================
 	# 🔵 CENTRAR LOS CONTROLES EN PANTALLA
 	# ============================================================
-	await get_tree().process_frame  # aseguramos tamaños y layout
+	#await get_tree().process_frame  # aseguramos tamaños y layout
 
-	var screen_center := get_window().size * 0.5
+	#var screen_center := get_window().size * 0.5
 
 	# Centrar sprite de cuenta atrás (AnimatedSprite2D)
-	if is_instance_valid(countdown_sprite):
-		countdown_sprite.global_position = screen_center
+	#if is_instance_valid(countdown_sprite):
+	#	countdown_sprite.global_position = screen_center
 
 	# Centrar banner rojo (Sprite2D)
-	if is_instance_valid(ribbon_message):
-		ribbon_message.global_position = screen_center + Vector2(0, -120)
+	#if is_instance_valid(ribbon_message):
+	#	ribbon_message.global_position = screen_center + Vector2(0, -120)
 
 	# Centrar texto ATACANDO... (Label)
-	if is_instance_valid(grace_label):
-		grace_label.global_position = screen_center + Vector2(-80, -140)
+	#if is_instance_valid(grace_label):
+	#	grace_label.global_position = screen_center + Vector2(-80, -140)
 
 
 
