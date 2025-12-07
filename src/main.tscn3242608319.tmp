@@ -1,4 +1,4 @@
-[gd_scene load_steps=149 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=146 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -29,10 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://bbo05kp3bjw4u" path="res://src/BotonElementos/boton_s.tscn" id="22_ocmcv"]
 [ext_resource type="Texture2D" uid="uid://knoivg0aqqle" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Blue_3Slides.png" id="24_ocmcv"]
 [ext_resource type="Script" uid="uid://cqg61w8waal7m" path="res://src/BotonElementos/boton_batalla1.gd" id="26_nnhyx"]
-[ext_resource type="Script" uid="uid://dg77duy3aenhi" path="res://src/BotonElementos/boton_batalla2.gd" id="27_16cua"]
 [ext_resource type="Script" uid="uid://dx4mnernx43c7" path="res://src/PantallaPrincipal/TimerRoot.gd" id="27_c2usk"]
-[ext_resource type="Script" uid="uid://cwahesxw6gx0m" path="res://src/BotonElementos/boton_batalla3.gd" id="28_cy3es"]
-[ext_resource type="Script" uid="uid://d3mvj3k5httei" path="res://src/BotonElementos/boton_batalla4.gd" id="29_2466g"]
 [ext_resource type="Texture2D" uid="uid://bmimr31whsu5c" path="res://src/AssetsUsados/800_3546623_h3ehrju2thrrg6u3yreli37vwe91wisv3takmp0w-removebg-preview.png" id="30_tovjm"]
 [ext_resource type="Texture2D" uid="uid://deycw5jvdykb1" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/UI/Ribbons/Ribbon_Red_3Slides.png" id="31_n36qx"]
 [ext_resource type="Script" uid="uid://jc6pseclxc28" path="res://src/PantallaPrincipal/AvisosPlayer.gd" id="32_nnhyx"]
@@ -1055,21 +1052,18 @@ offset_left = 5139.0005
 offset_top = 2130.0
 offset_right = 5203.0005
 offset_bottom = 2194.0
-script = ExtResource("27_16cua")
 
 [node name="BotonBatalla3" parent="Objetos" instance=ExtResource("21_jitvu")]
 offset_left = 2992.0002
 offset_top = 4302.0
 offset_right = 3056.0002
 offset_bottom = 4366.0
-script = ExtResource("28_cy3es")
 
 [node name="BotonBatalla4" parent="Objetos" instance=ExtResource("21_jitvu")]
 offset_left = 5126.0
 offset_top = 4234.0
 offset_right = 5190.0
 offset_bottom = 4298.0
-script = ExtResource("29_2466g")
 
 [node name="BotonesYSort" type="Node2D" parent="Objetos"]
 z_as_relative = false

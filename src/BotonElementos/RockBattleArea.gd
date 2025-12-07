@@ -1,4 +1,6 @@
 extends Area2D
+class_name RockBattleArea
+
 
 # =====================================================================
 # 🧾 NODOS
@@ -11,6 +13,7 @@ extends Area2D
 # 🎮 ESTADO
 # =====================================================================
 var player_in_area := false
+var button = 0
 
 # =====================================================================
 # ⚙️ REFERENCIA AL JUGADOR (asignar en el editor)
@@ -20,29 +23,22 @@ var player_in_area := false
 # =====================================================================
 # ⚙️ INICIALIZACIÓN
 # =====================================================================
-func _ready() -> void:
-	# 1. Obtener el cuadrante
-	var quadrant : int = MultiplayerManager.get_my_quadrant()
-
-	# 🔴 CORRECCIÓN CRÍTICA PARA PVE: Forzar cuadrante 0
-	if GameState.is_pve:
-		quadrant = 0
-		print("⚔️ Modo PVE detectado. Cuadrante forzado a 0.")
-	# --------------------------------
-
+func wait_till_ready() -> void:
+	# 1. No ejecuto esto en el ready porque tengo que esperar a que el padre diga a qué botón tengo que asignarle la variable
+	print("[BattleButton] Ya me he iniciado. Soy el botón del cuadrante " + str(button))
 	# 2. Asignación SEGURA del botón de batalla
-	match (quadrant):
+	match (button):
 		0: battle_button = get_node("/root/Main/Objetos/BotonBatalla1")
 		1: battle_button = get_node("/root/Main/Objetos/BotonBatalla2")
 		2: battle_button = get_node("/root/Main/Objetos/BotonBatalla3")
 		3: battle_button = get_node("/root/Main/Objetos/BotonBatalla4")
 		_:
-			push_error("❌ Cuadrante inválido/no asignado (" + str(quadrant) + "). No se puede asignar el botón de batalla.")
+			push_error("❌ Cuadrante inválido/no asignado (" + str(button) + "). No se puede asignar el botón de batalla.")
 			return # Salir de _ready si el cuadrante es inválido
 
 	# 3. VERIFICACIÓN CRÍTICA: Detener si battle_button es null (Ruta incorrecta)
 	if battle_button == null:
-		push_error("❌ No se pudo obtener el nodo de Botón de Batalla para el cuadrante " + str(quadrant) + ". Verifica la ruta: /root/Main/Objetos/BotonBatallaX.")
+		push_error("❌ No se pudo obtener el nodo de Botón de Batalla para el cuadrante " + str(button) + ". Verifica la ruta: /root/Main/Objetos/BotonBatallaX.")
 		return # Sale de la función para evitar el error 'get_node on a null value'
 
 	# 4. Obtener el ícono (Solo se ejecuta si battle_button no es null)
