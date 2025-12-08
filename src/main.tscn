@@ -980,6 +980,30 @@ offset_top = 523.0
 offset_right = -2107.0
 offset_bottom = 587.0
 
+[node name="Puente5" parent="Objetos/BotonesPuentes" instance=ExtResource("12_43aqp")]
+offset_left = 7296.0
+offset_top = -289.0
+offset_right = 7360.0
+offset_bottom = -225.0
+
+[node name="Puente6" parent="Objetos/BotonesPuentes" instance=ExtResource("12_43aqp")]
+offset_left = 6657.0
+offset_top = -890.0
+offset_right = 6721.0
+offset_bottom = -826.0
+
+[node name="Puente7" parent="Objetos/BotonesPuentes" instance=ExtResource("12_43aqp")]
+offset_left = 9363.0
+offset_top = -187.0
+offset_right = 9427.0
+offset_bottom = -123.0
+
+[node name="Puente8" parent="Objetos/BotonesPuentes" instance=ExtResource("12_43aqp")]
+offset_left = 10304.0
+offset_top = 522.0
+offset_right = 10368.0
+offset_bottom = 586.0
+
 [node name="Casas" type="Node2D" parent="Objetos"]
 z_as_relative = false
 y_sort_enabled = true
