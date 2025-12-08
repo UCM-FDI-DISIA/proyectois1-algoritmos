@@ -39,7 +39,6 @@ func _ready() -> void:
 	is_mobile = OS.get_name() in ["Android", "iOS"]
 	if not is_mobile:
 		set_process_input(true)
-	
 
 	position = get_viewport().get_visible_rect().size / 2
 	z_index = int(position.y)
@@ -61,12 +60,9 @@ func _physics_process(_delta: float) -> void:
 		move_and_slide()
 		return
 
-	var input_dir := Vector2.ZERO
-
-
-	input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-
+	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	input_dir = input_dir.normalized()
+
 	velocity = input_dir * speed
 	move_and_slide()
 
@@ -74,7 +70,7 @@ func _physics_process(_delta: float) -> void:
 		last_direction = input_dir
 
 	# =====================================================================
-	# 🎬 ANIMACIONES Y SONIDOS
+	# 🎬 ANIMACIONES
 	# =====================================================================
 	var current_anim := ""
 	if input_dir != Vector2.ZERO:
@@ -86,8 +82,11 @@ func _physics_process(_delta: float) -> void:
 	if current_anim != "" and animated_sprite.animation != current_anim:
 		animated_sprite.play(current_anim)
 
-	# Sonido PASOS
+	# =====================================================================
+	# 🔊 SOLO SONIDO DE PASOS (sin dinámicos)
+	# =====================================================================
 	if current_anim == "Andar" + color:
+		# reproducir tipo adecuado según tile
 		if _is_on_bridge():
 			if not foot_player_wood.playing:
 				foot_player_wood.play()
@@ -108,15 +107,21 @@ func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ataque"):
 		start_attack(1)
 
+# =====================================================================
+# ⚔️ SISTEMA DE ATAQUE
+# =====================================================================
 func start_attack(attack_number: int) -> void:
 	if is_attacking:
 		return
 	is_attacking = true
+
 	var anim_name = "Ataque%d_%s%s" % [attack_number, get_direction_suffix(last_direction), color]
 	animated_sprite.play(anim_name)
 	animated_sprite.animation_finished.connect(on_animation_finished)
+
 	atk_player.stop()
 	atk_player.play()
+
 	check_attack_hits()
 
 func check_attack_hits() -> void:
@@ -140,19 +145,14 @@ func on_animation_finished() -> void:
 		animated_sprite.animation_finished.disconnect(on_animation_finished)
 
 # =====================================================================
-# 🪵 DETECCIÓN DE PUENTE USANDO TILEMAP INVISIBLE (GODOT 4.1+)
+# 🪵 DETECCIÓN DE PUENTE VIA TILEMAP INVISIBLE
 # =====================================================================
 func _is_on_bridge() -> bool:
 	if not wood_tilemap:
 		return false
 
-	# Convertir global_position a coordenadas locales del TileMap
 	var local_pos: Vector2 = wood_tilemap.to_local(global_position)
 	var cell: Vector2i = wood_tilemap.local_to_map(local_pos)
-
-	# Obtener source_id del tile en esa celda, capa 0
 	var source_id: int = wood_tilemap.get_cell_source_id(0, cell)
-
-	print("Cell:", cell, "Source ID:", source_id) # Debug
 
 	return source_id != -1
