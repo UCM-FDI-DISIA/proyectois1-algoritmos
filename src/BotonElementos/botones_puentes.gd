@@ -16,6 +16,18 @@ class_name Puentes
 @export var p4_start: Vector2i = Vector2i(-34, 11)
 @export var p4_end:   Vector2i = Vector2i(-34, 5)
 
+@export var p5_start: Vector2i = Vector2i(114, -2)
+@export var p5_end:   Vector2i = Vector2i(114, -7)
+
+@export var p6_start: Vector2i = Vector2i(107, -14)
+@export var p6_end:   Vector2i = Vector2i(101, -14)
+
+@export var p7_start: Vector2i = Vector2i(142, -3)
+@export var p7_end:   Vector2i = Vector2i(150, -3)
+
+@export var p8_start: Vector2i = Vector2i(161, 11)
+@export var p8_end:   Vector2i = Vector2i(161, 5)
+
 # ==========================================================
 #   REFERENCIAS
 # ==========================================================
@@ -31,15 +43,14 @@ class_name Puentes
 #   INICIALIZACIÓN
 # ==========================================================
 func _ready() -> void:
-	for i in range(1, 5):
+	for i in range(1, 9):
 		var btn: TextureButton = get_node("Puente%d" % i)
 		if not btn:
 			continue
 
-		var cost_id := "puente3" if i >= 3 else "puente%d" % i
-		btn.tooltip_text = _tooltip(rm.get_puente_costs(cost_id))
+		var cost_id := "puente3" if i in [3,4,7] else "puente1" if i in [1,5] else "puente2" if i in [2,6] else "puente3"
 
-		# Estado inicial según recursos
+		btn.tooltip_text = _tooltip(rm.get_puente_costs(cost_id))
 		btn.disabled = not _hay_recursos(cost_id)
 
 		btn.pressed.connect(_on_puente_pressed.bind(i))
@@ -48,11 +59,11 @@ func _ready() -> void:
 #   ACTUALIZACIÓN DINÁMICA DE BOTONES
 # ==========================================================
 func _process(_delta: float) -> void:
-	for i in range(1, 5):
+	for i in range(1, 9):
 		var btn: TextureButton = get_node("Puente%d" % i)
 		if not btn or not btn.visible:
 			continue
-		var cost_id := "puente3" if i >= 3 else "puente%d" % i
+		var cost_id := "puente3" if i in [3,4,7] else "puente1" if i in [1,5] else "puente2"
 		btn.disabled = not _hay_recursos(cost_id)
 
 # ==========================================================
@@ -73,7 +84,6 @@ func _on_puente_pressed(id: int) -> void:
 	var end: Vector2i
 	var cost_id: String
 
-	# Definir posiciones y cost_id
 	match id:
 		1:
 			start = p1_start; end = p1_end; cost_id = "puente1"
@@ -83,23 +93,27 @@ func _on_puente_pressed(id: int) -> void:
 			start = p3_start; end = p3_end; cost_id = "puente3"
 		4:
 			start = p4_start; end = p4_end; cost_id = "puente3"
+		5:
+			start = p5_start; end = p5_end; cost_id = "puente1"  # igual que puente1
+		6:
+			start = p6_start; end = p6_end; cost_id = "puente2"  # igual que puente2 pero invertido
+		7:
+			start = p7_start; end = p7_end; cost_id = "puente3"  # igual que puente3 pero invertido
+		8:
+			start = p8_start; end = p8_end; cost_id = "puente3"  # igual que puente4
 		_:
 			return
 
-	# Comprobar recursos antes de hacer cualquier acción
 	if not _hay_recursos(cost_id):
 		print("Faltan recursos para", cost_id)
-		return  # No hace nada si faltan recursos
+		return
 
-	# Eliminar recursos
 	var cost := rm.get_puente_costs(cost_id)
 	for res in cost:
 		rm.remove_resource(res, cost[res])
 
-	# Ocultar el botón solo si hay recursos
 	get_node("Puente%d" % id).visible = false
 
-	# Construcción progresiva del puente
 	await _construir_puente(id, start, end)
 
 # ==========================================================
@@ -108,34 +122,34 @@ func _on_puente_pressed(id: int) -> void:
 func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 	var delay := 0.5
 
-	# Atlas según tu lógica
 	var atlas_inicio: Vector2i
 	var atlas_medio: Vector2i
 	var atlas_final: Vector2i
 
 	match id:
-		1:
-			atlas_inicio = Vector2i(0,3)
-			atlas_medio  = Vector2i(0,2)
-			atlas_final  = Vector2i(0,1)
-		2:
-			atlas_inicio = Vector2i(0,0)
-			atlas_medio  = Vector2i(1,0)
-			atlas_final  = Vector2i(2,0)
-		3:
-			atlas_inicio = Vector2i(2,0)
-			atlas_medio  = Vector2i(1,0)
-			atlas_final  = Vector2i(0,0)
-		4:
+		1,5:
 			atlas_inicio = Vector2i(0,3)
 			atlas_medio  = Vector2i(0,2)
 			atlas_final  = Vector2i(0,1)
 
-	# Construir inicio
+		4,8:
+			atlas_inicio = Vector2i(0,3)
+			atlas_medio  = Vector2i(0,2)
+			atlas_final  = Vector2i(0,1)
+
+		2,6:
+			atlas_inicio = Vector2i(2,0)   # invertido del puente2
+			atlas_medio  = Vector2i(1,0)
+			atlas_final  = Vector2i(0,0)
+
+		3,7:
+			atlas_inicio = Vector2i(0,0)   # invertido del puente3
+			atlas_medio  = Vector2i(1,0)
+			atlas_final  = Vector2i(2,0)
+
 	tilemap.set_cell(start, source_id, atlas_inicio)
 	await get_tree().create_timer(delay).timeout
 
-	# Construir partes intermedias
 	var delta := end - start
 	var dir := Vector2i(
 		0 if delta.x == 0 else 1 if delta.x > 0 else -1,
@@ -148,10 +162,8 @@ func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 		await get_tree().create_timer(delay).timeout
 		pos += dir
 
-	# Construir final
 	tilemap.set_cell(end, source_id, atlas_final)
 
-	# Cambiar inicio y final en TileMap "Suelo"
 	suelo_map.set_cell(start, source_suelo_id, Vector2i(1,1))
 	suelo_map.set_cell(end, source_suelo_id, Vector2i(1,1))
 
