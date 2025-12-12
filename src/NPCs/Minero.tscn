@@ -154,15 +154,22 @@ radius = 14.692983
 
 [node name="Minero" type="CharacterBody2D"]
 show_behind_parent = true
+z_as_relative = false
+y_sort_enabled = true
 script = ExtResource("1_1djbl")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_66hj5")
 animation = &"Idle"
 frame_progress = 0.8594856
+offset = Vector2(0, -19)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 22)
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(0, 1.0000019)
 scale = Vector2(1.325, 1.24001)
 shape = SubResource("CircleShape2D_we2l8")
 disabled = true
@@ -171,7 +178,12 @@ one_way_collision_margin = 6.0
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
 [node name="GatherArea2D" type="Area2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GatherArea2D"]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(0, -17)
 scale = Vector2(5.04, 4.7599998)
 shape = SubResource("CircleShape2D_3yj1i")

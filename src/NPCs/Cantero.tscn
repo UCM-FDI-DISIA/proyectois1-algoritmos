@@ -152,16 +152,23 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_lfxaq"]
 
 [node name="Cantero" type="CharacterBody2D"]
+z_as_relative = false
+y_sort_enabled = true
 script = ExtResource("1_lfxaq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 show_behind_parent = true
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(0, 1)
 sprite_frames = SubResource("SpriteFrames_kx867")
 animation = &"Idle"
 frame_progress = 0.37364087
+offset = Vector2(0, -21)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 22)
+z_as_relative = false
+y_sort_enabled = true
 scale = Vector2(1.4171427, 1.4331429)
 shape = SubResource("CircleShape2D_u48sf")
 disabled = true
@@ -170,7 +177,12 @@ disabled = true
 avoidance_enabled = true
 
 [node name="GatherArea2D" type="Area2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GatherArea2D"]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(1, -15.999999)
 scale = Vector2(7.2533336, -7.044572)
 shape = SubResource("CircleShape2D_lfxaq")

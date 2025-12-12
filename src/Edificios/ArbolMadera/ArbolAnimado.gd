@@ -54,6 +54,7 @@ func _ready() -> void:
 	add_child(regeneration_timer)
 	regeneration_timer.one_shot = true
 	regeneration_timer.timeout.connect(_on_regen_timer_timeout)
+	anim.animation_finished.connect(_on_npc_chop_finished)
 
 	collision_full.disabled = false
 	collision_stump.disabled = true
@@ -107,7 +108,6 @@ func gather_resource(amount: int) -> int:
 		anim_tronco.play("tronquito") 
 
 		anim.play("chop")
-		anim.animation_finished.connect(_on_npc_chop_finished, CONNECT_ONE_SHOT)
 
 	# El NPC no marca el árbol como muerto, solo lo agota gradualmente.
 	return gathered

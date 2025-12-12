@@ -163,8 +163,10 @@ script = ExtResource("1_26hqc")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_as_relative = false
 y_sort_enabled = true
+position = Vector2(209, -132)
 sprite_frames = SubResource("SpriteFrames_pnp14")
 animation = &"Idle"
+offset = Vector2(-209, 112)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_as_relative = false
@@ -180,5 +182,6 @@ avoidance_enabled = true
 [node name="GatherArea2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GatherArea2D"]
+position = Vector2(0, -19.999998)
 scale = Vector2(7.2533336, -7.044572)
 shape = SubResource("CircleShape2D_26hqc")
