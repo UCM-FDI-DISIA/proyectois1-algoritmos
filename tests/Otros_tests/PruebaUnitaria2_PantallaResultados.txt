@@ -1,0 +1,17 @@
+ESTÉTICA A PROBAR: Pantalla de resultados
+
+OBJETIVO DE LA PRUEBA:
+	Comprobar que la pantalla de resultados se muestra y es coherente.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	1) Ejecutar el archivo
+	2) Iniciar una partida.
+	3) Declarar una batalla.
+	4) Comprobar que el resultado que se muestra por pantalla es coherente.
+	5) COmprobar que las estadísticas de cada jugador se actualizan.
+
+RESULTADO ESPERADO:
+	La pantalla de resultados es visualmente clara y toda la información que ofrece es la esperada.
+
+PRUEBAS REALIZADAS:
+	Sin incidencias.

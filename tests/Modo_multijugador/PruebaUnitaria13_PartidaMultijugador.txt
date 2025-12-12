@@ -8,7 +8,7 @@ PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
 	1) Ejecutar el juego y entrar en partida con otro jugador.
 	2) Comprobar que el multijugador no interfiere en las funcionalidades de juego que se implementaron en local.
 	3) Ver que en la batalla, el número de soldados enviados es el correcto para cada uno de los jugadoes.
-	4) Ver que el resultado final es coherente (un ganador y un perdedor) y cuadra con el número de soldados.
+	4) Ver que el resultado final es coherente (un ganador y un perdedor o empate) y cuadra con el número de soldados.
 
 RESULTADO ESPERADO:
 	Poder tener una experiencia de partida en multijugador como si fuera en local, 

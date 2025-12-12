@@ -1,0 +1,18 @@
+MECÁNICA A PROBAR: Caídas multijugador
+
+OBJETIVO DE LA PRUEBA:
+	Comprobar que la partida puede continuar tras una caída.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	1) Ejecutar el archivo
+	2) Iniciar una partida multijugador.
+	3) Uno de los jugadores debe abandonar la partida.
+	4) El otro jugador recibe un mensaje por pantalla que el informa de la caída de su enemigo.
+	5) El jugador activo entra en modo PVE y puede terminar la partida.
+		* Es importante comprobar que la compra de recursos, batalla y el resto de "Funcionalidades_básicas" siguen funcionando, puesto que dependen del modo de juego.
+
+RESULTADO ESPERADO:
+	La partida continúa con normalidad, pero contra el bot.
+
+PRUEBAS REALIZADAS:
+	Sin incidencias.

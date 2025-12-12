@@ -1,0 +1,28 @@
+MECANICA A PROBAR: RECOLECCION AUTOMÁTICA DE RECURSOS
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	
+	1) Ejecutar el archivo.
+	2) Construir edificios recolectores en sitios críticos.
+		* Cerca de escaleras.
+		* Cerca del agua.
+		* Lejos de recursos iniciales.
+	3) Comprar NPCs y ver que sólo te deja comprar 5.
+		* Los NPCs deben aparecer en sitios coherentes (no encima del agua).
+		* Los NPCs deben ordenarse correctamente con los elementos del mapa.
+	4) Comprobar que los NPCs buscan el recurso que les corresponde y lo recolectan.
+		* Esto se refleja en animaciones y un aumento en el menú de recursos.
+	5) Comprobar que agotada la fuente del recurso, el NPC busca otra.
+	6) Comprobar que el NPC no se queda trabado y tiene un comportamiento coherente.
+		* EXCEPCIÓN: consideramos que es correcto que se quede trabado si no puede acceder a ningún recurso.
+			Por ejemplo, esto se da si no se han desbloqueado los puentes pertinentes.
+			También puede darse si todos los recursos cercanos al NPC están agotados.
+		* EXCEPCIÓN: teniendo en cuenta la complejidad del mapa y los objetivos del proyecto, consideramos que un comportamiento coherente es:
+				Aquel en el que el NPC respeta los bordes, escaleras y paredes del mapa.
+				No se tienen en cuenta las colisiones con los objetos del mapa. 
+	7) Comprobar todo lo anterior para leñadores, mineros y canteros.
+
+
+PRUEBAS REALIZADAS:
+	12/12/2025
+		Algunos NPCs spawnean en el agua.

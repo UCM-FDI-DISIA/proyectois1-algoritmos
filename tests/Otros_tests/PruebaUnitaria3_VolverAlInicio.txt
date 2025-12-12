@@ -1,0 +1,19 @@
+MECÁNICA A PROBAR: Posibilidad de jugar varias partidas seguidas
+
+OBJETIVO DE LA PRUEBA:
+	Comprobar que el jugador puede jugar tantas partidas como desee sin tener que cerrar y volver a ejecutar el programa.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	1) Ejecutar el archivo
+	2) Iniciar una partida PVE o PVP.
+	3) Declarar una batalla o esperar a que se dé la batalla automática.
+	4) Comprobar que el botón "Volver" aparece en la pantalla de resultados.
+	5) Repetir los pasos 2 - 4 intercalando PVE y PVP en todas las combinaciones posibles.
+		Por ejemlo: PVE -> PVE -> PVP -> PVP -> PVE
+	5) Comprobar que las estadísticas de cada jugador se actualizan y se acumulan con cada partida jugada.
+
+RESULTADO ESPERADO:
+	El jugador puede jugar tantas veces como quiera y ver cómo cambian sus estadísticas en cada partida.
+
+PRUEBAS REALIZADAS:
+	Sin incidencias.

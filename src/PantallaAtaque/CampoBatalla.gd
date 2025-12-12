@@ -182,12 +182,8 @@ func _start_battle_countdown() -> void:
 	label.position = Vector2(20, 20)
 	canvas.add_child(label)
 
-	for i in range(3, 0, -1):
-		label.text = str(i)
-		await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(2.0).timeout
 
-	label.text = "¡BATALLA!"
-	await get_tree().create_timer(1.0).timeout
 	label.queue_free()
 	canvas.queue_free()
 

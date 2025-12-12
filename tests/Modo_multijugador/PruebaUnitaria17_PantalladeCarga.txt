@@ -1,0 +1,23 @@
+INTERFAZ A PROBAR: Pantalla de carga
+
+OBJETIVO DE LA PRUEBA:
+	Comprobar que la pantalla de carga muestra los mensajes esperados.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	1) Ejecutar el archivo
+	2) Iniciar una partida multijugador y comprobar que se pasa a la pantalla de carga.
+		* Comprobar que la animación del reloj se ejecuta de forma cíclica.
+	2.1) Conectar a un número impar de personas.
+		* Después de 30 segundos, la pantalla debe informar al jugador sin pareja de que no se ha encontrado contrincante y cambiar a modo PVE.
+	2.2) Intentar iniciar el multijugador sin conexión a internet.
+		* La pantalla informa de que no se ha podido conectar a GDSync.
+	2.3) Intentar conectarse desde la red UCM.
+		* La pantalla informa de que GDSync no va a poder funcionar.
+		* Sabemos que esto ocurre porque el usuario no recive respuesta del lobby dependiendo de ciertas restricciones. 
+	4) Comprobar que, si no hay errores, la partida comienza con normalidad.
+
+RESULTADO ESPERADO:
+	La pantalla de carga es funcional y útil para el usuario.
+
+PRUEBAS REALIZADAS:
+	Sin incidencias.

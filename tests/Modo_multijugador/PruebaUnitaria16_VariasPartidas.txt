@@ -1,0 +1,16 @@
+MECÁNICA A PROBAR: Varias partidas
+
+OBJETIVO DE LA PRUEBA:
+	Comprobar que se pueden jugar varias simultáneas entre varios jugadores.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	1) Ejecutar el archivo
+	2) Iniciar al menos dos partidas multijugador.
+	3) Comprobar que todos los jugadores pueden entrar en partida.
+	4) Comprobar que la pantalla de carga asigna un lobby distinto y numerado a cada pareja de jugadores.
+
+RESULTADO ESPERADO:
+	Todos los jugadores pueden jugar con normalidad en partidas independientes.
+
+PRUEBAS REALIZADAS:
+	Sin incidencias.

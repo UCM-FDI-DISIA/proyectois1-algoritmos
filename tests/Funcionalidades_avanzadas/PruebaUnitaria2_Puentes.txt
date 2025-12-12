@@ -1,0 +1,17 @@
+MECANICA A PROBAR: RECOLECCION AUTOMÁTICA DE RECURSOS
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	
+	1) Ejecutar el archivo.
+	2) Intentar pasar por un puente no construido y ver que no se puede.
+	3) Construir los 5 puentes de cada cuadrante del mapa.
+		* El botón desaparece.
+		* Se ejecuta una animación en el mapa.
+		REVISIÓN EXHAUSTIVA: activar la visibilidad del NavigationMap de cada cuadrante en la depuración y comprobar que este se modifica con la compra de puentes.
+	4) Comprobar que el personaje puede atravesar los puentes.
+		* Si el NavigationMap se ha actualizado, los NPCs tampoco tendrán problemas para cruzarlo.
+
+
+PRUEBAS REALIZADAS:
+	12/12/2025
+		El puente más arriba del mapa de ambos cuadrantes no tiene botón.

@@ -1,0 +1,19 @@
+ESTÉTICA A PROBAR: Color de los personajes
+
+OBJETIVO DE LA PRUEBA:
+	Comprobar que cada jugador tiene un color distinto en su cuadrante.
+
+PASOS A SEGUIR PARA REALIZAR LA PRUEBA:
+	1) Ejecutar el archivo
+	2) Iniciar una partida multijugador.
+	3) Comprobar que uno de los personajes es rojo y el otro azul.
+		* Es importante mover a ambos jugadores por el mapa y atacar. Así se comprueba que todas las animaciones del rey son correctas para cada color.
+	4) Declarar una batalla y comprobar que las tropas propias y enemigas tienen el color correspondiente.
+		* NOTA: esto no se aplica para otros elementos del juego, como el menú de reclutamiento o el castillo.
+		En esos casos, aceptamos que los elementos sean siempre azules.
+
+RESULTADO ESPERADO:
+	Los jugadores tienen un color diferenciado coherente con el de su ejército.
+
+PRUEBAS REALIZADAS:
+	Sin incidencias.
