@@ -155,7 +155,7 @@ func _load_troop_scenes(is_red: bool) -> Dictionary:
 
 
 # =====================================================================
-# 🤖 AUXILIAR: Generar tropas AI PVE
+# 🤖 AUXILIAR: Generar tropas PVE
 # =====================================================================
 func _generate_ai_troops() -> Dictionary:
 	var troops := {
