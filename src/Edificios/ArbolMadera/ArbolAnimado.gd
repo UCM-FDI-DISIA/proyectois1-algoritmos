@@ -54,7 +54,6 @@ func _ready() -> void:
 	add_child(regeneration_timer)
 	regeneration_timer.one_shot = true
 	regeneration_timer.timeout.connect(_on_regen_timer_timeout)
-	anim.animation_finished.connect(_on_npc_chop_finished)
 
 	collision_full.disabled = false
 	collision_stump.disabled = true
@@ -83,7 +82,7 @@ func _on_player_anim_finished():
 		
 		# Añadir la madera total del árbol por el golpe final
 		if manager:
-			manager.add_resource("wood", MADERA_INICIAL) # Asume que el jugador obtiene toda la madera restante.
+			manager.add_resource("wood", MADERA_POR_GOLPE) # Asume que el jugador obtiene toda la madera restante.
 			
 		get_tree().create_timer(TIEMPO_MORIR).timeout.connect(_on_death_delay_timeout)
 	else:
@@ -108,6 +107,7 @@ func gather_resource(amount: int) -> int:
 		anim_tronco.play("tronquito") 
 
 		anim.play("chop")
+		anim.animation_finished.connect(_on_npc_chop_finished, CONNECT_ONE_SHOT)
 
 	# El NPC no marca el árbol como muerto, solo lo agota gradualmente.
 	return gathered

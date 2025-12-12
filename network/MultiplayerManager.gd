@@ -230,7 +230,8 @@ func reset() -> void:
 
 
 func get_my_quadrant() -> int:
-	return my_quadrant_id
+	if (GameState.is_pve) : return 0
+	else : return my_quadrant_id
 
 func get_player_quadrant(client_id: int) -> int:
 	return quadrants_by_client.get(client_id, -1)

@@ -119,6 +119,9 @@ func _on_puente_pressed(id: int) -> void:
 	get_node("Puente%d" % id).visible = false
 
 	await _construir_puente(id, start, end)
+	
+	# Si he podido construir el puente, ajusto el NavigationMap para que los NPCs lo puedan usar.
+	_crear_puente_NPCs(id)
 
 # ==========================================================
 #   CONSTRUCCIÓN PROGRESIVA DEL PUENTE
@@ -200,3 +203,48 @@ func _tooltip(cost: Dictionary) -> String:
 		if cost[res] > 0:
 			parts.append("%s %d" % [res.capitalize(), cost[res]])
 	return "Coste: " + ", ".join(parts) if parts.size() else "Gratis"
+
+func _crear_puente_NPCs(id : int) -> void:
+	print("/root/Main/Mapa/NavigationRegion2DQ%d" % [MultiplayerManager.get_my_quadrant()])
+	
+	match id:
+		1:
+			_change_puente(true, 1315, 832)
+		2:
+			_change_puente(false, 1336, -900)
+		3:
+			_change_puente(false, 1191, -190)
+		4:
+			_change_puente(true, 681, -2185)
+		5:
+			_change_puente(true, 1300, 7350)
+		6:
+			_change_puente(false, 1321, -900)
+		7:
+			_change_puente(false, 1176, -192)
+		8:
+			_change_puente(true, 667, 10370)
+		_:
+			return
+		
+	print("Boton %d pulsado" % [id])
+	
+	
+
+func _change_puente(X : bool, nodo : int, valor : int) -> void:
+	var navimap = get_node("/root/Main/Mapa/NavigationRegion2DQ%d" % [MultiplayerManager.get_my_quadrant()])
+	var poly = navimap.navigation_polygon
+	var outline = poly.get_outline(0)
+	
+	for i in range(2) :
+		if (X) :
+			var x_local = navimap.to_local(Vector2(outline[nodo].x, outline[nodo].y))
+			x_local.x = valor  # cambio en x
+			var x_global = navimap.to_global(x_local)
+			outline[nodo] = x_global
+		else : outline[nodo].y = valor
+		nodo += 1
+	
+	poly.set_outline(0, outline)
+	navimap.navigation_polygon = poly
+	navimap.bake_navigation_polygon()
