@@ -1,4 +1,4 @@
-[gd_scene load_steps=149 format=4 uid="uid://bp4ooy1sdcv8v"]
+[gd_scene load_steps=151 format=4 uid="uid://bp4ooy1sdcv8v"]
 
 [ext_resource type="TileSet" uid="uid://df4yue3wsjnbd" path="res://src/AssetsUsados/TileSet_Feudalia.tres" id="1_1bvp3"]
 [ext_resource type="Script" uid="uid://cp83v0lw83165" path="res://src/Main.gd" id="1_adv81"]
@@ -20,6 +20,8 @@
 [ext_resource type="Script" uid="uid://benr8y8kcf5p0" path="res://src/PantallaPrincipal/mapa.gd" id="11_adv81"]
 [ext_resource type="PackedScene" uid="uid://dct77qix8nhy0" path="res://src/BotonElementos/boton_puentes.tscn" id="12_43aqp"]
 [ext_resource type="Script" uid="uid://cmjday06ax2pk" path="res://src/BotonElementos/botones_puentes.gd" id="12_ocmcv"]
+[ext_resource type="AudioStream" uid="uid://b5qr14dfoc10l" path="res://sfx/WoodPlace.mp3" id="15_swqba"]
+[ext_resource type="AudioStream" uid="uid://yonakddmphe6" path="res://sfx/Ding.mp3" id="16_wjd0w"]
 [ext_resource type="Texture2D" uid="uid://b8g5046q5hjls" path="res://src/AssetPacks/Tiny Swords/Tiny Swords (Update 010)/Factions/Knights/Troops/Warrior/Red/Warrior_Red.png" id="19_hxsd3"]
 [ext_resource type="AudioStream" uid="uid://becy70d2mowdm" path="res://sfx/ataque.wav" id="20_hxsd3"]
 [ext_resource type="AudioStream" uid="uid://vs3ah6ms8317" path="res://sfx/Minecraft/step/stone2.ogg" id="20_nnhyx"]
@@ -1003,6 +1005,12 @@ offset_left = 10304.0
 offset_top = 522.0
 offset_right = 10368.0
 offset_bottom = 586.0
+
+[node name="WoodPlace" type="AudioStreamPlayer" parent="Objetos/BotonesPuentes"]
+stream = ExtResource("15_swqba")
+
+[node name="Ding" type="AudioStreamPlayer" parent="Objetos/BotonesPuentes"]
+stream = ExtResource("16_wjd0w")
 
 [node name="Casas" type="Node2D" parent="Objetos"]
 z_as_relative = false

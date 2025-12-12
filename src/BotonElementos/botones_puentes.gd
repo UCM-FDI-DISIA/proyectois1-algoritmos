@@ -39,6 +39,10 @@ class_name Puentes
 @onready var suelo_map: TileMapLayer = get_node(suelo_map_path)
 @onready var rm: ResourceManager = get_node("/root/Main/ResourceManager")
 
+# sonidos añadidos
+@onready var wood_sound: AudioStreamPlayer = $WoodPlace
+@onready var ding_sound: AudioStreamPlayer = $Ding
+
 # ==========================================================
 #   INICIALIZACIÓN
 # ==========================================================
@@ -94,13 +98,13 @@ func _on_puente_pressed(id: int) -> void:
 		4:
 			start = p4_start; end = p4_end; cost_id = "puente3"
 		5:
-			start = p5_start; end = p5_end; cost_id = "puente1"  # igual que puente1
+			start = p5_start; end = p5_end; cost_id = "puente1"
 		6:
-			start = p6_start; end = p6_end; cost_id = "puente2"  # igual que puente2 pero invertido
+			start = p6_start; end = p6_end; cost_id = "puente2"
 		7:
-			start = p7_start; end = p7_end; cost_id = "puente3"  # igual que puente3 pero invertido
+			start = p7_start; end = p7_end; cost_id = "puente3"
 		8:
-			start = p8_start; end = p8_end; cost_id = "puente3"  # igual que puente4
+			start = p8_start; end = p8_end; cost_id = "puente3"
 		_:
 			return
 
@@ -117,7 +121,7 @@ func _on_puente_pressed(id: int) -> void:
 	await _construir_puente(id, start, end)
 
 # ==========================================================
-#   CONSTRUCCIÓN PROGRESIVA DEL PUENTE
+#   CONSTRUCCIÓN PROGRESIVA DEL PUENTE (WoodPlace + Ding)
 # ==========================================================
 func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 	var delay := 0.5
@@ -138,18 +142,21 @@ func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 			atlas_final  = Vector2i(0,1)
 
 		2,6:
-			atlas_inicio = Vector2i(2,0)   # invertido del puente2
+			atlas_inicio = Vector2i(2,0)
 			atlas_medio  = Vector2i(1,0)
 			atlas_final  = Vector2i(0,0)
 
 		3,7:
-			atlas_inicio = Vector2i(0,0)   # invertido del puente3
+			atlas_inicio = Vector2i(0,0)
 			atlas_medio  = Vector2i(1,0)
 			atlas_final  = Vector2i(2,0)
 
+	# --- pieza inicial ---
 	tilemap.set_cell(start, source_id, atlas_inicio)
+	wood_sound.play()
 	await get_tree().create_timer(delay).timeout
 
+	# --- piezas intermedias ---
 	var delta := end - start
 	var dir := Vector2i(
 		0 if delta.x == 0 else 1 if delta.x > 0 else -1,
@@ -159,13 +166,20 @@ func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 	var pos := start + dir
 	while pos != end:
 		tilemap.set_cell(pos, source_id, atlas_medio)
+		wood_sound.play()
 		await get_tree().create_timer(delay).timeout
 		pos += dir
 
+	# --- pieza final ---
 	tilemap.set_cell(end, source_id, atlas_final)
+	wood_sound.play()
 
+	# terreno
 	suelo_map.set_cell(start, source_suelo_id, Vector2i(1,1))
 	suelo_map.set_cell(end, source_suelo_id, Vector2i(1,1))
+
+	# --- sonido final ---
+	ding_sound.play()
 
 # ==========================================================
 #   UTILS
