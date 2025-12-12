@@ -12,10 +12,7 @@ class_name Player
 @onready var animated_sprite: AnimatedSprite2D = $Animacion
 @onready var attack_area: Area2D = $AttackArea
 @onready var foot_player: AudioStreamPlayer = $FootstepsPlayer
-@onready var foot_player_wood: AudioStreamPlayer = $FootstepsWood
 @onready var atk_player: AudioStreamPlayer = $AttackPlayer
-
-@onready var wood_tilemap: TileMap = get_node("/root/Main/Mapa/Wood") # TileMap invisible para puentes
 
 # =====================================================================
 # 🎮 ESTADO
@@ -58,6 +55,7 @@ func _physics_process(_delta: float) -> void:
 	if is_attacking:
 		velocity = Vector2.ZERO
 		move_and_slide()
+		foot_player.stop()
 		return
 
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
@@ -83,21 +81,13 @@ func _physics_process(_delta: float) -> void:
 		animated_sprite.play(current_anim)
 
 	# =====================================================================
-	# 🔊 SOLO SONIDO DE PASOS (sin dinámicos)
+	# 🔊 SONIDO DE PASOS FIJO
 	# =====================================================================
 	if current_anim == "Andar" + color:
-		# reproducir tipo adecuado según tile
-		if _is_on_bridge():
-			if not foot_player_wood.playing:
-				foot_player_wood.play()
-			foot_player.stop()
-		else:
-			if not foot_player.playing:
-				foot_player.play()
-			foot_player_wood.stop()
+		if not foot_player.playing:
+			foot_player.play()
 	else:
 		foot_player.stop()
-		foot_player_wood.stop()
 
 	_last_anim = current_anim
 
@@ -143,16 +133,3 @@ func on_animation_finished() -> void:
 		is_attacking = false
 		animated_sprite.play("Idle" + color)
 		animated_sprite.animation_finished.disconnect(on_animation_finished)
-
-# =====================================================================
-# 🪵 DETECCIÓN DE PUENTE VIA TILEMAP INVISIBLE
-# =====================================================================
-func _is_on_bridge() -> bool:
-	if not wood_tilemap:
-		return false
-
-	var local_pos: Vector2 = wood_tilemap.to_local(global_position)
-	var cell: Vector2i = wood_tilemap.local_to_map(local_pos)
-	var source_id: int = wood_tilemap.get_cell_source_id(0, cell)
-
-	return source_id != -1
