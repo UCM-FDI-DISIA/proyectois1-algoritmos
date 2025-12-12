@@ -121,7 +121,7 @@ func _on_puente_pressed(id: int) -> void:
 	await _construir_puente(id, start, end)
 
 # ==========================================================
-#   CONSTRUCCIÓN PROGRESIVA DEL PUENTE (WoodPlace + Ding)
+#   CONSTRUCCIÓN PROGRESIVA DEL PUENTE
 # ==========================================================
 func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 	var delay := 0.5
@@ -131,25 +131,37 @@ func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 	var atlas_final: Vector2i
 
 	match id:
-		1,5:
+		
+		1:
+			
 			atlas_inicio = Vector2i(0,3)
 			atlas_medio  = Vector2i(0,2)
 			atlas_final  = Vector2i(0,1)
+
+		5:
+			atlas_inicio = Vector2i(0,1)
+			atlas_medio  = Vector2i(0,2)
+			atlas_final  = Vector2i(0,3)
+
+		2,6:
+			atlas_inicio = Vector2i(0,0)
+			atlas_medio  = Vector2i(1,0)
+			atlas_final  = Vector2i(2,0)
+			
+		3:
+			atlas_inicio = Vector2i(2,0)
+			atlas_medio  = Vector2i(1,0)
+			atlas_final  = Vector2i(0,0)
+
+		7:
+			atlas_inicio = Vector2i(0,0)
+			atlas_medio  = Vector2i(1,0)
+			atlas_final  = Vector2i(2,0)
 
 		4,8:
 			atlas_inicio = Vector2i(0,3)
 			atlas_medio  = Vector2i(0,2)
 			atlas_final  = Vector2i(0,1)
-
-		2,6:
-			atlas_inicio = Vector2i(2,0)
-			atlas_medio  = Vector2i(1,0)
-			atlas_final  = Vector2i(0,0)
-
-		3,7:
-			atlas_inicio = Vector2i(0,0)
-			atlas_medio  = Vector2i(1,0)
-			atlas_final  = Vector2i(2,0)
 
 	# --- pieza inicial ---
 	tilemap.set_cell(start, source_id, atlas_inicio)
@@ -174,11 +186,9 @@ func _construir_puente(id: int, start: Vector2i, end: Vector2i) -> void:
 	tilemap.set_cell(end, source_id, atlas_final)
 	wood_sound.play()
 
-	# terreno
 	suelo_map.set_cell(start, source_suelo_id, Vector2i(1,1))
 	suelo_map.set_cell(end, source_suelo_id, Vector2i(1,1))
 
-	# --- sonido final ---
 	ding_sound.play()
 
 # ==========================================================
