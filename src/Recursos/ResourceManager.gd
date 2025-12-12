@@ -69,7 +69,7 @@ const PUENTE_COSTS := {
 	"puente1": { "wood": 1, "stone": 0, "gold": 0, "villager": 0 },
 	"puente2": { "wood": 2, "stone": 0, "gold": 0, "villager": 0 },
 	"puente3": { "wood": 3, "stone": 0, "gold": 0, "villager": 0 }, #deberia ser el mismo que el 4
-	"puente4": { "wood": 3, "stone": 0, "gold": 0, "villager": 0 },
+	"puente4": { "wood": 4, "stone": 0, "gold": 0, "villager": 0 },
 }
 
 # =====================================================================
