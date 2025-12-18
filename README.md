@@ -1,29 +1,29 @@
 # Feudalia - AlgoRitmos
 
 ### Instrucciones de uso (EJECUTABLE)
-1. Descarga y contenido de la versión que necesites en la carpeta `/executable`.
-2. Ejecuta el juego haciendo doble clic en el archivo correspondiente (Windows: .exe, Linux: .x86_64).
-3. (Opcional) Puedes abrir la consola de depuración para ver, en tiempo real, información detallada sobre señales, eventos, interacciones, conexiones...
+1. Localiza la carpeta para la plataforma correspondiente en la carpeta `/executable` (Windows o Linux) y descárgala.
+2. Ejecuta el juego haciendo doble clic en el archivo correspondiente (Windows: .exe, Linux: .x86_64 o .sh).
+3. (Opcional en Windows) Puedes abrir la consola de depuración para ver, en tiempo real, información detallada sobre señales, eventos, interacciones, conexiones...
 
 ### Instrucciones de uso (Ejecución en el entorno + DEPURACIÓN / COMPILACIÓN)
 1. Descarga [Godot Engine 4.5.](https://godotengine.org/releases/4.5/) (es suficiente con la versión estándar, sin .NET) 
-2. Descarga el repositorio completo en una carpeta local (por ejemplo `/carpeta_local`)
-3. Abre Godot 4.5. e importa el proyecto seleccionando la carpeta `/carpeta_local` (la que contiene el archivo proyect.godot)
-4. Ejecuta y compila el proyecto pulsando Reproducir Proyecto (F5)
+2. Descarga este repositorio completo en una carpeta local (por ejemplo `/carpeta_local`).
+3. Abre Godot 4.5. e importa el proyecto seleccionando la carpeta `/carpeta_local` (la que contiene el archivo project.godot)
+4. Ejecuta y compila el proyecto pulsando Reproducir Proyecto (F5).
 
 <br>
 
 > [!WARNING]
 > El modo multijugador PVP utiliza GDSync, un plugin avanzado de Godot especializado en sincronización en red. Para que funcione correctamente, deben cumplirse las siguientes condiciones:
-> - Conexión a internet estable
-> - Acceso permitido a conexiones WebSocket (ws) hacia el servidor de GDSync
+> - Tener conexión a internet estable.
+> - Tener acceso permitido a conexiones WebSocket (ws) hacia el servidor de GDSync.
 > Si ocurre algún problema, el juego mostrará un mensaje informativo en pantalla.
 
 > [!NOTE]
 > Para más información sobre la depuración/"compilación" en Godot 4.5., véase el siguiente archivo: [README_Instrucciones.txt](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/blob/main/executable/README_Instrucciones.txt)
 
 > [!NOTE]
-> ¡También se puede jugar a _Feudalia_ online en el modo PVE!: [Feudalia PVE](https://andy-uno.itch.io/feudalia)
+> ¡También se puede jugar a _Feudalia_ online en el modo PVE (un jugador contra la máquina)!: [Feudalia PVE](https://andy-uno.itch.io/feudalia)
 
 <br>
 
