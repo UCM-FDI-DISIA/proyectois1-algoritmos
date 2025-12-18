@@ -1,48 +1,141 @@
-# Feudalia
-## AlgoRitmos
+# Feudalia - AlgoRitmos
 
-### Wiki
+### Instrucciones de uso (EJECUTABLE)
+1. Descarga y contenido de la versión que necesites en la carpeta `/executable`.
+2. Ejecuta el juego haciendo doble clic en el archivo correspondiente (Windows: .exe, Linux: .x86_64).
+3. (Opcional) Puedes abrir la consola de depuración para ver, en tiempo real, información detallada sobre señales, eventos, interacciones, conexiones...
+
+### Instrucciones de uso (Ejecución en el entorno + DEPURACIÓN / COMPILACIÓN)
+1. Descarga [Godot Engine 4.5.](https://godotengine.org/releases/4.5/) (es suficiente con la versión estándar, sin .NET) 
+2. Descarga el repositorio completo en una carpeta local (por ejemplo `/carpeta_local`)
+3. Abre Godot 4.5. e importa el proyecto seleccionando la carpeta `/carpeta_local` (la que contiene el archivo proyect.godot)
+4. Ejecuta y compila el proyecto pulsando Reproducir Proyecto (F5)
+
+<br>
+
+> [!WARNING]
+> El modo multijugador PVP utiliza GDSync, un plugin avanzado de Godot especializado en sincronización en red. Para que funcione correctamente, deben cumplirse las siguientes condiciones:
+> - Conexión a internet estable
+> - Acceso permitido a conexiones WebSocket (ws) hacia el servidor de GDSync
+> Si ocurre algún problema, el juego mostrará un mensaje informativo en pantalla.
+
+> [!NOTE]
+> Para más información sobre la depuración/"compilación" en Godot 4.5., véase el siguiente archivo: [README_Instrucciones.txt](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/blob/main/executable/README_Instrucciones.txt)
+
+> [!NOTE]
+> ¡También se puede jugar a _Feudalia_ online en el modo PVE!: [Feudalia PVE](https://andy-uno.itch.io/feudalia)
+
+<br>
+
+----
+## Wiki
 Visita nuestra [Wiki](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki) para mayor detalle.
+
+### Índice
+---
+
+<details>
+<summary><strong>📘 Documentación</strong></summary>
+<br>
+
+* [Documento de Especificación de Requisitos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/especificacionIEEE830.md)
+    * [Sección 1: Introducción](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/IEEE830intro.md)
+    * [Sección 2: Descripción general](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/IEEE830descrip.md)
+    * [Sección 3: Requisitos específicos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/IEEE830requis.md)
+* [Documento técnico - TDD](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/documentoTecnico.md)
+* [Manual del Usuario](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/manualDelUsuario.md)
+
+</details>
 
 ---
 
-### Índice
-* [Home](Home)
-* Documentación
-   * [Documento de Especificación de Requisitos](especificacionIEEE830.md)
-	   * [Sección 1: Introducción](IEEE830.md)
-	   * [Sección 2: Descripción](IEEE830descrip.md)
-	   * [Sección 3: Requisitos específicos](IEEE830requis.md)
-   * Documento técnico
-* Diseño gráfico
-   * [Estética y Diseño](estetica_papel.md)
-	   * [Interfaz](diseno_interfaz.md)
-	   * [Diseño de personajes](diseno_personajes.md)
-	   * [Diseño de recursos](diseno_recursos.md)
-   * [Enlazado de recursos](Enlazado-de-recursos)
-* Objetivos y planificación
-   * [Usuarios de _Feudalia_](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Historias-de-usuario).
-	   * [Historias de usuario](historiasusuario.md).
-	   * [DoD (Definition of Done)](definitionOfDone.md) 
-   * [Planificación de los Sprints](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/sprints.md)
-	   * [Backlog de los Sprints](backlogSprint.md)
-	   * [Revisión de los Sprints](revisionSprints.md)
-	   * [Retrospectiva de los Sprints](retrospectivaSprints.md)
-   * [Reuniones del equipo](reuniones.md)
-	   * [MVP y terminado](MVP.md)
-* Gestión de riesgos
-   * [Introducción](introduccionRiesgos.md) 
-   * [Priorización de riesgos del proyecto](priorizacionRiesgos.md)
-   * [Reducción, supervisión y gestión del riesgo](gestionRiesgos.md)
-   * [Planificación temporal](planificacionRiesgos.md)
-   * [Resumen](resumenRiesgos.md) 
+<details>
+<summary><strong>🎨 Diseño gráfico</strong></summary>
+<br>
 
-* Anexo
-   * [Documento IEEE830](https://docs.google.com/document/d/1hdwNOZvPmhaxj7iX_lu-zgpNqmKbLNv1iK7gSXKCvug/edit?tab=t.0#heading=h.u2atzjnlxad) (previo al Sprint 1).
-   * [Referencias - diseño](referencias_diseno.md).
-   * [Product Backlog](productBacklog.md).
-* Technical Design Document (TDD)
-   * [TDD](documentoTecnico.md).
+* [Estética y diseño](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/estetica_papel.md)
+    * [Interfaz](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/diseno_interfaz.md)
+    * [Diseño de personajes](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/diseno_personajes.md)
+    * [Diseño de recursos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/diseno_recursos.md)
+* [Enlazado de recursos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Enlazado-de-recursos)
+
+</details>
+
+---
+
+<details>
+<summary><strong>🧩 Proceso Scrum</strong></summary>
+<br>
+
+* [Usuarios de _Feudalia_](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Historias-de-usuario)
+    * [Historias de usuario](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/historiasusuario.md)
+    * [Product Backlog](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/productBacklog.md)
+* [Planificación de los Sprints](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/sprints.md)
+    * [Revisión de los Sprints](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/revisionSprints.md)
+    * [Retrospectiva de los Sprints](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/retrospectivaSprints.md)
+    * [Sprint Backlog](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/backlogSprint.md)
+* [Reuniones del equipo](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/reuniones.md)
+    * [MVP - Producto Mínimo Viable](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/MVP.md)
+    * [DoD (Definition of Done)](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/definitionOfDone.md)
+
+</details>
+
+---
+
+<details>
+<summary><strong>🧪 Control de calidad</strong></summary>
+<br>
+
+* [Gestión de Control de Calidad del Software](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/gestion_de_control_de_calidad_del_software.md)
+    * [Registro de las Revisiones Técnicas Formales](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/RTF.md)
+* [Estándares de diseño](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Est%C3%A1ndares-de-dise%C3%B1o)
+* [Estándares PEGI](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/PEGI12)
+* [Metodología de pruebas de Feudalia](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/pruebas_feudalia.md)
+* [Control de calidad de otros equipos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/control_calidad_externo.md)
+    * [Feedback para el equipo G2 (Veneris)](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/control_de_calidad_G2.md)
+    * [Feedback para el equipo G3 (LogBait)](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/control_de_calidad_G3.md)
+    * [Feedback para el equipo G4 (Scrabble)](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/control_de_calidad_G4.md)
+* [Plan de acción sobre nuestras RTF](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/RTF.md)
+
+</details>
+
+---
+
+<details>
+<summary><strong>⚠️ Gestión de riesgos</strong></summary>
+<br>
+
+* [Introducción](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/introduccionRiesgos.md)
+* [Priorización de riesgos del proyecto](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/priorizacionRiesgos.md)
+* [Reducción, supervisión y gestión del riesgo](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/gestionRiesgos.md)
+* [Planificación temporal](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/planificacionRiesgos.md)
+* [Resumen](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/resumenRiesgos.md)
+* [Issue Tracker](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/issueTracker.md)
+
+</details>
+
+---
+
+<details>
+<summary><strong>📎 Anexo</strong></summary>
+<br>
+
+* [Documento IEEE830](https://docs.google.com/document/d/1hdwNOZvPmhaxj7iX_lu-zgpNqmKbLNv1iK7gSXKCvug/edit?tab=t.0#heading=h.u2atzjnlxad) (previo al Sprint 1)
+* [Referencias y recursos](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/recursosyreferencias.md)
+* [Referencias - diseño](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/referencias_diseno.md)
+
+</details>
+
+---
+
+<details>
+<summary><strong>🛠️ Ayudas</strong></summary>
+<br>
+
+* [Guía Git](https://github.com/UCM-FDI-DISIA/proyectois1-algoritmos/wiki/Gu%C3%ADa-de-actualizaci%C3%B3n-del-repositorio-%E2%80%94-Proyecto-Feudalia-(Windows))
+
+</details>
+
 ---
 
 ### Versiones
