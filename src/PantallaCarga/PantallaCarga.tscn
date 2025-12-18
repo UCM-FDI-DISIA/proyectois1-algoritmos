@@ -1,12 +1,22 @@
-[gd_scene load_steps=145 format=3 uid="uid://dh72ycg3i4emo"]
+[gd_scene load_steps=147 format=3 uid="uid://dh72ycg3i4emo"]
 
 [ext_resource type="Script" uid="uid://c7pnpq05u0l6s" path="res://src/PantallaCarga/pantalla_carga.gd" id="1_v6oja"]
 [ext_resource type="Texture2D" uid="uid://cb45tb74jbjuu" path="res://src/AssetsUsados/Fondos/ChatGPT Image 5 dic 2025, 10_29_53.png" id="2_n2mqc"]
 [ext_resource type="Texture2D" uid="uid://b6ud1nj5qygao" path="res://src/AssetsUsados/PantallaCarga/RelojFrames/Loading_teal.png" id="3_n2mqc"]
 [ext_resource type="Texture2D" uid="uid://mnvkn04s0a41" path="res://src/AssetsUsados/PantallaCarga/RelojFrames/Reloj.png" id="4_kxf84"]
 
+[sub_resource type="FontVariation" id="FontVariation_n2mqc"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_n2mqc"]
-font_size = 30
+font = SubResource("FontVariation_n2mqc")
+font_size = 33
+
+[sub_resource type="FontFile" id="FontFile_n2mqc"]
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_kxf84"]
 
@@ -992,44 +1002,46 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -168.0
+offset_top = -102.0
+offset_right = 216.0
+offset_bottom = 274.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_n2mqc")
 
 [node name="TextoEstado" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 83.5
-offset_right = -3.0
-offset_bottom = -522.5
-grow_horizontal = 2
-grow_vertical = 2
+texture_filter = 1
+layout_mode = 0
+offset_left = 1.0
+offset_top = 100.0
+offset_right = 1151.0
+offset_bottom = 146.0
 text = "Cargando partida"
 label_settings = SubResource("LabelSettings_n2mqc")
 horizontal_alignment = 1
 
 [node name="LobbyUnido" type="Label" parent="."]
+texture_filter = 3
 layout_mode = 0
-offset_left = -1.0
-offset_top = 146.0
-offset_right = 1148.0
-offset_bottom = 169.0
+offset_top = 161.5
+offset_right = 1147.0
+offset_bottom = 184.5
+theme_override_fonts/font = SubResource("FontFile_n2mqc")
+theme_override_font_sizes/font_size = 16
 text = "Unido al lobby: "
 label_settings = SubResource("LabelSettings_kxf84")
 horizontal_alignment = 1
 
 [node name="Fondo2" type="AnimatedSprite2D" parent="."]
-position = Vector2(567, 360)
+position = Vector2(575, 375.5)
 scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_foafp")
 autoplay = "default"
 frame_progress = 0.28065386
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(570, 363)
+position = Vector2(575, 378.5)
 scale = Vector2(0.3, 0.31)
 sprite_frames = SubResource("SpriteFrames_sbyuh")
 autoplay = "default"

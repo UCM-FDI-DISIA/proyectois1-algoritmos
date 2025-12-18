@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://iah8x7at2l31" path="res://src/Menus/Construccion/menu_construccion.tscn" id="2_okx7f"]
 [ext_resource type="PackedScene" uid="uid://fsq1fp7g6o7n" path="res://src/Menus/MenuSoldados/menuSoldados.tscn" id="3_d3u4l"]
 [ext_resource type="Texture2D" uid="uid://eef8m3ladoy0" path="res://src/AssetsUsados/PersonajePrincipal/Warrior_Blue.png" id="3_lquwl"]
-[ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Edificios/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
+[ext_resource type="PackedScene" uid="uid://4oaphcoyv6qq" path="res://src/Recursos/ArbolMadera/arbolAnimado.tscn" id="4_272bh"]
 [ext_resource type="Script" uid="uid://d2e8dy1mo1k7w" path="res://src/Menus/MenuSoldados/MenuSoldados.gd" id="6_jitvu"]
 [ext_resource type="PackedScene" uid="uid://b16fkyrsi8o7y" path="res://src/Recursos/MinaOro/minaOroAnimado.tscn" id="6_kmhfv"]
 [ext_resource type="Script" uid="uid://dut20ponmt82k" path="res://src/Recursos/ResourceManager.gd" id="6_lovvn"]
@@ -1052,7 +1052,7 @@ tile_set = SubResource("TileSet_mgm53")
 [node name="Edificios" type="TileMapLayer" parent="Objetos"]
 z_as_relative = false
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAADABIAAAAAAAAAAgBzABIAAAAAAAAAAgAEAFMAAAAAAAAAAgB7AFQAAAAAAAAAAgA/ADEAAAAAAAAAAQA=")
+tile_map_data = PackedByteArray("AAADABIAAAAAAAAAAgBzABIAAAAAAAAAAgAEAFMAAAAAAAAAAgB7AFQAAAAAAAAAAgA=")
 tile_set = SubResource("TileSet_kqbth")
 
 [node name="CasasCompradas" type="Node2D" parent="Objetos/Edificios"]
