@@ -238,10 +238,11 @@ Las siguientes son [librerías de uso libre](https://opengameart.org/) de varias
 - Ataque: clicks izquierdo y derecho
   
 ## Organización del repositorio
-- `/docs`: Documentación del juego (visión, mecánicas, backlog).
-- `/src`: Código fuente.
-- `/assets`: Recursos gráficos, sonoros y otros.
-- `/design`: Bocetos visuales y mockups.
+- `/addons`: Plugin GDSync y SceneManager.
+- `/executable`: Ejecutables para Windows y Linux.
+- `/network`: Gestión del plugin.
+- `/sfx`: Recursos sonoros.
+- `/src`: Código y lógica del juego.
 - `/tests`: Pruebas unitarias y de integración.
 
 ## Equipo:
