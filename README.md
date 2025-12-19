@@ -268,6 +268,4 @@ Sí, puedes competir en arenas PvP para ver quién tiene la mejor estrategia.
 
 ## Trabajos previos a la creación del repositorio:
 
-- Carpeta de trabajo de Drive: https://drive.google.com/drive/folders/1AqEUSHkFcv267KFLV2Ws3VApdfcuCPCo?usp=drive_link
-
 - Documento de especificación de Requisitos original: https://docs.google.com/document/d/1hdwNOZvPmhaxj7iX_lu-zgpNqmKbLNv1iK7gSXKCvug/edit?tab=t.0#heading=h.u2atzjnlxad
